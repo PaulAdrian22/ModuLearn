@@ -3,6 +3,7 @@
   publish = "frontend/build"
 
 [build.environment]
+  CI = "false"
   NODE_VERSION = "24"
 
 [functions]
