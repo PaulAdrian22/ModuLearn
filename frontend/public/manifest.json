@@ -1,0 +1,15 @@
+{
+  "short_name": "MODULEARN",
+  "name": "MODULEARN - Computer Hardware Servicing Learning Platform",
+  "icons": [
+    {
+      "src": "images/logo.png",
+      "sizes": "512x512 192x192 64x64 32x32 24x24 16x16",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#083D77",
+  "background_color": "#083D77"
+}
