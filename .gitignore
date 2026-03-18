@@ -53,3 +53,6 @@ ui designs/
 
 # Configuration
 config/local.json
+
+# Local Netlify folder
+.netlify
