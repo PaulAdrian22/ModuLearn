@@ -44,12 +44,25 @@ const corsOriginConfig = (process.env.CORS_ORIGIN || 'http://localhost:3000')
   .map((origin) => origin.trim())
   .filter(Boolean);
 
+const isNetlifyOrigin = (origin) => {
+  try {
+    const parsed = new URL(origin);
+    return parsed.hostname.endsWith('.netlify.app');
+  } catch {
+    return false;
+  }
+};
+
 app.use(cors({
   origin: (origin, callback) => {
     // Allow non-browser requests and same-origin requests with no Origin header.
     if (!origin) return callback(null, true);
 
     if (corsOriginConfig.includes(origin)) {
+      return callback(null, true);
+    }
+
+    if (isNetlifyOrigin(origin)) {
       return callback(null, true);
     }
 
