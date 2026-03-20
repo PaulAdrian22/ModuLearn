@@ -48,6 +48,12 @@ coverage/
 uploads/
 temp/
 
+# Keep backend lesson media versioned so deployments include authored content.
+!backend/uploads/
+!backend/uploads/lessons/
+!backend/uploads/lessons/**
+backend/uploads/profiles/
+
 # Large local design assets (not needed for deployment)
 ui designs/
 
