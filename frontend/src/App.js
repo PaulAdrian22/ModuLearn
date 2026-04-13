@@ -4,6 +4,7 @@ import axios from 'axios';
 import { ProfileProvider } from './contexts/ProfileContext';
 import { applyAppearanceSettings, getStoredAppearanceSettings } from './utils/appearanceSettings';
 import { API_BASE_URL } from './config/api';
+import ThemedConfirmHost from './components/ThemedConfirmHost';
 
 // Pages
 import Landing from './pages/Landing';
@@ -20,8 +21,6 @@ import Progress from './pages/Progress';
 import Simulations from './pages/Simulations';
 import SimulationActivity from './pages/SimulationActivity';
 import AdminLessons from './pages/AdminLessons';
-import AdminSimulations from './pages/AdminSimulations';
-import AddSimulation from './pages/AddSimulation';
 import AddLesson from './pages/AddLesson';
 import AdminLearners from './pages/AdminLearners';
 import AdminDashboard from './pages/AdminDashboard';
@@ -129,6 +128,18 @@ const AppearanceManager = () => {
   const location = useLocation();
 
   useEffect(() => {
+    const normalizedPath = location.pathname.replace(/\/+$/, '') || '/';
+    const publicRoutes = new Set(['/', '/about', '/login', '/register']);
+    const isPublicRoute = publicRoutes.has(normalizedPath);
+
+    if (isPublicRoute) {
+      const root = document.documentElement;
+      root.classList.remove('theme-dark');
+      root.classList.add('theme-light');
+      root.dataset.appearanceTheme = 'Light Mode';
+      return;
+    }
+
     const isAdminRoute = location.pathname.startsWith('/admin');
     const settings = getStoredAppearanceSettings(isAdminRoute);
     applyAppearanceSettings(settings);
@@ -396,6 +407,7 @@ function App() {
   return (
     <Router>
       <AppearanceManager />
+      <ThemedConfirmHost />
       <AuthProvider>
         <ProfileProvider>
           <GlobalTokenUnlockTracker />
@@ -519,30 +531,6 @@ function App() {
               element={
                 <AdminRoute>
                   <AdminLearners />
-                </AdminRoute>
-              }
-            />
-            <Route
-              path="/admin/simulations"
-              element={
-                <AdminRoute>
-                  <AdminSimulations />
-                </AdminRoute>
-              }
-            />
-            <Route
-              path="/admin/simulations/add"
-              element={
-                <AdminRoute>
-                  <AddSimulation />
-                </AdminRoute>
-              }
-            />
-            <Route
-              path="/admin/simulations/edit/:id"
-              element={
-                <AdminRoute>
-                  <AddSimulation />
                 </AdminRoute>
               }
             />

@@ -30,4 +30,11 @@ router.put('/update', authenticate, [
   handleValidationErrors
 ], progressController.updateProgress);
 
+// POST /api/progress/track-time - Track active lesson time while learner is inside a lesson
+router.post('/track-time', authenticate, [
+  body('moduleId').isInt({ min: 1 }).withMessage('Module ID is required'),
+  body('timeSpentSeconds').isInt({ min: 1, max: 3600 }).withMessage('timeSpentSeconds must be between 1 and 3600'),
+  handleValidationErrors
+], progressController.trackLessonTime);
+
 module.exports = router;

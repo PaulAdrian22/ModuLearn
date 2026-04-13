@@ -478,7 +478,7 @@
 }
 
 .theme-dark .bg-white {
-  background-color: #111827 !important;
+  background-color: #1e293b !important;
 }
 
 .theme-dark .text-gray-400 {
@@ -499,13 +499,29 @@
 .theme-dark .border-gray-100,
 .theme-dark .border-gray-200,
 .theme-dark .border-gray-300 {
-  border-color: #334155 !important;
+  border-color: #475569 !important;
 }
 
 .theme-dark .bg-gray-50,
 .theme-dark .bg-gray-100,
 .theme-dark .bg-gray-200 {
-  background-color: #1f2937 !important;
+  background-color: #273449 !important;
+}
+
+.theme-dark .bg-\[\#f8fbff\] {
+  background-color: #243247 !important;
+}
+
+.theme-dark .text-\[\#1e3a5f\],
+.theme-dark .text-\[\#1E3A5F\],
+.theme-dark .text-\[\#1B5E87\],
+.theme-dark .text-\[\#1b5e87\],
+.theme-dark .text-\[\#1e5a8e\],
+.theme-dark .text-\[\#1E5A8E\],
+.theme-dark .text-\[\#0B2B4C\],
+.theme-dark .text-\[\#0b2b4c\],
+.theme-dark .text-\[\#000000\] {
+  color: #e2e8f0 !important;
 }
 
 .theme-dark .shadow-sm,
@@ -537,7 +553,7 @@
 
 .theme-dark .admin-learners-page .card,
 .theme-dark .admin-learners-page .bg-white {
-  background-color: #1f2937 !important;
+  background-color: #273449 !important;
   color: #e2e8f0 !important;
 }
 
@@ -703,17 +719,122 @@ h3, .text-2xl {
   margin-bottom: calc(2rem * var(--ui-scale));
 }
 
+/* Simulation pages follow global appearance settings (light/dark/auto). */
+.simulation-theme {
+  background-color: #F5F7FA;
+}
+
+.simulation-theme .simulation-surface {
+  background-color: #ffffff;
+  border-color: #d1d5db;
+}
+
+.simulation-theme .simulation-soft {
+  background-color: #f8fbff;
+  border-color: #e5e7eb;
+}
+
+.simulation-theme .simulation-title {
+  color: #1e3a5f;
+}
+
+.simulation-theme .simulation-text {
+  color: #4b5563;
+}
+
+.simulation-theme .simulation-muted {
+  color: #6b7280;
+}
+
+.theme-dark .simulation-theme {
+  background-color: #0f172a !important;
+}
+
+.theme-dark .simulation-theme .simulation-surface {
+  background-color: #1e293b !important;
+  border-color: #475569 !important;
+}
+
+.theme-dark .simulation-theme .simulation-soft {
+  background-color: #243247 !important;
+  border-color: #475569 !important;
+}
+
+.theme-dark .simulation-theme .simulation-title {
+  color: #e2e8f0 !important;
+}
+
+.theme-dark .simulation-theme .simulation-text {
+  color: #cbd5e1 !important;
+}
+
+.theme-dark .simulation-theme .simulation-muted {
+  color: #94a3b8 !important;
+}
+
 /* ContentEditable list styling for text editor */
+[contenteditable] {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+[contenteditable] * {
+  font-family: inherit !important;
+  font-size: inherit !important;
+}
+
 [contenteditable] ul {
   list-style-type: disc;
   padding-left: 1.5rem;
   margin: 0.5rem 0;
 }
 
+[contenteditable] ul[style*='list-style-type: none'] {
+  list-style-type: none;
+  padding-left: 1.15rem;
+}
+
+[contenteditable] ul[style*='list-style-type: none'] > li {
+  position: relative;
+  padding-left: 0.55rem;
+}
+
+[contenteditable] ul[style*='list-style-type: none'] > li::before {
+  content: '-';
+  position: absolute;
+  left: -0.55rem;
+  color: #374151;
+}
+
 [contenteditable] ol {
   list-style-type: decimal;
   padding-left: 1.5rem;
   margin: 0.5rem 0;
+}
+
+[contenteditable] ul ul {
+  list-style-type: circle;
+}
+
+[contenteditable] ul ul ul {
+  list-style-type: square;
+}
+
+[contenteditable] ul ul ul ul {
+  list-style-type: disc;
+}
+
+[contenteditable] ol ol {
+  list-style-type: lower-alpha;
+}
+
+[contenteditable] ol ol ol {
+  list-style-type: lower-roman;
+}
+
+[contenteditable] ol ol ol ol {
+  list-style-type: decimal;
 }
 
 [contenteditable] li {
@@ -730,11 +851,36 @@ h3, .text-2xl {
   margin: 0.25rem 0;
 }
 
+[contenteditable] ul ul,
+[contenteditable] ul ol,
+[contenteditable] ol ul,
+[contenteditable] ol ol {
+  margin: 0.35rem 0;
+  padding-left: 1.25rem;
+}
+
 /* Lesson content list styling (learner view) */
 .lesson-content ul {
   list-style-type: disc;
   padding-left: 2rem;
   margin: 0.5rem 0;
+}
+
+.lesson-content ul[style*='list-style-type: none'] {
+  list-style-type: none;
+  padding-left: 1.4rem;
+}
+
+.lesson-content ul[style*='list-style-type: none'] > li {
+  position: relative;
+  padding-left: 0.6rem;
+}
+
+.lesson-content ul[style*='list-style-type: none'] > li::before {
+  content: '-';
+  position: absolute;
+  left: -0.6rem;
+  color: #374151;
 }
 
 .lesson-content ol {
@@ -743,8 +889,53 @@ h3, .text-2xl {
   margin: 0.5rem 0;
 }
 
+.lesson-content ul ul {
+  list-style-type: circle;
+}
+
+.lesson-content ul ul ul {
+  list-style-type: square;
+}
+
+.lesson-content ul ul ul ul {
+  list-style-type: disc;
+}
+
+.lesson-content ol ol {
+  list-style-type: lower-alpha;
+}
+
+.lesson-content ol ol ol {
+  list-style-type: lower-roman;
+}
+
+.lesson-content ol ol ol ol {
+  list-style-type: decimal;
+}
+
 .lesson-content li {
   margin: 0.25rem 0;
+}
+
+.lesson-content p {
+  margin: 0.45rem 0;
+}
+
+.lesson-content p + p {
+  text-indent: 0;
+}
+
+.lesson-content li > p {
+  text-indent: 0;
+  margin: 0.2rem 0;
+}
+
+.lesson-content ul ul,
+.lesson-content ul ol,
+.lesson-content ol ul,
+.lesson-content ol ol {
+  margin: 0.35rem 0;
+  padding-left: 1.5rem;
 }
 
 /* Indentation support for lesson content */
@@ -764,6 +955,40 @@ h3, .text-2xl {
   border: none;
 }
 
+.lesson-content img,
+.table-rich-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0.75rem auto;
+  border-radius: 0.5rem;
+}
+
+.lesson-content figure {
+  margin: 0.9rem 0;
+}
+
+.lesson-content figcaption {
+  margin-top: 0.35rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #4b5563;
+  font-style: italic;
+}
+
+.lesson-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0.9rem 0;
+}
+
+.lesson-content table th,
+.lesson-content table td {
+  border: 1px solid #dbe3ea;
+  padding: 0.4rem 0.55rem;
+  vertical-align: top;
+}
+
 /* Ensure rich text inside table cells starts at the same top baseline. */
 .table-rich-content > *:first-child {
   margin-top: 0 !important;
@@ -771,4 +996,18 @@ h3, .text-2xl {
 
 .table-rich-content > *:last-child {
   margin-bottom: 0 !important;
+}
+
+.table-rich-content ul,
+.table-rich-content ol {
+  margin: 0.25rem 0;
+  padding-left: 1.25rem;
+}
+
+.table-rich-content li {
+  margin: 0.2rem 0;
+}
+
+.table-rich-content p + p {
+  text-indent: 1rem;
 }

@@ -19,6 +19,72 @@
 const { query, getConnection } = require('../config/database');
 const bkt = require('../utils/bktEngine');
 
+let assessmentTimeColumnReady = false;
+const SUPPLEMENTARY_DIFFICULTY = 'supplementary';
+
+const ensureAssessmentTimeSpentColumn = async () => {
+  if (assessmentTimeColumnReady) {
+    return true;
+  }
+
+  const existingColumns = await query(
+    `SELECT COLUMN_NAME
+       FROM INFORMATION_SCHEMA.COLUMNS
+      WHERE TABLE_SCHEMA = DATABASE()
+        AND TABLE_NAME = 'assessment'
+        AND COLUMN_NAME = 'TimeSpentSeconds'`
+  );
+
+  if (existingColumns.length === 0) {
+    await query(
+      `ALTER TABLE assessment
+       ADD COLUMN TimeSpentSeconds INT NOT NULL DEFAULT 0 AFTER TotalScore`
+    );
+    console.log('Added TimeSpentSeconds column to assessment table.');
+  }
+
+  assessmentTimeColumnReady = true;
+  return true;
+};
+
+const normalizeDifficultyValue = (value = '') => String(value || '').trim().toLowerCase();
+
+const getModuleBktContext = async (connection, moduleId) => {
+  const normalizedModuleId = Number.parseInt(moduleId, 10);
+
+  if (!Number.isFinite(normalizedModuleId) || normalizedModuleId <= 0) {
+    return {
+      moduleId: null,
+      moduleExists: false,
+      difficulty: null,
+      isSupplementary: false
+    };
+  }
+
+  const [modules] = await connection.execute(
+    'SELECT ModuleID, Difficulty FROM module WHERE ModuleID = ? LIMIT 1',
+    [normalizedModuleId]
+  );
+
+  if (modules.length === 0) {
+    return {
+      moduleId: normalizedModuleId,
+      moduleExists: false,
+      difficulty: null,
+      isSupplementary: false
+    };
+  }
+
+  const difficulty = modules[0].Difficulty;
+
+  return {
+    moduleId: normalizedModuleId,
+    moduleExists: true,
+    difficulty,
+    isSupplementary: normalizeDifficultyValue(difficulty) === SUPPLEMENTARY_DIFFICULTY
+  };
+};
+
 // ==============================================
 // 1. INITIALIZATION
 // ==============================================
@@ -344,6 +410,35 @@ const submitAnswer = async (req, res) => {
     const question = questions[0];
     const skillName = question.SkillTag;
     const isCorrect = userAnswer.trim().toLowerCase() === question.CorrectAnswer.trim().toLowerCase();
+
+    const moduleContext = await getModuleBktContext(connection, session.ModuleID);
+    if (moduleContext.moduleExists && moduleContext.isSupplementary) {
+      if (session.AssessmentID) {
+        await connection.execute(
+          `INSERT INTO user_answer (AssessmentID, QuestionID, UserAnswer, IsCorrect, ResponseTime, SkillTag)
+           VALUES (?, ?, ?, ?, ?, ?)`,
+          [session.AssessmentID, questionId, userAnswer, isCorrect, responseTime, skillName]
+        );
+      }
+
+      await connection.execute(
+        'UPDATE bkt_session SET QuestionsAnswered = QuestionsAnswered + 1 WHERE SessionID = ?',
+        [sessionId]
+      );
+
+      await connection.commit();
+      connection.release();
+
+      return res.json({
+        message: 'Answer submitted. BKT update skipped for supplementary lesson.',
+        questionId,
+        skillName,
+        isCorrect,
+        correctAnswer: isCorrect ? null : question.CorrectAnswer,
+        bktSkipped: true,
+        assessmentType: session.AssessmentType
+      });
+    }
 
     // Get current L for this skill
     const [skillStates] = await connection.execute(
@@ -965,6 +1060,53 @@ const completeLessonAssessment = async (req, res) => {
     const session = sessions[0];
     const assessmentType = session.AssessmentType;
 
+    const moduleContext = await getModuleBktContext(connection, moduleId);
+    if (moduleContext.moduleExists && moduleContext.isSupplementary) {
+      const [currentStates] = await connection.execute(
+        'SELECT SkillName, CurrentL FROM bkt_model WHERE UserID = ?',
+        [userId]
+      );
+
+      const skillStatesEnd = {};
+      currentStates.forEach((state) => {
+        skillStatesEnd[state.SkillName] = parseFloat(state.CurrentL);
+      });
+
+      await connection.execute(
+        `UPDATE bkt_session SET Status = 'Completed', SkillStatesEnd = ?, CompletedAt = CURRENT_TIMESTAMP WHERE SessionID = ?`,
+        [JSON.stringify(skillStatesEnd), sessionId]
+      );
+
+      if (session.AssessmentID) {
+        const [totalStats] = await connection.execute(
+          `SELECT COUNT(*) as total, SUM(CASE WHEN IsCorrect = 1 THEN 1 ELSE 0 END) as correct
+           FROM user_answer WHERE AssessmentID = ?`,
+          [session.AssessmentID]
+        );
+
+        const totalQ = totalStats[0].total || 0;
+        const correctQ = totalStats[0].correct || 0;
+        const score = totalQ > 0 ? (correctQ / totalQ) * 100 : 0;
+
+        await connection.execute(
+          `UPDATE assessment SET TotalScore = ?, ResultStatus = ? WHERE AssessmentID = ?`,
+          [score.toFixed(2), score >= 60 ? 'Pass' : 'Fail', session.AssessmentID]
+        );
+      }
+
+      await connection.commit();
+      connection.release();
+
+      return res.json({
+        message: `${assessmentType} assessment completed. BKT update skipped for supplementary lesson.`,
+        sessionId,
+        moduleId,
+        assessmentType,
+        bktSkipped: true,
+        skills: {}
+      });
+    }
+
     // Get final CurrentL for each skill (this is the Post-Test L from item interactions)
     const [skillStates] = await connection.execute(
       'SELECT SkillName, CurrentL, PostTestL FROM bkt_model WHERE UserID = ?',
@@ -1086,6 +1228,19 @@ const computeLessonMasteryEndpoint = async (req, res) => {
     const userId = req.user.userId;
     const moduleId = parseInt(req.params.moduleId);
 
+    const moduleContext = await getModuleBktContext(connection, moduleId);
+    if (moduleContext.moduleExists && moduleContext.isSupplementary) {
+      await connection.rollback();
+      connection.release();
+      return res.json({
+        message: 'Supplementary lessons are excluded from BKT lesson mastery computation.',
+        moduleId,
+        needsRetake: false,
+        bktSkipped: true,
+        skills: {}
+      });
+    }
+
     // Get lesson mastery records
     const [lessonMasteries] = await connection.execute(
       'SELECT * FROM bkt_lesson_mastery WHERE UserID = ? AND ModuleID = ?',
@@ -1203,8 +1358,12 @@ const computeOverallMasteryEndpoint = async (req, res) => {
 
       // Get all WMLesson values for this skill
       const [lessonMasteries] = await connection.execute(
-        'SELECT WMLesson FROM bkt_lesson_mastery WHERE UserID = ? AND SkillName = ? AND IsPassed = TRUE',
-        [userId, skillName]
+        `SELECT lm.WMLesson
+         FROM bkt_lesson_mastery lm
+         LEFT JOIN module m ON lm.ModuleID = m.ModuleID
+         WHERE lm.UserID = ? AND lm.SkillName = ? AND lm.IsPassed = TRUE
+           AND (m.ModuleID IS NULL OR LOWER(COALESCE(m.Difficulty, '')) <> ?)`,
+        [userId, skillName, SUPPLEMENTARY_DIFFICULTY]
       );
 
       const wmLessonValues = lessonMasteries.map(lm => parseFloat(lm.WMLesson) || 0);
@@ -1218,9 +1377,12 @@ const computeOverallMasteryEndpoint = async (req, res) => {
       // Get total questions stats for (m/n)*100
       const [questionStats] = await connection.execute(
         `SELECT COUNT(*) as totalQuestions,
-                SUM(CASE WHEN IsCorrect = 1 THEN 1 ELSE 0 END) as totalMastered
-         FROM bkt_item_response WHERE UserID = ? AND SkillName = ?`,
-        [userId, skillName]
+                SUM(CASE WHEN ir.IsCorrect = 1 THEN 1 ELSE 0 END) as totalMastered
+         FROM bkt_item_response ir
+         LEFT JOIN module m ON ir.ModuleID = m.ModuleID
+         WHERE ir.UserID = ? AND ir.SkillName = ?
+           AND (ir.ModuleID IS NULL OR LOWER(COALESCE(m.Difficulty, '')) <> ?)`,
+        [userId, skillName, SUPPLEMENTARY_DIFFICULTY]
       );
 
       const totalQuestions = questionStats[0].totalQuestions || 0;
@@ -1399,16 +1561,47 @@ const getFinalAssessmentHistory = async (req, res) => {
  */
 const batchUpdateKnowledge = async (req, res) => {
   const connection = await getConnection();
+  let transactionStarted = false;
   try {
+    await ensureAssessmentTimeSpentColumn();
     await connection.beginTransaction();
+    transactionStarted = true;
     const userId = req.user.userId;
     const { answers, assessmentType = 'Review', moduleId = null } = req.body;
+
+    const assessmentTypeMap = {
+      review: 'Review',
+      quiz: 'Review',
+      final: 'Final',
+      'post-test': 'Final',
+      posttest: 'Final',
+      simulation: 'Simulation',
+      diagnostic: 'Diagnostic',
+      initial: 'Initial'
+    };
+
+    const normalizedAssessmentType =
+      assessmentTypeMap[String(assessmentType || 'Review').trim().toLowerCase()] || 'Review';
+
+    const parsedModuleId = Number.parseInt(moduleId, 10);
+    const normalizedModuleId = Number.isFinite(parsedModuleId) ? parsedModuleId : null;
+    const moduleContext = await getModuleBktContext(connection, normalizedModuleId);
+    const skipBktUpdates = moduleContext.moduleExists && moduleContext.isSupplementary;
 
     if (!answers || !Array.isArray(answers) || answers.length === 0) {
       await connection.rollback();
       connection.release();
       return res.status(400).json({ error: 'Bad Request', message: 'answers array is required' });
     }
+
+    const explicitTimeSpentSeconds = Math.max(0, Math.floor(Number(req.body.timeSpentSeconds || 0)));
+    const derivedTimeSpentSeconds = answers.reduce(
+      (sum, answer) => sum + Math.max(0, Number(answer?.responseTime || 0)),
+      0
+    );
+    const totalTimeSpentSeconds = explicitTimeSpentSeconds > 0
+      ? explicitTimeSpentSeconds
+      : derivedTimeSpentSeconds;
 
     // Group answers by skill (skip 'No Skill' questions)
     const skillAnswers = {};
@@ -1425,79 +1618,132 @@ const batchUpdateKnowledge = async (req, res) => {
 
     const results = [];
     const timeRuleResults = [];
+    let persistedAssessment = null;
 
-    for (const [skillName, answerList] of Object.entries(skillAnswers)) {
-      const params = bkt.getSkillParams(skillName);
+    if (!skipBktUpdates) {
+      for (const [skillName, answerList] of Object.entries(skillAnswers)) {
+        const params = bkt.getSkillParams(skillName);
 
-      // Get or create skill record
-      const [existing] = await connection.execute(
-        'SELECT * FROM bkt_model WHERE UserID = ? AND SkillName = ?',
-        [userId, skillName]
-      );
-
-      let currentL;
-      if (existing.length === 0) {
-        currentL = params.pInit;
-        await connection.execute(
-          `INSERT INTO bkt_model (UserID, SkillName, PKnown, PLearn, PSlip, PGuess, BaseL, CurrentL, PostTestL)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0.000000)`,
-          [userId, skillName, params.pInit, params.pLearn, params.pSlip, params.pGuess, params.pInit, params.pInit]
+        // Get or create skill record
+        const [existing] = await connection.execute(
+          'SELECT * FROM bkt_model WHERE UserID = ? AND SkillName = ?',
+          [userId, skillName]
         );
-      } else {
-        currentL = parseFloat(existing[0].CurrentL || existing[0].PKnown);
-      }
 
-      const previousPKnown = currentL;
-
-      // Step 1-3: Process each answer through item interaction iteratively
-      // Each answer's Post-Test L becomes the Current L for the next answer (Step 3)
-      for (const answer of answerList) {
-        const interaction = bkt.itemInteraction(currentL, skillName, answer.isCorrect);
-        currentL = interaction.currentL_after; // Step 3: Current L = Post-Test L
-
-        // Apply time-based rules for Final Assessment
-        if (assessmentType === 'Final' && answer.responseTime !== undefined) {
-          const questionType = answer.questionType || 'Easy';
-          const timeRule = bkt.applyFinalTimeRules(answer.responseTime, questionType, answer.isCorrect);
-          timeRuleResults.push({
-            skill: skillName,
-            isCorrect: answer.isCorrect,
-            responseTime: answer.responseTime,
-            questionType,
-            ...timeRule
-          });
+        let currentL;
+        if (existing.length === 0) {
+          currentL = params.pInit;
+          await connection.execute(
+            `INSERT INTO bkt_model (UserID, SkillName, PKnown, PLearn, PSlip, PGuess, BaseL, CurrentL, PostTestL)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0.000000)`,
+            [userId, skillName, params.pInit, params.pLearn, params.pSlip, params.pGuess, params.pInit, params.pInit]
+          );
+        } else {
+          currentL = parseFloat(existing[0].CurrentL || existing[0].PKnown);
         }
+
+        const previousPKnown = currentL;
+
+        // Step 1-3: Process each answer through item interaction iteratively
+        // Each answer's Post-Test L becomes the Current L for the next answer (Step 3)
+        for (const answer of answerList) {
+          const interaction = bkt.itemInteraction(currentL, skillName, answer.isCorrect);
+          currentL = interaction.currentL_after; // Step 3: Current L = Post-Test L
+
+          // Apply time-based rules for Final Assessment
+          if (normalizedAssessmentType === 'Final' && answer.responseTime !== undefined) {
+            const questionType = answer.questionType || 'Easy';
+            const timeRule = bkt.applyFinalTimeRules(answer.responseTime, questionType, answer.isCorrect);
+            timeRuleResults.push({
+              skill: skillName,
+              isCorrect: answer.isCorrect,
+              responseTime: answer.responseTime,
+              questionType,
+              ...timeRule
+            });
+          }
+        }
+
+        // Step 4: Final Post-Test L assigned to CurrentL and PKnown
+        // Update bkt_model with the last Post-Test L value
+        await connection.execute(
+          'UPDATE bkt_model SET CurrentL = ?, PKnown = ?, updated_at = CURRENT_TIMESTAMP WHERE UserID = ? AND SkillName = ?',
+          [currentL, currentL, userId, skillName]
+        );
+
+        results.push({
+          skillName,
+          previousPKnown,
+          newPKnown: currentL,
+          isMastered: currentL >= bkt.CONSTANTS.MASTERY_THRESHOLD,
+          questionsAnswered: answerList.length,
+          correctCount: answerList.filter(a => a.isCorrect).length,
+          proficiencyLevel: bkt.getProficiencyLevel(currentL)
+        });
       }
-
-      // Step 4: Final Post-Test L assigned to CurrentL and PKnown
-      // Update bkt_model with the last Post-Test L value
-      await connection.execute(
-        'UPDATE bkt_model SET CurrentL = ?, PKnown = ?, updated_at = CURRENT_TIMESTAMP WHERE UserID = ? AND SkillName = ?',
-        [currentL, currentL, userId, skillName]
-      );
-
-      results.push({
-        skillName,
-        previousPKnown,
-        newPKnown: currentL,
-        isMastered: currentL >= bkt.CONSTANTS.MASTERY_THRESHOLD,
-        questionsAnswered: answerList.length,
-        correctCount: answerList.filter(a => a.isCorrect).length,
-        proficiencyLevel: bkt.getProficiencyLevel(currentL)
-      });
     }
 
-    await connection.commit();
+    const scoredAnswers = answers.filter((answer) => typeof answer?.isCorrect === 'boolean');
+    const totalAnswered = scoredAnswers.length;
+    const totalCorrect = scoredAnswers.reduce(
+      (sum, answer) => sum + (answer.isCorrect ? 1 : 0),
+      0
+    );
+    const score = totalAnswered > 0 ? (totalCorrect / totalAnswered) * 100 : 0;
+    const resultStatus = score >= 60 ? 'Pass' : 'Fail';
+
+    // Persist assessment summary so review/final attempts are reflected in mastery stats and token logic.
+    try {
+      const [moduleIdColumn] = await connection.execute("SHOW COLUMNS FROM assessment LIKE 'ModuleID'");
+      const hasModuleIdColumn = moduleIdColumn.length > 0;
+
+      const [insertResult] = hasModuleIdColumn
+        ? await connection.execute(
+            `INSERT INTO assessment (UserID, ModuleID, AssessmentType, TotalScore, TimeSpentSeconds, ResultStatus)
+             VALUES (?, ?, ?, ?, ?, ?)`,
+            [userId, normalizedModuleId, normalizedAssessmentType, score.toFixed(2), totalTimeSpentSeconds, resultStatus]
+          )
+        : await connection.execute(
+            `INSERT INTO assessment (UserID, AssessmentType, TotalScore, TimeSpentSeconds, ResultStatus)
+             VALUES (?, ?, ?, ?, ?)`,
+            [userId, normalizedAssessmentType, score.toFixed(2), totalTimeSpentSeconds, resultStatus]
+          );
+
+      persistedAssessment = {
+        assessmentId: insertResult.insertId,
+        assessmentType: normalizedAssessmentType,
+        moduleId: normalizedModuleId,
+        totalQuestions: totalAnswered,
+        totalCorrect,
+        score: Number(score.toFixed(2)),
+        timeSpentSeconds: totalTimeSpentSeconds,
+        resultStatus
+      };
+    } catch (persistError) {
+      // Keep BKT update successful even if optional assessment persistence fails in older schemas.
+      console.warn('Batch update assessment persistence skipped:', persistError.message);
+    }
+
+    if (transactionStarted) {
+      await connection.commit();
+      transactionStarted = false;
+    }
     connection.release();
 
     res.json({
-      message: 'Knowledge states updated',
+      message: skipBktUpdates
+        ? 'Supplementary lesson assessment recorded. BKT update skipped.'
+        : 'Knowledge states updated',
+      bktSkipped: skipBktUpdates,
       masteryThreshold: bkt.CONSTANTS.MASTERY_THRESHOLD,
       skills: results,
-      timeRules: timeRuleResults.length > 0 ? timeRuleResults : undefined
+      timeRules: timeRuleResults.length > 0 ? timeRuleResults : undefined,
+      assessment: persistedAssessment
     });
   } catch (error) {
-    await connection.rollback();
+    if (transactionStarted) {
+      await connection.rollback();
+    }
     connection.release();
     console.error('Batch update knowledge error:', error);
     res.status(500).json({ error: 'Internal Server Error', message: 'Failed to update knowledge states' });

@@ -85,7 +85,7 @@ const CONSTANTS = {
   REVIEW_QUESTIONS_MIN: 10,               // 10 or 20 questions
   REVIEW_QUESTIONS_MAX: 20,
   SIMULATION_TOTAL_STEPS: 35,             // 35 questions/steps
-  FINAL_TOTAL_QUESTIONS: 30,              // 30 questions
+  FINAL_TOTAL_QUESTIONS: 45,              // 45 questions
 
   // Time-based rule thresholds (in seconds)
   REVIEW_TIME_THRESHOLD: 30,              // 30 seconds for review
@@ -689,7 +689,7 @@ const selectSimulationQuestions = (lessonQuestions) => {
 
 /**
  * Select questions for Final Assessment.
- * 30 questions, both Easy and Situational, inside the lesson.
+ * 45 questions, both Easy and Situational, inside the lesson.
  * Equal distribution from each skill.
  * Can include questions from Review question list.
  * 

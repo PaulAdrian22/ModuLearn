@@ -37,7 +37,12 @@ const Login = () => {
       if (response.data.user.role === 'admin') {
         navigate('/admin/dashboard');
       } else {
-        navigate('/dashboard', { state: { fromLogin: true } });
+        navigate('/dashboard', {
+          state: {
+            fromLogin: true,
+            isNewUser: Boolean(response.data.isNewUser),
+          },
+        });
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');

@@ -8,6 +8,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
+import { themedConfirm } from '../utils/themedConfirm';
 
 const METRIC_OPTIONS = [
   { key: 'lessonProgress', label: 'Lesson Progress', yLabel: 'Percent' },
@@ -30,6 +31,11 @@ const AdminLearners = () => {
   const [filteredLearners, setFilteredLearners] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [sortField, setSortField] = useState('alphabetical');
+  const [sortDirection, setSortDirection] = useState('asc');
+  const [metricFilter, setMetricFilter] = useState('all');
+  const [learnerMetricSummaries, setLearnerMetricSummaries] = useState({});
+  const [metricFilterLoading, setMetricFilterLoading] = useState(false);
   const [selectedLearner, setSelectedLearner] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
   const [activeTab, setActiveTab] = useState('active');
@@ -50,19 +56,94 @@ const AdminLearners = () => {
   }, [user, navigate]);
 
   useEffect(() => {
-    // Filter learners based on search query
-    if (searchQuery.trim() === '') {
-      setFilteredLearners(learners);
-    } else {
-      const query = searchQuery.toLowerCase();
-      const filtered = learners.filter(learner => 
+    const query = searchQuery.trim().toLowerCase();
+    let filtered = learners;
+
+    if (query !== '') {
+      filtered = filtered.filter((learner) =>
         learner.Name.toLowerCase().includes(query) ||
         learner.Email.toLowerCase().includes(query) ||
         learner.EducationalBackground?.toLowerCase().includes(query)
       );
-      setFilteredLearners(filtered);
     }
-  }, [searchQuery, learners]);
+
+    if (metricFilter !== 'all') {
+      filtered = filtered.filter((learner) => {
+        const summary = learnerMetricSummaries[learner.UserID];
+
+        // Keep rows visible while metrics are still loading.
+        if (!summary) return metricFilterLoading;
+
+        const value = Number(summary[metricFilter] || 0);
+        return value > 0;
+      });
+    }
+
+    setFilteredLearners(filtered);
+  }, [searchQuery, learners, metricFilter, learnerMetricSummaries, metricFilterLoading]);
+
+  const buildMetricSummary = (lessonMetrics = []) => {
+    const metricTotals = METRIC_OPTIONS.reduce((acc, metric) => {
+      acc[metric.key] = 0;
+      return acc;
+    }, {});
+
+    lessonMetrics.forEach((lessonMetric) => {
+      METRIC_OPTIONS.forEach((metric) => {
+        metricTotals[metric.key] += Number(lessonMetric?.[metric.key] || 0);
+      });
+    });
+
+    const averageMetricKeys = new Set([
+      'lessonProgress',
+      'lessonCompletionRate',
+      'timeSpentPerLesson',
+      'finalAssessmentScores',
+      'challengeTrend'
+    ]);
+
+    const lessonCount = lessonMetrics.length || 1;
+
+    return METRIC_OPTIONS.reduce((acc, metric) => {
+      const total = Number(metricTotals[metric.key] || 0);
+      acc[metric.key] = averageMetricKeys.has(metric.key)
+        ? Math.round(total / lessonCount)
+        : Math.round(total);
+      return acc;
+    }, {});
+  };
+
+  const fetchLearnerMetricSummaries = async (studentLearners) => {
+    if (!studentLearners.length) {
+      setLearnerMetricSummaries({});
+      return;
+    }
+
+    setMetricFilterLoading(true);
+
+    try {
+      const summaryEntries = await Promise.all(
+        studentLearners.map(async (learner) => {
+          try {
+            const response = await axios.get(`/users/${learner.UserID}/details`);
+            return [learner.UserID, buildMetricSummary(response.data?.lessonMetrics || [])];
+          } catch (error) {
+            console.error(`Failed to load metric summary for learner ${learner.UserID}:`, error);
+            return [learner.UserID, null];
+          }
+        })
+      );
+
+      const summaries = {};
+      summaryEntries.forEach(([userId, summary]) => {
+        if (summary) summaries[userId] = summary;
+      });
+
+      setLearnerMetricSummaries(summaries);
+    } finally {
+      setMetricFilterLoading(false);
+    }
+  };
 
   const fetchLearners = async () => {
     try {
@@ -75,6 +156,7 @@ const AdminLearners = () => {
       
       setLearners(studentLearners);
       setFilteredLearners(studentLearners);
+      fetchLearnerMetricSummaries(studentLearners);
       
       // Calculate stats
       const now = Date.now();
@@ -114,7 +196,15 @@ const AdminLearners = () => {
   };
 
   const handleDeleteLearner = async (learnerId) => {
-    if (!window.confirm('Are you sure you want to delete this learner? This action cannot be undone.')) {
+    const shouldDelete = await themedConfirm({
+      title: 'Delete Learner',
+      message: 'Are you sure you want to delete this learner? This action cannot be undone.',
+      confirmText: 'Delete',
+      cancelText: 'Cancel',
+      variant: 'danger'
+    });
+
+    if (!shouldDelete) {
       return;
     }
 
@@ -135,6 +225,66 @@ const AdminLearners = () => {
       year: 'numeric'
     });
   };
+
+  const parseDateValue = (dateString) => {
+    if (!dateString) return null;
+    const timestamp = new Date(dateString).getTime();
+    return Number.isFinite(timestamp) ? timestamp : null;
+  };
+
+  const parseNumberValue = (value) => {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
+  };
+
+  const parseTextValue = (value) => {
+    const text = String(value || '').trim().toLowerCase();
+    return text || null;
+  };
+
+  const getComparableValue = (learner, field) => {
+    switch (field) {
+      case 'alphabetical':
+        return { type: 'text', value: parseTextValue(learner.Name) };
+      case 'dateJoined':
+        return { type: 'number', value: parseDateValue(learner.created_at) };
+      case 'lastOnline':
+        return { type: 'number', value: parseDateValue(learner.last_login) };
+      case 'age':
+        return { type: 'number', value: parseNumberValue(learner.Age) };
+      case 'background':
+        return { type: 'text', value: parseTextValue(learner.EducationalBackground) };
+      case 'selectedMetric': {
+        const metricKey = metricFilter === 'all' ? 'lessonProgress' : metricFilter;
+        const metricValue = learnerMetricSummaries[learner.UserID]?.[metricKey];
+        return { type: 'number', value: parseNumberValue(metricValue) };
+      }
+      default:
+        return { type: 'text', value: parseTextValue(learner.Name) };
+    }
+  };
+
+  const compareLearners = (a, b) => {
+    const first = getComparableValue(a, sortField);
+    const second = getComparableValue(b, sortField);
+    const isFirstMissing = first.value === null;
+    const isSecondMissing = second.value === null;
+
+    if (isFirstMissing && isSecondMissing) return 0;
+    if (isFirstMissing) return 1;
+    if (isSecondMissing) return -1;
+
+    let comparison = 0;
+    if (first.type === 'text') {
+      comparison = first.value.localeCompare(second.value);
+    } else {
+      comparison = first.value - second.value;
+    }
+
+    return sortDirection === 'asc' ? comparison : -comparison;
+  };
+
+  const sortLearnerList = (items) => [...items].sort(compareLearners);
 
   const formatMinutes = (minutes) => {
     const value = Number(minutes || 0);
@@ -208,9 +358,9 @@ const AdminLearners = () => {
     doc.save(`${selectedLearner.Name.replace(/\s+/g, '_')}_progress_report.pdf`);
   };
 
-  const activeLearners = filteredLearners;
-  const suspendedLearners = [];
-  const deletedLearners = [];
+  const activeLearners = sortLearnerList(filteredLearners);
+  const suspendedLearners = sortLearnerList([]);
+  const deletedLearners = sortLearnerList([]);
   const visibleLearners = activeTab === 'active' ? activeLearners : activeTab === 'suspended' ? suspendedLearners : deletedLearners;
 
   if (loading) {
@@ -287,28 +437,87 @@ const AdminLearners = () => {
 
           {/* Search Bar */}
           <div className="card mb-6">
-          <div className="flex items-center gap-3">
-            <svg className="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <input
-              type="text"
-              placeholder="Search learners by name, email, or background..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="flex-1 border-none focus:outline-none focus:ring-0 bg-transparent text-text-primary"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="text-text-secondary hover:text-text-primary"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <div className="flex flex-col xl:flex-row xl:items-center gap-4">
+              <div className="flex items-center gap-3 flex-1 min-w-0">
+                <svg className="w-5 h-5 text-text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-              </button>
+                <input
+                  type="text"
+                  placeholder="Search learners by name, email, or background..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="flex-1 border-none focus:outline-none focus:ring-0 bg-transparent text-text-primary"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="text-text-secondary hover:text-text-primary"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3 sm:items-center xl:justify-end">
+                <div className="flex items-center gap-2">
+                  <label htmlFor="learner-metric-filter" className="text-sm font-medium text-text-secondary whitespace-nowrap">
+                    Metric Filter
+                  </label>
+                  <select
+                    id="learner-metric-filter"
+                    value={metricFilter}
+                    onChange={(e) => setMetricFilter(e.target.value)}
+                    className="px-3 py-2 rounded-lg border border-border bg-white text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  >
+                    <option value="all">All Learners</option>
+                    {METRIC_OPTIONS.map((metric) => (
+                      <option key={metric.key} value={metric.key}>{metric.label}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <label htmlFor="learner-sort-field" className="text-sm font-medium text-text-secondary whitespace-nowrap">
+                    Sort By
+                  </label>
+                  <select
+                    id="learner-sort-field"
+                    value={sortField}
+                    onChange={(e) => setSortField(e.target.value)}
+                    className="px-3 py-2 rounded-lg border border-border bg-white text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  >
+                    <option value="alphabetical">Alphabetically</option>
+                    <option value="dateJoined">Date Joined</option>
+                    <option value="lastOnline">Last Online</option>
+                    <option value="age">Age</option>
+                    <option value="background">Background</option>
+                    <option value="selectedMetric">Selected Metric</option>
+                  </select>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <label htmlFor="learner-sort-order" className="text-sm font-medium text-text-secondary whitespace-nowrap">
+                    Order
+                  </label>
+                  <select
+                    id="learner-sort-order"
+                    value={sortDirection}
+                    onChange={(e) => setSortDirection(e.target.value)}
+                    className="px-3 py-2 rounded-lg border border-border bg-white text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  >
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {metricFilter !== 'all' && metricFilterLoading && (
+              <p className="mt-3 text-xs text-text-secondary">Loading learner metric filter data...</p>
             )}
-          </div>
           </div>
 
             {/* Learners Table */}

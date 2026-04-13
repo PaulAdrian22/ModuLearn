@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useAuth } from '../App';
 import IntroductionFlow from '../components/IntroductionFlow';
 import Navbar from '../components/Navbar';
+import { themedConfirm } from '../utils/themedConfirm';
+import { withPreferredLanguage } from '../utils/languagePreference';
 
 const decodeHtmlEntities = (value = '') => {
   const normalized = String(value)
@@ -17,6 +19,29 @@ const decodeHtmlEntities = (value = '') => {
 
 const toPlainText = (value = '') => decodeHtmlEntities(String(value).replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ').trim();
 
+const stripObjectivesFromSummary = (value = '') => {
+  const plain = toPlainText(value);
+  if (!plain) return '';
+
+  const objectiveStart = plain.search(/\b(?:learning\s*objectives?|objectives?)\b\s*[:\-]/i);
+  if (objectiveStart === -1) {
+    return plain;
+  }
+
+  return plain.slice(0, objectiveStart).trim();
+};
+
+const formatLastOpened = (dateString) => {
+  if (!dateString) return 'Not opened yet';
+  const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) return 'Not opened yet';
+  return new Intl.DateTimeFormat(undefined, {
+    month: '2-digit',
+    day: '2-digit',
+    year: 'numeric',
+  }).format(date);
+};
+
 const Dashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,6 +52,7 @@ const Dashboard = () => {
   const [showLoading, setShowLoading] = useState(false);
   const [error, setError] = useState('');
   const [showIntroduction, setShowIntroduction] = useState(false);
+  const [isNewUserLogin, setIsNewUserLogin] = useState(false);
 
   // Redirect admin users to admin panel
   useEffect(() => {
@@ -44,6 +70,7 @@ const Dashboard = () => {
     try {
       // Only show introduction flow when coming from login page
       if (location.state?.fromLogin) {
+        setIsNewUserLogin(Boolean(location.state?.isNewUser));
         setShowIntroduction(true);
         // Clear the state so refresh doesn't show it again
         window.history.replaceState({}, document.title);
@@ -66,7 +93,7 @@ const Dashboard = () => {
       
       // Fetch modules with user progress
       const [modulesResponse, statsResponse] = await Promise.all([
-        axios.get(`/modules?userId=${user.userId}`),
+        axios.get(withPreferredLanguage(`/modules?userId=${user.userId}`)),
         axios.get('/users/stats')
       ]);
       console.log('Dashboard fetched modules:', modulesResponse.data);
@@ -84,8 +111,15 @@ const Dashboard = () => {
     }
   };
 
-  const handleLogout = () => {
-    if (window.confirm('Are you sure you want to logout?')) {
+  const handleLogout = async () => {
+    const shouldLogout = await themedConfirm({
+      title: 'Logout',
+      message: 'Are you sure you want to logout?',
+      confirmText: 'Logout',
+      cancelText: 'Stay'
+    });
+
+    if (shouldLogout) {
       localStorage.removeItem('token');
       navigate('/login');
     }
@@ -96,13 +130,10 @@ const Dashboard = () => {
       return;
     }
 
-    // Check if progress exists, if not start the module
-    if (!module.ProgressID) {
-      try {
-        await axios.post('/progress/start', { moduleId: module.ModuleID });
-      } catch (err) {
-        console.error('Error starting module:', err);
-      }
+    try {
+      await axios.post('/progress/start', { moduleId: module.ModuleID });
+    } catch (err) {
+      console.error('Error opening module progress:', err);
     }
 
     navigate(`/module/${module.ModuleID}`);
@@ -113,7 +144,9 @@ const Dashboard = () => {
   const avgProgress = stats?.averageProgress || 0;
   const skillsMastered = stats?.skills?.mastered || 0;
   const totalSkills = stats?.skills?.total || 0;
-  const totalTime = stats?.timeSpentMinutes || 0;
+  const totalTime = Math.max(0, Number.parseInt(stats?.timeSpentMinutes ?? 0, 10) || 0);
+  const totalTimeHours = Math.floor(totalTime / 60);
+  const totalTimeMinutes = totalTime % 60;
   const lessonDifficultyColors = {
     Easy: '#4A90E2',
     Challenging: '#F1C40F',
@@ -178,9 +211,16 @@ const Dashboard = () => {
     <div className={`min-h-screen bg-[#F5F7FA] ${showIntroduction ? 'overflow-hidden' : ''}`}>
       {showIntroduction && (
         <IntroductionFlow 
+          isNewUser={isNewUserLogin}
           onComplete={(language) => {
+            const normalizedLanguage = String(language || '').toLowerCase() === 'filipino' ? 'Taglish' : (language || 'English');
             localStorage.setItem('hasSeenIntroduction', 'true');
-            localStorage.setItem('preferredLanguage', language);
+            localStorage.setItem('preferredLanguage', normalizedLanguage);
+
+            axios.put('/users/profile', { preferredLanguage: normalizedLanguage }).catch((err) => {
+              console.error('Error saving preferred language:', err);
+            });
+
             setShowIntroduction(false);
           }} 
         />
@@ -244,7 +284,7 @@ const Dashboard = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 font-medium">Time Spent</p>
-                  <p className="text-3xl font-bold text-[#0B2B4C]">{Math.floor(totalTime / 60)}h {totalTime % 60}m</p>
+                  <p className="text-3xl font-bold text-[#0B2B4C]">{totalTimeHours}h {totalTimeMinutes}m</p>
                 </div>
               </div>
             </div>
@@ -404,7 +444,11 @@ const Dashboard = () => {
                             </span>
                           )}
                           <p className="text-sm text-gray-600 line-clamp-2">
-                            {toPlainText(module.Description) || 'The foundation of Computer Hardware Servicing and its importance to modern professional operations.'}
+                            {stripObjectivesFromSummary(module.Description) || 'The foundation of Computer Hardware Servicing and its importance to modern professional operations.'}
+                          </p>
+                          <p className="mt-2 text-xs sm:text-sm text-gray-500 leading-relaxed flex flex-col sm:flex-row sm:items-center sm:gap-1">
+                            <span className="font-semibold">Last Opened:</span>
+                            <span>{formatLastOpened(module.LastOpenedAt)}</span>
                           </p>
                         </div>
                         {!module.Is_Unlocked && (

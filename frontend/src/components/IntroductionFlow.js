@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 
-const IntroductionFlow = ({ onComplete }) => {
+const IntroductionFlow = ({ onComplete, isNewUser = false }) => {
   const [step, setStep] = useState(1);
-  const [language, setLanguage] = useState('');
-  const [hasSeenBefore, setHasSeenBefore] = useState(false);
 
-  // Check if user has seen this before
-  useState(() => {
-    const seen = localStorage.getItem('hasSeenIntroduction');
-    setHasSeenBefore(!!seen);
-  }, []);
+  const normalizeLanguageChoice = (value = '') => {
+    const normalized = String(value || '').trim().toLowerCase();
+
+    if (normalized === 'english') return 'English';
+    if (normalized === 'taglish' || normalized === 'filipino' || normalized === 'tagalog') return 'Taglish';
+
+    return 'English';
+  };
 
   // Hide body scrollbar when component mounts
   React.useEffect(() => {
@@ -20,14 +21,14 @@ const IntroductionFlow = ({ onComplete }) => {
   }, []);
 
   const handleLanguageSelect = (selectedLanguage) => {
-    setLanguage(selectedLanguage);
-    localStorage.setItem('preferredLanguage', selectedLanguage);
+    const normalizedLanguage = normalizeLanguageChoice(selectedLanguage);
+    localStorage.setItem('preferredLanguage', normalizedLanguage);
     localStorage.setItem('hasSeenIntroduction', 'true');
-    onComplete(selectedLanguage);
+    onComplete(normalizedLanguage);
   };
 
   const handleSkip = () => {
-    const savedLanguage = localStorage.getItem('preferredLanguage') || 'English';
+    const savedLanguage = normalizeLanguageChoice(localStorage.getItem('preferredLanguage') || 'English');
     onComplete(savedLanguage);
   };
 
@@ -51,7 +52,7 @@ const IntroductionFlow = ({ onComplete }) => {
               </svg>
               <h1 className="text-3xl font-bold">Personalize your Learning Path</h1>
             </div>
-            {hasSeenBefore && (
+            {!isNewUser && (
               <button
                 onClick={handleSkip}
                 className="px-6 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-all hover:scale-105 font-semibold flex items-center gap-2"
@@ -105,10 +106,10 @@ const IntroductionFlow = ({ onComplete }) => {
               {/* Language Buttons */}
               <div className="flex justify-center gap-8 mt-12 pt-6">
                 <button
-                  onClick={() => handleLanguageSelect('Filipino')}
+                  onClick={() => handleLanguageSelect('Taglish')}
                   className="px-16 py-5 bg-[#2BC4B3] hover:bg-[#1a9d8f] text-[#1e5a8e] rounded-full text-3xl font-bold shadow-xl transition-all hover:scale-105"
                 >
-                  Filipino
+                  Taglish
                 </button>
                 
                 <button
@@ -127,16 +128,6 @@ const IntroductionFlow = ({ onComplete }) => {
             >
               <svg className="w-8 h-8 text-[#1e5a8e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-
-            {/* Next/Forward Button on Language Page */}
-            <button
-              onClick={handleNext}
-              className="absolute bottom-8 right-8 w-16 h-16 bg-[#2BC4B3] hover:bg-[#1a9d8f] rounded-full shadow-2xl flex items-center justify-center transition-all hover:scale-110"
-            >
-              <svg className="w-8 h-8 text-[#1e5a8e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />
               </svg>
             </button>
           </div>

@@ -5,6 +5,11 @@ const { query } = require('../config/database');
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const path = require('path');
+const {
+  getMulterProfileDestination,
+  uploadProfileImageFromPath,
+  deleteProfileImage
+} = require('../utils/uploadStorage');
 
 let sharpLib = null;
 const getSharp = () => {
@@ -23,13 +28,105 @@ const getSharp = () => {
   return sharpLib;
 };
 
+let userProfileColumnsReady = false;
+let activityColumnsReady = false;
+
+const normalizePreferredLanguage = (value = '') => {
+  const normalized = String(value || '').trim().toLowerCase();
+
+  if (normalized === 'english') return 'English';
+  if (normalized === 'taglish' || normalized === 'filipino' || normalized === 'tagalog') return 'Taglish';
+
+  return 'English';
+};
+
+const stripHtmlToText = (value = '') => {
+  return String(value || '')
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/\s+/g, ' ')
+    .trim();
+};
+
+const ensureUserProfileColumns = async () => {
+  if (userProfileColumnsReady) return;
+
+  const existingColumns = await query(
+    `SELECT COLUMN_NAME
+       FROM INFORMATION_SCHEMA.COLUMNS
+      WHERE TABLE_SCHEMA = DATABASE()
+        AND TABLE_NAME = 'user'
+        AND COLUMN_NAME IN ('preferred_language')`
+  );
+
+  const columnSet = new Set(existingColumns.map((column) => String(column.COLUMN_NAME || '')));
+
+  if (!columnSet.has('preferred_language')) {
+    await query(
+      `ALTER TABLE user
+       ADD COLUMN preferred_language VARCHAR(20) NOT NULL DEFAULT 'English' AFTER EducationalBackground`
+    );
+    console.log('Added preferred_language column to user table.');
+  }
+
+  userProfileColumnsReady = true;
+};
+
+const ensureActivityTrackingColumns = async () => {
+  if (activityColumnsReady) return;
+
+  const [progressColumns, assessmentColumns] = await Promise.all([
+    query(
+      `SELECT COLUMN_NAME
+         FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+          AND TABLE_NAME = 'progress'
+          AND COLUMN_NAME = 'ActiveSeconds'`
+    ),
+    query(
+      `SELECT COLUMN_NAME
+         FROM INFORMATION_SCHEMA.COLUMNS
+        WHERE TABLE_SCHEMA = DATABASE()
+          AND TABLE_NAME = 'assessment'
+          AND COLUMN_NAME = 'TimeSpentSeconds'`
+    )
+  ]);
+
+  if (progressColumns.length === 0) {
+    await query(
+      `ALTER TABLE progress
+       ADD COLUMN ActiveSeconds INT NOT NULL DEFAULT 0 AFTER CompletionRate`
+    );
+    console.log('Added ActiveSeconds column to progress table.');
+  }
+
+  if (assessmentColumns.length === 0) {
+    await query(
+      `ALTER TABLE assessment
+       ADD COLUMN TimeSpentSeconds INT NOT NULL DEFAULT 0 AFTER TotalScore`
+    );
+    console.log('Added TimeSpentSeconds column to assessment table.');
+  }
+
+  activityColumnsReady = true;
+};
+
 // Get user profile
 const getUserProfile = async (req, res) => {
   try {
     const userId = req.user.userId;
+
+    await ensureUserProfileColumns();
     
     const users = await query(
-      'SELECT UserID, Name, Email, Age, EducationalBackground, profile_picture, avatar_type, default_avatar, created_at, last_login FROM user WHERE UserID = ?',
+      'SELECT UserID, Name, Email, Age, EducationalBackground, preferred_language AS preferredLanguage, profile_picture, avatar_type, default_avatar, created_at, last_login FROM user WHERE UserID = ?',
       [userId]
     );
     
@@ -55,15 +152,52 @@ const getUserProfile = async (req, res) => {
 const updateUserProfile = async (req, res) => {
   try {
     const userId = req.user.userId;
-    const { name, age, educationalBackground } = req.body;
-    
-    await query(
-      'UPDATE user SET Name = ?, Age = ?, EducationalBackground = ? WHERE UserID = ?',
-      [name, age || null, educationalBackground || null, userId]
-    );
+
+    await ensureUserProfileColumns();
+
+    const { name, email, age, educationalBackground, preferredLanguage } = req.body;
+
+    const fields = [];
+    const values = [];
+
+    if (name !== undefined) {
+      fields.push('Name = ?');
+      values.push(String(name).trim());
+    }
+
+    if (email !== undefined) {
+      fields.push('Email = ?');
+      values.push(String(email).trim());
+    }
+
+    if (age !== undefined) {
+      fields.push('Age = ?');
+      values.push(age === null || age === '' ? null : Number(age));
+    }
+
+    if (educationalBackground !== undefined) {
+      fields.push('EducationalBackground = ?');
+      values.push(String(educationalBackground).trim() || null);
+    }
+
+    if (preferredLanguage !== undefined) {
+      fields.push('preferred_language = ?');
+      values.push(normalizePreferredLanguage(preferredLanguage));
+    }
+
+    if (fields.length === 0) {
+      return res.status(400).json({
+        error: 'Validation Error',
+        message: 'No valid fields were provided to update'
+      });
+    }
+
+    values.push(userId);
+
+    await query(`UPDATE user SET ${fields.join(', ')} WHERE UserID = ?`, values);
     
     const updatedUser = await query(
-      'SELECT UserID, Name, Email, Age, EducationalBackground FROM user WHERE UserID = ?',
+      'SELECT UserID, Name, Email, Age, EducationalBackground, preferred_language AS preferredLanguage FROM user WHERE UserID = ?',
       [userId]
     );
     
@@ -73,6 +207,13 @@ const updateUserProfile = async (req, res) => {
     });
     
   } catch (error) {
+    if (error?.code === 'ER_DUP_ENTRY') {
+      return res.status(409).json({
+        error: 'Conflict',
+        message: 'Email is already in use'
+      });
+    }
+
     console.error('Update user profile error:', error);
     res.status(500).json({
       error: 'Internal Server Error',
@@ -139,36 +280,86 @@ const changePassword = async (req, res) => {
 const getUserStats = async (req, res) => {
   try {
     const userId = req.user.userId;
-    
-    // Get total modules count
-    const totalModules = await query(
-      'SELECT COUNT(*) as total FROM module',
-      []
-    );
+    await ensureActivityTrackingColumns();
 
-    // Get module progress
-    const moduleProgress = await query(
-      'SELECT COUNT(*) as started, SUM(CASE WHEN CompletionRate >= 100 THEN 1 ELSE 0 END) as completed, AVG(CompletionRate) as avgProgress FROM progress WHERE UserID = ?',
-      [userId]
-    );
-    
-    // Get assessment stats
-    const assessmentStats = await query(
-      'SELECT COUNT(*) as total, AVG(TotalScore) as avgScore, SUM(CASE WHEN ResultStatus = "Pass" THEN 1 ELSE 0 END) as passed FROM assessment WHERE UserID = ?',
-      [userId]
-    );
-    
-    // Get BKT mastery count
-    const bktStats = await query(
-      'SELECT COUNT(*) as total, SUM(CASE WHEN PKnown >= 0.95 THEN 1 ELSE 0 END) as mastered FROM bkt_model WHERE UserID = ?',
-      [userId]
-    );
+    const [
+      totalModules,
+      moduleProgress,
+      assessmentStats,
+      bktStats,
+      lessonTimeStats,
+      assessmentTimeStats,
+      simulationTimeStats
+    ] = await Promise.all([
+      query(
+        `SELECT COUNT(DISTINCT m.LessonOrder) as total
+           FROM module m`
+      ),
+      query(
+        `SELECT
+            COUNT(*) as started,
+            SUM(CASE WHEN lessonProgress.CompletionRate >= 100 THEN 1 ELSE 0 END) as completed,
+            AVG(lessonProgress.CompletionRate) as avgProgress
+         FROM (
+           SELECT
+             m.LessonOrder,
+             MAX(COALESCE(p.CompletionRate, 0)) as CompletionRate
+           FROM progress p
+           JOIN module m ON p.ModuleID = m.ModuleID
+           WHERE p.UserID = ?
+           GROUP BY m.LessonOrder
+         ) lessonProgress`,
+        [userId]
+      ),
+      query(
+        `SELECT COUNT(*) as total,
+                AVG(a.TotalScore) as avgScore,
+                SUM(CASE WHEN a.ResultStatus = 'Pass' THEN 1 ELSE 0 END) as passed
+           FROM assessment a
+          WHERE a.UserID = ?`,
+        [userId]
+      ),
+      query(
+        'SELECT COUNT(*) as total, SUM(CASE WHEN PKnown >= 0.95 THEN 1 ELSE 0 END) as mastered FROM bkt_model WHERE UserID = ?',
+        [userId]
+      ),
+      query(
+        `SELECT COALESCE(SUM(GREATEST(COALESCE(p.ActiveSeconds, 0), 0)), 0) as lessonSeconds
+           FROM progress p
+          WHERE p.UserID = ?`,
+        [userId]
+      ),
+      query(
+        `SELECT COALESCE(
+                  SUM(
+                    CASE
+                      WHEN COALESCE(a.TimeSpentSeconds, 0) > 0 THEN a.TimeSpentSeconds
+                      ELSE COALESCE(ua.totalResponseSeconds, 0)
+                    END
+                  ),
+                  0
+                ) as assessmentSeconds
+           FROM assessment a
+           LEFT JOIN (
+             SELECT AssessmentID, COALESCE(SUM(GREATEST(COALESCE(ResponseTime, 0), 0)), 0) as totalResponseSeconds
+               FROM user_answer
+              GROUP BY AssessmentID
+           ) ua ON ua.AssessmentID = a.AssessmentID
+          WHERE a.UserID = ?`,
+        [userId]
+      ),
+      query(
+        `SELECT COALESCE(SUM(GREATEST(COALESCE(sp.TimeSpent, 0), 0)), 0) as simulationSeconds
+           FROM simulation_progress sp
+          WHERE sp.UserID = ?`,
+        [userId]
+      )
+    ]);
 
-    // Calculate time spent from progress records (minutes between DateStarted and DateCompletion or now)
-    const timeStats = await query(
-      'SELECT SUM(TIMESTAMPDIFF(MINUTE, DateStarted, COALESCE(DateCompletion, NOW()))) as totalMinutes FROM progress WHERE UserID = ?',
-      [userId]
-    );
+    const lessonSeconds = Math.max(0, Number(lessonTimeStats[0]?.lessonSeconds || 0));
+    const assessmentSeconds = Math.max(0, Number(assessmentTimeStats[0]?.assessmentSeconds || 0));
+    const simulationSeconds = Math.max(0, Number(simulationTimeStats[0]?.simulationSeconds || 0));
+    const totalTimeSpentMinutes = Math.floor((lessonSeconds + assessmentSeconds + simulationSeconds) / 60);
     
     const started = moduleProgress[0].started || 0;
     const avgProgress = started > 0 ? parseFloat(moduleProgress[0].avgProgress || 0) : 0;
@@ -188,7 +379,7 @@ const getUserStats = async (req, res) => {
         mastered: parseInt(bktStats[0].mastered) || 0
       },
       averageProgress: Math.round(avgProgress),
-      timeSpentMinutes: parseInt(timeStats[0].totalMinutes) || 0
+      timeSpentMinutes: totalTimeSpentMinutes
     });
     
   } catch (error) {
@@ -204,36 +395,82 @@ const getUserStats = async (req, res) => {
 const getLearningProgressSummary = async (req, res) => {
   try {
     const userId = req.user.userId;
+    await ensureActivityTrackingColumns();
 
-    const [lessonTotals, progressTotals, assessmentByType, moduleAssessmentStats, masteryStats] = await Promise.all([
-      query('SELECT COUNT(*) as totalLessons FROM module', []),
+    const [
+      lessonTotals,
+      progressTotals,
+      assessmentByType,
+      moduleAssessmentStats,
+      masteryStats,
+      assessmentTimeTotals,
+      simulationTimeTotals
+    ] = await Promise.all([
+      query(
+        `SELECT COUNT(DISTINCT LessonOrder) as totalLessons
+           FROM module`
+      ),
       query(
         `SELECT
           COUNT(*) as startedLessons,
-          SUM(CASE WHEN CompletionRate >= 100 THEN 1 ELSE 0 END) as completedLessons,
-          AVG(CompletionRate) as avgCompletionRate,
-          SUM(TIMESTAMPDIFF(MINUTE, DateStarted, COALESCE(DateCompletion, NOW()))) as totalLearningMinutes
-         FROM progress
-         WHERE UserID = ?`,
+          SUM(CASE WHEN lessonProgress.CompletionRate >= 100 THEN 1 ELSE 0 END) as completedLessons,
+          COALESCE(SUM(lessonProgress.CompletionRate), 0) as totalCompletionRate,
+          AVG(lessonProgress.CompletionRate) as avgCompletionRate,
+          COALESCE(SUM(lessonProgress.ActiveSeconds), 0) as lessonActiveSeconds
+         FROM (
+           SELECT
+             m.LessonOrder,
+             MAX(COALESCE(p.CompletionRate, 0)) as CompletionRate,
+             COALESCE(SUM(GREATEST(COALESCE(p.ActiveSeconds, 0), 0)), 0) as ActiveSeconds
+           FROM progress p
+           JOIN module m ON p.ModuleID = m.ModuleID
+           WHERE p.UserID = ?
+           GROUP BY m.LessonOrder
+         ) lessonProgress`,
         [userId]
       ),
       query(
-        `SELECT LOWER(AssessmentType) as assessmentType, COUNT(*) as totalTaken, AVG(TotalScore) as averageScore
-         FROM assessment
-         WHERE UserID = ?
-         GROUP BY LOWER(AssessmentType)`,
+        `SELECT LOWER(a.AssessmentType) as assessmentType, COUNT(*) as totalTaken, AVG(a.TotalScore) as averageScore
+         FROM assessment a
+         WHERE a.UserID = ?
+         GROUP BY LOWER(a.AssessmentType)`,
         [userId]
       ),
       query(
-        `SELECT m.ModuleID, m.ModuleTitle, m.LessonOrder, AVG(a.TotalScore) as averageScore
+        `SELECT m.LessonOrder, MAX(m.ModuleTitle) as ModuleTitle, AVG(a.TotalScore) as averageScore
          FROM assessment a
          JOIN module m ON m.ModuleID = a.ModuleID
          WHERE a.UserID = ? AND a.ModuleID IS NOT NULL
-         GROUP BY m.ModuleID, m.ModuleTitle, m.LessonOrder`,
+         GROUP BY m.LessonOrder`,
         [userId]
       ),
       query(
         'SELECT AVG(PKnown) as avgKnown FROM bkt_model WHERE UserID = ?',
+        [userId]
+      ),
+      query(
+        `SELECT COALESCE(
+                  SUM(
+                    CASE
+                      WHEN COALESCE(a.TimeSpentSeconds, 0) > 0 THEN a.TimeSpentSeconds
+                      ELSE COALESCE(ua.totalResponseSeconds, 0)
+                    END
+                  ),
+                  0
+                ) as assessmentSeconds
+           FROM assessment a
+           LEFT JOIN (
+             SELECT AssessmentID, COALESCE(SUM(GREATEST(COALESCE(ResponseTime, 0), 0)), 0) as totalResponseSeconds
+               FROM user_answer
+              GROUP BY AssessmentID
+           ) ua ON ua.AssessmentID = a.AssessmentID
+          WHERE a.UserID = ?`,
+        [userId]
+      ),
+      query(
+        `SELECT COALESCE(SUM(GREATEST(COALESCE(sp.TimeSpent, 0), 0)), 0) as simulationSeconds
+           FROM simulation_progress sp
+          WHERE sp.UserID = ?`,
         [userId]
       )
     ]);
@@ -241,10 +478,15 @@ const getLearningProgressSummary = async (req, res) => {
     const totalLessons = parseInt(lessonTotals[0]?.totalLessons || 0, 10);
     const startedLessons = parseInt(progressTotals[0]?.startedLessons || 0, 10);
     const completedLessons = parseInt(progressTotals[0]?.completedLessons || 0, 10);
+    const totalCompletionRate = parseFloat(progressTotals[0]?.totalCompletionRate || 0);
     const avgCompletionRate = parseFloat(progressTotals[0]?.avgCompletionRate || 0);
-    const totalLearningMinutes = parseInt(progressTotals[0]?.totalLearningMinutes || 0, 10);
-    const averageTimePerLessonMinutes = startedLessons > 0 ? Math.round(totalLearningMinutes / startedLessons) : 0;
-    const progressPercent = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+    const lessonActiveSeconds = Math.max(0, parseInt(progressTotals[0]?.lessonActiveSeconds || 0, 10));
+    const assessmentSeconds = Math.max(0, parseInt(assessmentTimeTotals[0]?.assessmentSeconds || 0, 10));
+    const simulationSeconds = Math.max(0, parseInt(simulationTimeTotals[0]?.simulationSeconds || 0, 10));
+    const lessonActiveMinutes = Math.floor(lessonActiveSeconds / 60);
+    const totalLearningMinutes = Math.floor((lessonActiveSeconds + assessmentSeconds + simulationSeconds) / 60);
+    const averageTimePerLessonMinutes = startedLessons > 0 ? Math.round(lessonActiveMinutes / startedLessons) : 0;
+    const progressPercent = totalLessons > 0 ? Math.round(totalCompletionRate / totalLessons) : 0;
     const masteryLevelPercent = Math.round((parseFloat(masteryStats[0]?.avgKnown || 0) || 0) * 100);
 
     const reviewTypeSet = new Set(['review', 'quiz']);
@@ -288,12 +530,20 @@ const getLearningProgressSummary = async (req, res) => {
 
     rankedModules.sort((a, b) => a.averageScore - b.averageScore);
 
+    const buildLessonSummaryLabel = (lessonOrder, moduleTitle) => {
+      const cleanTitle = stripHtmlToText(moduleTitle) || 'Untitled Lesson';
+      return `Lesson ${lessonOrder}: ${cleanTitle}`;
+    };
+
     const mostChallengedLesson = rankedModules.length
-      ? `Lesson ${rankedModules[0].LessonOrder}: ${rankedModules[0].ModuleTitle}`
+      ? buildLessonSummaryLabel(rankedModules[0].LessonOrder, rankedModules[0].ModuleTitle)
       : null;
 
     const wellGraspedLesson = rankedModules.length
-      ? `Lesson ${rankedModules[rankedModules.length - 1].LessonOrder}: ${rankedModules[rankedModules.length - 1].ModuleTitle}`
+      ? buildLessonSummaryLabel(
+          rankedModules[rankedModules.length - 1].LessonOrder,
+          rankedModules[rankedModules.length - 1].ModuleTitle
+        )
       : null;
 
     let lessonLevel = 'Introductory Level';
@@ -335,6 +585,8 @@ const getLearningProgressSummary = async (req, res) => {
 
 // Upload profile picture
 const uploadProfilePicture = async (req, res) => {
+  let processedFilePath = '';
+
   try {
     const userId = req.user.userId;
     
@@ -354,12 +606,13 @@ const uploadProfilePicture = async (req, res) => {
     const oldPicture = users[0]?.profile_picture;
 
     let profilePicturePath = '';
+    processedFilePath = req.file.path;
     const sharp = getSharp();
 
     if (sharp) {
       // Resize image to 600x600px when sharp is available.
       const resizedFilename = `${userId}_${Date.now()}.jpg`;
-      const resizedPath = path.join(__dirname, '../uploads/profiles', resizedFilename);
+      const resizedPath = path.join(getMulterProfileDestination(), resizedFilename);
 
       await sharp(req.file.path)
         .resize(600, 600, {
@@ -371,11 +624,10 @@ const uploadProfilePicture = async (req, res) => {
 
       // Delete the original uploaded file after resize.
       fs.unlinkSync(req.file.path);
-      profilePicturePath = `/uploads/profiles/${resizedFilename}`;
-    } else {
-      // Fallback: keep original upload so avatar feature still works.
-      profilePicturePath = `/uploads/profiles/${path.basename(req.file.path)}`;
+      processedFilePath = resizedPath;
     }
+
+    profilePicturePath = await uploadProfileImageFromPath(processedFilePath, { userId });
 
     // Update database with new profile picture path and set avatar_type to 'custom'
     
@@ -385,12 +637,7 @@ const uploadProfilePicture = async (req, res) => {
     );
 
     // Delete old profile picture if it exists and is a custom upload
-    if (oldPicture && !oldPicture.includes('/avatars/')) {
-      const oldPath = path.join(__dirname, '..', oldPicture);
-      if (fs.existsSync(oldPath)) {
-        fs.unlinkSync(oldPath);
-      }
-    }
+    await deleteProfileImage(oldPicture);
 
     res.json({
       message: 'Profile picture uploaded successfully',
@@ -401,9 +648,15 @@ const uploadProfilePicture = async (req, res) => {
   } catch (error) {
     console.error('Upload profile picture error:', error);
     
-    // Clean up uploaded file if there's an error
-    if (req.file && fs.existsSync(req.file.path)) {
-      fs.unlinkSync(req.file.path);
+    // Clean up uploaded files if there's an error.
+    const filesToCleanup = new Set();
+    if (req.file?.path) filesToCleanup.add(req.file.path);
+    if (processedFilePath) filesToCleanup.add(processedFilePath);
+
+    for (const filePath of filesToCleanup) {
+      if (filePath && fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
     }
     
     res.status(500).json({
@@ -434,12 +687,9 @@ const deleteProfilePicture = async (req, res) => {
       });
     }
 
-    // Delete file from server only if it's a custom upload
-    if (avatarType === 'custom' && !profilePicture.includes('/avatars/')) {
-      const filePath = path.join(__dirname, '..', profilePicture);
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
-      }
+    // Delete file only if it's a custom upload.
+    if (avatarType === 'custom') {
+      await deleteProfileImage(profilePicture);
     }
 
     // Reset to default avatar
@@ -487,12 +737,9 @@ const selectDefaultAvatar = async (req, res) => {
     const oldPicture = users[0]?.profile_picture;
     const oldAvatarType = users[0]?.avatar_type;
 
-    // Delete old custom profile picture if exists
-    if (oldAvatarType === 'custom' && oldPicture && !oldPicture.includes('/avatars/')) {
-      const oldPath = path.join(__dirname, '..', oldPicture);
-      if (fs.existsSync(oldPath)) {
-        fs.unlinkSync(oldPath);
-      }
+    // Delete old custom profile picture if exists.
+    if (oldAvatarType === 'custom' && oldPicture) {
+      await deleteProfileImage(oldPicture);
     }
 
     // Update user to use default avatar
@@ -552,6 +799,7 @@ const getAllUsers = async (req, res) => {
 const getUserDetails = async (req, res) => {
   try {
     const { id } = req.params;
+    await ensureActivityTrackingColumns();
 
     const roleColumn = await query("SHOW COLUMNS FROM user LIKE 'Role'");
     const hasRoleColumn = roleColumn.length > 0;
@@ -579,19 +827,33 @@ const getUserDetails = async (req, res) => {
     const hasAssessmentRetakeColumn = assessmentRetakeColumn.length > 0;
 
     const assessmentQuery = hasAssessmentModuleColumn
-      ? `SELECT ModuleID, LOWER(AssessmentType) as assessmentType,
+      ? `SELECT m.LessonOrder, LOWER(a.AssessmentType) as assessmentType,
                 TotalScore, ${hasAssessmentRetakeColumn ? 'RetakeCount' : '0 as RetakeCount'}
-         FROM assessment
-         WHERE UserID = ? AND ModuleID IS NOT NULL`
+         FROM assessment a
+         JOIN module m ON m.ModuleID = a.ModuleID
+         WHERE a.UserID = ? AND a.ModuleID IS NOT NULL`
       : null;
 
     const [allModules, progressRows, assessmentRows] = await Promise.all([
-      query('SELECT ModuleID, LessonOrder, ModuleTitle FROM module ORDER BY LessonOrder ASC', []),
       query(
-        `SELECT ModuleID, CompletionRate,
-                TIMESTAMPDIFF(MINUTE, DateStarted, COALESCE(DateCompletion, NOW())) as minutesSpent
-         FROM progress
-         WHERE UserID = ?`,
+        `SELECT
+            MIN(ModuleID) as ModuleID,
+            LessonOrder,
+            MAX(ModuleTitle) as ModuleTitle
+         FROM module
+         GROUP BY LessonOrder
+         ORDER BY LessonOrder ASC`,
+        []
+      ),
+      query(
+        `SELECT
+            m.LessonOrder,
+            MAX(COALESCE(p.CompletionRate, 0)) as CompletionRate,
+            FLOOR(SUM(GREATEST(COALESCE(p.ActiveSeconds, 0), 0)) / 60) as minutesSpent
+         FROM progress p
+         JOIN module m ON m.ModuleID = p.ModuleID
+         WHERE p.UserID = ?
+         GROUP BY m.LessonOrder`,
         [id]
       ),
       assessmentQuery ? query(assessmentQuery, [id]) : Promise.resolve([])
@@ -599,7 +861,7 @@ const getUserDetails = async (req, res) => {
 
     const progressByModule = {};
     progressRows.forEach((row) => {
-      progressByModule[row.ModuleID] = {
+      progressByModule[row.LessonOrder] = {
         completionRate: Number(row.CompletionRate || 0),
         minutesSpent: Number(row.minutesSpent || 0)
       };
@@ -607,9 +869,9 @@ const getUserDetails = async (req, res) => {
 
     const assessmentsByModule = {};
     assessmentRows.forEach((row) => {
-      const moduleId = row.ModuleID;
-      if (!assessmentsByModule[moduleId]) assessmentsByModule[moduleId] = [];
-      assessmentsByModule[moduleId].push({
+      const lessonOrder = row.LessonOrder;
+      if (!assessmentsByModule[lessonOrder]) assessmentsByModule[lessonOrder] = [];
+      assessmentsByModule[lessonOrder].push({
         assessmentType: String(row.assessmentType || '').toLowerCase(),
         totalScore: Number(row.TotalScore || 0),
         retakeCount: Number(row.RetakeCount || 0),
@@ -617,8 +879,8 @@ const getUserDetails = async (req, res) => {
     });
 
     const lessonMetrics = allModules.map((module) => {
-      const progress = progressByModule[module.ModuleID] || { completionRate: 0, minutesSpent: 0 };
-      const moduleAssessments = assessmentsByModule[module.ModuleID] || [];
+      const progress = progressByModule[module.LessonOrder] || { completionRate: 0, minutesSpent: 0 };
+      const moduleAssessments = assessmentsByModule[module.LessonOrder] || [];
 
       const reviewAssessments = moduleAssessments.filter((a) => ['review', 'quiz'].includes(a.assessmentType));
       const finalAssessments = moduleAssessments.filter((a) => ['final', 'post-test'].includes(a.assessmentType));

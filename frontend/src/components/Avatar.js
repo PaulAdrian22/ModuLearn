@@ -1,9 +1,17 @@
 import React from 'react';
 import { API_SERVER_URL } from '../config/api';
 
+const toAvatarUrl = (value = '') => {
+  const normalized = String(value || '').trim();
+  if (!normalized) return null;
+  if (/^https?:\/\//i.test(normalized)) return normalized;
+  return `${API_SERVER_URL}${normalized}`;
+};
+
 const Avatar = ({ user, size = 'md', className = '' }) => {
   // Size configurations
   const sizeClasses = {
+    nav: 'w-[39px] h-[39px] text-xs',
     sm: 'w-8 h-8 text-xs',
     md: 'w-10 h-10 text-sm',
     lg: 'w-16 h-16 text-lg',
@@ -23,22 +31,18 @@ const Avatar = ({ user, size = 'md', className = '' }) => {
   const getAvatarSource = () => {
     if (!user) return null;
     
-    // Get the API base URL (without /api path)
-    const serverUrl = API_SERVER_URL;
-    
     // Debug logging
     console.log('Avatar Debug:', {
       user_name: user.Name || user.name,
       avatar_type: user.avatar_type,
       default_avatar: user.default_avatar,
-      profile_picture: user.profile_picture,
-      serverUrl
+      profile_picture: user.profile_picture
     });
     
     // If user has custom avatar type and profile_picture
     if (user.avatar_type === 'custom' && user.profile_picture) {
       // Custom uploads are served from the backend server
-      const url = `${serverUrl}${user.profile_picture}`;
+      const url = toAvatarUrl(user.profile_picture);
       console.log('Using custom avatar:', url);
       return url;
     }
@@ -52,7 +56,7 @@ const Avatar = ({ user, size = 'md', className = '' }) => {
     
     // Legacy support: if profile_picture exists but no avatar_type
     if (user.profile_picture && !user.avatar_type) {
-      const url = `${serverUrl}${user.profile_picture}`;
+      const url = toAvatarUrl(user.profile_picture);
       console.log('Using legacy avatar:', url);
       return url;
     }

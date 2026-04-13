@@ -3,10 +3,218 @@
 
 const { query } = require('../config/database');
 
+let hasModuleDeletedFlagColumn = null;
+let hasModuleLessonLanguageColumn = null;
+let hasUserPreferredLanguageColumn = null;
+
+const normalizeLessonLanguage = (value = '') => {
+  const normalized = String(value || '').trim().toLowerCase();
+
+  if (!normalized) return null;
+  if (normalized === 'english') return 'English';
+  if (normalized === 'taglish' || normalized === 'filipino' || normalized === 'tagalog') return 'Taglish';
+
+  return null;
+};
+
+const PROTECTED_LESSON_ORDER_MIN = 1;
+const PROTECTED_LESSON_ORDER_MAX = 7;
+
+const isProtectedLessonOrder = (lessonOrder) => {
+  const normalizedLessonOrder = Number(lessonOrder);
+  return Number.isFinite(normalizedLessonOrder)
+    && normalizedLessonOrder >= PROTECTED_LESSON_ORDER_MIN
+    && normalizedLessonOrder <= PROTECTED_LESSON_ORDER_MAX;
+};
+
+const getHasModuleDeletedFlagColumn = async () => {
+  if (hasModuleDeletedFlagColumn === true) {
+    return true;
+  }
+
+  const existingColumns = await query(
+    `SELECT COLUMN_NAME
+       FROM INFORMATION_SCHEMA.COLUMNS
+      WHERE TABLE_SCHEMA = DATABASE()
+        AND TABLE_NAME = 'module'
+        AND COLUMN_NAME = 'Is_Deleted'`
+  );
+
+  hasModuleDeletedFlagColumn = existingColumns.length > 0 ? true : null;
+  return existingColumns.length > 0;
+};
+
+const getHasModuleLessonLanguageColumn = async () => {
+  if (hasModuleLessonLanguageColumn === true) {
+    return true;
+  }
+
+  const existingColumns = await query(
+    `SELECT COLUMN_NAME
+       FROM INFORMATION_SCHEMA.COLUMNS
+      WHERE TABLE_SCHEMA = DATABASE()
+        AND TABLE_NAME = 'module'
+        AND COLUMN_NAME = 'LessonLanguage'`
+  );
+
+  hasModuleLessonLanguageColumn = existingColumns.length > 0 ? true : null;
+  return existingColumns.length > 0;
+};
+
+const getHasUserPreferredLanguageColumn = async () => {
+  if (hasUserPreferredLanguageColumn === true) {
+    return true;
+  }
+
+  const existingColumns = await query(
+    `SELECT COLUMN_NAME
+       FROM INFORMATION_SCHEMA.COLUMNS
+      WHERE TABLE_SCHEMA = DATABASE()
+        AND TABLE_NAME = 'user'
+        AND COLUMN_NAME = 'preferred_language'`
+  );
+
+  hasUserPreferredLanguageColumn = existingColumns.length > 0 ? true : null;
+  return existingColumns.length > 0;
+};
+
+const resolveLanguageFilter = async ({ userId, requestedLanguage }) => {
+  const requested = normalizeLessonLanguage(requestedLanguage);
+  if (requested) return requested;
+
+  if (!userId) return null;
+
+  const hasPreferredLanguage = await getHasUserPreferredLanguageColumn();
+  if (!hasPreferredLanguage) return 'English';
+
+  const users = await query(
+    'SELECT preferred_language AS preferredLanguage FROM user WHERE UserID = ? LIMIT 1',
+    [userId]
+  );
+
+  if (!users.length) return 'English';
+  return normalizeLessonLanguage(users[0].preferredLanguage) || 'English';
+};
+
+const toArray = (value) => {
+  if (Array.isArray(value)) return value;
+  if (!value) return [];
+
+  if (typeof value === 'string') {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  return [];
+};
+
+const toObject = (value, fallback = null) => {
+  if (value && typeof value === 'object' && !Array.isArray(value)) {
+    return value;
+  }
+
+  if (typeof value === 'string') {
+    try {
+      const parsed = JSON.parse(value);
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        return parsed;
+      }
+    } catch {
+      return fallback;
+    }
+  }
+
+  return fallback;
+};
+
+const extractInlineReviewQuestions = (sections = []) => {
+  if (!Array.isArray(sections)) return [];
+
+  return sections.reduce((allQuestions, section) => {
+    const sectionType = String(section?.type || '').toLowerCase().trim();
+    if (sectionType !== 'review-multiple-choice' && sectionType !== 'review - multiple choice') {
+      return allQuestions;
+    }
+
+    const sectionQuestions = Array.isArray(section?.questions) ? section.questions : [];
+    return [...allQuestions, ...sectionQuestions];
+  }, []);
+};
+
+const buildDiagnosticFromReview = (reviewQuestions = [], sections = []) => {
+  const explicitReviewQuestions = Array.isArray(reviewQuestions) ? reviewQuestions : [];
+  const inlineReviewQuestions = extractInlineReviewQuestions(sections);
+  const sourceQuestions = explicitReviewQuestions.length > 0 ? explicitReviewQuestions : inlineReviewQuestions;
+
+  if (!sourceQuestions.length) return [];
+
+  const diagnosticTarget = sourceQuestions.length >= 20 ? 10 : 5;
+  const selectedCount = Math.min(diagnosticTarget, sourceQuestions.length);
+
+  return sourceQuestions.slice(0, selectedCount).map((question, index) => {
+    const options = Array.isArray(question?.options) ? question.options.slice(0, 4) : [];
+    while (options.length < 4) options.push('');
+
+    const parsedCorrect = Number(question?.correctAnswer);
+    const safeCorrectAnswer = Number.isFinite(parsedCorrect)
+      ? Math.max(0, Math.min(3, parsedCorrect))
+      : 0;
+
+    return {
+      ...question,
+      id: question?.id ?? `auto-diagnostic-${index}`,
+      question: String(question?.question || ''),
+      skill: String(question?.skill || 'No Skill'),
+      options,
+      correctAnswer: safeCorrectAnswer,
+    };
+  });
+};
+
+const getModuleCardStats = (moduleRow = {}) => {
+  const sections = toArray(moduleRow.sections);
+  const reviewQuestions = toArray(moduleRow.reviewQuestions);
+  const finalQuestions = toArray(moduleRow.finalQuestions);
+  const diagnosticQuestions = buildDiagnosticFromReview(reviewQuestions, sections);
+
+  const topicCount = sections.filter((section) => {
+    const type = String(section?.type || '').toLowerCase().trim();
+    return (
+      type === 'topic' ||
+      type === 'topic title' ||
+      type === 'subtopic' ||
+      type === 'subtopic title'
+    );
+  }).length;
+
+  const inlineReviewCount = sections.filter((section) => {
+    const type = String(section?.type || '').toLowerCase().trim();
+    return (
+      type === 'review-multiple-choice' ||
+      type === 'review - multiple choice' ||
+      type === 'review-drag-drop' ||
+      type === 'review - drag and drop'
+    );
+  }).length;
+
+  const assessmentCount =
+    diagnosticQuestions.length + reviewQuestions.length + finalQuestions.length + inlineReviewCount;
+
+  return { topicCount, assessmentCount };
+};
+
 // Get all modules
 const getAllModules = async (req, res) => {
   try {
-    const { userId } = req.query;
+    const hasDeletedFlag = await getHasModuleDeletedFlagColumn();
+    const hasLessonLanguage = await getHasModuleLessonLanguageColumn();
+
+    const { userId, language } = req.query;
+    const languageFilter = await resolveLanguageFilter({ userId, requestedLanguage: language });
     
     let sql = `
       SELECT 
@@ -18,6 +226,10 @@ const getAllModules = async (req, res) => {
         m.Is_Unlocked,
         m.Difficulty
     `;
+
+    if (hasLessonLanguage) {
+      sql += ',\n        m.LessonLanguage';
+    }
     
     // If userId provided, include progress
     if (userId) {
@@ -25,17 +237,93 @@ const getAllModules = async (req, res) => {
         p.ProgressID,
         p.CompletionRate,
         p.DateStarted,
-        p.DateCompletion
+        p.DateCompletion,
+        p.LastOpenedAt,
+        m.sections,
+        m.diagnosticQuestions,
+        m.reviewQuestions,
+        m.finalQuestions
       FROM module m
-      LEFT JOIN progress p ON m.ModuleID = p.ModuleID AND p.UserID = ?
-      ORDER BY m.LessonOrder`;
+      LEFT JOIN (
+        SELECT
+          m2.LessonOrder,
+          MAX(p1.ProgressID) AS ProgressID,
+          MAX(COALESCE(p1.CompletionRate, 0)) AS CompletionRate,
+          MIN(p1.DateStarted) AS DateStarted,
+          MAX(p1.DateCompletion) AS DateCompletion,
+          MAX(
+            CASE
+              WHEN p1.DateCompletion IS NULL THEN p1.DateStarted
+              WHEN p1.DateStarted IS NULL THEN p1.DateCompletion
+              WHEN p1.DateStarted > p1.DateCompletion THEN p1.DateStarted
+              ELSE p1.DateCompletion
+            END
+          ) AS LastOpenedAt
+        FROM progress p1
+        JOIN module m2 ON m2.ModuleID = p1.ModuleID
+        WHERE p1.UserID = ?
+        GROUP BY m2.LessonOrder
+      ) p ON p.LessonOrder = m.LessonOrder
+      `;
+
+      const filters = [];
+      const params = [userId];
+
+      if (hasDeletedFlag) {
+        filters.push('m.Is_Deleted = FALSE');
+      }
+
+      if (hasLessonLanguage && languageFilter) {
+        filters.push("COALESCE(NULLIF(TRIM(m.LessonLanguage), ''), 'English') = ?");
+        params.push(languageFilter);
+      }
+
+      if (filters.length > 0) {
+        sql += ` WHERE ${filters.join(' AND ')}`;
+      }
       
-      const modules = await query(sql, [userId]);
-      return res.json(modules);
+      const modules = await query(sql, params);
+      modules.sort((a, b) => Number(a.LessonOrder || 0) - Number(b.LessonOrder || 0));
+
+      const enrichedModules = modules.map((moduleRow) => {
+        const { topicCount, assessmentCount } = getModuleCardStats(moduleRow);
+        const {
+          sections,
+          diagnosticQuestions,
+          reviewQuestions,
+          finalQuestions,
+          ...moduleData
+        } = moduleRow;
+
+        return {
+          ...moduleData,
+          topicCount,
+          assessmentCount,
+        };
+      });
+
+      return res.json(enrichedModules);
+    }
+
+    const filters = [];
+    const params = [];
+
+    if (hasDeletedFlag) {
+      filters.push('m.Is_Deleted = FALSE');
+    }
+
+    if (hasLessonLanguage && languageFilter) {
+      filters.push("COALESCE(NULLIF(TRIM(m.LessonLanguage), ''), 'English') = ?");
+      params.push(languageFilter);
     }
     
-    sql += ' FROM module m ORDER BY m.LessonOrder';
-    const modules = await query(sql);
+    sql += ' FROM module m';
+    if (filters.length > 0) {
+      sql += ` WHERE ${filters.join(' AND ')}`;
+    }
+    sql += ' ORDER BY m.LessonOrder';
+
+    const modules = await query(sql, params);
     
     res.json(modules);
     
@@ -51,8 +339,12 @@ const getAllModules = async (req, res) => {
 // Get module by ID
 const getModuleById = async (req, res) => {
   try {
+    const hasDeletedFlag = await getHasModuleDeletedFlagColumn();
+    const hasLessonLanguage = await getHasModuleLessonLanguageColumn();
+
     const { id } = req.params;
-    const { userId } = req.query;
+    const { userId, language } = req.query;
+    const languageFilter = await resolveLanguageFilter({ userId, requestedLanguage: language });
     
     let sql = `
       SELECT 
@@ -61,6 +353,8 @@ const getModuleById = async (req, res) => {
         m.Description,
         m.LessonOrder,
         m.Tesda_Reference,
+        m.LessonTime,
+        m.Difficulty,
         m.Is_Unlocked,
         m.sections,
         m.diagnosticQuestions,
@@ -69,6 +363,10 @@ const getModuleById = async (req, res) => {
         m.finalInstruction,
         m.roadmapStages
     `;
+
+    if (hasLessonLanguage) {
+      sql += ',\n        m.LessonLanguage';
+    }
     
     if (userId) {
       sql += `,
@@ -76,10 +374,31 @@ const getModuleById = async (req, res) => {
         p.DateStarted,
         p.DateCompletion
       FROM module m
-      LEFT JOIN progress p ON m.ModuleID = p.ModuleID AND p.UserID = ?
+      LEFT JOIN (
+        SELECT
+          m2.LessonOrder,
+          MAX(COALESCE(p1.CompletionRate, 0)) AS CompletionRate,
+          MIN(p1.DateStarted) AS DateStarted,
+          MAX(p1.DateCompletion) AS DateCompletion
+        FROM progress p1
+        JOIN module m2 ON m2.ModuleID = p1.ModuleID
+        WHERE p1.UserID = ?
+        GROUP BY m2.LessonOrder
+      ) p ON p.LessonOrder = m.LessonOrder
       WHERE m.ModuleID = ?`;
+
+      const params = [userId, id];
+
+      if (hasDeletedFlag) {
+        sql += ' AND m.Is_Deleted = FALSE';
+      }
+
+      if (hasLessonLanguage && languageFilter) {
+        sql += " AND COALESCE(NULLIF(TRIM(m.LessonLanguage), ''), 'English') = ?";
+        params.push(languageFilter);
+      }
       
-      const modules = await query(sql, [userId, id]);
+      const modules = await query(sql, params);
       
       if (modules.length === 0) {
         return res.status(404).json({
@@ -91,17 +410,32 @@ const getModuleById = async (req, res) => {
       // MySQL JSON columns return objects directly, no need to parse
       const module = modules[0];
       
-      // Ensure arrays exist (MySQL returns null for empty JSON fields)
-      if (!module.sections) module.sections = [];
-      if (!module.diagnosticQuestions) module.diagnosticQuestions = [];
-      if (!module.reviewQuestions) module.reviewQuestions = [];
-      if (!module.finalQuestions) module.finalQuestions = [];
+      module.sections = toArray(module.sections);
+      module.reviewQuestions = toArray(module.reviewQuestions);
+      module.finalQuestions = toArray(module.finalQuestions);
+      module.roadmapStages = toArray(module.roadmapStages);
+      const storedDiagnosticQuestions = toArray(module.diagnosticQuestions);
+      const autoDiagnosticQuestions = buildDiagnosticFromReview(module.reviewQuestions, module.sections);
+      module.diagnosticQuestions = autoDiagnosticQuestions.length > 0 ? autoDiagnosticQuestions : storedDiagnosticQuestions;
+      module.LessonTime = toObject(module.LessonTime, null);
       
       return res.json(module);
     }
     
     sql += '\n      FROM module m WHERE m.ModuleID = ?';
-    const modules = await query(sql, [id]);
+
+    const params = [id];
+
+    if (hasDeletedFlag) {
+      sql += ' AND m.Is_Deleted = FALSE';
+    }
+
+    if (hasLessonLanguage && languageFilter) {
+      sql += " AND COALESCE(NULLIF(TRIM(m.LessonLanguage), ''), 'English') = ?";
+      params.push(languageFilter);
+    }
+
+    const modules = await query(sql, params);
     
     if (modules.length === 0) {
       return res.status(404).json({
@@ -113,11 +447,14 @@ const getModuleById = async (req, res) => {
     // MySQL JSON columns return objects directly, no need to parse
     const module = modules[0];
     
-    // Ensure arrays exist (MySQL returns null for empty JSON fields)
-    if (!module.sections) module.sections = [];
-    if (!module.diagnosticQuestions) module.diagnosticQuestions = [];
-    if (!module.reviewQuestions) module.reviewQuestions = [];
-    if (!module.finalQuestions) module.finalQuestions = [];
+    module.sections = toArray(module.sections);
+    module.reviewQuestions = toArray(module.reviewQuestions);
+    module.finalQuestions = toArray(module.finalQuestions);
+    module.roadmapStages = toArray(module.roadmapStages);
+    const storedDiagnosticQuestions = toArray(module.diagnosticQuestions);
+    const autoDiagnosticQuestions = buildDiagnosticFromReview(module.reviewQuestions, module.sections);
+    module.diagnosticQuestions = autoDiagnosticQuestions.length > 0 ? autoDiagnosticQuestions : storedDiagnosticQuestions;
+    module.LessonTime = toObject(module.LessonTime, null);
     
     res.json(module);
     
@@ -170,7 +507,7 @@ const updateModule = async (req, res) => {
     
     // Check if module exists
     const existingModule = await query(
-      'SELECT ModuleID FROM module WHERE ModuleID = ?',
+      'SELECT ModuleID, LessonOrder FROM module WHERE ModuleID = ?',
       [id]
     );
     
@@ -180,7 +517,7 @@ const updateModule = async (req, res) => {
         message: 'Module not found'
       });
     }
-    
+
     // Ensure lesson 1 is always unlocked
     const shouldUnlock = lessonOrder === 1 ? true : isUnlocked;
     
@@ -215,7 +552,7 @@ const deleteModule = async (req, res) => {
     
     // Check if module exists
     const existingModule = await query(
-      'SELECT ModuleID FROM module WHERE ModuleID = ?',
+      'SELECT ModuleID, LessonOrder FROM module WHERE ModuleID = ?',
       [id]
     );
     
@@ -223,6 +560,13 @@ const deleteModule = async (req, res) => {
       return res.status(404).json({
         error: 'Not Found',
         message: 'Module not found'
+      });
+    }
+
+    if (isProtectedLessonOrder(existingModule[0].LessonOrder)) {
+      return res.status(403).json({
+        error: 'Forbidden',
+        message: 'Lessons 1-7 are protected and cannot be deleted.'
       });
     }
     

@@ -21,6 +21,11 @@ const TOGGLE_OPTIONS = [
   { key: 'averageFinalAssessmentScore', label: 'Average Final Assessment Score' },
 ];
 
+const buildNotificationsSignature = (list = []) =>
+  list
+    .map((item) => `${item?.type || ''}|${item?.date || ''}|${item?.message || ''}`)
+    .join('||');
+
 const AdminDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -31,6 +36,7 @@ const AdminDashboard = () => {
     reportedIssues: 0
   });
   const [notifications, setNotifications] = useState([]);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
   const [activityData, setActivityData] = useState([]);
   const [loading, setLoading] = useState(true);
   
@@ -64,6 +70,13 @@ const AdminDashboard = () => {
         axios.get('/admin/dashboard/notifications').catch(() => ({ data: [] }))
       ]);
 
+      const fetchedNotifications = Array.isArray(notificationsRes.data) ? notificationsRes.data : [];
+      const notificationsSignature = buildNotificationsSignature(fetchedNotifications);
+      const seenSignatureKey = user?.userId
+        ? `admin_notifications_seen_signature_u${user.userId}`
+        : 'admin_notifications_seen_signature';
+      const seenSignature = localStorage.getItem(seenSignatureKey) || '';
+
       setStats({
         lessonsDeployed: lessonsRes.data.length,
         learnerCount: usersRes.data.filter(u => u.Role === 'student').length,
@@ -71,12 +84,27 @@ const AdminDashboard = () => {
         reportedIssues: reportsRes.data.count || 0
       });
       setActivityData(activityRes.data);
-      setNotifications(notificationsRes.data);
+      setNotifications(fetchedNotifications);
+      setUnreadNotifications(
+        notificationsSignature && notificationsSignature !== seenSignature ? fetchedNotifications.length : 0
+      );
       setLoading(false);
     } catch (err) {
       console.error('Error fetching stats:', err);
       setLoading(false);
     }
+  };
+
+  const handleOpenNotificationsModal = () => {
+    setShowNotificationsModal(true);
+
+    const notificationsSignature = buildNotificationsSignature(notifications);
+    const seenSignatureKey = user?.userId
+      ? `admin_notifications_seen_signature_u${user.userId}`
+      : 'admin_notifications_seen_signature';
+
+    localStorage.setItem(seenSignatureKey, notificationsSignature);
+    setUnreadNotifications(0);
   };
 
   const fetchIssueReports = async () => {
@@ -321,15 +349,15 @@ const AdminDashboard = () => {
                 {/* Notifications - Clickable */}
                 <div
                   className="flex items-center gap-4 cursor-pointer hover:bg-gray-50 rounded-lg p-2 -m-2 transition-colors duration-200"
-                  onClick={() => setShowNotificationsModal(true)}
+                  onClick={handleOpenNotificationsModal}
                 >
                   <div className="w-16 h-16 bg-[#2BC4B3] rounded-xl flex items-center justify-center flex-shrink-0 relative">
                     <svg className="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                     </svg>
-                    {notifications.length > 0 && (
+                    {unreadNotifications > 0 && (
                       <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1 rounded-full bg-[#EF5350] text-white text-xs font-bold flex items-center justify-center">
-                        {notifications.length}
+                        {unreadNotifications}
                       </span>
                     )}
                   </div>
@@ -432,7 +460,7 @@ const AdminDashboard = () => {
                         onChange={() => setSelectedToggleMetric(option.key)}
                         className="w-4 h-4 md:w-5 md:h-5"
                       />
-                      <span className="text-lg md:text-2xl leading-tight font-medium">{option.label}</span>
+                      <span className="text-sm md:text-base leading-tight font-medium">{option.label}</span>
                     </label>
                   ))}
                 </div>
@@ -440,7 +468,7 @@ const AdminDashboard = () => {
                 <div className="flex justify-end mt-6">
                   <button
                     onClick={() => setShowExportModal(true)}
-                    className="px-8 py-2 bg-[#0F4A8A] hover:bg-[#164570] text-white rounded-xl font-semibold text-[34px] leading-tight"
+                    className="px-6 py-2.5 bg-[#0F4A8A] hover:bg-[#164570] text-white rounded-xl font-semibold text-base leading-tight"
                   >
                     Export Data
                   </button>
@@ -663,7 +691,7 @@ const AdminDashboard = () => {
                       onChange={() => handleToggleExportMetric(option.key)}
                       className="w-4 h-4 md:w-5 md:h-5"
                     />
-                    <span className="text-lg md:text-2xl leading-tight font-medium">{option.label}</span>
+                    <span className="text-sm md:text-base leading-tight font-medium">{option.label}</span>
                   </label>
                 ))}
               </div>

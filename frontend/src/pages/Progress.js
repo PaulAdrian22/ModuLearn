@@ -309,11 +309,36 @@ const Progress = () => {
     return `${hours} Hour${hours === 1 ? '' : 's'} ${remaining} Minute${remaining === 1 ? '' : 's'}`;
   };
 
+  const toPlainText = (value, fallback = 'Not Available Yet') => {
+    if (!value) return fallback;
+
+    const text = String(value)
+      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
+      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/&amp;/gi, '&')
+      .replace(/&lt;/gi, '<')
+      .replace(/&gt;/gi, '>')
+      .replace(/&quot;/gi, '"')
+      .replace(/&#39;/gi, "'")
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    return text || fallback;
+  };
+
+  const fallbackProgressRows = Array.isArray(progressData) ? progressData : [];
+  const fallbackTotalCompletionRate = fallbackProgressRows.reduce(
+    (sum, row) => sum + Number(row.CompletionRate || 0),
+    0
+  );
+
   const summary = learningSummary || {
     learningPathProgress: {
-      completedLessons: progressData?.filter(p => (p.CompletionRate || 0) >= 100).length || 0,
-      totalLessons: progressData?.length || 0,
-      progressPercent: progressData?.length ? Math.round((progressData.filter(p => (p.CompletionRate || 0) >= 100).length / progressData.length) * 100) : 0,
+      completedLessons: fallbackProgressRows.filter((p) => Number(p.CompletionRate || 0) >= 100).length,
+      totalLessons: fallbackProgressRows.length,
+      progressPercent: fallbackProgressRows.length ? Math.round(fallbackTotalCompletionRate / fallbackProgressRows.length) : 0,
     },
     lessonPerformance: {
       learningTimeMinutes: 0,
@@ -375,7 +400,14 @@ const Progress = () => {
             {/* Header - Fixed */}
             <div className="p-6 pb-4">
               <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-[#0B2B4C]">Achievement Tokens</h2>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-[#2BC4B3] rounded-lg flex items-center justify-center">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+                    </svg>
+                  </div>
+                  <h2 className="text-3xl font-bold text-[#0B2B4C]">Achievement Tokens</h2>
+                </div>
                 <div className="text-xl font-bold text-gray-600">
                   {achievementTokens.length}
                   <span className="text-gray-400"> / {iconTokens.length}</span>
@@ -424,7 +456,14 @@ const Progress = () => {
 
                 {/* Icon Tokens */}
                 <div className="pt-6 border-t border-gray-200">
-                  <h2 className="text-2xl font-bold text-[#0B2B4C] mb-6">Icon Tokens</h2>
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 bg-[#2BC4B3] rounded-lg flex items-center justify-center">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <h2 className="text-3xl font-bold text-[#0B2B4C]">Icon Tokens</h2>
+                  </div>
                   
                   <div className="grid grid-cols-3 gap-4">
                     {lockedIconTokens.map((token) => (
@@ -494,7 +533,14 @@ const Progress = () => {
 
           {/* Right Column - Mastery Performance */}
           <div className="bg-white rounded-lg p-6 border border-gray-300">
-            <h2 className="text-2xl font-bold text-[#0B2B4C] mb-6">Mastery Performance</h2>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-[#2BC4B3] rounded-lg flex items-center justify-center">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-6m4 6V7m4 10v-4M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h2 className="text-3xl font-bold text-[#0B2B4C]">Mastery Performance</h2>
+            </div>
             
             <div className="space-y-6">
               {skills.map((skill, index) => (
@@ -532,16 +578,23 @@ const Progress = () => {
 
         {/* Bottom Panel - Learning Path Progress */}
         <div className="mt-8 bg-white rounded-lg border border-gray-300 p-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#0B2B4C] mb-4">Learning Path Progress</h2>
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 bg-[#2BC4B3] rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+              </svg>
+            </div>
+            <h2 className="text-3xl font-bold text-gray-900">Learning Path Progress</h2>
+          </div>
 
           <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden mb-2">
             <div
-              className="h-full rounded-full bg-[#87CEEB] transition-all duration-500"
+              className="h-full rounded-full bg-[#9EDAF3] transition-all duration-500"
               style={{ width: `${summary.learningPathProgress.progressPercent || 0}%` }}
             ></div>
           </div>
 
-          <p className="text-lg sm:text-xl md:text-2xl text-[#1F1F1F] mb-6 leading-snug">
+          <p className="text-base md:text-lg text-gray-700 mb-6 leading-snug">
             Lessons Completed:{' '}
             <span className="text-[#4DD0E1] font-semibold">{summary.learningPathProgress.completedLessons}</span>
             {' / '}
@@ -550,8 +603,8 @@ const Progress = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-2xl md:text-3xl font-bold text-[#0B2B4C] mb-3">Lesson Performance</h3>
-              <div className="space-y-1 text-sm sm:text-base md:text-lg lg:text-xl leading-snug text-[#1F1F1F]">
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">Lesson Performance</h3>
+              <div className="space-y-1 text-sm md:text-base leading-snug text-gray-700">
                 <p>
                   Learning Time : <span className="text-[#4DD0E1] font-semibold">{formatMinutesToHoursAndMinutes(summary.lessonPerformance.learningTimeMinutes)}</span>
                 </p>
@@ -562,10 +615,10 @@ const Progress = () => {
                   Lesson Level : <span className="text-[#4DD0E1] font-semibold">{summary.lessonPerformance.lessonLevel}</span>
                 </p>
                 <p>
-                  Most Challenged Lesson : <span className="text-[#4DD0E1] font-semibold">{summary.lessonPerformance.mostChallengedLesson || 'Not Available Yet'}</span>
+                  Most Challenged Lesson : <span className="text-[#4DD0E1] font-semibold">{toPlainText(summary.lessonPerformance.mostChallengedLesson)}</span>
                 </p>
                 <p>
-                  Well Grasped Lesson : <span className="text-[#4DD0E1] font-semibold">{summary.lessonPerformance.wellGraspedLesson || 'Not Available Yet'}</span>
+                  Well Grasped Lesson : <span className="text-[#4DD0E1] font-semibold">{toPlainText(summary.lessonPerformance.wellGraspedLesson)}</span>
                 </p>
                 <p>
                   Mastery Level : <span className="text-[#4DD0E1] font-semibold">{summary.lessonPerformance.masteryLevelPercent}%</span>
@@ -574,8 +627,8 @@ const Progress = () => {
             </div>
 
             <div>
-              <h3 className="text-2xl md:text-3xl font-bold text-[#0B2B4C] mb-3">Assessment</h3>
-              <div className="space-y-1 text-sm sm:text-base md:text-lg lg:text-xl leading-snug text-[#1F1F1F]">
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">Assessment</h3>
+              <div className="space-y-1 text-sm md:text-base leading-snug text-gray-700">
                 <p>
                   Total Review Assessment Taken: <span className="text-[#4DD0E1] font-semibold">{summary.assessment.totalReviewAssessmentsTaken}</span>
                 </p>

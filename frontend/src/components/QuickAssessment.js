@@ -6,10 +6,10 @@ import {
   trackPerformance,
   getPerformance,
   shouldShowHints,
-  generateAssessmentQuestions,
   getTutorialHints,
   questionVariations
 } from '../services/adaptiveLearning';
+import { resolveCorrectAnswerText, shuffleQuestionChoicesList } from '../utils/assessmentShuffle';
 
 const QuickAssessment = ({ questions, onComplete, onCancel, topicTitle, moduleId, topicIndex }) => {
   const { user } = useAuth();
@@ -20,9 +20,10 @@ const QuickAssessment = ({ questions, onComplete, onCancel, topicTitle, moduleId
   const [score, setScore] = useState(0);
   const [cooldownEnd, setCooldownEnd] = useState(null);
   const [timeRemaining, setTimeRemaining] = useState(0);
-  const [startTime, setStartTime] = useState(Date.now());
+  const [questionStartTime, setQuestionStartTime] = useState(Date.now());
+  const [questionTimes, setQuestionTimes] = useState({});
   const [showHint, setShowHint] = useState(false);
-  const [assessmentQuestions, setAssessmentQuestions] = useState(questions);
+  const [assessmentQuestions, setAssessmentQuestions] = useState(() => shuffleQuestionChoicesList(questions));
   const [performance, setPerformance] = useState({});
   const [skillResults, setSkillResults] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -36,7 +37,7 @@ const QuickAssessment = ({ questions, onComplete, onCancel, topicTitle, moduleId
     
     // Generate questions based on past performance
     const generatedQuestions = generateQuestionVariations(questions, perf);
-    setAssessmentQuestions(generatedQuestions);
+    setAssessmentQuestions(shuffleQuestionChoicesList(generatedQuestions));
     
     // Check for existing cooldown
     const cooldownKey = `cooldown_${moduleId}_${topicIndex}`;
@@ -50,7 +51,7 @@ const QuickAssessment = ({ questions, onComplete, onCancel, topicTitle, moduleId
         localStorage.removeItem(cooldownKey);
       }
     }
-  }, [topicTitle, moduleId, topicIndex]);
+  }, [questions, topicTitle, moduleId, topicIndex]);
 
   // Generate question variations excluding correctly answered ones
   const generateQuestionVariations = (originalQuestions, perf) => {
@@ -74,7 +75,7 @@ const QuickAssessment = ({ questions, onComplete, onCancel, topicTitle, moduleId
   };
 
   useEffect(() => {
-    // Update countdown timer
+    // Update retry cooldown timer
     if (cooldownEnd) {
       const timer = setInterval(() => {
         const now = new Date();
@@ -91,6 +92,30 @@ const QuickAssessment = ({ questions, onComplete, onCancel, topicTitle, moduleId
     }
   }, [cooldownEnd, moduleId, topicIndex]);
 
+  useEffect(() => {
+    if (assessmentQuestions.length === 0) return;
+    setQuestionStartTime(Date.now());
+    setQuestionTimes({});
+    setElapsedTime(0);
+  }, [assessmentQuestions.length]);
+
+  useEffect(() => {
+    if (showResults || cooldownEnd || assessmentQuestions.length === 0) return;
+    setQuestionStartTime(Date.now());
+  }, [currentQuestion, showResults, cooldownEnd, assessmentQuestions.length]);
+
+  const updateCurrentQuestionTime = (existingTimes = questionTimes) => {
+    const accumulated = existingTimes[currentQuestion] || 0;
+    const additional = questionStartTime
+      ? Math.max(0, Math.floor((Date.now() - questionStartTime) / 1000))
+      : 0;
+
+    return {
+      ...existingTimes,
+      [currentQuestion]: accumulated + additional,
+    };
+  };
+
   const handleAnswerSelect = (answer) => {
     setSelectedAnswers({
       ...selectedAnswers,
@@ -99,26 +124,38 @@ const QuickAssessment = ({ questions, onComplete, onCancel, topicTitle, moduleId
   };
 
   const handleNext = () => {
-    if (currentQuestion < questions.length - 1) {
+    const updatedQuestionTimes = updateCurrentQuestionTime();
+    setQuestionTimes(updatedQuestionTimes);
+
+    if (currentQuestion < assessmentQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     }
   };
 
   const handlePrevious = () => {
+    const updatedQuestionTimes = updateCurrentQuestionTime();
+    setQuestionTimes(updatedQuestionTimes);
+
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
     }
   };
 
   const handleSubmit = async () => {
-    // Calculate time spent
-    const timeSpent = Math.floor((Date.now() - startTime) / 1000);
+    const updatedQuestionTimes = updateCurrentQuestionTime();
+    setQuestionTimes(updatedQuestionTimes);
+
+    const timeSpent = Object.values(updatedQuestionTimes).reduce(
+      (total, seconds) => total + Number(seconds || 0),
+      0
+    );
     
     // Calculate score and track correct answers
     let correct = 0;
     const correctIndices = [];
     assessmentQuestions.forEach((q, index) => {
-      if (selectedAnswers[index] === q.correctAnswer) {
+      const correctAnswerText = resolveCorrectAnswerText(q);
+      if (selectedAnswers[index] === correctAnswerText) {
         correct++;
         correctIndices.push(index);
       }
@@ -142,11 +179,19 @@ const QuickAssessment = ({ questions, onComplete, onCancel, topicTitle, moduleId
     try {
       const answers = assessmentQuestions.map((q, i) => ({
         skill: q.skill || 'Memorization',
-        isCorrect: selectedAnswers[i] === q.correctAnswer
+        isCorrect: selectedAnswers[i] === resolveCorrectAnswerText(q),
+        responseTime: updatedQuestionTimes[i] || 0,
+        questionType: q.questionType || q.type || 'Easy'
       }));
       const skillAnswers = answers.filter(a => a.skill !== 'No Skill');
       if (skillAnswers.length > 0) {
-        const res = await axios.post('/bkt/batch-update', { answers: skillAnswers });
+        const numericModuleId = Number.parseInt(moduleId, 10);
+        const res = await axios.post('/bkt/batch-update', {
+          answers: skillAnswers,
+          assessmentType: 'Review',
+          moduleId: Number.isFinite(numericModuleId) ? numericModuleId : null,
+          timeSpentSeconds: timeSpent
+        });
         setSkillResults(res.data);
       }
     } catch (err) {
@@ -163,7 +208,7 @@ const QuickAssessment = ({ questions, onComplete, onCancel, topicTitle, moduleId
     
     // Regenerate questions with variations (excluding correctly answered ones)
     const newQuestions = generateQuestionVariations(questions, performance);
-    setAssessmentQuestions(newQuestions);
+    setAssessmentQuestions(shuffleQuestionChoicesList(newQuestions));
     
     // Reset assessment state
     setCurrentQuestion(0);
@@ -171,7 +216,9 @@ const QuickAssessment = ({ questions, onComplete, onCancel, topicTitle, moduleId
     setShowResults(false);
     setScore(0);
     setShowHint(false);
-    setStartTime(Date.now());
+    setQuestionStartTime(Date.now());
+    setQuestionTimes({});
+    setElapsedTime(0);
   };
 
   const toggleHint = () => {
@@ -246,7 +293,7 @@ const QuickAssessment = ({ questions, onComplete, onCancel, topicTitle, moduleId
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span className="text-sm">Time taken: {Math.floor(elapsedTime / 60)}m {elapsedTime % 60}s</span>
+            <span className="text-sm">Time spent: {Math.floor(elapsedTime / 60)}m {elapsedTime % 60}s</span>
           </div>
           
           <div className="mb-6">
@@ -297,7 +344,8 @@ const QuickAssessment = ({ questions, onComplete, onCancel, topicTitle, moduleId
           <div className="space-y-4">
             {assessmentQuestions.map((q, index) => {
               const userAnswer = selectedAnswers[index];
-              const isCorrect = userAnswer === q.correctAnswer;
+              const correctAnswerText = resolveCorrectAnswerText(q);
+              const isCorrect = userAnswer === correctAnswerText;
               
               return (
                 <div key={index} className="bg-background-light p-4 rounded-lg">
@@ -318,7 +366,7 @@ const QuickAssessment = ({ questions, onComplete, onCancel, topicTitle, moduleId
                     </p>
                     {!isCorrect && (
                       <p className="text-text-secondary">
-                        Correct answer: <span className="text-success">{q.correctAnswer}</span>
+                        Correct answer: <span className="text-success">{correctAnswerText}</span>
                       </p>
                     )}
                   </div>
@@ -342,7 +390,7 @@ const QuickAssessment = ({ questions, onComplete, onCancel, topicTitle, moduleId
             Question {currentQuestion + 1} of {assessmentQuestions.length}
           </span>
         </div>
-        
+
         {/* Progress Bar */}
         <div className="progress-bar">
           <div

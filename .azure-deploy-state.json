@@ -1,0 +1,19 @@
+﻿{
+    "location":  "southeastasia",
+    "resourceGroup":  "modulearn-prod-rg",
+    "appServicePlan":  "modulearn-prod-plan",
+    "webAppName":  "modulearn-api-260412162638",
+    "webAppUrl":  "https://modulearn-api-260412162638.azurewebsites.net",
+    "mysqlServer":  "modulearnmysql260412162638",
+    "mysqlDatabase":  "modulearn_db",
+    "mysqlUser":  "modulearnadmin",
+    "mysqlPassword":  "%h1XQ9vWzVkrxwUgI5ofHcjt",
+    "storageAccount":  "modulearnst104451",
+    "azureStorageContainer":  "modulearn-assets",
+    "jwtSecret":  "NjA2YWVjODEtODk3OS00MGY4LWE5NTMtYTM0MGNlNTBmMzdhYWE5ODgxNDEtNjdiNS00YmY4LTlmNGEtYzE1MzM4YTFiOWIyMjYwNDEyMTYyNjM4",
+    "jwtRefreshSecret":  "OTU1ODk0M2UtYjFmYS00Njg5LWE5OTktOWI1Y2Q2MTYzZWQ5NGQ5YzcwNzMtZmVkMi00MDU5LWI4ZDQtZDMxMTI0ZmFhZmUxcmVmcmVzaDI2MDQxMjE2MjYzOA==",
+    "netlifySiteUrl":  "https://modulearn1.netlify.app",
+    "createdAt":  "2026-04-12T16:29:32.2515481+08:00",
+    "mysqlHost":  "modulearnmysql260412162638.mysql.database.azure.com",
+    "publicIp":  "136.158.79.165"
+}

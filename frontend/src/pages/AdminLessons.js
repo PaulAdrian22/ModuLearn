@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../App';
 import AdminNavbar from '../components/AdminNavbar';
+import { themedConfirm } from '../utils/themedConfirm';
 
 const decodeHtmlEntities = (value = '') => {
   const normalized = String(value)
@@ -16,13 +17,60 @@ const decodeHtmlEntities = (value = '') => {
 
 const toPlainText = (value = '') => decodeHtmlEntities(String(value).replace(/<[^>]*>/g, ' ')).replace(/\s+/g, ' ').trim();
 
+const stripObjectivesFromSummary = (value = '') => {
+  const plain = toPlainText(value);
+  if (!plain) return '';
+
+  const objectiveStart = plain.search(/\b(?:learning\s*objectives?|objectives?)\b\s*[:\-]/i);
+  if (objectiveStart === -1) {
+    return plain;
+  }
+
+  return plain.slice(0, objectiveStart).trim();
+};
+
+const toBooleanFlag = (value) => {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') return value === 1;
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+    return normalized === '1' || normalized === 'true' || normalized === 'yes' || normalized === 'on';
+  }
+  return false;
+};
+
+const normalizeLessonLanguage = (value = '') => {
+  const normalized = String(value || '').trim().toLowerCase();
+
+  if (normalized === 'english') return 'English';
+  if (normalized === 'taglish' || normalized === 'filipino' || normalized === 'tagalog') return 'Taglish';
+
+  return 'English';
+};
+
+const PROTECTED_LESSON_ORDER_MIN = 1;
+const PROTECTED_LESSON_ORDER_MAX = 7;
+
+const isProtectedLessonFromDeletion = (lesson) => {
+  const difficulty = String(lesson?.Difficulty || '').trim().toLowerCase();
+  if (difficulty === 'supplementary') {
+    return false;
+  }
+
+  const lessonOrder = Number(lesson?.LessonOrder);
+  return Number.isFinite(lessonOrder)
+    && lessonOrder >= PROTECTED_LESSON_ORDER_MIN
+    && lessonOrder <= PROTECTED_LESSON_ORDER_MAX;
+};
+
 const AdminLessons = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [activeTab, setActiveTab] = useState('active'); // 'active', 'hidden', 'deleted'
+  const [activeTab, setActiveTab] = useState('english'); // 'english', 'taglish', 'deleted'
+  const [lessonActionLoading, setLessonActionLoading] = useState({});
 
   useEffect(() => {
     // Check if user is admin
@@ -48,38 +96,174 @@ const AdminLessons = () => {
   };
 
   const handleAddLesson = () => {
-    navigate('/admin/lessons/add');
+    navigate('/admin/lessons/add?type=supplementary');
   };
 
-  const handleEditLesson = (lessonId) => {
-    navigate(`/admin/lessons/edit/${lessonId}`);
+  const updateLessonInState = (lessonId, patch) => {
+    setLessons((prevLessons) =>
+      prevLessons.map((lesson) =>
+        lesson.ModuleID === lessonId ? { ...lesson, ...patch } : lesson
+      )
+    );
   };
 
-  const handleHideLesson = async (lessonId) => {
-    // Implement hide functionality
-    console.log('Hide lesson functionality to be implemented');
+  const withLessonAction = async (lessonId, actionFn) => {
+    setLessonActionLoading((prev) => ({ ...prev, [lessonId]: true }));
+    try {
+      await actionFn();
+    } finally {
+      setLessonActionLoading((prev) => ({ ...prev, [lessonId]: false }));
+    }
+  };
+
+  const handleEditLesson = (lesson) => {
+    if (toBooleanFlag(lesson.Is_Completed)) {
+      return;
+    }
+
+    navigate(`/admin/lessons/edit/${lesson.ModuleID}`);
   };
 
   const handleDeleteLesson = async (lessonId) => {
-    if (!window.confirm('Are you sure you want to delete this lesson?')) {
+    if (lessons.some((lesson) => Number(lesson.ModuleID) === Number(lessonId) && isProtectedLessonFromDeletion(lesson))) {
+      return;
+    }
+
+    const shouldDelete = await themedConfirm({
+      title: 'Move Lesson to Recycle Bin',
+      message: 'This lesson will be moved to Deleted Lessons and can be restored later.',
+      confirmText: 'Move to Bin',
+      cancelText: 'Cancel',
+      variant: 'danger'
+    });
+
+    if (!shouldDelete) {
       return;
     }
 
     try {
-      await axios.delete(`/admin/modules/${lessonId}`);
-      fetchLessons(); // Refresh list
+      await withLessonAction(lessonId, async () => {
+        await axios.delete(`/admin/modules/${lessonId}`);
+      });
+      fetchLessons();
     } catch (err) {
       console.error('Error deleting lesson:', err);
     }
   };
 
+  const handleRestoreLesson = async (lessonId) => {
+    const shouldRestore = await themedConfirm({
+      title: 'Restore Lesson',
+      message: 'Restore this lesson from Deleted Lessons?',
+      confirmText: 'Restore',
+      cancelText: 'Cancel',
+      variant: 'success'
+    });
+
+    if (!shouldRestore) {
+      return;
+    }
+
+    try {
+      await withLessonAction(lessonId, async () => {
+        await axios.put(`/admin/modules/${lessonId}/restore`);
+      });
+      fetchLessons();
+    } catch (err) {
+      console.error('Error restoring lesson:', err);
+    }
+  };
+
+  const handlePermanentDeleteLesson = async (lessonId) => {
+    if (lessons.some((lesson) => Number(lesson.ModuleID) === Number(lessonId) && isProtectedLessonFromDeletion(lesson))) {
+      return;
+    }
+
+    const shouldDeletePermanently = await themedConfirm({
+      title: 'Delete Permanently',
+      message: 'This will permanently remove the lesson and cannot be undone.',
+      confirmText: 'Delete Permanently',
+      cancelText: 'Cancel',
+      variant: 'danger'
+    });
+
+    if (!shouldDeletePermanently) {
+      return;
+    }
+
+    try {
+      await withLessonAction(lessonId, async () => {
+        await axios.delete(`/admin/modules/${lessonId}/permanent`);
+      });
+      fetchLessons();
+    } catch (err) {
+      console.error('Error permanently deleting lesson:', err);
+    }
+  };
+
+  const handleToggleCompletion = async (lesson) => {
+    const lessonId = lesson.ModuleID;
+    const isCompleted = toBooleanFlag(lesson.Is_Completed);
+    const nextCompleted = !isCompleted;
+
+    if (nextCompleted) {
+      const shouldMarkComplete = await themedConfirm({
+        title: 'Mark Lesson as Complete?',
+        message: 'This will lock editing for this lesson until you set it back to incomplete.',
+        confirmText: 'Mark Complete',
+        cancelText: 'Cancel',
+        variant: 'warning'
+      });
+
+      if (!shouldMarkComplete) {
+        return;
+      }
+    }
+
+    try {
+      await withLessonAction(lessonId, async () => {
+        const response = await axios.put(`/admin/modules/${lessonId}/completion`, {
+          isCompleted: nextCompleted
+        });
+
+        updateLessonInState(lessonId, {
+          Is_Completed: response?.data?.isCompleted ?? nextCompleted
+        });
+      });
+    } catch (err) {
+      console.error('Error updating lesson completion state:', err);
+    }
+  };
+
+  const handleToggleLock = async (lesson) => {
+    const lessonId = lesson.ModuleID;
+    const isUnlocked = toBooleanFlag(lesson.Is_Unlocked);
+    const nextUnlocked = !isUnlocked;
+
+    try {
+      await withLessonAction(lessonId, async () => {
+        const response = await axios.put(`/admin/modules/${lessonId}/lock-state`, {
+          isUnlocked: nextUnlocked
+        });
+
+        updateLessonInState(lessonId, {
+          Is_Unlocked: response?.data?.isUnlocked ?? nextUnlocked
+        });
+      });
+    } catch (err) {
+      console.error('Error updating lesson lock state:', err);
+    }
+  };
+
   const formatDate = (dateString) => {
-    if (!dateString) return '01 / 15 / 2025';
+    if (!dateString) return 'Not available';
     const date = new Date(dateString);
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${month} / ${day} / ${year}`;
+    if (Number.isNaN(date.getTime())) return 'Not available';
+    return new Intl.DateTimeFormat(undefined, {
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric',
+    }).format(date);
   };
 
   const getDifficultyColor = (difficulty) => {
@@ -103,12 +287,22 @@ const AdminLessons = () => {
     );
   }
 
+  const englishLessonsCount = lessons.filter(
+    (lesson) => !toBooleanFlag(lesson.Is_Deleted) && normalizeLessonLanguage(lesson.LessonLanguage) === 'English'
+  ).length;
+  const taglishLessonsCount = lessons.filter(
+    (lesson) => !toBooleanFlag(lesson.Is_Deleted) && normalizeLessonLanguage(lesson.LessonLanguage) === 'Taglish'
+  ).length;
+  const deletedLessonsCount = lessons.filter((lesson) => toBooleanFlag(lesson.Is_Deleted)).length;
+
   // Filter lessons based on active tab
   const filteredLessons = lessons.filter(lesson => {
-    if (activeTab === 'active') return true; // Show all for now
-    if (activeTab === 'hidden') return false; // No hidden lessons yet
-    if (activeTab === 'deleted') return false; // No deleted lessons yet
-    return true;
+    const isDeleted = toBooleanFlag(lesson.Is_Deleted);
+    if (activeTab === 'deleted') return isDeleted;
+    if (isDeleted) return false;
+    if (activeTab === 'english') return normalizeLessonLanguage(lesson.LessonLanguage) === 'English';
+    if (activeTab === 'taglish') return normalizeLessonLanguage(lesson.LessonLanguage) === 'Taglish';
+    return false;
   });
 
   return (
@@ -120,28 +314,28 @@ const AdminLessons = () => {
         <div className="flex items-center justify-between mb-6">
           <div className="flex gap-8 border-b-2 border-gray-200">
             <button
-              onClick={() => setActiveTab('active')}
+              onClick={() => setActiveTab('english')}
               className={`pb-3 px-2 font-bold text-lg relative ${
-                activeTab === 'active'
+                activeTab === 'english'
                   ? 'text-[#1e5a8e]'
                   : 'text-gray-500'
               }`}
             >
-              Active Lessons
-              {activeTab === 'active' && (
+              English Lessons ({englishLessonsCount})
+              {activeTab === 'english' && (
                 <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#2BC4B3]"></div>
               )}
             </button>
             <button
-              onClick={() => setActiveTab('hidden')}
+              onClick={() => setActiveTab('taglish')}
               className={`pb-3 px-2 font-bold text-lg relative ${
-                activeTab === 'hidden'
+                activeTab === 'taglish'
                   ? 'text-[#1e5a8e]'
                   : 'text-gray-500'
               }`}
             >
-              Hidden Lessons
-              {activeTab === 'hidden' && (
+              Taglish Lessons ({taglishLessonsCount})
+              {activeTab === 'taglish' && (
                 <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#2BC4B3]"></div>
               )}
             </button>
@@ -153,7 +347,7 @@ const AdminLessons = () => {
                   : 'text-gray-500'
               }`}
             >
-              Deleted Lessons
+              Deleted Lessons ({deletedLessonsCount})
               {activeTab === 'deleted' && (
                 <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#2BC4B3]"></div>
               )}
@@ -164,7 +358,7 @@ const AdminLessons = () => {
             onClick={handleAddLesson}
             className="px-6 py-3 bg-[#FFB74D] hover:bg-[#FFA726] text-white rounded-lg font-bold shadow-md transition-all"
           >
-            Add Lesson
+            Add Supplementary Lesson
           </button>
         </div>
 
@@ -172,19 +366,30 @@ const AdminLessons = () => {
         <div className="space-y-4">
           {filteredLessons.length === 0 ? (
             <div className="bg-white rounded-xl shadow-sm text-center py-16">
-              <h3 className="text-xl font-bold text-gray-700 mb-2">No lessons found</h3>
-              <p className="text-gray-500 mb-6">Start by creating your first lesson</p>
-              <button 
-                onClick={handleAddLesson} 
-                className="px-6 py-3 bg-[#FFB74D] hover:bg-[#FFA726] text-white rounded-lg font-bold transition-colors duration-200"
-              >
-                Create Lesson
-              </button>
+              <h3 className="text-xl font-bold text-gray-700 mb-2">
+                {activeTab === 'deleted' ? 'Recycle bin is empty' : 'No lessons found'}
+              </h3>
+              <p className="text-gray-500 mb-6">
+                {activeTab === 'deleted'
+                  ? 'Deleted lessons will appear here and can be restored.'
+                  : `Start by creating your first ${activeTab === 'taglish' ? 'Taglish' : 'English'} supplementary lesson`}
+              </p>
+              {activeTab !== 'deleted' && (
+                <button 
+                  onClick={handleAddLesson} 
+                  className="px-6 py-3 bg-[#FFB74D] hover:bg-[#FFA726] text-white rounded-lg font-bold transition-colors duration-200"
+                >
+                  Create Supplementary Lesson
+                </button>
+              )}
             </div>
           ) : (
-            filteredLessons.map((lesson) => (
-              <div 
-                key={lesson.ModuleID} 
+            filteredLessons.map((lesson) => {
+              const isDeleteProtected = isProtectedLessonFromDeletion(lesson);
+
+              return (
+              <div
+                key={lesson.ModuleID}
                 className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden flex"
               >
                 {/* Colored Left Border */}
@@ -195,33 +400,71 @@ const AdminLessons = () => {
 
                 {/* Content */}
                 <div className="flex-1 p-6">
-                  <div className="flex items-start justify-between mb-3">
+                  {toBooleanFlag(lesson.Is_Deleted) && (
+                    <div className="mb-3 inline-flex items-center rounded-full bg-[#FDECEC] px-3 py-1 text-xs font-semibold text-[#C0392B]">
+                      In Recycle Bin
+                    </div>
+                  )}
+
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between mb-3">
                     <div className="flex-1">
-                      <h3 className="text-xl font-bold text-gray-900 mb-2">
+                      <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
                         Lesson {lesson.LessonOrder} : {toPlainText(lesson.ModuleTitle) || 'Untitled Lesson'}
                       </h3>
                     </div>
-                    <div className="text-right ml-4">
-                      <p className="text-sm font-semibold text-[#1e5a8e]">Date Published</p>
-                      <p className="text-sm text-gray-600">{formatDate(lesson.created_at)}</p>
+                    <div className="sm:text-right sm:ml-4 flex-shrink-0">
+                      <div>
+                        <p className="text-xs sm:text-sm font-semibold text-[#1e5a8e]">Last Update</p>
+                        <p className="text-xs sm:text-sm text-gray-600">{formatDate(lesson.updated_at || lesson.created_at)}</p>
+                      </div>
+                      {isDeleteProtected && (
+                        <div className="mt-2 inline-flex items-center rounded-full bg-[#E8F4FF] px-3 py-1 text-xs font-semibold text-[#1E5A8E]">
+                          Protected (Lesson 1-7)
+                        </div>
+                      )}
                     </div>
                   </div>
 
                   <div className="mb-4">
                     <p className="text-sm font-semibold text-gray-700 mb-1">Description</p>
                     <p className="text-sm text-gray-600">
-                      {toPlainText(lesson.Description) || 'No description available.'}
+                      {stripObjectivesFromSummary(lesson.Description) || 'No description available.'}
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-6">
+                  <div className="grid grid-cols-1 2xl:grid-cols-[minmax(0,1fr)_auto] gap-4 items-start">
+                    <div className="flex flex-wrap items-center gap-x-6 gap-y-3 min-w-0">
                       <p className="text-sm">
                         <span className="font-semibold text-[#2BC4B3]">Difficulty : </span>
                         <span className="text-gray-700">{lesson.Difficulty || 'Easy'}</span>
                       </p>
+
+                      <p className="text-sm">
+                        <span className="font-semibold text-[#2BC4B3]">Language : </span>
+                        <span className="text-gray-700">{normalizeLessonLanguage(lesson.LessonLanguage)}</span>
+                      </p>
+
+                      <span
+                        className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
+                          toBooleanFlag(lesson.Is_Completed)
+                            ? 'bg-[#E8F7EE] text-[#228B5A]'
+                            : 'bg-gray-100 text-gray-600'
+                        }`}
+                      >
+                        {toBooleanFlag(lesson.Is_Completed) ? 'Completed' : 'Incomplete'}
+                      </span>
+
+                      <span
+                        className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
+                          toBooleanFlag(lesson.Is_Unlocked)
+                            ? 'bg-[#E8F4FF] text-[#1E5A8E]'
+                            : 'bg-[#FDECEC] text-[#C0392B]'
+                        }`}
+                      >
+                        {toBooleanFlag(lesson.Is_Unlocked) ? 'Unlocked' : 'Locked'}
+                      </span>
                       
-                      <div className="flex items-center gap-4 text-sm text-gray-600">
+                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
                         <span className="flex items-center gap-1">
                           <svg className="w-5 h-5 text-[#1e5a8e]" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3M14 17H7V15H14V17M17 13H7V11H17V13M17 9H7V7H17V9Z"/>
@@ -245,30 +488,79 @@ const AdminLessons = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => handleEditLesson(lesson.ModuleID)}
-                        className="px-5 py-2 bg-[#4DD0E1] hover:bg-[#2BC4B3] text-white rounded-lg font-semibold transition-all shadow-sm"
-                      >
-                        Edit Lesson
-                      </button>
-                      <button
-                        onClick={() => handleHideLesson(lesson.ModuleID)}
-                        className="px-5 py-2 bg-[#90CAF9] hover:bg-[#64B5F6] text-white rounded-lg font-semibold transition-all shadow-sm"
-                      >
-                        Hide Lesson
-                      </button>
-                      <button
-                        onClick={() => handleDeleteLesson(lesson.ModuleID)}
-                        className="px-5 py-2 bg-[#EF9A9A] hover:bg-[#E57373] text-white rounded-lg font-semibold transition-all shadow-sm"
-                      >
-                        Delete Lesson
-                      </button>
+                    <div className="flex flex-wrap items-center gap-3 2xl:justify-end">
+                      {toBooleanFlag(lesson.Is_Deleted) ? (
+                        <>
+                          <button
+                            onClick={() => handleRestoreLesson(lesson.ModuleID)}
+                            disabled={Boolean(lessonActionLoading[lesson.ModuleID])}
+                            className="min-w-[172px] px-5 py-2 text-center bg-[#81C784] hover:bg-[#66BB6A] text-white rounded-lg font-semibold transition-all shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+                          >
+                            Restore Lesson
+                          </button>
+                          {!isDeleteProtected && (
+                            <button
+                              onClick={() => handlePermanentDeleteLesson(lesson.ModuleID)}
+                              disabled={Boolean(lessonActionLoading[lesson.ModuleID])}
+                              className="min-w-[172px] px-5 py-2 text-center bg-[#EF5350] hover:bg-[#E53935] text-white rounded-lg font-semibold transition-all shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+                            >
+                              Delete Permanently
+                            </button>
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            onClick={() => handleEditLesson(lesson)}
+                            disabled={toBooleanFlag(lesson.Is_Completed) || Boolean(lessonActionLoading[lesson.ModuleID])}
+                            className={`min-w-[160px] px-5 py-2 text-center rounded-lg font-semibold transition-all shadow-sm ${
+                              toBooleanFlag(lesson.Is_Completed)
+                                ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                                : 'bg-[#4DD0E1] hover:bg-[#2BC4B3] text-white'
+                            }`}
+                          >
+                            {toBooleanFlag(lesson.Is_Completed) ? 'Editing Locked' : 'Edit Lesson'}
+                          </button>
+                          <button
+                            onClick={() => handleToggleCompletion(lesson)}
+                            disabled={Boolean(lessonActionLoading[lesson.ModuleID])}
+                            className={`min-w-[160px] px-5 py-2 text-center text-white rounded-lg font-semibold transition-all shadow-sm ${
+                              toBooleanFlag(lesson.Is_Completed)
+                                ? 'bg-[#90CAF9] hover:bg-[#64B5F6]'
+                                : 'bg-[#81C784] hover:bg-[#66BB6A]'
+                            } disabled:opacity-60 disabled:cursor-not-allowed`}
+                          >
+                            {toBooleanFlag(lesson.Is_Completed) ? 'Mark Incomplete' : 'Mark Complete'}
+                          </button>
+                          <button
+                            onClick={() => handleToggleLock(lesson)}
+                            disabled={Boolean(lessonActionLoading[lesson.ModuleID]) || Number(lesson.LessonOrder) === 1}
+                            className={`min-w-[160px] px-5 py-2 text-center text-white rounded-lg font-semibold transition-all shadow-sm ${
+                              toBooleanFlag(lesson.Is_Unlocked)
+                                ? 'bg-[#FFB74D] hover:bg-[#FFA726]'
+                                : 'bg-[#7986CB] hover:bg-[#5C6BC0]'
+                            } disabled:opacity-60 disabled:cursor-not-allowed`}
+                            title={Number(lesson.LessonOrder) === 1 ? 'Lesson 1 must stay unlocked' : undefined}
+                          >
+                            {toBooleanFlag(lesson.Is_Unlocked) ? 'Lock Lesson' : 'Unlock Lesson'}
+                          </button>
+                          {!isDeleteProtected && (
+                            <button
+                              onClick={() => handleDeleteLesson(lesson.ModuleID)}
+                              disabled={Boolean(lessonActionLoading[lesson.ModuleID])}
+                              className="min-w-[160px] px-5 py-2 text-center bg-[#EF9A9A] hover:bg-[#E57373] text-white rounded-lg font-semibold transition-all shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+                            >
+                              Delete Lesson
+                            </button>
+                          )}
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
-            ))
+            );
+            })
           )}
         </div>
       </div>

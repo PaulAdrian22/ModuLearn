@@ -42,105 +42,110 @@ const ImageCropper = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/90 flex flex-col items-center justify-center z-[60]">
-      <div className="w-full max-w-4xl px-4">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-2xl font-bold text-white">{title}</h3>
-          <button 
-            onClick={onClose}
-            className="text-white hover:text-gray-300"
-          >
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
+    <div className="fixed inset-0 z-[60] bg-black/90">
+      <div className="h-full w-full overflow-y-auto">
+        <div className="min-h-full px-3 py-4 sm:px-4 sm:py-6 lg:py-8">
+          <div className="mx-auto w-full max-w-4xl">
+            {/* Header */}
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-xl font-bold text-white sm:text-2xl">{title}</h3>
+              <button 
+                onClick={onClose}
+                className="text-white hover:text-gray-300"
+                aria-label="Close image editor"
+              >
+                <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
 
-        {/* Cropper Area */}
-        <div className="relative w-full h-[500px] bg-white rounded-lg overflow-hidden">
-          <Cropper
-            image={image}
-            crop={crop}
-            zoom={zoom}
-            aspect={selectedAspect}
-            cropShape={cropShape}
-            showGrid={showGrid}
-            onCropChange={setCrop}
-            onZoomChange={setZoom}
-            onCropComplete={onCropComplete}
-            objectFit="contain"
-            restrictPosition={false}
-          />
-          {/* Center Guidelines */}
-          <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-            {/* Vertical line */}
-            <div className="absolute w-[2px] h-full bg-black opacity-30"></div>
-            {/* Horizontal line */}
-            <div className="absolute h-[2px] w-full bg-black opacity-30"></div>
-          </div>
-        </div>
-
-        {/* Aspect Ratio + Size Control */}
-        <div className="mt-6 px-4 space-y-4">
-          {aspectOptions.length > 0 && (
-            <div>
-              <p className="text-white text-sm mb-2">Aspect Ratio</p>
-              <div className="flex flex-wrap gap-2">
-                {aspectOptions.map((option) => (
-                  <button
-                    key={option.label}
-                    onClick={() => setSelectedAspect(option.value)}
-                    className={`px-3 py-1.5 rounded-md text-sm font-semibold transition-colors ${
-                      selectedAspect === option.value
-                        ? 'bg-[#2BC4B3] text-white'
-                        : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
-                    }`}
-                  >
-                    {option.label}
-                  </button>
-                ))}
+            {/* Cropper Area */}
+            <div className="relative h-[clamp(220px,52vh,500px)] w-full overflow-hidden rounded-lg bg-white sm:h-[clamp(260px,56vh,500px)]">
+              <Cropper
+                image={image}
+                crop={crop}
+                zoom={zoom}
+                aspect={selectedAspect}
+                cropShape={cropShape}
+                showGrid={showGrid}
+                onCropChange={setCrop}
+                onZoomChange={setZoom}
+                onCropComplete={onCropComplete}
+                objectFit="contain"
+                restrictPosition={false}
+              />
+              {/* Center Guidelines */}
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                {/* Vertical line */}
+                <div className="absolute h-full w-[2px] bg-black opacity-30"></div>
+                {/* Horizontal line */}
+                <div className="absolute h-[2px] w-full bg-black opacity-30"></div>
               </div>
             </div>
-          )}
 
-          <div className="flex items-center gap-4">
-            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-            </svg>
-            <input
-              type="range"
-              value={zoom}
-              min={0.5}
-              max={3}
-              step={0.1}
-              onChange={(e) => setZoom(parseFloat(e.target.value))}
-              className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider"
-              style={{
-                background: `linear-gradient(to right, #2BC4B3 0%, #2BC4B3 ${((zoom - 0.5) / 2.5) * 100}%, #374151 ${((zoom - 0.5) / 2.5) * 100}%, #374151 100%)`
-              }}
-            />
-            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-            </svg>
+            {/* Aspect Ratio + Size Control */}
+            <div className="mt-5 space-y-4 px-1 sm:mt-6 sm:px-4">
+              {aspectOptions.length > 0 && (
+                <div>
+                  <p className="mb-2 text-sm text-white">Aspect Ratio</p>
+                  <div className="flex flex-wrap gap-2">
+                    {aspectOptions.map((option) => (
+                      <button
+                        key={option.label}
+                        onClick={() => setSelectedAspect(option.value)}
+                        className={`rounded-md px-3 py-1.5 text-sm font-semibold transition-colors ${
+                          selectedAspect === option.value
+                            ? 'bg-[#2BC4B3] text-white'
+                            : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex items-center gap-3 sm:gap-4">
+                <svg className="h-5 w-5 shrink-0 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                </svg>
+                <input
+                  type="range"
+                  value={zoom}
+                  min={0.5}
+                  max={3}
+                  step={0.1}
+                  onChange={(e) => setZoom(parseFloat(e.target.value))}
+                  className="slider h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-gray-700"
+                  style={{
+                    background: `linear-gradient(to right, #2BC4B3 0%, #2BC4B3 ${((zoom - 0.5) / 2.5) * 100}%, #374151 ${((zoom - 0.5) / 2.5) * 100}%, #374151 100%)`
+                  }}
+                />
+                <svg className="h-6 w-6 shrink-0 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                </svg>
+              </div>
+              <p className="mt-2 text-center text-sm text-white">Adjust image size, drag to reposition</p>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:gap-4">
+              <button
+                onClick={onClose}
+                className="flex-1 rounded-lg bg-gray-700 px-6 py-3 font-semibold text-white transition-all hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                className="flex-1 rounded-lg bg-[#2BC4B3] px-6 py-3 font-semibold text-white transition-all hover:bg-[#1a9d8f]"
+              >
+                Save & Apply
+              </button>
+            </div>
           </div>
-          <p className="text-center text-white text-sm mt-2">Adjust image size, drag to reposition</p>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex gap-4 mt-6">
-          <button
-            onClick={onClose}
-            className="flex-1 px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-semibold transition-all"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            className="flex-1 px-6 py-3 bg-[#2BC4B3] hover:bg-[#1a9d8f] text-white rounded-lg font-semibold transition-all"
-          >
-            Save & Apply
-          </button>
         </div>
       </div>
     </div>

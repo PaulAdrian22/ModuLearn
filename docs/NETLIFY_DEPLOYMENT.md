@@ -1,50 +1,79 @@
-# Netlify Deployment Guide
+# Netlify Frontend + Azure Backend Deployment
 
-This project is configured to deploy frontend and backend API on a single Netlify site.
+This setup deploys the frontend on Netlify and keeps the backend API + database on Azure.
 
-## What Was Added
+## Target Architecture
 
-- `netlify.toml` for build, functions directory, and redirects.
-- `netlify/functions/api.js` to run Express API as a Netlify Function.
-- Frontend API URL config in `frontend/src/config/api.js`.
+- Frontend: Netlify
+- Backend API: Azure App Service
+- Database: Azure Database for MySQL Flexible Server
+- Upload storage: Azure Blob Storage (recommended)
 
-## 1. Connect Repository
+## 1. Deploy Backend to Azure First
+
+Complete backend deployment before deploying frontend:
+
+- `docs/AZURE_BACKEND_DEPLOYMENT.md`
+
+When backend is ready, note your API base URL:
+
+- `https://<azure-webapp-name>.azurewebsites.net/api`
+
+## 2. Connect Repository in Netlify
 
 1. Open Netlify and click **Add new site** > **Import an existing project**.
 2. Select your GitHub repository.
-3. Netlify detects `netlify.toml` automatically.
+3. Netlify reads `netlify.toml` automatically.
 
-## 2. Build Settings
+## 3. Build Settings
 
-If prompted manually, use:
+If you set them manually, use:
 
-- Build command: `npm install --prefix backend && npm install --prefix frontend && npm install --prefix netlify/functions && npm run build --prefix frontend`
+- Build command: `npm ci --prefix frontend --no-audit --no-fund && npm run build --prefix frontend`
 - Publish directory: `frontend/build`
-- Functions directory: `netlify/functions`
-- Node version: `24`
+- Node version: `20`
 
-## 3. Environment Variables (Required)
+## 4. Netlify Environment Variables
 
-Set these in Netlify Site settings > Environment variables:
+Set these in Netlify site settings:
 
-- `NODE_ENV=production`
-- `DB_HOST=<your-db-host>`
-- `DB_USER=<your-db-user>`
-- `DB_PASSWORD=<your-db-password>`
-- `DB_NAME=<your-db-name>`
-- `DB_PORT=<your-db-port>`
-- `JWT_SECRET=<your-jwt-secret>`
-- `JWT_REFRESH_SECRET=<your-refresh-secret>`
+- `REACT_APP_API_URL=https://<azure-webapp-name>.azurewebsites.net/api`
+
+Optional:
+
+- `REACT_APP_NAME=MODULEARN`
+
+Important:
+
+- Trigger a new Netlify deploy after changing environment variables.
+
+## 5. Azure Backend CORS for Netlify
+
+In Azure App Service environment variables, set:
+
 - `CORS_ORIGIN=https://<your-netlify-site>.netlify.app`
-- `REACT_APP_API_URL=/.netlify/functions/api/api`
 
-## 4. Test URLs After Deploy
+If you use a custom frontend domain, set `CORS_ORIGIN` to that exact origin.
+
+## 6. Verify Deployment
 
 - Frontend app: `https://<your-netlify-site>.netlify.app`
-- API health: `https://<your-netlify-site>.netlify.app/api/health`
+- Backend health: `https://<azure-webapp-name>.azurewebsites.net/api/health`
+- Browser Network tab: API calls should go to the Azure domain.
 
-## Important Limitation
+## 7. Cost Notes
 
-Current file uploads use local disk storage in `backend/uploads`. Netlify Functions have ephemeral filesystem behavior, so uploaded files are not durable for production.
+In this architecture, Netlify usage is mostly:
 
-For production-safe uploads, move files to external storage (Cloudinary, AWS S3, or Supabase Storage).
+- Build minutes
+- Bandwidth
+
+Estimate monthly usage with:
+
+```powershell
+node scripts/netlify_credit_calculator.js --scenario=netlify-fullstack --deploys=30 --avg-build-minutes=4 --bandwidth-gb=80 --function-invocations=0
+```
+
+For a lower-credit frontend host option, see:
+
+- `docs/GITHUB_PAGES_DEPLOYMENT.md`

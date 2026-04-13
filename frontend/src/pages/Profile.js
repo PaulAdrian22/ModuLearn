@@ -9,6 +9,23 @@ import Avatar from '../components/Avatar';
 import ImageCropper from '../components/ImageCropper';
 import { applyAppearanceSettings, getStoredAppearanceSettings, saveAppearanceSettings } from '../utils/appearanceSettings';
 import { API_SERVER_URL } from '../config/api';
+import { themedConfirm } from '../utils/themedConfirm';
+
+const toAvatarUrl = (value = '') => {
+  const normalized = String(value || '').trim();
+  if (!normalized) return null;
+  if (/^https?:\/\//i.test(normalized)) return normalized;
+  return `${API_SERVER_URL}${normalized}`;
+};
+
+const normalizePreferredLanguageValue = (value = '') => {
+  const normalized = String(value || '').trim().toLowerCase();
+
+  if (normalized === 'english') return 'English';
+  if (normalized === 'taglish' || normalized === 'filipino' || normalized === 'tagalog') return 'Taglish';
+
+  return 'English';
+};
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -24,6 +41,9 @@ const Profile = () => {
   const [theme, setTheme] = useState('Light Mode');
   const [fontSize, setFontSize] = useState('Default');
   const [uiSize, setUiSize] = useState('Default');
+  const [preferredLanguage, setPreferredLanguage] = useState(() =>
+    normalizePreferredLanguageValue(localStorage.getItem('preferredLanguage') || 'English')
+  );
   const [loading, setLoading] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -38,6 +58,7 @@ const Profile = () => {
   const [showThemeModal, setShowThemeModal] = useState(false);
   const [showFontSizeModal, setShowFontSizeModal] = useState(false);
   const [showUiSizeModal, setShowUiSizeModal] = useState(false);
+  const [showLanguageModal, setShowLanguageModal] = useState(false);
   const [showCropper, setShowCropper] = useState(false);
   const [imageToCrop, setImageToCrop] = useState(null);
 
@@ -59,6 +80,12 @@ const Profile = () => {
     setFontSize(savedFontSize);
     setUiSize(savedUiSize);
     applyAppearanceSettings({ theme: savedTheme, fontSize: savedFontSize, uiSize: savedUiSize });
+
+    const resolvedLanguage = normalizePreferredLanguageValue(
+      profile?.preferredLanguage || localStorage.getItem('preferredLanguage') || 'English'
+    );
+    setPreferredLanguage(resolvedLanguage);
+    localStorage.setItem('preferredLanguage', resolvedLanguage);
   }, [profile]);
 
   const handleChange = (e) => {
@@ -127,6 +154,21 @@ const Profile = () => {
     }
   };
 
+  const handleUpdateLanguage = async (newLanguage) => {
+    const normalizedLanguage = normalizePreferredLanguageValue(newLanguage);
+
+    try {
+      await axios.put('/users/profile', { preferredLanguage: normalizedLanguage });
+      localStorage.setItem('preferredLanguage', normalizedLanguage);
+      setPreferredLanguage(normalizedLanguage);
+      setMessage({ type: 'success', text: 'Language updated successfully!', show: true });
+      await refreshProfile();
+      setShowLanguageModal(false);
+    } catch (err) {
+      setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to update language', show: true });
+    }
+  };
+
   const handleUpdatePassword = async (passwords) => {
     try {
       await axios.post('/users/change-password', passwords);
@@ -138,7 +180,15 @@ const Profile = () => {
   };
 
   const handleDeletePicture = async () => {
-    if (!window.confirm('Are you sure you want to delete your profile picture?')) {
+    const shouldDeletePicture = await themedConfirm({
+      title: 'Delete Profile Picture?',
+      message: 'Are you sure you want to delete your profile picture?',
+      confirmText: 'Delete',
+      cancelText: 'Keep',
+      variant: 'danger'
+    });
+
+    if (!shouldDeletePicture) {
       return;
     }
 
@@ -154,11 +204,27 @@ const Profile = () => {
   };
 
   const handleDeleteAccount = async () => {
-    if (!window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+    const shouldDeleteAccount = await themedConfirm({
+      title: 'Delete Account?',
+      message: 'Are you sure you want to delete your account? This action cannot be undone.',
+      confirmText: 'Continue',
+      cancelText: 'Cancel',
+      variant: 'danger'
+    });
+
+    if (!shouldDeleteAccount) {
       return;
     }
 
-    if (!window.confirm('This will permanently delete all your progress and data. Are you absolutely sure?')) {
+    const shouldDeletePermanently = await themedConfirm({
+      title: 'Permanently Delete?',
+      message: 'This will permanently delete all your progress and data. Are you absolutely sure?',
+      confirmText: 'Delete Forever',
+      cancelText: 'Keep Account',
+      variant: 'danger'
+    });
+
+    if (!shouldDeletePermanently) {
       return;
     }
 
@@ -244,13 +310,11 @@ const Profile = () => {
   };
 
   const handleEditCurrentAvatar = () => {
-    const serverUrl = API_SERVER_URL;
-    
     let imageUrl;
     
     if (profile?.avatar_type === 'custom' && profile?.profile_picture) {
       // Edit existing custom avatar
-      imageUrl = `${serverUrl}${profile.profile_picture}`;
+      imageUrl = toAvatarUrl(profile.profile_picture);
     } else if (profile?.avatar_type === 'default' && profile?.default_avatar) {
       // Edit preset avatar - load it from public folder
       imageUrl = `/images/avatars/${profile.default_avatar}`;
@@ -326,6 +390,20 @@ const Profile = () => {
               <div>
                 <h3 className="font-semibold text-gray-800">UI Size</h3>
                 <p className="text-gray-500">{uiSize}</p>
+              </div>
+              <svg className="w-6 h-6 text-[#1e5a8e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </div>
+
+            {/* Language */}
+            <div
+              onClick={() => setShowLanguageModal(true)}
+              className="flex items-center justify-between py-3 px-4 rounded-lg cursor-pointer"
+            >
+              <div>
+                <h3 className="font-semibold text-gray-800">Language</h3>
+                <p className="text-gray-500">{preferredLanguage}</p>
               </div>
               <svg className="w-6 h-6 text-[#1e5a8e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -467,6 +545,14 @@ const Profile = () => {
             setMessage({ type: 'success', text: 'UI size updated!', show: true });
           }}
           onClose={() => setShowUiSizeModal(false)}
+        />
+      )}
+
+      {showLanguageModal && (
+        <LanguageModal
+          currentLanguage={preferredLanguage}
+          onSave={handleUpdateLanguage}
+          onClose={() => setShowLanguageModal(false)}
         />
       )}
 
@@ -850,6 +936,56 @@ const AvatarModal = ({ currentProfile, onSelectDefault, onUploadCustom, fileInpu
           <button
             onClick={onClose}
             className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg font-semibold"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const LanguageModal = ({ currentLanguage, onSave, onClose }) => {
+  const [selectedLanguage, setSelectedLanguage] = useState(normalizePreferredLanguageValue(currentLanguage));
+  const options = ['English', 'Taglish'];
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+        <h3 className="text-2xl font-bold mb-6">Select Language</h3>
+        <div className="space-y-3 mb-6">
+          {options.map((option) => (
+            <button
+              key={option}
+              onClick={() => setSelectedLanguage(option)}
+              className={`w-full p-4 rounded-lg border-2 text-left ${
+                selectedLanguage === option
+                  ? 'border-[#2BC4B3] bg-[#2BC4B3]/10'
+                  : 'border-gray-200 hover:border-[#2BC4B3]/50'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="font-semibold">{option}</span>
+                {selectedLanguage === option && (
+                  <svg className="w-6 h-6 text-[#2BC4B3]" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                )}
+              </div>
+            </button>
+          ))}
+        </div>
+
+        <div className="flex gap-3">
+          <button
+            onClick={() => onSave(selectedLanguage)}
+            className="flex-1 px-4 py-2 bg-[#2BC4B3] text-white rounded-lg font-semibold hover:bg-[#1e5a8e]"
+          >
+            Save
+          </button>
+          <button
+            onClick={onClose}
+            className="flex-1 px-4 py-2 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50"
           >
             Cancel
           </button>

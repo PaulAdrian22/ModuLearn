@@ -32,7 +32,7 @@ const upload = multer({
     fileSize: 100 * 1024 * 1024 // 100MB limit
   },
   fileFilter: function (req, file, cb) {
-    const allowedTypes = /jpeg|jpg|png|gif|mp4|webm|avi|mov/;
+    const allowedTypes = /jpeg|jpg|png|gif|webp|mp4|webm|avi|mov/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype);
     
@@ -44,6 +44,216 @@ const upload = multer({
   }
 });
 
+const parseBooleanFlag = (value) => {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'number') return value === 1;
+
+  if (typeof value === 'string') {
+    const normalized = value.trim().toLowerCase();
+    if (['true', '1', 'yes', 'on'].includes(normalized)) return true;
+    if (['false', '0', 'no', 'off'].includes(normalized)) return false;
+  }
+
+  return null;
+};
+
+const PROTECTED_LESSON_ORDER_MIN = 1;
+const PROTECTED_LESSON_ORDER_MAX = 7;
+
+const isProtectedLessonOrder = (lessonOrder) => {
+  const normalizedLessonOrder = Number(lessonOrder);
+  return Number.isFinite(normalizedLessonOrder)
+    && normalizedLessonOrder >= PROTECTED_LESSON_ORDER_MIN
+    && normalizedLessonOrder <= PROTECTED_LESSON_ORDER_MAX;
+};
+
+const isSupplementaryDifficulty = (difficulty) => {
+  return String(difficulty || '').trim().toLowerCase() === 'supplementary';
+};
+
+const isProtectedFromDeletion = (lesson = {}) => {
+  if (isSupplementaryDifficulty(lesson.Difficulty)) {
+    return false;
+  }
+
+  return isProtectedLessonOrder(lesson.LessonOrder);
+};
+
+const parseLessonLanguage = (value = 'English') => {
+  const normalized = String(value || '').trim().toLowerCase();
+
+  if (normalized === 'english') return 'English';
+  if (normalized === 'taglish' || normalized === 'filipino' || normalized === 'tagalog') return 'Taglish';
+
+  return 'English';
+};
+
+const toArray = (value) => {
+  if (Array.isArray(value)) return value;
+  if (!value) return [];
+
+  if (typeof value === 'string') {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  return [];
+};
+
+const isPlainObject = (value) => {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+};
+
+const normalizeJsonColumnInput = ({
+  value,
+  fieldName,
+  expectedType,
+  fallback,
+  allowNull = true,
+  warnings
+}) => {
+  if (value === undefined) {
+    return { hasValue: false, value: undefined };
+  }
+
+  if (value === null) {
+    if (allowNull) {
+      return { hasValue: true, value: null };
+    }
+
+    warnings.push(`${fieldName} was null and was replaced with fallback ${expectedType}.`);
+    return { hasValue: true, value: JSON.stringify(fallback) };
+  }
+
+  let parsed = value;
+
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+
+    if (!trimmed) {
+      if (allowNull) {
+        return { hasValue: true, value: null };
+      }
+
+      warnings.push(`${fieldName} was an empty string and was replaced with fallback ${expectedType}.`);
+      return { hasValue: true, value: JSON.stringify(fallback) };
+    }
+
+    try {
+      parsed = JSON.parse(trimmed);
+    } catch {
+      warnings.push(`${fieldName} contained invalid JSON and was replaced with fallback ${expectedType}.`);
+      return { hasValue: true, value: JSON.stringify(fallback) };
+    }
+  }
+
+  const isExpectedType = expectedType === 'array'
+    ? Array.isArray(parsed)
+    : isPlainObject(parsed);
+
+  if (!isExpectedType) {
+    warnings.push(`${fieldName} expected ${expectedType} data and was replaced with fallback ${expectedType}.`);
+    return { hasValue: true, value: JSON.stringify(fallback) };
+  }
+
+  return { hasValue: true, value: JSON.stringify(parsed) };
+};
+
+const normalizeLessonTimeInput = (value, warnings) => {
+  if (value === undefined) {
+    return { hasValue: false, value: undefined };
+  }
+
+  if (value === null) {
+    return { hasValue: true, value: null };
+  }
+
+  let parsed = value;
+
+  if (typeof value === 'string') {
+    const trimmed = value.trim();
+    if (!trimmed) {
+      return { hasValue: true, value: null };
+    }
+
+    try {
+      parsed = JSON.parse(trimmed);
+    } catch {
+      warnings.push('LessonTime contained invalid JSON and was reset to null.');
+      return { hasValue: true, value: null };
+    }
+  }
+
+  if (!isPlainObject(parsed)) {
+    warnings.push('LessonTime must be an object and was reset to null.');
+    return { hasValue: true, value: null };
+  }
+
+  const rawHours = Number(parsed.hours);
+  const rawMinutes = Number(parsed.minutes);
+  const safeHours = Number.isFinite(rawHours) ? Math.max(0, Math.floor(rawHours)) : 0;
+  const safeMinutes = Number.isFinite(rawMinutes) ? Math.max(0, Math.floor(rawMinutes)) : 0;
+
+  if (
+    rawHours !== safeHours ||
+    rawMinutes !== safeMinutes ||
+    !Number.isFinite(rawHours) ||
+    !Number.isFinite(rawMinutes)
+  ) {
+    warnings.push('LessonTime was normalized to non-negative whole numbers.');
+  }
+
+  return {
+    hasValue: true,
+    value: JSON.stringify({ hours: safeHours, minutes: safeMinutes })
+  };
+};
+
+let moduleAdminColumnsReady = false;
+
+const ensureModuleAdminColumns = async () => {
+  if (moduleAdminColumnsReady) return;
+
+  const existingColumns = await query(
+    `SELECT COLUMN_NAME
+       FROM INFORMATION_SCHEMA.COLUMNS
+      WHERE TABLE_SCHEMA = DATABASE()
+        AND TABLE_NAME = 'module'
+        AND COLUMN_NAME IN ('Is_Completed', 'LessonLanguage', 'Is_Deleted')`
+  );
+
+  const columnSet = new Set(existingColumns.map((column) => String(column.COLUMN_NAME || '')));
+  if (!columnSet.has('Is_Completed')) {
+    await query(
+      `ALTER TABLE module
+       ADD COLUMN Is_Completed BOOLEAN NOT NULL DEFAULT FALSE AFTER Is_Unlocked`
+    );
+    console.log('Added Is_Completed column to module table.');
+  }
+
+  if (!columnSet.has('LessonLanguage')) {
+    await query(
+      `ALTER TABLE module
+       ADD COLUMN LessonLanguage VARCHAR(20) NOT NULL DEFAULT 'English' AFTER Is_Completed`
+    );
+    console.log('Added LessonLanguage column to module table.');
+  }
+
+  if (!columnSet.has('Is_Deleted')) {
+    await query(
+      `ALTER TABLE module
+       ADD COLUMN Is_Deleted BOOLEAN NOT NULL DEFAULT FALSE AFTER LessonLanguage`
+    );
+    console.log('Added Is_Deleted column to module table.');
+  }
+
+  moduleAdminColumnsReady = true;
+};
+
 // All routes require authentication and admin role
 router.use(authenticate);
 router.use(requireAdmin);
@@ -51,27 +261,44 @@ router.use(requireAdmin);
 // GET /api/admin/modules - Get all modules (admin view)
 router.get('/modules', async (req, res) => {
   try {
+    await ensureModuleAdminColumns();
+
     const modules = await query(`
       SELECT 
         m.*,
-        COUNT(DISTINCT q.QuestionID) as questionCount
+        (
+          SELECT COUNT(DISTINCT q.QuestionID)
+          FROM question q
+          WHERE q.ModuleID = m.ModuleID
+        ) as questionCount,
+        (
+          SELECT MAX(
+            CASE
+              WHEN p.DateCompletion IS NULL THEN p.DateStarted
+              WHEN p.DateStarted IS NULL THEN p.DateCompletion
+              WHEN p.DateStarted > p.DateCompletion THEN p.DateStarted
+              ELSE p.DateCompletion
+            END
+          )
+          FROM progress p
+          WHERE p.ModuleID = m.ModuleID
+        ) as lastOpenedAt
       FROM module m
-      LEFT JOIN question q ON m.ModuleID = q.ModuleID
-      GROUP BY m.ModuleID
-      ORDER BY m.LessonOrder
     `);
+
+    modules.sort((a, b) => Number(a.LessonOrder || 0) - Number(b.LessonOrder || 0));
     
     // Compute topicCount and assessmentCount from JSON columns
     const enriched = modules.map(m => {
-      const sections = m.sections || [];
+      const sections = toArray(m.sections);
       const topicCount = sections.filter(s => {
         const t = (s.type || '').toLowerCase();
         return t === 'topic' || t === 'topic title';
       }).length;
 
-      const diagnosticCount = (m.diagnosticQuestions || []).length;
-      const reviewCount = (m.reviewQuestions || []).length;
-      const finalCount = (m.finalQuestions || []).length;
+      const diagnosticCount = toArray(m.diagnosticQuestions).length;
+      const reviewCount = toArray(m.reviewQuestions).length;
+      const finalCount = toArray(m.finalQuestions).length;
       const inlineReviewCount = sections.filter(s => {
         const t = (s.type || '').toLowerCase();
         return t === 'review-multiple-choice' || t === 'review - multiple choice' || t === 'review-drag-drop' || t === 'review - drag and drop';
@@ -99,17 +326,72 @@ router.post('/modules', [
   body('Tesda_Reference').optional().trim(),
   body('LessonTime').optional(),
   body('Difficulty').optional().trim(),
+  body('LessonLanguage').optional().isIn(['English', 'Taglish', 'Filipino']).withMessage('Lesson language must be English or Taglish'),
   handleValidationErrors
 ], async (req, res) => {
   try {
-    const { ModuleTitle, Description, LessonOrder, Tesda_Reference, LessonTime, Difficulty, sections, diagnosticQuestions, reviewQuestions, finalQuestions, finalInstruction, roadmapStages } = req.body;
+    const { ModuleTitle, Description, LessonOrder, Tesda_Reference, LessonTime, Difficulty, LessonLanguage, sections, diagnosticQuestions, reviewQuestions, finalQuestions, finalInstruction, roadmapStages } = req.body;
+    const normalizationWarnings = [];
+
+    const normalizedSections = normalizeJsonColumnInput({
+      value: sections,
+      fieldName: 'sections',
+      expectedType: 'array',
+      fallback: [],
+      allowNull: true,
+      warnings: normalizationWarnings
+    });
+
+    const normalizedDiagnosticQuestions = normalizeJsonColumnInput({
+      value: diagnosticQuestions,
+      fieldName: 'diagnosticQuestions',
+      expectedType: 'array',
+      fallback: [],
+      allowNull: true,
+      warnings: normalizationWarnings
+    });
+
+    const normalizedReviewQuestions = normalizeJsonColumnInput({
+      value: reviewQuestions,
+      fieldName: 'reviewQuestions',
+      expectedType: 'array',
+      fallback: [],
+      allowNull: true,
+      warnings: normalizationWarnings
+    });
+
+    const normalizedFinalQuestions = normalizeJsonColumnInput({
+      value: finalQuestions,
+      fieldName: 'finalQuestions',
+      expectedType: 'array',
+      fallback: [],
+      allowNull: true,
+      warnings: normalizationWarnings
+    });
+
+    const normalizedRoadmapStages = normalizeJsonColumnInput({
+      value: roadmapStages,
+      fieldName: 'roadmapStages',
+      expectedType: 'array',
+      fallback: [],
+      allowNull: true,
+      warnings: normalizationWarnings
+    });
+
+    const normalizedLessonTime = normalizeLessonTimeInput(LessonTime, normalizationWarnings);
+    const normalizedFinalInstruction =
+      finalInstruction === undefined
+        ? { hasValue: false, value: undefined }
+        : { hasValue: true, value: String(finalInstruction || '').trim() || null };
+
+    await ensureModuleAdminColumns();
     
-    console.log('Creating new module with data:', { ModuleTitle, Description, LessonOrder, Tesda_Reference, LessonTime, Difficulty });
+    console.log('Creating new module with data:', { ModuleTitle, Description, LessonOrder, Tesda_Reference, LessonTime, Difficulty, LessonLanguage });
     
     const result = await query(
-      `INSERT INTO module (ModuleTitle, Description, LessonOrder, Tesda_Reference, Is_Unlocked) 
-       VALUES (?, ?, ?, ?, ?)`,
-      [ModuleTitle, Description || '', LessonOrder, Tesda_Reference || '', LessonOrder === 1]
+      `INSERT INTO module (ModuleTitle, Description, LessonOrder, Tesda_Reference, Is_Unlocked, LessonLanguage) 
+       VALUES (?, ?, ?, ?, ?, ?)`,
+      [ModuleTitle, Description || '', LessonOrder, Tesda_Reference || '', LessonOrder === 1, parseLessonLanguage(LessonLanguage)]
     );
     
     const moduleId = result.insertId;
@@ -117,15 +399,28 @@ router.post('/modules', [
     
     // Save sections, diagnosticQuestions, reviewQuestions, finalQuestions as JSON in a separate table or column
     // For now, we'll store them in a JSON column - you may need to add these columns to your module table
-    if (sections || diagnosticQuestions || reviewQuestions || finalQuestions || LessonTime || Difficulty || finalInstruction) {
+    if (
+      normalizedSections.hasValue ||
+      normalizedDiagnosticQuestions.hasValue ||
+      normalizedReviewQuestions.hasValue ||
+      normalizedFinalQuestions.hasValue ||
+      normalizedLessonTime.hasValue ||
+      normalizedRoadmapStages.hasValue ||
+      normalizedFinalInstruction.hasValue ||
+      Difficulty !== undefined
+    ) {
       console.log('Saving JSON fields:', {
-        sectionsCount: sections?.length,
-        diagnosticCount: diagnosticQuestions?.length,
-        reviewCount: reviewQuestions?.length,
-        finalCount: finalQuestions?.length,
-        lessonTime: LessonTime,
+        sectionsCount: Array.isArray(sections) ? sections.length : undefined,
+        diagnosticCount: Array.isArray(diagnosticQuestions) ? diagnosticQuestions.length : undefined,
+        reviewCount: Array.isArray(reviewQuestions) ? reviewQuestions.length : undefined,
+        finalCount: Array.isArray(finalQuestions) ? finalQuestions.length : undefined,
+        lessonTime: normalizedLessonTime.hasValue,
         difficulty: Difficulty
       });
+
+      if (normalizationWarnings.length > 0) {
+        console.warn('Create module payload normalized with warnings:', normalizationWarnings);
+      }
       
       await query(
         `UPDATE module SET 
@@ -139,14 +434,14 @@ router.post('/modules', [
          roadmapStages = ?
          WHERE ModuleID = ?`,
         [
-          sections || null,
-          diagnosticQuestions || null,
-          reviewQuestions || null,
-          finalQuestions || null,
-          LessonTime ? JSON.stringify(LessonTime) : null,
+          normalizedSections.hasValue ? normalizedSections.value : null,
+          normalizedDiagnosticQuestions.hasValue ? normalizedDiagnosticQuestions.value : null,
+          normalizedReviewQuestions.hasValue ? normalizedReviewQuestions.value : null,
+          normalizedFinalQuestions.hasValue ? normalizedFinalQuestions.value : null,
+          normalizedLessonTime.hasValue ? normalizedLessonTime.value : null,
           Difficulty || null,
-          finalInstruction || null,
-          roadmapStages ? JSON.stringify(roadmapStages) : null,
+          normalizedFinalInstruction.hasValue ? normalizedFinalInstruction.value : null,
+          normalizedRoadmapStages.hasValue ? normalizedRoadmapStages.value : null,
           moduleId
         ]
       );
@@ -156,7 +451,8 @@ router.post('/modules', [
     
     res.status(201).json({
       message: 'Module created successfully',
-      moduleId: moduleId
+      moduleId: moduleId,
+      normalizationWarnings
     });
   } catch (error) {
     console.error('Create module error:', error);
@@ -177,11 +473,93 @@ router.put('/modules/:id', [
   body('Tesda_Reference').optional().trim(),
   body('LessonTime').optional(),
   body('Difficulty').optional().trim(),
+  body('LessonLanguage').optional().isIn(['English', 'Taglish', 'Filipino']).withMessage('Lesson language must be English or Taglish'),
   handleValidationErrors
 ], async (req, res) => {
   try {
     const { id } = req.params;
-    const { ModuleTitle, Description, LessonOrder, Tesda_Reference, LessonTime, Difficulty, sections, diagnosticQuestions, reviewQuestions, finalQuestions, finalInstruction, roadmapStages } = req.body;
+    const { ModuleTitle, Description, LessonOrder, Tesda_Reference, LessonTime, Difficulty, LessonLanguage, sections, diagnosticQuestions, reviewQuestions, finalQuestions, finalInstruction, roadmapStages } = req.body;
+    const normalizationWarnings = [];
+
+    const normalizedSections = normalizeJsonColumnInput({
+      value: sections,
+      fieldName: 'sections',
+      expectedType: 'array',
+      fallback: [],
+      allowNull: true,
+      warnings: normalizationWarnings
+    });
+
+    const normalizedDiagnosticQuestions = normalizeJsonColumnInput({
+      value: diagnosticQuestions,
+      fieldName: 'diagnosticQuestions',
+      expectedType: 'array',
+      fallback: [],
+      allowNull: true,
+      warnings: normalizationWarnings
+    });
+
+    const normalizedReviewQuestions = normalizeJsonColumnInput({
+      value: reviewQuestions,
+      fieldName: 'reviewQuestions',
+      expectedType: 'array',
+      fallback: [],
+      allowNull: true,
+      warnings: normalizationWarnings
+    });
+
+    const normalizedFinalQuestions = normalizeJsonColumnInput({
+      value: finalQuestions,
+      fieldName: 'finalQuestions',
+      expectedType: 'array',
+      fallback: [],
+      allowNull: true,
+      warnings: normalizationWarnings
+    });
+
+    const normalizedRoadmapStages = normalizeJsonColumnInput({
+      value: roadmapStages,
+      fieldName: 'roadmapStages',
+      expectedType: 'array',
+      fallback: [],
+      allowNull: true,
+      warnings: normalizationWarnings
+    });
+
+    const normalizedLessonTime = normalizeLessonTimeInput(LessonTime, normalizationWarnings);
+
+    const normalizedFinalInstruction =
+      finalInstruction === undefined
+        ? { hasValue: false, value: undefined }
+        : { hasValue: true, value: String(finalInstruction || '').trim() || null };
+
+    await ensureModuleAdminColumns();
+
+    const existingModules = await query(
+      'SELECT ModuleID, Is_Completed, Is_Deleted FROM module WHERE ModuleID = ?',
+      [id]
+    );
+
+    if (existingModules.length === 0) {
+      return res.status(404).json({
+        error: 'Not Found',
+        message: 'Module not found'
+      });
+    }
+
+    if (parseBooleanFlag(existingModules[0].Is_Completed)) {
+      return res.status(423).json({
+        error: 'Locked',
+        message: 'This lesson is marked as completed and locked for editing. Mark it as incomplete first to edit it.'
+      });
+    }
+
+    if (parseBooleanFlag(existingModules[0].Is_Deleted)) {
+      return res.status(410).json({
+        error: 'Gone',
+        message: 'This lesson is in the recycle bin. Restore it before editing.'
+      });
+    }
     
     console.log('Updating module:', id);
     console.log('Received data:', { 
@@ -189,9 +567,12 @@ router.put('/modules/:id', [
       Description, 
       LessonOrder, 
       Tesda_Reference,
-      sectionsCount: sections?.length,
-      sections: sections
+      sectionsCount: Array.isArray(sections) ? sections.length : undefined
     });
+
+    if (normalizationWarnings.length > 0) {
+      console.warn('Update module payload normalized with warnings:', normalizationWarnings);
+    }
     
     // Build dynamic update query
     const fields = [];
@@ -213,37 +594,41 @@ router.put('/modules/:id', [
       fields.push('Tesda_Reference = ?');
       values.push(Tesda_Reference);
     }
-    if (LessonTime !== undefined) {
+    if (normalizedLessonTime.hasValue) {
       fields.push('LessonTime = ?');
-      values.push(JSON.stringify(LessonTime));
+      values.push(normalizedLessonTime.value);
     }
     if (Difficulty !== undefined) {
       fields.push('Difficulty = ?');
       values.push(Difficulty);
     }
-    if (sections !== undefined) {
+    if (LessonLanguage !== undefined) {
+      fields.push('LessonLanguage = ?');
+      values.push(parseLessonLanguage(LessonLanguage));
+    }
+    if (normalizedSections.hasValue) {
       fields.push('sections = ?');
-      values.push(sections);
+      values.push(normalizedSections.value);
     }
-    if (diagnosticQuestions !== undefined) {
+    if (normalizedDiagnosticQuestions.hasValue) {
       fields.push('diagnosticQuestions = ?');
-      values.push(diagnosticQuestions);
+      values.push(normalizedDiagnosticQuestions.value);
     }
-    if (reviewQuestions !== undefined) {
+    if (normalizedReviewQuestions.hasValue) {
       fields.push('reviewQuestions = ?');
-      values.push(reviewQuestions);
+      values.push(normalizedReviewQuestions.value);
     }
-    if (finalQuestions !== undefined) {
+    if (normalizedFinalQuestions.hasValue) {
       fields.push('finalQuestions = ?');
-      values.push(finalQuestions);
+      values.push(normalizedFinalQuestions.value);
     }
-    if (finalInstruction !== undefined) {
+    if (normalizedFinalInstruction.hasValue) {
       fields.push('finalInstruction = ?');
-      values.push(finalInstruction || null);
+      values.push(normalizedFinalInstruction.value);
     }
-    if (roadmapStages !== undefined) {
+    if (normalizedRoadmapStages.hasValue) {
       fields.push('roadmapStages = ?');
-      values.push(JSON.stringify(roadmapStages));
+      values.push(normalizedRoadmapStages.value);
     }
     
     if (fields.length === 0) {
@@ -270,7 +655,8 @@ router.put('/modules/:id', [
     console.log('Module updated successfully');
     
     res.json({
-      message: 'Module updated successfully'
+      message: 'Module updated successfully',
+      normalizationWarnings
     });
   } catch (error) {
     console.error('Update module error:', error);
@@ -282,6 +668,117 @@ router.put('/modules/:id', [
   }
 });
 
+// PUT /api/admin/modules/:id/completion - Toggle admin completion state
+router.put('/modules/:id/completion', [
+  param('id').isInt({ min: 1 }).withMessage('Invalid module ID'),
+  body('isCompleted')
+    .custom((value) => parseBooleanFlag(value) !== null)
+    .withMessage('isCompleted must be true or false'),
+  handleValidationErrors
+], async (req, res) => {
+  try {
+    const { id } = req.params;
+    const isCompleted = parseBooleanFlag(req.body.isCompleted);
+
+    await ensureModuleAdminColumns();
+
+    const existingModules = await query(
+      'SELECT ModuleID, Is_Deleted FROM module WHERE ModuleID = ?',
+      [id]
+    );
+
+    if (existingModules.length === 0) {
+      return res.status(404).json({
+        error: 'Not Found',
+        message: 'Module not found'
+      });
+    }
+
+    if (parseBooleanFlag(existingModules[0].Is_Deleted)) {
+      return res.status(410).json({
+        error: 'Gone',
+        message: 'This lesson is in the recycle bin. Restore it before updating completion state.'
+      });
+    }
+
+    await query(
+      'UPDATE module SET Is_Completed = ? WHERE ModuleID = ?',
+      [isCompleted, id]
+    );
+
+    res.json({
+      message: isCompleted
+        ? 'Lesson marked as completed and locked for editing'
+        : 'Lesson marked as incomplete and unlocked for editing',
+      moduleId: Number(id),
+      isCompleted
+    });
+  } catch (error) {
+    console.error('Update module completion state error:', error);
+    res.status(500).json({
+      error: 'Internal Server Error',
+      message: error.message || 'Failed to update lesson completion state'
+    });
+  }
+});
+
+// PUT /api/admin/modules/:id/lock-state - Manually lock or unlock lesson visibility
+router.put('/modules/:id/lock-state', [
+  param('id').isInt({ min: 1 }).withMessage('Invalid module ID'),
+  body('isUnlocked')
+    .custom((value) => parseBooleanFlag(value) !== null)
+    .withMessage('isUnlocked must be true or false'),
+  handleValidationErrors
+], async (req, res) => {
+  try {
+    const { id } = req.params;
+    const isUnlocked = parseBooleanFlag(req.body.isUnlocked);
+
+    const existingModules = await query(
+      'SELECT ModuleID, LessonOrder, Difficulty, Is_Deleted FROM module WHERE ModuleID = ?',
+      [id]
+    );
+
+    if (existingModules.length === 0) {
+      return res.status(404).json({
+        error: 'Not Found',
+        message: 'Module not found'
+      });
+    }
+
+    if (parseBooleanFlag(existingModules[0].Is_Deleted)) {
+      return res.status(410).json({
+        error: 'Gone',
+        message: 'This lesson is in the recycle bin. Restore it before changing lock state.'
+      });
+    }
+
+    if (Number(existingModules[0].LessonOrder) === 1 && !isUnlocked) {
+      return res.status(400).json({
+        error: 'Bad Request',
+        message: 'Lesson 1 must remain unlocked.'
+      });
+    }
+
+    await query(
+      'UPDATE module SET Is_Unlocked = ? WHERE ModuleID = ?',
+      [isUnlocked, id]
+    );
+
+    res.json({
+      message: isUnlocked ? 'Lesson unlocked' : 'Lesson locked',
+      moduleId: Number(id),
+      isUnlocked
+    });
+  } catch (error) {
+    console.error('Update module lock state error:', error);
+    res.status(500).json({
+      error: 'Internal Server Error',
+      message: error.message || 'Failed to update lesson lock state'
+    });
+  }
+});
+
 // DELETE /api/admin/modules/:id - Delete module
 router.delete('/modules/:id', [
   param('id').isInt({ min: 1 }).withMessage('Invalid module ID'),
@@ -289,17 +786,136 @@ router.delete('/modules/:id', [
 ], async (req, res) => {
   try {
     const { id } = req.params;
-    
-    await query('DELETE FROM module WHERE ModuleID = ?', [id]);
+
+    await ensureModuleAdminColumns();
+
+    const existingModules = await query(
+      'SELECT ModuleID, LessonOrder, Difficulty, Is_Deleted FROM module WHERE ModuleID = ?',
+      [id]
+    );
+
+    if (existingModules.length === 0) {
+      return res.status(404).json({
+        error: 'Not Found',
+        message: 'Module not found'
+      });
+    }
+
+    if (isProtectedFromDeletion(existingModules[0])) {
+      return res.status(403).json({
+        error: 'Forbidden',
+        message: 'Lessons 1-7 are protected and cannot be deleted.'
+      });
+    }
+
+    if (parseBooleanFlag(existingModules[0].Is_Deleted)) {
+      return res.json({
+        message: 'Module is already in the recycle bin',
+        moduleId: Number(id),
+        isDeleted: true
+      });
+    }
+
+    await query('UPDATE module SET Is_Deleted = TRUE WHERE ModuleID = ?', [id]);
     
     res.json({
-      message: 'Module deleted successfully'
+      message: 'Module moved to recycle bin',
+      moduleId: Number(id),
+      isDeleted: true
     });
   } catch (error) {
     console.error('Delete module error:', error);
     res.status(500).json({
       error: 'Internal Server Error',
       message: 'Failed to delete module'
+    });
+  }
+});
+
+// PUT /api/admin/modules/:id/restore - Restore module from recycle bin
+router.put('/modules/:id/restore', [
+  param('id').isInt({ min: 1 }).withMessage('Invalid module ID'),
+  handleValidationErrors
+], async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await ensureModuleAdminColumns();
+
+    const existingModules = await query(
+      'SELECT ModuleID, Is_Deleted FROM module WHERE ModuleID = ?',
+      [id]
+    );
+
+    if (existingModules.length === 0) {
+      return res.status(404).json({
+        error: 'Not Found',
+        message: 'Module not found'
+      });
+    }
+
+    if (!parseBooleanFlag(existingModules[0].Is_Deleted)) {
+      return res.json({
+        message: 'Module is already active',
+        moduleId: Number(id),
+        isDeleted: false
+      });
+    }
+
+    await query('UPDATE module SET Is_Deleted = FALSE WHERE ModuleID = ?', [id]);
+
+    res.json({
+      message: 'Module restored from recycle bin',
+      moduleId: Number(id),
+      isDeleted: false
+    });
+  } catch (error) {
+    console.error('Restore module error:', error);
+    res.status(500).json({
+      error: 'Internal Server Error',
+      message: 'Failed to restore module'
+    });
+  }
+});
+
+// DELETE /api/admin/modules/:id/permanent - Permanently delete module
+router.delete('/modules/:id/permanent', [
+  param('id').isInt({ min: 1 }).withMessage('Invalid module ID'),
+  handleValidationErrors
+], async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const existingModules = await query(
+      'SELECT ModuleID, LessonOrder, Difficulty FROM module WHERE ModuleID = ?',
+      [id]
+    );
+
+    if (existingModules.length === 0) {
+      return res.status(404).json({
+        error: 'Not Found',
+        message: 'Module not found'
+      });
+    }
+
+    if (isProtectedFromDeletion(existingModules[0])) {
+      return res.status(403).json({
+        error: 'Forbidden',
+        message: 'Lessons 1-7 are protected and cannot be deleted.'
+      });
+    }
+
+    await query('DELETE FROM module WHERE ModuleID = ?', [id]);
+
+    res.json({
+      message: 'Module permanently deleted',
+      moduleId: Number(id)
+    });
+  } catch (error) {
+    console.error('Permanent delete module error:', error);
+    res.status(500).json({
+      error: 'Internal Server Error',
+      message: 'Failed to permanently delete module'
     });
   }
 });
@@ -475,7 +1091,9 @@ router.get('/reports', async (req, res) => {
 // GET /api/admin/dashboard/certified - Count learners who completed all lessons
 router.get('/dashboard/certified', async (req, res) => {
   try {
-    const totalModules = await query('SELECT COUNT(*) as total FROM module');
+    await ensureModuleAdminColumns();
+
+    const totalModules = await query('SELECT COUNT(*) as total FROM module WHERE Is_Deleted = FALSE');
     const totalCount = totalModules[0].total;
 
     if (totalCount === 0) {
@@ -503,12 +1121,24 @@ router.get('/dashboard/certified', async (req, res) => {
 // GET /api/admin/dashboard/activity - Get learner count per lesson
 router.get('/dashboard/activity', async (req, res) => {
   try {
+    await ensureModuleAdminColumns();
+
     const lessons = await query(`
-      SELECT m.ModuleID, m.LessonOrder, m.ModuleTitle, m.Difficulty,
-             COUNT(p.ProgressID) as learnerCount
+      SELECT
+        m.LessonOrder,
+        COALESCE(
+          MAX(CASE WHEN LOWER(COALESCE(m.LessonLanguage, '')) = 'english' THEN m.ModuleTitle END),
+          MAX(m.ModuleTitle)
+        ) as ModuleTitle,
+        COALESCE(
+          MAX(CASE WHEN LOWER(COALESCE(m.LessonLanguage, '')) = 'english' THEN m.Difficulty END),
+          MAX(m.Difficulty)
+        ) as Difficulty,
+        COUNT(DISTINCT p.UserID) as learnerCount
       FROM module m
       LEFT JOIN progress p ON m.ModuleID = p.ModuleID
-      GROUP BY m.ModuleID
+      WHERE m.Is_Deleted = FALSE
+      GROUP BY m.LessonOrder
       ORDER BY m.LessonOrder ASC
     `);
 
@@ -543,6 +1173,8 @@ router.get('/dashboard/activity', async (req, res) => {
 // GET /api/admin/dashboard/notifications - Get recent system events
 router.get('/dashboard/notifications', async (req, res) => {
   try {
+    await ensureModuleAdminColumns();
+
     const notifications = [];
 
     // Recent enrollments (new progress entries)
@@ -551,7 +1183,7 @@ router.get('/dashboard/notifications', async (req, res) => {
       FROM progress p
       JOIN user u ON p.UserID = u.UserID
       JOIN module m ON p.ModuleID = m.ModuleID
-      WHERE u.Role = 'student'
+      WHERE u.Role = 'student' AND m.Is_Deleted = FALSE
       ORDER BY p.DateStarted DESC
       LIMIT 10
     `);
@@ -569,7 +1201,7 @@ router.get('/dashboard/notifications', async (req, res) => {
       FROM progress p
       JOIN user u ON p.UserID = u.UserID
       JOIN module m ON p.ModuleID = m.ModuleID
-      WHERE p.CompletionRate >= 100 AND p.DateCompletion IS NOT NULL AND u.Role = 'student'
+      WHERE p.CompletionRate >= 100 AND p.DateCompletion IS NOT NULL AND u.Role = 'student' AND m.Is_Deleted = FALSE
       ORDER BY p.DateCompletion DESC
       LIMIT 10
     `);

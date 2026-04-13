@@ -43,5 +43,10 @@ modulearn/
 ## Getting Started
 (To be updated as development progresses)
 
+## Deployment Paths
+- Netlify frontend + Azure backend deployment: `docs/NETLIFY_DEPLOYMENT.md`
+- Credit-optimized frontend deployment (GitHub Pages): `docs/GITHUB_PAGES_DEPLOYMENT.md`
+- Azure backend + database deployment: `docs/AZURE_BACKEND_DEPLOYMENT.md`
+
 ## License
 (To be determined)

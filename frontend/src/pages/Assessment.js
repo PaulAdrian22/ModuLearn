@@ -4,6 +4,8 @@ import axios from 'axios';
 import { useAuth } from '../App';
 import Navbar from '../components/Navbar';
 import { trackFinalAssessment } from '../services/adaptiveLearning';
+import { themedConfirm } from '../utils/themedConfirm';
+import { normalizeQuestionOptionList, shuffleArray } from '../utils/assessmentShuffle';
 
 const Assessment = () => {
   const { assessmentId } = useParams();
@@ -17,12 +19,34 @@ const Assessment = () => {
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [startTime] = useState(Date.now());
+  const [questionStartTime, setQuestionStartTime] = useState(Date.now());
+  const [questionTimes, setQuestionTimes] = useState({});
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [shuffledOptionsByQuestion, setShuffledOptionsByQuestion] = useState({});
 
   useEffect(() => {
     fetchAssessment();
   }, [assessmentId]);
+
+  useEffect(() => {
+    if (loading || showResults || questions.length === 0) return;
+    setQuestionStartTime(Date.now());
+  }, [currentQuestion, loading, showResults, questions.length]);
+
+  const updateCurrentQuestionTime = (existingTimes = questionTimes) => {
+    const currentQuestionId = questions[currentQuestion]?.QuestionID;
+    if (!currentQuestionId) return existingTimes;
+
+    const accumulated = existingTimes[currentQuestionId] || 0;
+    const additional = questionStartTime
+      ? Math.max(0, Math.floor((Date.now() - questionStartTime) / 1000))
+      : 0;
+
+    return {
+      ...existingTimes,
+      [currentQuestionId]: accumulated + additional,
+    };
+  };
 
   const fetchAssessment = async () => {
     try {
@@ -35,6 +59,17 @@ const Assessment = () => {
       // Fetch questions for the assessment
       const questionsResponse = await axios.get(`/questions/assessment/${assessmentId}`);
       setQuestions(questionsResponse.data);
+      const shuffledOptionMap = questionsResponse.data.reduce((accumulator, question) => {
+        const rawOptions = normalizeQuestionOptionList([
+          question.OptionA,
+          question.OptionB,
+          question.OptionC,
+          question.OptionD,
+        ]).filter((option) => option.length > 0);
+        accumulator[question.QuestionID] = shuffleArray(rawOptions);
+        return accumulator;
+      }, {});
+      setShuffledOptionsByQuestion(shuffledOptionMap);
       
       setLoading(false);
     } catch (err) {
@@ -51,21 +86,43 @@ const Assessment = () => {
   };
 
   const handleNext = () => {
+    const updatedQuestionTimes = updateCurrentQuestionTime();
+    setQuestionTimes(updatedQuestionTimes);
+
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     }
   };
 
   const handlePrevious = () => {
+    const updatedQuestionTimes = updateCurrentQuestionTime();
+    setQuestionTimes(updatedQuestionTimes);
+
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
     }
   };
 
+  const handleJumpToQuestion = (index) => {
+    const updatedQuestionTimes = updateCurrentQuestionTime();
+    setQuestionTimes(updatedQuestionTimes);
+    setCurrentQuestion(index);
+  };
+
   const handleSubmit = async () => {
-    if (!window.confirm('Are you sure you want to submit your assessment?')) {
+    const shouldSubmit = await themedConfirm({
+      title: 'Submit Assessment?',
+      message: 'Are you sure you want to submit your assessment?',
+      confirmText: 'Submit',
+      cancelText: 'Review Answers'
+    });
+
+    if (!shouldSubmit) {
       return;
     }
+
+    const updatedQuestionTimes = updateCurrentQuestionTime();
+    setQuestionTimes(updatedQuestionTimes);
 
     setSubmitting(true);
 
@@ -84,7 +141,11 @@ const Assessment = () => {
       // Grade the assessment
       const gradeResponse = await axios.post(`/assessments/grade/${assessmentId}`);
       setResults(gradeResponse.data);
-      setElapsedTime(Math.floor((Date.now() - startTime) / 1000));
+      const totalTimeSpent = Object.values(updatedQuestionTimes).reduce(
+        (total, seconds) => total + Number(seconds || 0),
+        0
+      );
+      setElapsedTime(totalTimeSpent);
       setShowResults(true);
       
       // Track final assessment performance for adaptive learning (Lessons 1-4 only)
@@ -162,7 +223,7 @@ const Assessment = () => {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span className="text-base">Time taken: {Math.floor(elapsedTime / 60)}m {elapsedTime % 60}s</span>
+                <span className="text-base">Time spent: {Math.floor(elapsedTime / 60)}m {elapsedTime % 60}s</span>
               </div>
             </div>
 
@@ -256,9 +317,11 @@ const Assessment = () => {
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border-2 border-[#E5E7EB]">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-bold text-lg text-[#0B2B4C]">Question {currentQuestion + 1} of {questions.length}</h3>
-            <span className="text-gray-600 font-medium">
-              {Object.keys(answers).length}/{questions.length} answered
-            </span>
+            <div className="text-right">
+              <span className="text-gray-600 font-medium block">
+                {Object.keys(answers).length}/{questions.length} answered
+              </span>
+            </div>
           </div>
           
           <div className="w-full bg-gray-200 rounded-full h-3">
@@ -274,8 +337,13 @@ const Assessment = () => {
           <h2 className="text-2xl font-bold text-[#0B2B4C] mb-8">{currentQ.QuestionText}</h2>
           
           <div className="space-y-4">
-            {[currentQ.OptionA, currentQ.OptionB, currentQ.OptionC, currentQ.OptionD]
-              .filter(option => option)
+            {(shuffledOptionsByQuestion[currentQ.QuestionID]
+              || normalizeQuestionOptionList([
+                currentQ.OptionA,
+                currentQ.OptionB,
+                currentQ.OptionC,
+                currentQ.OptionD,
+              ]).filter((option) => option.length > 0))
               .map((option, index) => (
                 <button
                   key={index}
@@ -317,7 +385,7 @@ const Assessment = () => {
             {questions.map((_, index) => (
               <button
                 key={index}
-                onClick={() => setCurrentQuestion(index)}
+                onClick={() => handleJumpToQuestion(index)}
                 className={`w-3 h-3 rounded-full ${
                   index === currentQuestion
                     ? 'bg-primary w-6'

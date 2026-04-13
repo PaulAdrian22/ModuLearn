@@ -14,8 +14,14 @@ router.get('/profile', authenticate, userController.getUserProfile);
 
 // PUT /api/users/profile - Update user profile
 router.put('/profile', authenticate, [
-  body('name').trim().notEmpty().withMessage('Name is required'),
+  body('name').optional().trim().notEmpty().withMessage('Name cannot be empty'),
+  body('email').optional().isEmail().withMessage('Email must be valid'),
   body('age').optional().isInt({ min: 1, max: 120 }).withMessage('Age must be between 1 and 120'),
+  body('educationalBackground').optional().trim(),
+  body('preferredLanguage')
+    .optional()
+    .isIn(['English', 'Taglish', 'Filipino'])
+    .withMessage('Preferred language must be English or Taglish'),
   handleValidationErrors
 ], userController.updateUserProfile);
 

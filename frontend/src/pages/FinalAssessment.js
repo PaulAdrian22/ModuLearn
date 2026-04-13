@@ -3,6 +3,47 @@ import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../App';
 import SkillMasteryResults from '../components/SkillMasteryResults';
+import { resolveCorrectAnswerText, shuffleArray, shuffleQuestionChoicesList } from '../utils/assessmentShuffle';
+import { withPreferredLanguage } from '../utils/languagePreference';
+
+const FINAL_TOTAL_QUESTIONS = 45;
+const RETAKE_FINAL_EASY_TARGET = Math.ceil(FINAL_TOTAL_QUESTIONS / 2);
+const RETAKE_REVIEW_EASY_TARGET = FINAL_TOTAL_QUESTIONS - RETAKE_FINAL_EASY_TARGET;
+
+const normalizeAssessmentQuestionType = (value = '', fallback = 'Easy') => {
+  const normalized = String(value || '').trim().toLowerCase();
+  if (normalized === 'situational') return 'Situational';
+  if (normalized === 'easy') return 'Easy';
+  return fallback;
+};
+
+const getQuestionSkillTag = (question = {}) => {
+  const skill = String(question?.skill || question?.skillTag || 'No Skill').trim();
+  return skill || 'No Skill';
+};
+
+const getQuestionKey = (question = {}, source = 'final', index = 0) => {
+  if (question?.__questionKey) return question.__questionKey;
+  if (question?.id !== undefined && question?.id !== null) return `${source}:id:${question.id}`;
+
+  const normalizedQuestion = String(question?.question || question?.questionText || '')
+    .trim()
+    .toLowerCase();
+  const normalizedSkill = getQuestionSkillTag(question).toLowerCase();
+  const normalizedAnswer = resolveCorrectAnswerText(question).trim().toLowerCase();
+  return `${source}:text:${normalizedQuestion}|skill:${normalizedSkill}|answer:${normalizedAnswer}|idx:${index}`;
+};
+
+const applyFinalTimingRule = (responseTime, questionType, isCorrect) => {
+  const safeResponseTime = Math.max(0, Number(responseTime || 0));
+  const normalizedType = normalizeAssessmentQuestionType(questionType, 'Easy');
+
+  if (normalizedType === 'Situational') {
+    return !(safeResponseTime < 120 && isCorrect);
+  }
+
+  return !(safeResponseTime < 60 && isCorrect);
+};
 
 const FinalAssessment = () => {
   const { moduleId } = useParams();
@@ -16,14 +57,273 @@ const FinalAssessment = () => {
   const [showResults, setShowResults] = useState(false);
   const [score, setScore] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [timeLeft, setTimeLeft] = useState(30);
   const [skillResults, setSkillResults] = useState(null);
-  const [startTime] = useState(Date.now());
-  const [elapsedTime, setElapsedTime] = useState(0);
-  const [questionStartTime, setQuestionStartTime] = useState(Date.now());
+  const [questionStartTime, setQuestionStartTime] = useState(null);
   const [questionTimes, setQuestionTimes] = useState({});
+  const [elapsedTime, setElapsedTime] = useState(0);
   const [examStarted, setExamStarted] = useState(false);
   const [attemptHistory, setAttemptHistory] = useState(null);
+  const [assessmentMode, setAssessmentMode] = useState('first-take');
+  const [questionMix, setQuestionMix] = useState({
+    situationalFinal: 0,
+    easyFinal: 0,
+    easyReview: 0,
+    mandatoryRetake: 0,
+    total: 0,
+  });
+
+  const retakeRulesStorageKey = user?.userId
+    ? `final_retake_rules_u${user.userId}_m${moduleId}`
+    : null;
+
+  const readLatestRetakeRules = () => {
+    if (!retakeRulesStorageKey) return [];
+
+    try {
+      const raw = localStorage.getItem(retakeRulesStorageKey);
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object') return [];
+      if (!Array.isArray(parsed.latestRules)) return [];
+      return parsed.latestRules;
+    } catch (error) {
+      console.warn('Failed to parse final retake rules:', error);
+      return [];
+    }
+  };
+
+  const persistRetakeRules = (latestRules = [], summary = {}) => {
+    if (!retakeRulesStorageKey) return;
+
+    try {
+      const raw = localStorage.getItem(retakeRulesStorageKey);
+      let history = [];
+
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed?.history)) {
+          history = parsed.history;
+        }
+      }
+
+      const nextEntry = {
+        savedAt: new Date().toISOString(),
+        score: Number(summary?.score || 0),
+        totalQuestions: Number(summary?.totalQuestions || 0),
+        totalCorrect: Number(summary?.totalCorrect || 0),
+        rules: latestRules,
+      };
+
+      const nextPayload = {
+        latestRules,
+        history: [...history, nextEntry].slice(-10),
+      };
+
+      localStorage.setItem(retakeRulesStorageKey, JSON.stringify(nextPayload));
+    } catch (error) {
+      console.warn('Failed to persist final retake rules:', error);
+    }
+  };
+
+  const extractInlineReviewQuestions = (sections = []) => {
+    if (!Array.isArray(sections)) return [];
+
+    return sections.reduce((allQuestions, section) => {
+      const sectionType = String(section?.type || '').toLowerCase().trim();
+      if (sectionType !== 'review-multiple-choice' && sectionType !== 'review - multiple choice') {
+        return allQuestions;
+      }
+
+      const questionsInSection = Array.isArray(section?.questions) ? section.questions : [];
+      return [...allQuestions, ...questionsInSection];
+    }, []);
+  };
+
+  const buildFinalQuestionSet = (moduleData, attemptsCount = 0) => {
+    const rawFinalQuestions = Array.isArray(moduleData?.finalQuestions) ? moduleData.finalQuestions : [];
+    const rawReviewQuestions = Array.isArray(moduleData?.reviewQuestions) ? moduleData.reviewQuestions : [];
+    const inlineReviewQuestions = extractInlineReviewQuestions(moduleData?.sections || []);
+
+    const decoratedFinal = rawFinalQuestions.map((question, index) => ({
+      ...question,
+      sourceAssessment: 'final',
+      questionType: normalizeAssessmentQuestionType(question?.questionType || question?.type || 'Situational', 'Situational'),
+      __questionKey: getQuestionKey(question, 'final', index),
+      skill: getQuestionSkillTag(question),
+    }));
+
+    const decoratedReview = [...rawReviewQuestions, ...inlineReviewQuestions].map((question, index) => ({
+      ...question,
+      sourceAssessment: 'review',
+      questionType: normalizeAssessmentQuestionType(question?.questionType || question?.type || 'Easy', 'Easy'),
+      __questionKey: getQuestionKey(question, 'review', index),
+      skill: getQuestionSkillTag(question),
+    }));
+
+    const situationalFinalPool = decoratedFinal.filter((question) => question.questionType === 'Situational');
+    const situationalReviewPool = decoratedReview.filter((question) => question.questionType === 'Situational');
+    const easyFinalPool = decoratedFinal.filter((question) => question.questionType === 'Easy');
+    const easyReviewPool = decoratedReview.filter((question) => question.questionType === 'Easy');
+
+    if (attemptsCount <= 0) {
+      const selectedKeys = new Set();
+      const selectedQuestions = [];
+
+      const addFromPool = (pool = [], limit = FINAL_TOTAL_QUESTIONS) => {
+        const shuffledPool = shuffleArray(pool);
+        shuffledPool.forEach((question) => {
+          if (selectedQuestions.length >= limit) return;
+          if (selectedKeys.has(question.__questionKey)) return;
+          selectedKeys.add(question.__questionKey);
+          selectedQuestions.push(question);
+        });
+      };
+
+      // First take: prioritize situational-only coverage up to FINAL_TOTAL_QUESTIONS items.
+      addFromPool(situationalFinalPool, FINAL_TOTAL_QUESTIONS);
+      if (selectedQuestions.length < FINAL_TOTAL_QUESTIONS) {
+        addFromPool(situationalReviewPool, FINAL_TOTAL_QUESTIONS);
+      }
+
+      return {
+        mode: 'first-take',
+        selectedQuestions: selectedQuestions.slice(0, FINAL_TOTAL_QUESTIONS),
+        mix: {
+          situationalFinal: selectedQuestions.filter(
+            (question) => question.sourceAssessment === 'final' && question.questionType === 'Situational'
+          ).length,
+          easyFinal: selectedQuestions.filter(
+            (question) => question.sourceAssessment === 'final' && question.questionType === 'Easy'
+          ).length,
+          easyReview: selectedQuestions.filter(
+            (question) => question.sourceAssessment === 'review' && question.questionType === 'Easy'
+          ).length,
+          mandatoryRetake: 0,
+          total: selectedQuestions.length,
+        },
+      };
+    }
+
+    const latestRetakeRules = readLatestRetakeRules();
+    const mandatoryRules = latestRetakeRules.filter((rule) => rule?.needToAnswerAgain);
+    const selectedKeys = new Set();
+    const selectedFinal = [];
+    const selectedReview = [];
+
+    const addToBucket = (question, preferredBucket = question?.sourceAssessment || 'final') => {
+      if (!question || selectedKeys.has(question.__questionKey)) return false;
+
+      if (preferredBucket === 'final' && selectedFinal.length < RETAKE_FINAL_EASY_TARGET) {
+        selectedFinal.push(question);
+        selectedKeys.add(question.__questionKey);
+        return true;
+      }
+
+      if (preferredBucket === 'review' && selectedReview.length < RETAKE_REVIEW_EASY_TARGET) {
+        selectedReview.push(question);
+        selectedKeys.add(question.__questionKey);
+        return true;
+      }
+
+      if (selectedFinal.length < RETAKE_FINAL_EASY_TARGET) {
+        selectedFinal.push(question);
+        selectedKeys.add(question.__questionKey);
+        return true;
+      }
+
+      if (selectedReview.length < RETAKE_REVIEW_EASY_TARGET) {
+        selectedReview.push(question);
+        selectedKeys.add(question.__questionKey);
+        return true;
+      }
+
+      return false;
+    };
+
+    const findFromPoolByKey = (pool, questionKey) => pool.find((question) => question.__questionKey === questionKey);
+
+    const findEasyBySkill = (skillName = '', preferredBucket = 'final') => {
+      const normalizedSkill = String(skillName || '').trim().toLowerCase();
+      const finalSkillMatch = easyFinalPool.find(
+        (question) => !selectedKeys.has(question.__questionKey) && String(question.skill || '').trim().toLowerCase() === normalizedSkill
+      );
+      const reviewSkillMatch = easyReviewPool.find(
+        (question) => !selectedKeys.has(question.__questionKey) && String(question.skill || '').trim().toLowerCase() === normalizedSkill
+      );
+
+      if (preferredBucket === 'final') {
+        return finalSkillMatch || reviewSkillMatch || null;
+      }
+
+      return reviewSkillMatch || finalSkillMatch || null;
+    };
+
+    mandatoryRules.forEach((rule) => {
+      const ruleQuestionType = normalizeAssessmentQuestionType(rule?.questionType || 'Easy', 'Easy');
+      const preferredBucket = rule?.sourceAssessment === 'review' ? 'review' : 'final';
+
+      let matchedQuestion = findFromPoolByKey(easyFinalPool, rule?.questionKey) || findFromPoolByKey(easyReviewPool, rule?.questionKey);
+
+      // Situational items from previous attempts map to same-skill easy replacements on retake.
+      if (!matchedQuestion && ruleQuestionType === 'Situational') {
+        matchedQuestion = findEasyBySkill(rule?.skill, preferredBucket);
+      }
+
+      if (!matchedQuestion) {
+        matchedQuestion = findEasyBySkill(rule?.skill, preferredBucket);
+      }
+
+      addToBucket(matchedQuestion, preferredBucket);
+    });
+
+    shuffleArray(easyFinalPool).forEach((question) => {
+      if (selectedFinal.length >= RETAKE_FINAL_EASY_TARGET) return;
+      addToBucket(question, 'final');
+    });
+
+    shuffleArray(easyReviewPool).forEach((question) => {
+      if (selectedReview.length >= RETAKE_REVIEW_EASY_TARGET) return;
+      addToBucket(question, 'review');
+    });
+
+    // If one pool is short, borrow from the other easy pool to maintain a full retake.
+    if (selectedFinal.length < RETAKE_FINAL_EASY_TARGET) {
+      shuffleArray(easyReviewPool).forEach((question) => {
+        if (selectedFinal.length >= RETAKE_FINAL_EASY_TARGET) return;
+        addToBucket(question, 'final');
+      });
+    }
+
+    if (selectedReview.length < RETAKE_REVIEW_EASY_TARGET) {
+      shuffleArray(easyFinalPool).forEach((question) => {
+        if (selectedReview.length >= RETAKE_REVIEW_EASY_TARGET) return;
+        addToBucket(question, 'review');
+      });
+    }
+
+    const selectedQuestions = shuffleArray([
+      ...selectedFinal,
+      ...selectedReview,
+    ]).slice(0, FINAL_TOTAL_QUESTIONS);
+
+    return {
+      mode: 'retake',
+      selectedQuestions,
+      mix: {
+        situationalFinal: selectedQuestions.filter(
+          (question) => question.sourceAssessment === 'final' && question.questionType === 'Situational'
+        ).length,
+        easyFinal: selectedQuestions.filter(
+          (question) => question.sourceAssessment === 'final' && question.questionType === 'Easy'
+        ).length,
+        easyReview: selectedQuestions.filter(
+          (question) => question.sourceAssessment === 'review' && question.questionType === 'Easy'
+        ).length,
+        mandatoryRetake: mandatoryRules.length,
+        total: selectedQuestions.length,
+      },
+    };
+  };
 
   const toPlainText = (value) => {
     if (!value) return '';
@@ -33,7 +333,12 @@ const FinalAssessment = () => {
     return decoded.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
   };
 
-  const TIMER_DURATION = 30;
+  const formatTime = (seconds) => {
+    const safeSeconds = Math.max(0, Math.floor(seconds));
+    const mins = Math.floor(safeSeconds / 60);
+    const secs = safeSeconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
   
   // Check if coming from review - redirect to module if so
   useEffect(() => {
@@ -47,33 +352,28 @@ const FinalAssessment = () => {
     checkAccessAndFetchModule();
   }, [moduleId, navigate]);
 
-  // Reset timer when question changes
-  useEffect(() => {
-    setTimeLeft(TIMER_DURATION);
-    setQuestionStartTime(Date.now());
-  }, [currentQuestion]);
-
-  // Countdown timer
+  // Track when a new question is shown for response-time analytics.
   useEffect(() => {
     if (!examStarted || showResults || loading || questions.length === 0) return;
+    setQuestionStartTime(Date.now());
+  }, [currentQuestion, examStarted, showResults, loading, questions.length]);
 
-    if (timeLeft <= 0) {
-      // Auto-advance when time runs out
-      handleNext();
-      return;
-    }
+  const updateCurrentQuestionTime = (existingTimes = questionTimes) => {
+    const accumulated = existingTimes[currentQuestion] || 0;
+    const additional = questionStartTime
+      ? Math.max(0, Math.floor((Date.now() - questionStartTime) / 1000))
+      : 0;
 
-    const interval = setInterval(() => {
-      setTimeLeft(prev => prev - 0.1);
-    }, 100);
-
-    return () => clearInterval(interval);
-  }, [timeLeft, showResults, loading, questions.length]);
+    return {
+      ...existingTimes,
+      [currentQuestion]: accumulated + additional,
+    };
+  };
 
   const checkAccessAndFetchModule = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`/modules/${moduleId}?userId=${user.userId}`);
+      const response = await axios.get(withPreferredLanguage(`/modules/${moduleId}?userId=${user.userId}`));
       setModule(response.data);
       
       // Check if module has diagnostic questions
@@ -101,17 +401,20 @@ const FinalAssessment = () => {
         return;
       }
       
-      if (response.data.finalQuestions && response.data.finalQuestions.length > 0) {
-        setQuestions(response.data.finalQuestions);
-      }
-
       // Fetch attempt history
+      let totalAttempts = 0;
       try {
         const historyRes = await axios.get(`/bkt/lesson/${moduleId}/final/history`);
         setAttemptHistory(historyRes.data);
+        totalAttempts = Number(historyRes.data?.totalAttempts || 0);
       } catch (histErr) {
         console.error('Error fetching attempt history:', histErr);
       }
+
+      const finalQuestionSet = buildFinalQuestionSet(response.data, totalAttempts);
+      setAssessmentMode(finalQuestionSet.mode);
+      setQuestionMix(finalQuestionSet.mix);
+      setQuestions(shuffleQuestionChoicesList(finalQuestionSet.selectedQuestions));
       
       setLoading(false);
     } catch (err) {
@@ -127,35 +430,75 @@ const FinalAssessment = () => {
     });
   };
 
+  const handleStartExam = () => {
+    const now = Date.now();
+    setQuestions((previousQuestions) => shuffleQuestionChoicesList(previousQuestions));
+    setCurrentQuestion(0);
+    setSelectedAnswers({});
+    setQuestionStartTime(now);
+    setQuestionTimes({});
+    setExamStarted(true);
+  };
+
   const handleNext = () => {
-    // Record time spent on this question
-    const timeSpent = Math.floor((Date.now() - questionStartTime) / 1000);
-    setQuestionTimes(prev => ({ ...prev, [currentQuestion]: timeSpent }));
+    const updatedQuestionTimes = updateCurrentQuestionTime();
+    setQuestionTimes(updatedQuestionTimes);
 
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      handleSubmit({ ...questionTimes, [currentQuestion]: timeSpent });
+      handleSubmit(updatedQuestionTimes);
     }
   };
 
   const handleSubmit = async (finalQuestionTimes) => {
+    const updatedQuestionTimes = finalQuestionTimes || updateCurrentQuestionTime();
+    setQuestionTimes(updatedQuestionTimes);
+
     let correct = 0;
     const answers = [];
+    const retakeRuleSnapshot = [];
     questions.forEach((q, index) => {
-      const isCorrect = selectedAnswers[index] === q.options[q.correctAnswer];
+      const isCorrect = selectedAnswers[index] === resolveCorrectAnswerText(q);
+      const responseTime = updatedQuestionTimes[index] || 0;
+      const normalizedQuestionType = normalizeAssessmentQuestionType(
+        q.questionType || q.type || (q.sourceAssessment === 'final' ? 'Situational' : 'Easy'),
+        q.sourceAssessment === 'final' ? 'Situational' : 'Easy'
+      );
       if (isCorrect) correct++;
+
+      const needToAnswerAgain = applyFinalTimingRule(responseTime, normalizedQuestionType, isCorrect);
+      retakeRuleSnapshot.push({
+        questionKey: getQuestionKey(q, q.sourceAssessment || 'final', index),
+        sourceAssessment: q.sourceAssessment || 'final',
+        skill: getQuestionSkillTag(q),
+        questionType: normalizedQuestionType,
+        isCorrect,
+        responseTime,
+        needToAnswerAgain,
+      });
+
       answers.push({
         skill: q.skill || 'Memorization',
         isCorrect,
-        responseTime: finalQuestionTimes[index] || 0,
-        questionType: q.type || q.questionType || 'Easy'
+        responseTime,
+        questionType: normalizedQuestionType
       });
     });
     const finalScore = (correct / questions.length) * 100;
     setScore(finalScore);
-    setElapsedTime(Math.floor((Date.now() - startTime) / 1000));
+    const totalTimeSpent = Object.values(updatedQuestionTimes).reduce(
+      (total, seconds) => total + Number(seconds || 0),
+      0
+    );
+    setElapsedTime(totalTimeSpent);
     setShowResults(true);
+
+    persistRetakeRules(retakeRuleSnapshot, {
+      score: finalScore,
+      totalQuestions: questions.length,
+      totalCorrect: correct,
+    });
 
     // Batch update BKT skill mastery (exclude No Skill questions)
     try {
@@ -164,7 +507,8 @@ const FinalAssessment = () => {
         const res = await axios.post('/bkt/batch-update', {
           answers: skillAnswers,
           assessmentType: 'Final',
-          moduleId: parseInt(moduleId)
+          moduleId: parseInt(moduleId),
+          timeSpentSeconds: totalTimeSpent
         });
         setSkillResults(res.data);
       }
@@ -188,6 +532,9 @@ const FinalAssessment = () => {
   };
 
   const currentQ = questions[currentQuestion];
+  const correctAnswerCount = questions.reduce((total, question, index) => {
+    return total + (selectedAnswers[index] === resolveCorrectAnswerText(question) ? 1 : 0);
+  }, 0);
 
   if (loading) {
     return (
@@ -229,10 +576,10 @@ const FinalAssessment = () => {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span className="text-base">Time taken: {Math.floor(elapsedTime / 60)}m {elapsedTime % 60}s</span>
+                <span className="text-base">Time spent: {formatTime(elapsedTime)}</span>
               </div>
               <p className="text-lg text-gray-600">
-                You answered {Object.keys(selectedAnswers).filter((key, idx) => selectedAnswers[key] === questions[idx]?.options[questions[idx]?.correctAnswer]).length} out of {questions.length} questions correctly
+                You answered {correctAnswerCount} out of {questions.length} questions correctly
               </p>
             </div>
 
@@ -312,14 +659,30 @@ const FinalAssessment = () => {
               </div>
               <div className="border-l border-gray-200"></div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-[#1e3a5f]">{TIMER_DURATION}s</p>
-                <p className="text-xs text-gray-500">Per Question</p>
+                <p className="text-2xl font-bold text-[#1e3a5f]">Timing</p>
+                <p className="text-xs text-gray-500">Tracked Passively</p>
               </div>
               <div className="border-l border-gray-200"></div>
               <div className="text-center">
                 <p className="text-2xl font-bold text-[#1e3a5f]">75%</p>
                 <p className="text-xs text-gray-500">Passing Score</p>
               </div>
+            </div>
+
+            <div className="mb-6 rounded-lg border border-[#BFE7E2] bg-[#F3FCFA] p-4">
+              <p className="text-sm font-bold text-[#1e3a5f] mb-1">
+                Mode: {assessmentMode === 'retake' ? 'Retake Final Assessment' : 'First Take Final Assessment'}
+              </p>
+              {assessmentMode === 'retake' ? (
+                <p className="text-sm text-gray-700">
+                  Question mix: {questionMix.easyFinal} easy final + {questionMix.easyReview} easy review
+                  {questionMix.mandatoryRetake > 0 ? ` (${questionMix.mandatoryRetake} mandatory from previous attempt rules)` : ''}.
+                </p>
+              ) : (
+                <p className="text-sm text-gray-700">
+                  Question mix: {questionMix.total} situational items selected for first take.
+                </p>
+              )}
             </div>
 
             {/* Previous Records (if retake) */}
@@ -368,7 +731,7 @@ const FinalAssessment = () => {
 
             {/* Proceed Button */}
             <button
-              onClick={() => setExamStarted(true)}
+              onClick={handleStartExam}
               className="w-full py-4 bg-[#2BC4B3] hover:bg-[#1e5a8e] text-white rounded-xl text-lg font-bold transition-all shadow-lg flex items-center justify-center gap-2"
             >
               Proceed to the Exam
@@ -391,22 +754,10 @@ const FinalAssessment = () => {
       <div className="flex items-center justify-center h-[calc(100vh-64px)] px-6 py-6">
         <div className="bg-white rounded-xl shadow-lg max-w-4xl w-full p-10">
 
-          {/* Countdown Timer and Question Counter */}
-          <div className="flex justify-between items-center mb-4">
-            <span className="text-2xl font-bold text-[#1e3a5f]">{Math.ceil(timeLeft)}s</span>
+          <div className="flex justify-end items-center mb-6">
             <span className="text-xl text-[#1e3a5f]">
               <span className="font-bold">{currentQuestion + 1}</span> / {questions.length}
             </span>
-          </div>
-
-          {/* Timer Progress Bar */}
-          <div className="mb-6">
-            <div className="w-full bg-gray-300 rounded-full h-2.5 overflow-hidden">
-              <div
-                className="h-2.5 bg-[#2BC4B3] ease-linear rounded-full"
-                style={{ width: `${(timeLeft / TIMER_DURATION) * 100}%` }}
-              ></div>
-            </div>
           </div>
 
           {/* Question */}

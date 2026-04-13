@@ -2,38 +2,54 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../App';
 import SkillMasteryResults from './SkillMasteryResults';
+import { resolveCorrectAnswerText, shuffleQuestionChoicesList } from '../utils/assessmentShuffle';
 
-const Diagnostic = ({ questions, onComplete, onSkip }) => {
+const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null }) => {
   const { user } = useAuth();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [showResults, setShowResults] = useState(false);
   const [score, setScore] = useState(0);
-  const [timeLeft, setTimeLeft] = useState(30);
   const [skillResults, setSkillResults] = useState(null);
-  const [startTime] = useState(Date.now());
+  const [questionStartTime, setQuestionStartTime] = useState(Date.now());
+  const [questionTimes, setQuestionTimes] = useState({});
   const [elapsedTime, setElapsedTime] = useState(0);
+  const [assessmentQuestions, setAssessmentQuestions] = useState(() => shuffleQuestionChoicesList(questions));
 
-  const TIMER_DURATION = 30;
+  const formatTime = (seconds) => {
+    const safeSeconds = Math.max(0, Math.floor(seconds));
+    const mins = Math.floor(safeSeconds / 60);
+    const secs = safeSeconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
 
-  // Countdown timer that resets for each question
   useEffect(() => {
-    setTimeLeft(TIMER_DURATION);
-  }, [currentQuestion]);
+    setAssessmentQuestions(shuffleQuestionChoicesList(questions));
+    setCurrentQuestion(0);
+    setSelectedAnswers({});
+    setShowResults(false);
+    setScore(0);
+    setSkillResults(null);
+    setQuestionTimes({});
+    setElapsedTime(0);
+  }, [questions]);
 
   useEffect(() => {
-    if (timeLeft <= 0) {
-      // Auto-advance when time runs out
-      handleNext();
-      return;
-    }
+    if (showResults || assessmentQuestions.length === 0) return;
+    setQuestionStartTime(Date.now());
+  }, [currentQuestion, showResults, assessmentQuestions.length]);
 
-    const interval = setInterval(() => {
-      setTimeLeft(prev => prev - 0.1);
-    }, 100);
+  const updateCurrentQuestionTime = (existingTimes = questionTimes) => {
+    const accumulated = existingTimes[currentQuestion] || 0;
+    const additional = questionStartTime
+      ? Math.max(0, Math.floor((Date.now() - questionStartTime) / 1000))
+      : 0;
 
-    return () => clearInterval(interval);
-  }, [timeLeft]);
+    return {
+      ...existingTimes,
+      [currentQuestion]: accumulated + additional,
+    };
+  };
 
   const handleAnswerSelect = (answer) => {
     setSelectedAnswers({
@@ -43,39 +59,56 @@ const Diagnostic = ({ questions, onComplete, onSkip }) => {
   };
 
   const handleNext = () => {
-    if (currentQuestion < questions.length - 1) {
+    const updatedQuestionTimes = updateCurrentQuestionTime();
+    setQuestionTimes(updatedQuestionTimes);
+
+    if (currentQuestion < assessmentQuestions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      handleSubmit();
+      handleSubmit(updatedQuestionTimes);
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (finalQuestionTimes) => {
+    const updatedQuestionTimes = finalQuestionTimes || updateCurrentQuestionTime();
+    setQuestionTimes(updatedQuestionTimes);
+
     // Calculate score
     let correct = 0;
     const answers = [];
-    questions.forEach((q, index) => {
+    assessmentQuestions.forEach((q, index) => {
       const userAnswer = selectedAnswers[index];
-      const correctAnswerText = typeof q.correctAnswer === 'number' 
-        ? q.options[q.correctAnswer] 
-        : q.correctAnswer;
+      const correctAnswerText = resolveCorrectAnswerText(q);
       const isCorrect = userAnswer === correctAnswerText;
       if (isCorrect) correct++;
       answers.push({
         skill: q.skill || 'Memorization',
-        isCorrect
+        isCorrect,
+        responseTime: updatedQuestionTimes[index] || 0,
+        questionType: q.questionType || q.type || 'Easy'
       });
     });
-    const finalScore = (correct / questions.length) * 100;
+    const finalScore = assessmentQuestions.length > 0
+      ? (correct / assessmentQuestions.length) * 100
+      : 0;
     setScore(finalScore);
-    setElapsedTime(Math.floor((Date.now() - startTime) / 1000));
+    const totalTimeSpent = Object.values(updatedQuestionTimes).reduce(
+      (total, seconds) => total + Number(seconds || 0),
+      0
+    );
+    setElapsedTime(totalTimeSpent);
     setShowResults(true);
 
     // Batch update BKT skill mastery (exclude No Skill questions)
     try {
       const skillAnswers = answers.filter(a => a.skill !== 'No Skill');
       if (skillAnswers.length > 0) {
-        const res = await axios.post('/bkt/batch-update', { answers: skillAnswers });
+        const res = await axios.post('/bkt/batch-update', {
+          answers: skillAnswers,
+          assessmentType: 'Diagnostic',
+          moduleId: Number.isFinite(Number(moduleId)) ? Number(moduleId) : null,
+          timeSpentSeconds: totalTimeSpent
+        });
         setSkillResults(res.data);
       }
     } catch (err) {
@@ -83,8 +116,12 @@ const Diagnostic = ({ questions, onComplete, onSkip }) => {
     }
   };
 
-  const currentQ = questions[currentQuestion];
-  const timerProgress = (timeLeft / TIMER_DURATION) * 100;
+  const currentQ = assessmentQuestions[currentQuestion];
+  const correctAnswerCount = assessmentQuestions.reduce((total, question, index) => {
+    const userAnswer = selectedAnswers[index];
+    const correctAnswerText = resolveCorrectAnswerText(question);
+    return total + (userAnswer === correctAnswerText ? 1 : 0);
+  }, 0);
 
   if (showResults) {
     return (
@@ -123,16 +160,10 @@ const Diagnostic = ({ questions, onComplete, onSkip }) => {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span className="text-base">Time taken: {Math.floor(elapsedTime / 60)}m {elapsedTime % 60}s</span>
+                <span className="text-base">Time spent: {formatTime(elapsedTime)}</span>
               </div>
               <p className="text-lg text-gray-600">
-                You answered {Object.keys(selectedAnswers).filter((key, idx) => {
-                  const q = questions[idx];
-                  const correctAnswerText = typeof q?.correctAnswer === 'number' 
-                    ? q?.options[q?.correctAnswer] 
-                    : q?.correctAnswer;
-                  return selectedAnswers[key] === correctAnswerText;
-                }).length} out of {questions.length} questions correctly
+                You answered {correctAnswerCount} out of {assessmentQuestions.length} questions correctly
               </p>
             </div>
 
@@ -199,14 +230,11 @@ const Diagnostic = ({ questions, onComplete, onSkip }) => {
             </p>
           </div>
 
-          {/* Countdown Timer Progress Bar */}
-          <div className="mb-8">
-            <div className="w-full bg-gray-300 rounded-full h-2.5 overflow-hidden">
-              <div
-                className="h-2.5 bg-[#2BC4B3] transition-all duration-100 ease-linear rounded-full"
-                style={{ width: `${timerProgress}%` }}
-              ></div>
-            </div>
+          <div className="mb-6 text-right">
+            <p className="text-sm uppercase tracking-wide text-gray-500">Question</p>
+            <p className="text-xl font-bold text-[#1e3a5f]">
+              {currentQuestion + 1} / {assessmentQuestions.length}
+            </p>
           </div>
 
           {/* Question */}

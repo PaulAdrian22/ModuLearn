@@ -1,5 +1,15 @@
 const { pool } = require('../config/database');
 
+let simulationColumnCache = null;
+
+const getSimulationColumnSet = async () => {
+  if (simulationColumnCache) return simulationColumnCache;
+
+  const [columns] = await pool.query('SHOW COLUMNS FROM simulation');
+  simulationColumnCache = new Set(columns.map((column) => column.Field));
+  return simulationColumnCache;
+};
+
 // Get all simulations
 const getAllSimulations = async (req, res) => {
   try {
@@ -35,8 +45,10 @@ const getSimulationsByModule = async (req, res) => {
   try {
     const { moduleId } = req.params;
     const userId = req.query.userId;
-    
-    const query = `
+    const columns = await getSimulationColumnSet();
+    const hasModuleColumn = columns.has('ModuleID');
+
+    const baseSelect = `
       SELECT 
         s.*,
         sp.Score,
@@ -47,11 +59,21 @@ const getSimulationsByModule = async (req, res) => {
       FROM simulation s
       LEFT JOIN simulation_progress sp ON s.SimulationID = sp.SimulationID 
         AND sp.UserID = ?
-      WHERE s.ModuleID = ?
-      ORDER BY s.SimulationOrder
     `;
-    
-    const [simulations] = await pool.query(query, [userId || 0, moduleId]);
+
+    const query = hasModuleColumn
+      ? `${baseSelect}
+      WHERE s.ModuleID = ?
+      ORDER BY s.SimulationOrder`
+      : `${baseSelect}
+      WHERE s.SimulationTitle LIKE ?
+      ORDER BY s.SimulationOrder`;
+
+    const moduleFilter = hasModuleColumn
+      ? moduleId
+      : `Lesson ${moduleId} Simulation %`;
+
+    const [simulations] = await pool.query(query, [userId || 0, moduleFilter]);
     res.json(simulations);
   } catch (error) {
     console.error('Error fetching simulations:', error);
@@ -95,30 +117,53 @@ const getSimulation = async (req, res) => {
 const createSimulation = async (req, res) => {
   try {
     const {
+      moduleId,
       simulationTitle,
       description,
       activityType,
       maxScore,
       timeLimit,
+      instructions,
       simulationOrder,
+      isLocked,
+      skillType,
       zoneData
     } = req.body;
 
+    const columns = await getSimulationColumnSet();
+
+    const normalizedZoneData = zoneData
+      ? {
+          ...zoneData,
+          skillType: zoneData.skillType || skillType || 'Memorization'
+        }
+      : (skillType ? { skillType } : null);
+
+    const insertPayload = {
+      SimulationTitle: simulationTitle,
+      Description: description,
+      ActivityType: activityType || 'Drag and Drop',
+      MaxScore: maxScore || 100,
+      TimeLimit: timeLimit || 0,
+      SimulationOrder: simulationOrder || 1,
+      ZoneData: normalizedZoneData ? JSON.stringify(normalizedZoneData) : null
+    };
+
+    if (columns.has('ModuleID')) insertPayload.ModuleID = moduleId || null;
+    if (columns.has('Instructions')) insertPayload.Instructions = instructions || '';
+    if (columns.has('Is_Locked')) insertPayload.Is_Locked = isLocked !== undefined ? !!isLocked : false;
+    if (columns.has('SkillType')) insertPayload.SkillType = skillType || normalizedZoneData?.skillType || 'Memorization';
+
+    const insertColumns = Object.keys(insertPayload);
+    const insertValues = insertColumns.map((column) => insertPayload[column]);
+    const placeholders = insertColumns.map(() => '?').join(', ');
+
     const query = `
-      INSERT INTO simulation 
-      (SimulationTitle, Description, ActivityType, MaxScore, TimeLimit, SimulationOrder, ZoneData)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO simulation (${insertColumns.join(', ')})
+      VALUES (${placeholders})
     `;
-    
-    const [result] = await pool.query(query, [
-      simulationTitle,
-      description,
-      activityType,
-      maxScore || 10,
-      timeLimit || 0,
-      simulationOrder,
-      zoneData ? JSON.stringify(zoneData) : null
-    ]);
+
+    const [result] = await pool.query(query, insertValues);
     
     res.status(201).json({
       message: 'Simulation created successfully',
@@ -135,37 +180,54 @@ const updateSimulation = async (req, res) => {
   try {
     const { id } = req.params;
     const {
+      moduleId,
       simulationTitle,
       description,
       activityType,
       maxScore,
       timeLimit,
+      instructions,
       simulationOrder,
+      isLocked,
+      skillType,
       zoneData
     } = req.body;
 
+    const columns = await getSimulationColumnSet();
+
+    const normalizedZoneData = zoneData
+      ? {
+          ...zoneData,
+          skillType: zoneData.skillType || skillType || 'Memorization'
+        }
+      : (skillType ? { skillType } : null);
+
+    const updatePayload = {
+      SimulationTitle: simulationTitle,
+      Description: description,
+      ActivityType: activityType || 'Drag and Drop',
+      MaxScore: maxScore || 100,
+      TimeLimit: timeLimit || 0,
+      SimulationOrder: simulationOrder || 1,
+      ZoneData: normalizedZoneData ? JSON.stringify(normalizedZoneData) : null
+    };
+
+    if (columns.has('ModuleID') && moduleId !== undefined) updatePayload.ModuleID = moduleId;
+    if (columns.has('Instructions') && instructions !== undefined) updatePayload.Instructions = instructions;
+    if (columns.has('Is_Locked') && isLocked !== undefined) updatePayload.Is_Locked = !!isLocked;
+    if (columns.has('SkillType') && skillType !== undefined) updatePayload.SkillType = skillType;
+
+    const updateColumns = Object.keys(updatePayload);
+    const updateAssignments = updateColumns.map((column) => `${column} = ?`).join(', ');
+    const updateValues = updateColumns.map((column) => updatePayload[column]);
+
     const query = `
-      UPDATE simulation 
-      SET SimulationTitle = ?,
-          Description = ?,
-          ActivityType = ?,
-          MaxScore = ?,
-          TimeLimit = ?,
-          SimulationOrder = ?,
-          ZoneData = ?
+      UPDATE simulation
+      SET ${updateAssignments}
       WHERE SimulationID = ?
     `;
-    
-    const [result] = await pool.query(query, [
-      simulationTitle,
-      description,
-      activityType,
-      maxScore,
-      timeLimit,
-      simulationOrder,
-      zoneData ? JSON.stringify(zoneData) : null,
-      id
-    ]);
+
+    const [result] = await pool.query(query, [...updateValues, id]);
     
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: 'Simulation not found' });
@@ -239,6 +301,7 @@ const startSimulation = async (req, res) => {
 const completeSimulation = async (req, res) => {
   try {
     const { simulationId, userId, score, timeSpent } = req.body;
+    const safeTimeSpent = Math.max(0, Math.floor(Number(timeSpent || 0)));
     
     // Ensure progress row exists (in case start failed)
     const [existing] = await pool.query(
@@ -252,7 +315,7 @@ const completeSimulation = async (req, res) => {
         `INSERT INTO simulation_progress 
          (UserID, SimulationID, Score, Attempts, TimeSpent, CompletionStatus, DateCompleted)
          VALUES (?, ?, ?, 1, ?, 'completed', CURRENT_TIMESTAMP)`,
-        [userId, simulationId, score, timeSpent || 0]
+        [userId, simulationId, score, safeTimeSpent]
       );
     } else {
       // Update existing
@@ -264,7 +327,7 @@ const completeSimulation = async (req, res) => {
              CompletionStatus = 'completed',
              DateCompleted = CURRENT_TIMESTAMP
          WHERE UserID = ? AND SimulationID = ?`,
-        [score, timeSpent || 0, userId, simulationId]
+        [score, safeTimeSpent, userId, simulationId]
       );
     }
     

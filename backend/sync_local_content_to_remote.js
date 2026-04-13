@@ -58,8 +58,15 @@ const main = async () => {
       if (!String(e.message).includes('Duplicate column')) throw e;
     }
 
+    try {
+      await remote.query('ALTER TABLE module ADD COLUMN Is_Completed BOOLEAN NOT NULL DEFAULT FALSE');
+      console.log('Added Is_Completed column to remote module table.');
+    } catch (e) {
+      if (!String(e.message).includes('Duplicate column')) throw e;
+    }
+
     const [localModules] = await local.query(`
-      SELECT ModuleID, ModuleTitle, Description, LessonOrder, Tesda_Reference, Is_Unlocked,
+      SELECT ModuleID, ModuleTitle, Description, LessonOrder, Tesda_Reference, Is_Unlocked, Is_Completed,
              sections, diagnosticQuestions, reviewQuestions, finalQuestions, finalInstruction,
              roadmapStages, LessonTime, Difficulty
       FROM module
@@ -69,16 +76,17 @@ const main = async () => {
     for (const m of localModules) {
       await remote.query(
         `INSERT INTO module (
-           ModuleID, ModuleTitle, Description, LessonOrder, Tesda_Reference, Is_Unlocked,
+           ModuleID, ModuleTitle, Description, LessonOrder, Tesda_Reference, Is_Unlocked, Is_Completed,
            sections, diagnosticQuestions, reviewQuestions, finalQuestions, finalInstruction,
            roadmapStages, LessonTime, Difficulty
-         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
          ON DUPLICATE KEY UPDATE
            ModuleTitle = VALUES(ModuleTitle),
            Description = VALUES(Description),
            LessonOrder = VALUES(LessonOrder),
            Tesda_Reference = VALUES(Tesda_Reference),
            Is_Unlocked = VALUES(Is_Unlocked),
+           Is_Completed = VALUES(Is_Completed),
            sections = VALUES(sections),
            diagnosticQuestions = VALUES(diagnosticQuestions),
            reviewQuestions = VALUES(reviewQuestions),
@@ -88,7 +96,7 @@ const main = async () => {
            LessonTime = VALUES(LessonTime),
            Difficulty = VALUES(Difficulty)`,
         [
-          m.ModuleID, m.ModuleTitle, m.Description, m.LessonOrder, m.Tesda_Reference, m.Is_Unlocked,
+          m.ModuleID, m.ModuleTitle, m.Description, m.LessonOrder, m.Tesda_Reference, m.Is_Unlocked, m.Is_Completed,
           toDbJson(m.sections), toDbJson(m.diagnosticQuestions), toDbJson(m.reviewQuestions), toDbJson(m.finalQuestions), m.finalInstruction,
           toDbJson(m.roadmapStages), toDbJson(m.LessonTime), m.Difficulty
         ]

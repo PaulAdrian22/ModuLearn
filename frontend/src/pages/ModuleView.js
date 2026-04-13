@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 import QuickAssessment from '../components/QuickAssessment';
 import Diagnostic from '../components/Diagnostic';
 import { API_SERVER_URL } from '../config/api';
+import { withPreferredLanguage } from '../utils/languagePreference';
 import { 
   getPerformance, 
   shouldShowChallenge, 
@@ -33,8 +34,7 @@ const ModuleView = () => {
   const [diagnosticCompleted, setDiagnosticCompleted] = useState(false);
   const [diagnosticScore, setDiagnosticScore] = useState(null);
   const [isReviewMode, setIsReviewMode] = useState(false);
-  const [showSidebar, setShowSidebar] = useState(false);
-  const [activeSection, setActiveSection] = useState(null);
+  const [showReferencesPanel, setShowReferencesPanel] = useState(false);
   const [currentTopicPage, setCurrentTopicPage] = useState(0);
   const [showLessonIntro, setShowLessonIntro] = useState(true);
   const contentScrollRef = useRef(null);
@@ -53,6 +53,17 @@ const ModuleView = () => {
   const [cooldownNow, setCooldownNow] = useState(Date.now());
   const [reviewAttempts, setReviewAttempts] = useState({});
   const [shuffledQuestions, setShuffledQuestions] = useState({});
+  const [activeReviewQuestionIndex, setActiveReviewQuestionIndex] = useState(0);
+  const [activeReviewQuestionStartTime, setActiveReviewQuestionStartTime] = useState(null);
+  const [activeReviewQuestionTimes, setActiveReviewQuestionTimes] = useState({});
+  const lessonProgressStorageKey = useMemo(() => {
+    if (!moduleId || !user?.userId) return null;
+    return `lesson_progress_u${user.userId}_m${moduleId}`;
+  }, [moduleId, user?.userId]);
+  const progressHydratedRef = useRef(false);
+  const progressSyncRef = useRef({ moduleId: null, completionRate: null });
+  const lessonTimeBufferRef = useRef(0);
+  const lessonTimeFlushInFlightRef = useRef(false);
 
   useEffect(() => {
     const hasActiveCooldown = Object.values(reviewCooldowns).some((endAt) => endAt > Date.now());
@@ -71,6 +82,32 @@ const ModuleView = () => {
     return remainingMs > 0 ? Math.ceil(remainingMs / 1000) : 0;
   };
 
+  const formatDuration = (seconds = 0) => {
+    const safeSeconds = Math.max(0, Math.floor(seconds));
+    return `${Math.floor(safeSeconds / 60)}m ${safeSeconds % 60}s`;
+  };
+
+  useEffect(() => {
+    if (!activeReview) return;
+    setActiveReviewQuestionStartTime(Date.now());
+  }, [activeReview, activeReviewQuestionIndex]);
+
+  const updateActiveReviewQuestionTime = (existingTimes = activeReviewQuestionTimes) => {
+    const accumulated = existingTimes[activeReviewQuestionIndex] || 0;
+    const additional = activeReviewQuestionStartTime
+      ? Math.max(0, Math.floor((Date.now() - activeReviewQuestionStartTime) / 1000))
+      : 0;
+
+    return {
+      ...existingTimes,
+      [activeReviewQuestionIndex]: accumulated + additional,
+    };
+  };
+
+  const getTotalTimeFromQuestionTimes = (times = {}) => {
+    return Object.values(times).reduce((total, seconds) => total + Number(seconds || 0), 0);
+  };
+
   const decodeHtmlEntities = (value) => {
     if (!value) return '';
     const textarea = document.createElement('textarea');
@@ -83,7 +120,114 @@ const ModuleView = () => {
     return decoded.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
   };
 
-  const normalizeLayerTextHtml = (value) => {
+  const normalizeTableHeaderSpans = (rawSpans, colCount) => {
+    const safeColCount = Math.max(0, Number.isFinite(colCount) ? Math.floor(colCount) : 0);
+    if (safeColCount === 0) {
+      return [];
+    }
+
+    const sourceSpans = Array.isArray(rawSpans) ? rawSpans : [];
+    const normalizedSpans = [];
+    let openSpanSlots = 0;
+
+    for (let colIndex = 0; colIndex < safeColCount; colIndex += 1) {
+      if (openSpanSlots > 0) {
+        normalizedSpans.push(0);
+        openSpanSlots -= 1;
+        continue;
+      }
+
+      const rawValue = Number.parseInt(sourceSpans[colIndex], 10);
+      const spanValue = Number.isFinite(rawValue) && rawValue > 1
+        ? Math.min(rawValue, safeColCount - colIndex)
+        : 1;
+
+      normalizedSpans.push(spanValue);
+      openSpanSlots = spanValue - 1;
+    }
+
+    return normalizedSpans;
+  };
+
+  const normalizeExternalVideoUrl = (rawUrl) => {
+    if (!rawUrl) return '';
+    const value = String(rawUrl).trim();
+    if (!value) return '';
+
+    try {
+      const parsed = new URL(value);
+      const host = parsed.hostname.toLowerCase();
+      const pathname = parsed.pathname || '';
+
+      if (host.includes('youtu.be')) {
+        const videoId = pathname.replace('/', '').trim();
+        if (videoId) return `https://www.youtube.com/embed/${videoId}`;
+      }
+
+      if (host.includes('youtube.com')) {
+        if (pathname.includes('/embed/')) return parsed.toString();
+        const videoId = parsed.searchParams.get('v');
+        if (videoId) return `https://www.youtube.com/embed/${videoId}`;
+      }
+
+      if (host.includes('vimeo.com') && !pathname.includes('/video/')) {
+        const videoId = pathname.split('/').filter(Boolean).pop();
+        if (videoId) return `https://player.vimeo.com/video/${videoId}`;
+      }
+
+      if (host.includes('dropbox.com')) {
+        const directUrl = new URL(parsed.toString());
+        directUrl.hostname = 'dl.dropboxusercontent.com';
+        directUrl.searchParams.delete('dl');
+        directUrl.searchParams.delete('raw');
+        return directUrl.toString();
+      }
+
+      if (host === 'imgur.com' || host.endsWith('.imgur.com')) {
+        if (host.startsWith('i.')) {
+          if (pathname.toLowerCase().endsWith('.gifv')) {
+            return parsed.toString().replace(/\.gifv$/i, '.mp4');
+          }
+          return parsed.toString();
+        }
+
+        const pathParts = pathname.split('/').filter(Boolean);
+        const isAlbumPath = pathParts[0] === 'a' || pathParts[0] === 'gallery';
+        if (isAlbumPath) return parsed.toString();
+        const candidateId = pathParts[pathParts.length - 1];
+
+        if (candidateId) {
+          const baseId = candidateId.replace(/\.(gifv|mp4|webm)$/i, '');
+          return `https://i.imgur.com/${baseId}.mp4`;
+        }
+      }
+
+      return parsed.toString();
+    } catch {
+      return value;
+    }
+  };
+
+  const isIframeVideoUrl = (url) => {
+    if (!url) return false;
+
+    try {
+      const parsed = new URL(String(url));
+      const host = parsed.hostname.toLowerCase();
+      const value = parsed.toString().toLowerCase();
+      return (
+        host.includes('youtube.com') ||
+        host.includes('youtu.be') ||
+        host.includes('vimeo.com') ||
+        value.includes('/embed/')
+      );
+    } catch {
+      const value = String(url).toLowerCase();
+      return value.includes('youtube') || value.includes('vimeo') || value.includes('/embed/');
+    }
+  };
+
+  const normalizeRichTextHtml = (value) => {
     if (!value) return '';
 
     let html = String(value).replace(/^\s+/, '');
@@ -97,7 +241,270 @@ const ModuleView = () => {
         .replace(/^<(p|div)>\s*(?:<br\s*\/?>\s*)*<\/\1>\s*/i, '');
     }
 
-    return html;
+    // Remove accidental leading tabs/spaces inside common block tags from imported content.
+    return html.replace(
+      /<(p|li|h[1-6]|td|th|blockquote)([^>]*)>\s+/gi,
+      '<$1$2>'
+    );
+  };
+
+  const VIDEO_TEXT_URL_REGEX = /(https?:\/\/[^\s<>"']+|www\.[^\s<>"']+)/gi;
+
+  const normalizeVideoTextUrl = (rawValue = '') => {
+    const trimmed = String(rawValue || '').trim().replace(/[),.;]+$/, '');
+    if (!trimmed) return null;
+
+    try {
+      return new URL(trimmed).toString();
+    } catch {
+      try {
+        return new URL(`https://${trimmed}`).toString();
+      } catch {
+        return null;
+      }
+    }
+  };
+
+  const isVideoTextUrl = (url = '') => {
+    const normalizedUrl = String(url || '').toLowerCase();
+    if (!normalizedUrl) return false;
+
+    if (
+      normalizedUrl.includes('youtube.com') ||
+      normalizedUrl.includes('youtu.be') ||
+      normalizedUrl.includes('vimeo.com') ||
+      normalizedUrl.includes('dailymotion.com') ||
+      normalizedUrl.includes('loom.com') ||
+      normalizedUrl.includes('/embed/')
+    ) {
+      return true;
+    }
+
+    return /\.(mp4|webm|ogg|mov|m4v|m3u8)(\?|#|$)/i.test(normalizedUrl);
+  };
+
+  const linkifyVideoUrlsInTextHtml = (html = '') => {
+    const source = String(html || '');
+    if (!source) return '';
+    if (typeof document === 'undefined') return source;
+
+    const container = document.createElement('div');
+    container.innerHTML = source;
+
+    const replaceTextNodeVideoLinks = (node) => {
+      if (!node || node.nodeType !== Node.TEXT_NODE) return;
+
+      const textValue = node.textContent || '';
+      if (!textValue.trim()) return;
+
+      const matcher = new RegExp(VIDEO_TEXT_URL_REGEX.source, 'gi');
+      const matches = Array.from(textValue.matchAll(matcher));
+      if (matches.length === 0) return;
+
+      const fragment = document.createDocumentFragment();
+      let cursor = 0;
+
+      matches.forEach((match) => {
+        const matchedText = String(match[0] || '');
+        const startIndex = typeof match.index === 'number' ? match.index : cursor;
+
+        if (startIndex > cursor) {
+          fragment.appendChild(document.createTextNode(textValue.slice(cursor, startIndex)));
+        }
+
+        const href = normalizeVideoTextUrl(matchedText);
+        if (href && isVideoTextUrl(href)) {
+          const anchor = document.createElement('a');
+          anchor.href = href;
+          anchor.target = '_blank';
+          anchor.rel = 'noopener noreferrer';
+          anchor.textContent = matchedText;
+          anchor.style.color = '#1e5a8e';
+          anchor.style.textDecoration = 'underline';
+          anchor.style.fontWeight = '600';
+          fragment.appendChild(anchor);
+        } else {
+          fragment.appendChild(document.createTextNode(matchedText));
+        }
+
+        cursor = startIndex + matchedText.length;
+      });
+
+      if (cursor < textValue.length) {
+        fragment.appendChild(document.createTextNode(textValue.slice(cursor)));
+      }
+
+      node.parentNode?.replaceChild(fragment, node);
+    };
+
+    const traverseNode = (node) => {
+      if (!node) return;
+
+      if (node.nodeType === Node.TEXT_NODE) {
+        replaceTextNodeVideoLinks(node);
+        return;
+      }
+
+      if (node.nodeType !== Node.ELEMENT_NODE) return;
+
+      const element = node;
+      if (element.tagName?.toUpperCase() === 'A') return;
+
+      Array.from(element.childNodes).forEach(traverseNode);
+    };
+
+    Array.from(container.childNodes).forEach(traverseNode);
+    return container.innerHTML;
+  };
+
+  const REFERENCE_URL_REGEX = /(https?:\/\/[^\s<>"']+|www\.[^\s<>"']+)/gi;
+
+  const normalizeReferenceUrl = (rawValue) => {
+    if (!rawValue) return null;
+
+    const trimmed = String(rawValue).trim().replace(/[),.;]+$/, '');
+    if (!trimmed) return null;
+
+    try {
+      return new URL(trimmed).toString();
+    } catch {
+      try {
+        return new URL(`https://${trimmed}`).toString();
+      } catch {
+        return null;
+      }
+    }
+  };
+
+  const extractReferenceLinks = (rawContent) => {
+    if (!rawContent) return [];
+
+    const links = [];
+    const seen = new Set();
+
+    const addLink = (rawUrl, rawLabel = '') => {
+      const normalizedUrl = normalizeReferenceUrl(rawUrl);
+      if (!normalizedUrl) return;
+
+      const key = normalizedUrl.toLowerCase();
+      if (seen.has(key)) return;
+      seen.add(key);
+
+      const label = String(rawLabel || '').replace(/\s+/g, ' ').trim();
+      links.push({
+        url: normalizedUrl,
+        label: label || normalizedUrl
+      });
+    };
+
+    const html = String(rawContent);
+
+    if (typeof document !== 'undefined') {
+      const container = document.createElement('div');
+      container.innerHTML = html;
+
+      container.querySelectorAll('a[href]').forEach((anchor) => {
+        addLink(anchor.getAttribute('href') || '', anchor.textContent || '');
+      });
+
+      const textContent = container.textContent || '';
+      const lines = textContent
+        .split(/\r?\n/)
+        .map((line) => line.trim())
+        .filter(Boolean);
+
+      lines.forEach((line) => {
+        const candidates = line.match(REFERENCE_URL_REGEX) || [];
+        candidates.forEach((candidate) => {
+          const label = line
+            .replace(candidate, '')
+            .replace(/^[\-*\u2022\d.)\s]+/, '')
+            .replace(/^[\s:|-]+|[\s:|-]+$/g, '');
+          addLink(candidate, label);
+        });
+      });
+    } else {
+      const fallbackText = html.replace(/<[^>]*>/g, ' ');
+      const candidates = fallbackText.match(REFERENCE_URL_REGEX) || [];
+      candidates.forEach((candidate) => addLink(candidate, candidate));
+    }
+
+    return links;
+  };
+
+  const isUrlLikeLabel = (value = '') => /^(https?:\/\/|www\.)/i.test(String(value || '').trim());
+
+  const toTitleCase = (value = '') => {
+    const words = String(value || '').split(/\s+/).filter(Boolean);
+    return words
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ')
+      .trim();
+  };
+
+  const getSiteNameFromUrl = (normalizedUrl = '') => {
+    try {
+      const parsed = new URL(normalizedUrl);
+      const host = parsed.hostname.replace(/^www\./i, '');
+      const hostParts = host.split('.').filter(Boolean);
+
+      if (!hostParts.length) return '';
+
+      let domainToken = hostParts.length >= 2 ? hostParts[hostParts.length - 2] : hostParts[0];
+      if (hostParts.length >= 3) {
+        const tld = hostParts[hostParts.length - 1];
+        const secondLevel = hostParts[hostParts.length - 2];
+        if (
+          tld.length === 2 &&
+          ['co', 'com', 'org', 'net', 'gov', 'edu', 'ac'].includes(secondLevel.toLowerCase())
+        ) {
+          domainToken = hostParts[hostParts.length - 3];
+        }
+      }
+
+      return toTitleCase(domainToken.replace(/[-_]+/g, ' '));
+    } catch {
+      return '';
+    }
+  };
+
+  const getPageTitleFromUrl = (normalizedUrl = '') => {
+    try {
+      const parsed = new URL(normalizedUrl);
+      const segments = parsed.pathname.split('/').filter(Boolean);
+      const lastSegment = decodeURIComponent(segments[segments.length - 1] || '')
+        .replace(/\.[a-z0-9]{1,6}$/i, '')
+        .replace(/[-_]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      if (!lastSegment) return 'Web page';
+      return lastSegment.charAt(0).toUpperCase() + lastSegment.slice(1);
+    } catch {
+      return 'Web page';
+    }
+  };
+
+  const inferReferenceYear = (...values) => {
+    const combined = values
+      .map((value) => String(value || ''))
+      .join(' ');
+    const matchedYear = combined.match(/\b(?:19|20)\d{2}\b/);
+    return matchedYear ? matchedYear[0] : 'n.d.';
+  };
+
+  const formatReferenceAsApa = (reference = {}) => {
+    const normalizedUrl = normalizeReferenceUrl(reference.url || '');
+    if (!normalizedUrl) return String(reference.label || '').trim();
+
+    const normalizedLabel = String(reference.label || '').replace(/\s+/g, ' ').trim();
+    const shouldUseLabelAsTitle = normalizedLabel && !isUrlLikeLabel(normalizedLabel) && normalizedLabel !== normalizedUrl;
+
+    const siteName = getSiteNameFromUrl(normalizedUrl) || 'Unknown source';
+    const title = shouldUseLabelAsTitle ? normalizedLabel.replace(/[.]+$/g, '') : getPageTitleFromUrl(normalizedUrl);
+    const year = inferReferenceYear(normalizedLabel, normalizedUrl);
+
+    return `${siteName}. (${year}). ${title}.`;
   };
 
   // Shuffle array utility (Fisher-Yates)
@@ -134,6 +541,51 @@ const ModuleView = () => {
     }
     return result;
   };
+
+  const shouldRunDiagnosticBeforeIntro = (roadmapStages = []) => {
+    if (!Array.isArray(roadmapStages) || roadmapStages.length === 0) {
+      return false;
+    }
+
+    const stageTypes = roadmapStages
+      .map((stage) => String(stage?.type || '').trim().toLowerCase())
+      .filter(Boolean);
+
+    const diagnosticIndex = stageTypes.indexOf('diagnostic');
+    if (diagnosticIndex === -1) {
+      return false;
+    }
+
+    const introductionIndex = stageTypes.indexOf('introduction');
+    if (introductionIndex === -1) {
+      return true;
+    }
+
+    return diagnosticIndex < introductionIndex;
+  };
+
+  const readSavedLessonProgress = () => {
+    if (!lessonProgressStorageKey) return null;
+
+    try {
+      const raw = localStorage.getItem(lessonProgressStorageKey);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return null;
+      return parsed;
+    } catch (err) {
+      console.warn('Failed to parse saved lesson progress:', err);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    progressHydratedRef.current = false;
+  }, [lessonProgressStorageKey]);
+
+  useEffect(() => {
+    progressSyncRef.current = { moduleId: Number(moduleId), completionRate: null };
+  }, [moduleId]);
   
   // Check if this is a review request (coming from failed assessment)
   useEffect(() => {
@@ -282,24 +734,16 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
   const fetchModuleData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`/modules/${moduleId}?userId=${user.userId}`);
-      
-      // Process sections to add cache busting for media files
-      if (response.data.sections) {
-        const timestamp = new Date().getTime();
-        response.data.sections = response.data.sections.map(section => {
-          if ((section.type === 'image' || section.type === 'video') && section.content) {
-            // Add cache busting to media URLs
-            if (section.content.startsWith('/uploads')) {
-              return {
-                ...section,
-                content: section.content // Keep relative path, add cache busting in render
-              };
-            }
-          }
-          return section;
-        });
+      const response = await axios.get(withPreferredLanguage(`/modules/${moduleId}?userId=${user.userId}`));
+      const diagnosticBeforeIntro = shouldRunDiagnosticBeforeIntro(response.data.roadmapStages);
+
+      try {
+        await axios.post('/progress/start', { moduleId: Number(moduleId) });
+      } catch (progressStartError) {
+        console.error('Error opening module progress:', progressStartError);
       }
+
+      const savedLessonProgress = readSavedLessonProgress();
       
       setModule(response.data);
       
@@ -308,6 +752,37 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
       console.log('Diagnostic Questions:', response.data.diagnosticQuestions);
       console.log('Review Questions:', response.data.reviewQuestions);
       console.log('Final Questions:', response.data.finalQuestions);
+
+      // Restore saved local lesson session state (topic/page/review progress) when available.
+      if (savedLessonProgress) {
+        const toObject = (value) => (value && typeof value === 'object' && !Array.isArray(value) ? value : {});
+        const hardcodedTopicCount = moduleContent[moduleId]?.topics?.length || 0;
+        const savedCurrentTopic = Number.isInteger(savedLessonProgress.currentTopic) ? savedLessonProgress.currentTopic : 0;
+        const maxTopicIndex = hardcodedTopicCount > 0 ? hardcodedTopicCount - 1 : savedCurrentTopic;
+
+        setCurrentTopic(Math.max(0, Math.min(savedCurrentTopic, maxTopicIndex)));
+        setCurrentTopicPage(Math.max(0, Number.isInteger(savedLessonProgress.currentTopicPage) ? savedLessonProgress.currentTopicPage : 0));
+        setShowLessonIntro(
+          typeof savedLessonProgress.showLessonIntro === 'boolean'
+            ? savedLessonProgress.showLessonIntro
+            : !diagnosticBeforeIntro
+        );
+        setTopicCompleted(toObject(savedLessonProgress.topicCompleted));
+        setCompletedReviews(toObject(savedLessonProgress.completedReviews));
+        setReviewResults(toObject(savedLessonProgress.reviewResults));
+        setReviewAttempts(toObject(savedLessonProgress.reviewAttempts));
+
+        const restoredCooldowns = Object.entries(toObject(savedLessonProgress.reviewCooldowns)).reduce((acc, [key, value]) => {
+          const endAt = Number(value);
+          if (Number.isFinite(endAt) && endAt > Date.now()) {
+            acc[key] = endAt;
+          }
+          return acc;
+        }, {});
+        setReviewCooldowns(restoredCooldowns);
+      } else {
+        setShowLessonIntro(!diagnosticBeforeIntro);
+      }
       
       // Check if this is review mode (from URL param)
       const review = searchParams.get('review');
@@ -316,30 +791,39 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
         setShowDiagnostic(false);
         setDiagnosticCompleted(true);
         setIsReviewMode(true);
+        progressHydratedRef.current = true;
         setLoading(false);
         return;
       }
-      
-      // NOT review mode - always start fresh with diagnostic
-      // Clear previous session data for this module
-      localStorage.removeItem(`diagnostic_completed_${moduleId}`);
-      localStorage.removeItem(`lesson_viewed_${moduleId}`);
-      
+
       // Show diagnostic if module has diagnostic questions
       const hasDiagnosticQuestions = response.data.diagnosticQuestions && response.data.diagnosticQuestions.length > 0;
       
       console.log('Has diagnostic questions:', hasDiagnosticQuestions);
       
       if (hasDiagnosticQuestions) {
-        console.log('Setting showDiagnostic to true');
-        setShowDiagnostic(true);
-        setDiagnosticCompleted(false);
+        const hasSavedDiagnostic = savedLessonProgress?.diagnosticCompleted === true;
+        if (hasSavedDiagnostic) {
+          setDiagnosticCompleted(true);
+          setShowDiagnostic(false);
+          if (typeof savedLessonProgress.diagnosticScore === 'number') {
+            setDiagnosticScore(savedLessonProgress.diagnosticScore);
+          }
+        } else {
+          console.log('Setting showDiagnostic to true');
+          setShowDiagnostic(true);
+          setDiagnosticCompleted(false);
+          if (diagnosticBeforeIntro) {
+            setShowLessonIntro(false);
+          }
+        }
       } else {
         console.log('No diagnostic questions - going to content');
         setDiagnosticCompleted(true);
         setShowDiagnostic(false);
       }
-      
+
+      progressHydratedRef.current = true;
       setLoading(false);
     } catch (err) {
       console.error('Error fetching module:', err);
@@ -380,20 +864,111 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
     setShowDiagnostic(false);
   };
 
-  const updateModuleProgress = async (completionRate) => {
-    try {
+  const updateModuleProgress = async (completionRate, options = {}) => {
+    const { navigateOnComplete = true } = options;
+    const numericModuleId = parseInt(moduleId, 10);
+
+    const persistProgress = async () => {
       await axios.put('/progress/update', {
-        moduleId: parseInt(moduleId),
+        moduleId: numericModuleId,
         completionRate
       });
-      
-      if (completionRate >= 100) {
+    };
+
+    try {
+      await persistProgress();
+
+      if (completionRate >= 100 && navigateOnComplete) {
         navigate('/dashboard');
       }
     } catch (err) {
+      if (err?.response?.status === 404) {
+        try {
+          await axios.post('/progress/start', { moduleId: numericModuleId });
+          await persistProgress();
+
+          if (completionRate >= 100 && navigateOnComplete) {
+            navigate('/dashboard');
+          }
+          return;
+        } catch (retryErr) {
+          console.error('Error updating progress after starting module:', retryErr);
+          return;
+        }
+      }
+
       console.error('Error updating progress:', err);
     }
   };
+
+  useEffect(() => {
+    if (loading || !module) return;
+
+    const numericModuleId = Number.parseInt(moduleId, 10);
+    if (!Number.isFinite(numericModuleId)) return;
+
+    const shouldTrackLessonTime = !showQuickAssessment && !showDiagnostic && !activeReview;
+    if (!shouldTrackLessonTime) return;
+
+    let isDisposed = false;
+
+    const flushLessonTime = async () => {
+      if (lessonTimeFlushInFlightRef.current) return;
+
+      const bufferedSeconds = Math.floor(Number(lessonTimeBufferRef.current || 0));
+      if (bufferedSeconds <= 0) return;
+
+      lessonTimeBufferRef.current = 0;
+      lessonTimeFlushInFlightRef.current = true;
+
+      try {
+        await axios.post('/progress/track-time', {
+          moduleId: numericModuleId,
+          timeSpentSeconds: bufferedSeconds,
+        });
+      } catch (error) {
+        if (!isDisposed) {
+          lessonTimeBufferRef.current += bufferedSeconds;
+          console.error('Error tracking lesson time:', error);
+        }
+      } finally {
+        lessonTimeFlushInFlightRef.current = false;
+      }
+    };
+
+    const handleTick = () => {
+      if (document.visibilityState !== 'visible') return;
+
+      lessonTimeBufferRef.current += 10;
+      if (lessonTimeBufferRef.current >= 30) {
+        flushLessonTime();
+      }
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        flushLessonTime();
+      }
+    };
+
+    const intervalId = setInterval(handleTick, 10000);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      isDisposed = true;
+      clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+
+      const bufferedSeconds = Math.floor(Number(lessonTimeBufferRef.current || 0));
+      if (bufferedSeconds > 0) {
+        axios.post('/progress/track-time', {
+          moduleId: numericModuleId,
+          timeSpentSeconds: bufferedSeconds,
+        }).catch(() => {});
+        lessonTimeBufferRef.current = 0;
+      }
+    };
+  }, [moduleId, module, loading, showQuickAssessment, showDiagnostic, activeReview]);
 
   const handleShowQuickAssessment = () => {
     setShowQuickAssessment(true);
@@ -402,6 +977,36 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
   // Use sections from database if available, otherwise fall back to hardcoded content
   const lessonSections = module?.sections || [];
   const isDbLessonModeActive = lessonSections.length > 0 && !showQuickAssessment;
+  const referenceLinks = useMemo(() => {
+    if (!lessonSections.length) return [];
+
+    const links = [];
+    const seen = new Set();
+
+    lessonSections.forEach((section) => {
+      if (section.type?.toLowerCase() !== 'references') return;
+
+      extractReferenceLinks(section.content || '').forEach((link) => {
+        const key = link.url.toLowerCase();
+        if (seen.has(key)) return;
+        seen.add(key);
+        links.push(link);
+      });
+    });
+
+    return links;
+  }, [lessonSections]);
+
+  const apaReferences = referenceLinks.map((reference) => ({
+    ...reference,
+    apaCitation: formatReferenceAsApa(reference),
+  }));
+
+  useEffect(() => {
+    if (!referenceLinks.length) {
+      setShowReferencesPanel(false);
+    }
+  }, [referenceLinks.length]);
 
   useEffect(() => {
     if (!isDbLessonModeActive) return;
@@ -421,6 +1026,48 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
     setShowLessonIntro(true);
     setCurrentTopicPage(0);
   }, [moduleId]);
+
+  useEffect(() => {
+    if (!lessonProgressStorageKey || !module || loading || !progressHydratedRef.current) return;
+
+    const snapshot = {
+      moduleId: Number(moduleId),
+      userId: user?.userId,
+      currentTopic,
+      topicCompleted,
+      currentTopicPage,
+      showLessonIntro,
+      completedReviews,
+      reviewResults,
+      reviewCooldowns,
+      reviewAttempts,
+      diagnosticCompleted,
+      diagnosticScore,
+      updatedAt: Date.now()
+    };
+
+    try {
+      localStorage.setItem(lessonProgressStorageKey, JSON.stringify(snapshot));
+    } catch (err) {
+      console.warn('Failed to save lesson progress snapshot:', err);
+    }
+  }, [
+    lessonProgressStorageKey,
+    module,
+    loading,
+    moduleId,
+    user?.userId,
+    currentTopic,
+    topicCompleted,
+    currentTopicPage,
+    showLessonIntro,
+    completedReviews,
+    reviewResults,
+    reviewCooldowns,
+    reviewAttempts,
+    diagnosticCompleted,
+    diagnosticScore
+  ]);
 
   // Group sections into topic-based pages for paginated view
   const topicPages = useMemo(() => {
@@ -444,6 +1091,40 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
     return pages;
   }, [lessonSections]);
 
+  useEffect(() => {
+    if (!topicPages.length) return;
+    if (currentTopicPage > topicPages.length - 1) {
+      setCurrentTopicPage(topicPages.length - 1);
+    }
+  }, [topicPages.length, currentTopicPage]);
+
+  useEffect(() => {
+    if (!lessonSections.length || !topicPages.length || showLessonIntro || showQuickAssessment || loading) {
+      return;
+    }
+
+    const existingCompletion = Number(module?.CompletionRate || 0);
+    if (existingCompletion >= 100) {
+      return;
+    }
+
+    const pageProgress = Math.round((currentTopicPage / topicPages.length) * 100);
+    const nextCompletion = Math.max(existingCompletion, Math.max(0, Math.min(99, pageProgress)));
+
+    if (nextCompletion <= 0) {
+      return;
+    }
+
+    const numericModuleId = Number(moduleId);
+    const lastSynced = progressSyncRef.current;
+    if (lastSynced.moduleId === numericModuleId && lastSynced.completionRate === nextCompletion) {
+      return;
+    }
+
+    progressSyncRef.current = { moduleId: numericModuleId, completionRate: nextCompletion };
+    updateModuleProgress(nextCompletion, { navigateOnComplete: false });
+  }, [lessonSections.length, topicPages.length, showLessonIntro, showQuickAssessment, loading, module?.CompletionRate, currentTopicPage, moduleId]);
+
   // Navigate to a topic page and scroll content to top
   const goToTopicPage = (pageIndex) => {
     setCurrentTopicPage(pageIndex);
@@ -462,7 +1143,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
         const reviewId = section.id || `review-mc-${section.originalIndex}`;
         if (!completedReviews[reviewId]) return false;
       }
-      if (sType === 'review - drag and drop' || sType === 'review-drag-drop') {
+      if (sType === 'review - drag and drop' || sType === 'review-drag-drop' || sType === 'simulation') {
         const dndId = section.id || `review-dnd-${section.originalIndex}`;
         if (!completedReviews[dndId]) return false;
       }
@@ -509,13 +1190,16 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
   console.log('Render state - showDiagnostic:', showDiagnostic, 'diagnosticCompleted:', diagnosticCompleted);
   console.log('Module diagnostic questions:', module?.diagnosticQuestions?.length);
 
+  const introStageVisible = lessonSections.length > 0 && !showQuickAssessment && showLessonIntro;
+
   // FIRST: Show diagnostic if not completed and diagnostic questions exist
-  if (showDiagnostic && module?.diagnosticQuestions && module.diagnosticQuestions.length > 0) {
+  if (!introStageVisible && showDiagnostic && module?.diagnosticQuestions && module.diagnosticQuestions.length > 0) {
     console.log('Rendering Diagnostic component');
     return (
       <Diagnostic
         questions={module.diagnosticQuestions}
         onComplete={handleDiagnosticComplete}
+        moduleId={moduleId}
         onSkip={null}
       />
     );
@@ -645,6 +1329,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
 
         {/* Lesson Content from Database */}
         {lessonSections.length > 0 && !showQuickAssessment && !showLessonIntro && (
+          <>
           <div className="fixed inset-0 z-40 flex">
 
             {/* Sidebar - Always visible */}
@@ -747,8 +1432,36 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                 </div>
               </div>
 
-              {/* Report Issue Button */}
-              <div className="p-6 border-t border-gray-200">
+              {/* Sidebar Actions */}
+              <div className="p-6 border-t border-gray-200 space-y-3">
+                <button
+                  onClick={() => {
+                    if (referenceLinks.length) {
+                      setShowReferencesPanel(true);
+                    }
+                  }}
+                  disabled={!referenceLinks.length}
+                  className={`flex items-center gap-3 w-full transition-colors ${
+                    referenceLinks.length
+                      ? 'text-[#1e3a5f] hover:text-[#2BC4B3]'
+                      : 'text-gray-400 cursor-not-allowed'
+                  }`}
+                  title={
+                    referenceLinks.length
+                      ? `Open ${referenceLinks.length} reference link${referenceLinks.length > 1 ? 's' : ''}`
+                      : 'No references added yet'
+                  }
+                >
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                  <span className="font-medium">References</span>
+                  {referenceLinks.length > 0 && (
+                    <span className="ml-auto text-xs font-semibold bg-[#2BC4B3]/15 text-[#1e3a5f] px-2 py-1 rounded-full">
+                      {referenceLinks.length}
+                    </span>
+                  )}
+                </button>
                 <button 
                   onClick={() => setShowReportModal(true)}
                   className="flex items-center gap-3 text-[#1e3a5f] w-full hover:text-[#EF5350] transition-colors"
@@ -811,34 +1524,112 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                         return (
                           <div key={index} className="mb-5">
                             {section.contentLayout === 'table' && section.tableData ? (
-                              <div className="overflow-x-auto rounded-lg border border-gray-200">
-                                <table className="w-full border-collapse">
-                                  <thead>
-                                    <tr className="bg-[#1B5E87] text-white">
-                                      {section.tableData.headers.map((header, hIdx) => (
-                                        <th key={hIdx} className="px-4 py-3 text-base lg:text-lg font-bold text-left border-r border-[#1B5E87]/30 last:border-r-0 align-top">
-                                          <div className="table-rich-content" dangerouslySetInnerHTML={{ __html: header || '' }} />
-                                        </th>
-                                      ))}
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {section.tableData.rows.map((row, rIdx) => (
-                                      <tr key={rIdx} className={`border-t border-gray-200 ${rIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
-                                        {row.map((cell, cIdx) => (
-                                          <td key={cIdx} className="px-4 py-3 text-lg text-[#000000] border-r border-gray-100 last:border-r-0 align-top">
-                                            <div className="table-rich-content" dangerouslySetInnerHTML={{ __html: cell || '' }} />
-                                          </td>
-                                        ))}
-                                      </tr>
-                                    ))}
-                                  </tbody>
-                                </table>
-                              </div>
+                              (() => {
+                                const tableHeaders = Array.isArray(section.tableData.headers)
+                                  ? section.tableData.headers
+                                  : [];
+                                const tableRows = Array.isArray(section.tableData.rows) ? section.tableData.rows : [];
+                                const sourceRows = tableRows.length > 0
+                                  ? tableRows
+                                  : [new Array(Math.max(1, tableHeaders.length || 0)).fill('')];
+                                const inferredColumnCount = Math.max(
+                                  tableHeaders.length,
+                                  ...sourceRows.map((row) => (Array.isArray(row) ? row.length : 0)),
+                                  1
+                                );
+                                const tableTitle = String(section.tableData?.title || section.tableTitle || '');
+                                const normalizedHeaders = Array.from(
+                                  { length: inferredColumnCount },
+                                  (_, cIdx) => String(tableHeaders[cIdx] || '')
+                                );
+                                const tableHeaderSpans = normalizeTableHeaderSpans(
+                                  section.tableData.headerSpans,
+                                  inferredColumnCount
+                                );
+                                const normalizedRows = sourceRows.map((row) => {
+                                  const nextRow = Array.isArray(row)
+                                    ? row.slice(0, inferredColumnCount).map((cell) => String(cell || ''))
+                                    : [];
+                                  while (nextRow.length < inferredColumnCount) {
+                                    nextRow.push('');
+                                  }
+                                  return nextRow;
+                                });
+                                const rowSpanMatrix = normalizedRows.map((_, rowIdx) =>
+                                  normalizeTableHeaderSpans(section.tableData.rowCellSpans?.[rowIdx], inferredColumnCount)
+                                );
+                                const showHeaderRow = normalizedHeaders.some((header, cIdx) => {
+                                  if ((tableHeaderSpans[cIdx] || 0) <= 0) return false;
+                                  const plainText = String(header).replace(/<[^>]*>/g, '').trim();
+                                  return plainText.length > 0;
+                                }) || tableHeaderSpans.some((span) => span > 1);
+
+                                return (
+                                  <div className="rounded-lg border border-gray-200 overflow-hidden">
+                                    <div className="overflow-x-auto">
+                                      <table className="w-full border-collapse">
+                                        <thead>
+                                          {tableTitle && (
+                                            <tr className="bg-[#1e5a8e]/10 border-b border-gray-200">
+                                              <th colSpan={inferredColumnCount} className="px-4 py-3 text-left">
+                                                <div className="table-rich-content text-sm font-bold text-[#1e3a5f]" dangerouslySetInnerHTML={{ __html: normalizeRichTextHtml(tableTitle) }} />
+                                              </th>
+                                            </tr>
+                                          )}
+                                          {showHeaderRow && (
+                                            <tr className="bg-[#1e5a8e]/10 border-b border-gray-200">
+                                              {normalizedHeaders.map((header, cIdx) => {
+                                                const headerColSpan = tableHeaderSpans[cIdx] || 0;
+                                                if (headerColSpan <= 0) return null;
+                                                const hasRightBorder = cIdx + headerColSpan < inferredColumnCount;
+
+                                                return (
+                                                  <th
+                                                    key={`table-header-${cIdx}`}
+                                                    colSpan={headerColSpan}
+                                                    className={`px-4 py-3 text-center text-sm font-semibold text-[#1e3a5f] align-top break-words ${hasRightBorder ? 'border-r border-gray-100' : ''}`}
+                                                  >
+                                                    <div className="table-rich-content" dangerouslySetInnerHTML={{ __html: normalizeRichTextHtml(header || '') }} />
+                                                  </th>
+                                                );
+                                              })}
+                                            </tr>
+                                          )}
+                                        </thead>
+                                        <tbody>
+                                          {normalizedRows.map((rowCells, rIdx) => {
+                                            const rowSpans = rowSpanMatrix[rIdx];
+
+                                            return (
+                                              <tr key={rIdx} className={`border-t border-gray-200 ${rIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50/80'}`}>
+                                                {rowCells.map((cell, cIdx) => {
+                                                  const cellColSpan = rowSpans[cIdx] || 0;
+                                                  if (cellColSpan <= 0) return null;
+                                                  const hasRightBorder = cIdx + cellColSpan < inferredColumnCount;
+
+                                                  return (
+                                                    <td
+                                                      key={`table-cell-${rIdx}-${cIdx}`}
+                                                      colSpan={cellColSpan}
+                                                      className={`px-4 py-3 text-lg text-[#000000] ${hasRightBorder ? 'border-r border-gray-100' : ''} align-top break-words`}
+                                                    >
+                                                      <div className="table-rich-content" dangerouslySetInnerHTML={{ __html: normalizeRichTextHtml(cell || '') }} />
+                                                    </td>
+                                                  );
+                                                })}
+                                              </tr>
+                                            );
+                                          })}
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                );
+                              })()
                             ) : (
                               <div 
                                 className="lesson-content text-xl text-[#000000] leading-relaxed" 
-                                dangerouslySetInnerHTML={{ __html: section.content }}
+                                dangerouslySetInnerHTML={{ __html: normalizeRichTextHtml(section.content) }}
                               ></div>
                             )}
                           </div>
@@ -866,11 +1657,10 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                           </div>
                         );
                       case 'image':
-                        // Build proper image URL with cache busting
-                        const timestamp = new Date().getTime();
+                        // Build proper image URL
                         const buildImgUrl = (url) => {
                           if (!url) return '';
-                          if (url.startsWith('/uploads')) return `${API_SERVER_URL}${url}?t=${timestamp}`;
+                          if (url.startsWith('/uploads')) return `${API_SERVER_URL}${url}`;
                           return url;
                         };
                         const layout = section.layout || 'single';
@@ -887,7 +1677,9 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                               <div className="border-b border-black"></div>
                               {Array.from({ length: layerCount }, (_, layerIdx) => {
                                 const imgs = layerImages[layerIdx] || [];
-                                const textHtml = normalizeLayerTextHtml(sideTexts[layerIdx] || '');
+                                const textHtml = linkifyVideoUrlsInTextHtml(
+                                  normalizeRichTextHtml(sideTexts[layerIdx] || '')
+                                );
                                 const validImgs = imgs.filter(img => img && img.url);
 
                                 const textBlock = (
@@ -897,14 +1689,26 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                   ></div>
                                 );
 
+                                const imageGridClass =
+                                  validImgs.length === 1
+                                    ? 'grid grid-cols-1'
+                                    : validImgs.length === 2
+                                      ? 'grid grid-cols-2'
+                                      : validImgs.length === 3
+                                        ? 'grid grid-cols-3'
+                                        : 'grid grid-cols-2 lg:grid-cols-3';
+
                                 const imageBlock = validImgs.length > 0 ? (
-                                  <div className={`flex gap-3 ${validImgs.length === 1 ? 'justify-center' : ''}`}>
+                                  <div className={`${imageGridClass} gap-3`}>
                                     {validImgs.map((img, imgIdx) => (
                                       <div key={imgIdx} className="flex flex-col items-center flex-1 min-w-0">
                                         <img
                                           src={buildImgUrl(img.url)}
                                           alt={img.fileName || "Lesson content"}
                                           className="w-full h-auto rounded-lg shadow-sm object-cover"
+                                          loading="lazy"
+                                          decoding="async"
+                                          fetchPriority="low"
                                           onError={(e) => { e.target.style.display = 'none'; }}
                                         />
                                         {img.caption && (
@@ -928,9 +1732,19 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                   );
                                 }
 
+                                const plainTextContent = textHtml.replace(/<[^>]+>/g, '').trim();
+                                if (!plainTextContent) {
+                                  return (
+                                    <div key={layerIdx} className="space-y-4">
+                                      {imageBlock}
+                                      {layerIdx < layerCount - 1 && <div className="border-b border-black"></div>}
+                                    </div>
+                                  );
+                                }
+
                                 return (
                                   <div key={layerIdx} className="space-y-4">
-                                    <div className="grid grid-cols-2 gap-6 items-start">
+                                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
                                       {layout === 'text-left' ? <>{textBlock}{imageBlock}</> : <>{imageBlock}{textBlock}</>}
                                     </div>
                                     {layerIdx < layerCount - 1 && <div className="border-b border-black"></div>}
@@ -962,6 +1776,9 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                         src={buildImgUrl(img.url)}
                                         alt={img.fileName || `Image ${imgIdx + 1}`}
                                         className="w-full h-full rounded-lg shadow-sm object-cover"
+                                        loading="lazy"
+                                        decoding="async"
+                                        fetchPriority="low"
                                         onError={(e) => { e.target.style.display = 'none'; }}
                                       />
                                       {img.caption && (
@@ -981,6 +1798,9 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                               src={imageUrl} 
                               alt={section.fileName || "Lesson content"}
                               className="max-w-md rounded-lg shadow-sm mb-3 object-contain" 
+                              loading="lazy"
+                              decoding="async"
+                              fetchPriority="low"
                               onError={(e) => {
                                 console.error('Image failed to load:', section.content);
                                 e.target.style.display = 'none';
@@ -992,13 +1812,13 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                           </div>
                         );
                       case 'video':
-                        // Build proper video URL with cache busting
-                        const videoTimestamp = new Date().getTime();
-                        const videoUrl = section.content?.startsWith('/uploads') 
-                          ? `${API_SERVER_URL}${section.content}?t=${videoTimestamp}`
-                          : section.content;
-                        // Check if it's a YouTube/embed URL or a local video file
-                        const isEmbedUrl = videoUrl?.includes('youtube') || videoUrl?.includes('vimeo') || videoUrl?.includes('embed');
+                        // Build proper video URL
+                        const normalizedVideoSource = normalizeExternalVideoUrl(section.content || '');
+                        const videoUrl = normalizedVideoSource?.startsWith('/uploads')
+                          ? `${API_SERVER_URL}${normalizedVideoSource}`
+                          : normalizedVideoSource;
+                        // Use iframe for hosted embed providers; use native video for direct media URLs.
+                        const isEmbedUrl = isIframeVideoUrl(videoUrl);
                         return (
                           <div key={index} className="mb-10 mt-8 flex flex-col items-center">
                             <div className="aspect-video max-w-2xl w-full mb-3">
@@ -1006,6 +1826,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                 <iframe 
                                   src={videoUrl} 
                                   className="w-full h-full rounded-lg shadow-sm"
+                                  title={`Lesson video ${index + 1}`}
                                   allowFullScreen
                                 ></iframe>
                               ) : (
@@ -1037,9 +1858,13 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                         const showReviewStatusCard = isCompleted || isWrongSubmission;
                         const cooldownSecondsLeft = isWrongSubmission ? getCooldownSecondsLeft(reviewId) : 0;
                         const isCooldownActive = cooldownSecondsLeft > 0;
+                        const canRetakeFromStatusCard = isWrongSubmission && !isCooldownActive;
                         const hasQuestions = section.questions && section.questions.length > 0;
                         
                         if (!hasQuestions) return null;
+
+                        const reviewQuestions = shuffledQuestions[reviewId] || section.questions;
+                        const currentReviewQuestion = reviewQuestions[activeReviewQuestionIndex] || reviewQuestions[0];
                         
                         return (
                           <React.Fragment key={index}>
@@ -1047,19 +1872,22 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                             {showReviewStatusCard ? (
                               <div 
                                 onClick={() => {
-                                  if (isCooldownActive) return;
-                                  // Allow retake by clicking the completed card
+                                  if (!canRetakeFromStatusCard) return;
+                                  // Allow retake only for failed cards after cooldown.
                                   const attempts = (reviewAttempts[reviewId] || 0);
                                   setReviewAttempts(prev => ({ ...prev, [reviewId]: attempts + 1 }));
                                   setShuffledQuestions(prev => ({ ...prev, [reviewId]: buildShuffledQuestions(section.questions) }));
+                                  setActiveReviewQuestionIndex(0);
+                                  setActiveReviewQuestionTimes({});
+                                  setActiveReviewQuestionStartTime(Date.now());
                                   setActiveReview(reviewId);
                                   setReviewAnswers({});
                                   setReviewScore(null);
                                 }}
-                                className={`mb-8 p-5 border-2 rounded-xl cursor-pointer transition-colors relative overflow-hidden ${
+                                className={`mb-8 p-5 border-2 rounded-xl transition-colors relative overflow-hidden ${
                                   isWrongSubmission
-                                    ? `bg-red-50 border-red-300 ${isCooldownActive ? 'cursor-not-allowed opacity-90' : 'hover:border-red-400'}`
-                                    : 'bg-green-50 border-green-300 hover:border-green-400'
+                                    ? `bg-red-50 border-red-300 ${canRetakeFromStatusCard ? 'cursor-pointer hover:border-red-400' : 'cursor-not-allowed opacity-90'}`
+                                    : 'bg-green-50 border-green-300 cursor-default'
                                 }`}
                               >
                                 {isPerfectScore ? (
@@ -1086,7 +1914,9 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                     {typeof reviewResult?.score === 'number' && (
                                       <p className="text-sm font-bold text-green-700 mt-3">Overall Score: {reviewResult.score.toFixed(0)}%</p>
                                     )}
-                                    <p className="text-xs text-green-700 mt-3">Click this card to retake.</p>
+                                    {typeof reviewResult?.timeSpentSeconds === 'number' && (
+                                      <p className="text-sm font-medium text-green-700 mt-1">Time spent: {formatDuration(reviewResult.timeSpentSeconds)}</p>
+                                    )}
                                   </>
                                 ) : (
                                   <>
@@ -1101,6 +1931,11 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                     <p className={`text-sm mt-1 ${isWrongSubmission ? 'text-red-600' : 'text-green-600'}`}>{section.questions.length} question{section.questions.length > 1 ? 's' : ''} answered</p>
                                     {typeof reviewResult?.score === 'number' && (
                                       <p className={`text-sm font-bold mt-1 ${isWrongSubmission ? 'text-red-700' : 'text-green-700'}`}>Overall Score: {reviewResult.score.toFixed(0)}%</p>
+                                    )}
+                                    {typeof reviewResult?.timeSpentSeconds === 'number' && (
+                                      <p className={`text-sm font-medium mt-1 ${isWrongSubmission ? 'text-red-700' : 'text-green-700'}`}>
+                                        Time spent: {formatDuration(reviewResult.timeSpentSeconds)}
+                                      </p>
                                     )}
                                   </>
                                 )}
@@ -1125,6 +1960,9 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                   // Always shuffle options on every attempt
                                   setShuffledQuestions(prev => ({ ...prev, [reviewId]: buildShuffledQuestions(section.questions) }));
                                   setReviewAttempts(prev => ({ ...prev, [reviewId]: attempts + 1 }));
+                                  setActiveReviewQuestionIndex(0);
+                                  setActiveReviewQuestionTimes({});
+                                  setActiveReviewQuestionStartTime(Date.now());
                                   setActiveReview(reviewId);
                                   setReviewAnswers({});
                                   setReviewScore(null);
@@ -1175,6 +2013,9 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                         setCompletedReviews(prev => ({ ...prev, [reviewId]: true }));
                                         setActiveReview(null);
                                         setReviewScore(null);
+                                        setActiveReviewQuestionIndex(0);
+                                        setActiveReviewQuestionTimes({});
+                                        setActiveReviewQuestionStartTime(null);
                                       }} className="px-8 py-3 bg-[#2BC4B3] text-white rounded-full text-lg font-semibold shadow-lg">
                                         Continue
                                       </button>
@@ -1182,77 +2023,145 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                   ) : (
                                     <>
                                       <h2 className="text-2xl font-bold text-[#1e3a5f] mb-6">Review - Multiple Choice</h2>
-                                      <div className="space-y-6">
-                                        {(shuffledQuestions[reviewId] || section.questions).map((q, qIdx) => (
-                                          <div key={q.id || qIdx} className="border border-gray-200 rounded-lg p-5">
-                                            <p className="font-semibold text-gray-800 mb-3">{qIdx + 1}. {q.question}</p>
-                                            <div className="space-y-2">
-                                              {q.options.map((opt, oIdx) => (
-                                                <label key={oIdx} className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all ${
-                                                  reviewAnswers[qIdx] === oIdx ? 'bg-[#2BC4B3]/10 border-2 border-[#2BC4B3]' : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'
-                                                }`}>
-                                                  <input type="radio" name={`review-q-${reviewId}-${qIdx}`} checked={reviewAnswers[qIdx] === oIdx}
-                                                    onChange={() => setReviewAnswers(prev => ({ ...prev, [qIdx]: oIdx }))}
-                                                    className="w-4 h-4 text-[#2BC4B3]" />
-                                                  <span className="text-gray-700">{opt}</span>
-                                                </label>
-                                              ))}
-                                            </div>
-                                          </div>
-                                        ))}
+                                      <div className="border border-gray-200 rounded-lg p-5">
+                                        <p className="text-sm text-gray-500 mb-2">
+                                          Question {activeReviewQuestionIndex + 1} of {reviewQuestions.length}
+                                        </p>
+                                        <p className="font-semibold text-gray-800 mb-3">
+                                          {activeReviewQuestionIndex + 1}. {currentReviewQuestion?.question}
+                                        </p>
+                                        <div className="space-y-2">
+                                          {(currentReviewQuestion?.options || []).map((opt, oIdx) => (
+                                            <label key={oIdx} className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all ${
+                                              reviewAnswers[activeReviewQuestionIndex] === oIdx
+                                                ? 'bg-[#2BC4B3]/10 border-2 border-[#2BC4B3]'
+                                                : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'
+                                            }`}>
+                                              <input
+                                                type="radio"
+                                                name={`review-q-${reviewId}-${activeReviewQuestionIndex}`}
+                                                checked={reviewAnswers[activeReviewQuestionIndex] === oIdx}
+                                                onChange={() => setReviewAnswers(prev => ({ ...prev, [activeReviewQuestionIndex]: oIdx }))}
+                                                className="w-4 h-4 text-[#2BC4B3]"
+                                              />
+                                              <span className="text-gray-700">{opt}</span>
+                                            </label>
+                                          ))}
+                                        </div>
                                       </div>
-                                      <div className="mt-6 flex justify-end">
+                                      <div className="mt-6 flex items-center justify-between">
                                         <button
                                           onClick={() => {
-                                            const questionsToCheck = shuffledQuestions[reviewId] || section.questions;
-                                            let correct = 0;
-                                            const breakdown = questionsToCheck.map((q, qIdx) => {
-                                              const selectedIdx = reviewAnswers[qIdx];
-                                              const isCorrect = selectedIdx === q.correctAnswer;
-                                              if (isCorrect) correct++;
-                                              return {
-                                                question: q.question,
-                                                isCorrect,
-                                                correctAnswerText: q.options[q.correctAnswer],
-                                              };
-                                            });
-                                            const score = (correct / questionsToCheck.length) * 100;
-                                            setReviewResults(prev => ({
-                                              ...prev,
-                                              [reviewId]: {
-                                                score,
-                                                hasCorrectAnswer: breakdown.some(item => item.isCorrect),
-                                                breakdown,
-                                              }
-                                            }));
-                                            if (score < 100) {
-                                              setReviewCooldowns(prev => ({
-                                                ...prev,
-                                                [reviewId]: Date.now() + 20000,
-                                              }));
-                                              setCompletedReviews(prev => ({
-                                                ...prev,
-                                                [reviewId]: false,
-                                              }));
-                                            } else {
-                                              setReviewCooldowns(prev => {
-                                                const next = { ...prev };
-                                                delete next[reviewId];
-                                                return next;
-                                              });
-                                              setCompletedReviews(prev => ({
-                                                ...prev,
-                                                [reviewId]: true,
-                                              }));
-                                            }
-                                            setActiveReview(null);
-                                            setReviewScore(null);
+                                            const updatedQuestionTimes = updateActiveReviewQuestionTime();
+                                            setActiveReviewQuestionTimes(updatedQuestionTimes);
+                                            setActiveReviewQuestionIndex((prev) => Math.max(prev - 1, 0));
                                           }}
-                                          disabled={Object.keys(reviewAnswers).length < section.questions.length}
-                                          className="px-8 py-3 bg-[#2BC4B3] text-white rounded-lg font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                          disabled={activeReviewQuestionIndex === 0}
+                                          className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
-                                          Submit Answers
+                                          Previous
                                         </button>
+
+                                        {activeReviewQuestionIndex < reviewQuestions.length - 1 ? (
+                                          <button
+                                            onClick={() => {
+                                              const updatedQuestionTimes = updateActiveReviewQuestionTime();
+                                              setActiveReviewQuestionTimes(updatedQuestionTimes);
+                                              setActiveReviewQuestionIndex((prev) => Math.min(prev + 1, reviewQuestions.length - 1));
+                                            }}
+                                            disabled={reviewAnswers[activeReviewQuestionIndex] === undefined}
+                                            className="px-8 py-3 bg-[#2BC4B3] text-white rounded-lg font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                          >
+                                            Next
+                                          </button>
+                                        ) : (
+                                          <button
+                                            onClick={async () => {
+                                              const updatedQuestionTimes = updateActiveReviewQuestionTime();
+                                              setActiveReviewQuestionTimes(updatedQuestionTimes);
+
+                                              let correct = 0;
+                                              const skillAnswers = [];
+                                              const breakdown = reviewQuestions.map((q, qIdx) => {
+                                                const selectedIdx = reviewAnswers[qIdx];
+                                                const isCorrect = selectedIdx === q.correctAnswer;
+                                                if (isCorrect) correct++;
+
+                                                skillAnswers.push({
+                                                  skill: q.skill || 'Memorization',
+                                                  isCorrect,
+                                                  responseTime: updatedQuestionTimes[qIdx] || 0,
+                                                  questionType: q.questionType || q.type || 'Easy'
+                                                });
+
+                                                return {
+                                                  question: q.question,
+                                                  isCorrect,
+                                                  correctAnswerText: q.options[q.correctAnswer],
+                                                };
+                                              });
+
+                                              const score = (correct / reviewQuestions.length) * 100;
+                                              const timeSpentSeconds = getTotalTimeFromQuestionTimes(updatedQuestionTimes);
+
+                                              setReviewResults(prev => ({
+                                                ...prev,
+                                                [reviewId]: {
+                                                  score,
+                                                  hasCorrectAnswer: breakdown.some(item => item.isCorrect),
+                                                  breakdown,
+                                                  timeSpentSeconds,
+                                                }
+                                              }));
+
+                                              try {
+                                                const numericModuleId = Number.parseInt(moduleId, 10);
+                                                const batchAnswers = skillAnswers.filter((answer) => answer.skill !== 'No Skill');
+                                                if (batchAnswers.length > 0) {
+                                                  await axios.post('/bkt/batch-update', {
+                                                    answers: batchAnswers,
+                                                    assessmentType: 'Review',
+                                                    moduleId: Number.isFinite(numericModuleId) ? numericModuleId : null,
+                                                    timeSpentSeconds
+                                                  });
+                                                }
+                                              } catch (error) {
+                                                console.error('Error updating BKT after lesson review submission:', error);
+                                              }
+
+                                              if (score < 100) {
+                                                setReviewCooldowns(prev => ({
+                                                  ...prev,
+                                                  [reviewId]: Date.now() + 30000,
+                                                }));
+                                                setCompletedReviews(prev => ({
+                                                  ...prev,
+                                                  [reviewId]: false,
+                                                }));
+                                              } else {
+                                                setReviewCooldowns(prev => {
+                                                  const next = { ...prev };
+                                                  delete next[reviewId];
+                                                  return next;
+                                                });
+                                                setCompletedReviews(prev => ({
+                                                  ...prev,
+                                                  [reviewId]: true,
+                                                }));
+                                              }
+
+                                              setActiveReview(null);
+                                              setReviewScore(null);
+                                              setActiveReviewQuestionIndex(0);
+                                              setActiveReviewQuestionTimes({});
+                                              setActiveReviewQuestionStartTime(null);
+                                            }}
+                                            disabled={reviewAnswers[activeReviewQuestionIndex] === undefined}
+                                            className="px-8 py-3 bg-[#2BC4B3] text-white rounded-lg font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                          >
+                                            Submit Answers
+                                          </button>
+                                        )}
                                       </div>
                                     </>
                                   )}
@@ -1263,28 +2172,35 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                         );
                       }
                       case 'review - drag and drop':
-                      case 'review-drag-drop': {
+                      case 'review-drag-drop':
+                      case 'simulation': {
                         const dndReviewId = section.id || `review-dnd-${index}`;
+                        const simulationId = section.simulationId || section.simulation?.SimulationID || section.simulation?.id;
+                        const simulationTitle = section.simulation?.SimulationTitle || 'Interactive Exercise';
+                        const simulationDescription = section.simulation?.Description || 'Complete this interactive exercise to continue.';
                         const isDndCompleted = completedReviews[dndReviewId];
-                        const hasSim = section.simulationId || section.simulation;
-                        
-                        if (!hasSim) return null;
-                        
+                        const cooldownSecondsLeft = getCooldownSecondsLeft(dndReviewId);
+                        const isCooldownActive = cooldownSecondsLeft > 0;
+
+                        if (!simulationId && !section.simulation) return null;
+
                         return (
                           <React.Fragment key={index}>
-                            {/* Locked / Completed Card */}
                             {isDndCompleted ? (
                               <div className="mb-8 p-5 bg-green-50 border-2 border-green-300 rounded-xl">
                                 <h4 className="text-lg font-bold text-green-700 flex items-center gap-2">
                                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                  Review - Drag and Drop <span className="text-sm font-semibold ml-1">✓ Completed</span>
+                                  Simulation <span className="text-sm font-semibold ml-1">✓ Completed</span>
                                 </h4>
-                                <p className="text-sm text-green-600 mt-1">{section.simulation?.SimulationTitle || 'Interactive Exercise'}</p>
+                                <p className="text-sm text-green-600 mt-1">{simulationTitle}</p>
                               </div>
                             ) : (
                               <div
-                                onClick={() => setActiveReview(dndReviewId)}
-                                className="mb-8 relative rounded-xl cursor-pointer group overflow-hidden"
+                                onClick={() => {
+                                  if (isCooldownActive) return;
+                                  setActiveReview(dndReviewId);
+                                }}
+                                className={`mb-8 relative rounded-xl overflow-hidden ${isCooldownActive ? 'cursor-not-allowed' : 'cursor-pointer group'}`}
                                 style={{ animation: 'reviewGlowPurple 2s ease-in-out infinite alternate' }}
                               >
                                 <style>{`
@@ -1300,17 +2216,29 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                     </svg>
                                   </div>
                                   <div className="flex-1">
-                                    <h4 className="text-lg font-bold text-purple-800">Review - Drag and Drop</h4>
-                                    <p className="text-sm text-purple-600">{section.simulation?.SimulationTitle || 'Interactive Exercise'} — Click to unlock</p>
+                                    <h4 className="text-lg font-bold text-purple-800">Simulation</h4>
+                                    <p className="text-sm text-purple-600">{simulationTitle} — Click to open</p>
                                   </div>
                                   <svg className="w-6 h-6 text-purple-400 group-hover:text-purple-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                   </svg>
                                 </div>
+                                {isCooldownActive && (
+                                  <div className="absolute inset-0 rounded-xl bg-red-100/90 backdrop-blur-[1px] flex items-center justify-center">
+                                    <div className="text-center px-4">
+                                      <div className="w-12 h-12 mx-auto mb-2 rounded-full bg-red-200 flex items-center justify-center border border-red-300">
+                                        <svg className="w-6 h-6 text-red-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                      </div>
+                                      <p className="text-base font-bold text-red-800">Available in {cooldownSecondsLeft}s</p>
+                                      <p className="text-sm text-red-700">Please wait before reopening this simulation</p>
+                                    </div>
+                                  </div>
+                                )}
                               </div>
                             )}
-                            
-                            {/* Simulation Overlay */}
+
                             {activeReview === dndReviewId && (
                               <div className="fixed inset-0 z-50 flex items-center justify-center">
                                 <div className="absolute inset-0 backdrop-blur-md bg-black/40"></div>
@@ -1321,13 +2249,17 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                                       </svg>
                                     </div>
-                                    <h3 className="text-2xl font-bold text-[#1e3a5f] mb-2">{section.simulation?.SimulationTitle || 'Drag and Drop Activity'}</h3>
-                                    <p className="text-gray-600 mb-6">{section.simulation?.Description || 'Complete this interactive exercise to continue.'}</p>
-                                    <div className="flex gap-4 justify-center">
+                                    <h3 className="text-2xl font-bold text-[#1e3a5f] mb-2">{simulationTitle}</h3>
+                                    <p className="text-gray-600 mb-6">{simulationDescription}</p>
+                                    <div className="flex gap-4 justify-center flex-wrap">
                                       <button
                                         onClick={() => {
-                                          const simId = section.simulationId || section.simulation?.SimulationID;
-                                          if (simId) navigate(`/simulation/${simId}`);
+                                          setReviewCooldowns((prevCooldowns) => ({
+                                            ...prevCooldowns,
+                                            [dndReviewId]: Date.now() + 30000,
+                                          }));
+                                          setActiveReview(null);
+                                          if (simulationId) navigate(`/simulation/${simulationId}`);
                                         }}
                                         className="px-8 py-3 bg-purple-500 text-white rounded-lg font-semibold shadow-lg hover:bg-purple-600"
                                       >
@@ -1335,12 +2267,23 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                       </button>
                                       <button
                                         onClick={() => {
-                                          setCompletedReviews(prev => ({ ...prev, [dndReviewId]: true }));
+                                          setCompletedReviews((prevReviews) => ({ ...prevReviews, [dndReviewId]: true }));
+                                          setReviewCooldowns((prevCooldowns) => {
+                                            const nextCooldowns = { ...prevCooldowns };
+                                            delete nextCooldowns[dndReviewId];
+                                            return nextCooldowns;
+                                          });
                                           setActiveReview(null);
                                         }}
+                                        className="px-8 py-3 bg-green-500 text-white rounded-lg font-semibold shadow-lg hover:bg-green-600"
+                                      >
+                                        Mark as Completed
+                                      </button>
+                                      <button
+                                        onClick={() => setActiveReview(null)}
                                         className="px-8 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300"
                                       >
-                                        Skip for Now
+                                        Close
                                       </button>
                                     </div>
                                   </div>
@@ -1351,20 +2294,8 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                         );
                       }
                       case 'references':
-                        return (
-                          <div key={index} className="mb-8 p-5 bg-gray-50 border-l-4 border-gray-400 rounded">
-                            <h4 className="text-lg font-bold text-gray-800 mb-3">
-                              <svg className="w-5 h-5 inline mr-2 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                              </svg>
-                              References
-                            </h4>
-                            <div 
-                              className="lesson-content text-sm text-gray-600" 
-                              dangerouslySetInnerHTML={{ __html: section.content }}
-                            ></div>
-                          </div>
-                        );
+                        // References are shown in the dedicated sidebar panel.
+                        return null;
                       default:
                         return null;
                     }
@@ -1494,6 +2425,57 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
               </div>
             </div>
           </div>
+          {showReferencesPanel && (
+            <>
+              <div
+                className="fixed inset-0 bg-black/30 z-[55]"
+                onClick={() => setShowReferencesPanel(false)}
+              ></div>
+              <div className="fixed top-0 right-0 h-full w-[430px] max-w-[92vw] bg-white shadow-2xl border-l border-gray-200 z-[60] flex flex-col">
+                <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                  <h3 className="text-2xl font-bold text-[#1e3a5f]">References</h3>
+                  <button
+                    onClick={() => setShowReferencesPanel(false)}
+                    className="text-gray-500 hover:text-[#2BC4B3] transition-colors"
+                    aria-label="Close references panel"
+                  >
+                    <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto p-6">
+                  {apaReferences.length > 0 ? (
+                    <ul className="space-y-3">
+                      {apaReferences.map((reference, refIndex) => (
+                        <li key={`${reference.url}-${refIndex}`}>
+                          <div className="relative border border-gray-200 rounded-xl p-4 pt-9 bg-[#f8fbff]">
+                            <span className="absolute top-3 left-3 inline-flex items-center justify-center min-w-[24px] h-6 px-2 rounded-full bg-[#1e3a5f]/10 text-[#1e3a5f] text-xs font-bold">
+                              {refIndex + 1}
+                            </span>
+                            <div className="min-w-0">
+                              <p className="text-sm font-semibold text-[#1e3a5f] break-words">
+                                {reference.apaCitation}
+                              </p>
+                            </div>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div className="h-full flex items-center justify-center text-center">
+                      <div>
+                        <p className="text-gray-600 font-semibold">No reference links available.</p>
+                        <p className="text-sm text-gray-500 mt-1">Ask your instructor/admin to add references in this lesson.</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+          </>
         )}
 
         {/* Topic Content - Only show if using hardcoded content */}

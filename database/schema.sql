@@ -28,6 +28,7 @@ CREATE TABLE module (
     LessonOrder INT NOT NULL,
     Tesda_Reference VARCHAR(100),
     Is_Unlocked BOOLEAN DEFAULT FALSE,
+    Is_Completed BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_lesson_order (LessonOrder)

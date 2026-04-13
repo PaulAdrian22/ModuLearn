@@ -1,0 +1,2049 @@
+[
+  {
+    "ModuleID": 1,
+    "ModuleTitle": "Introduction to Computer Hardware Servicing",
+    "LessonOrder": 1,
+    "LessonLanguage": "English",
+    "Description": "<div>The foundation of Computer Hardware Servicing and its importance to the modern professional operations and general uses of computers.</div><p><br></p><p><strong>Learning Objectives:</strong></p><p>This lesson aims to:</p><ol style=\"list-style-type: decimal;\"><li>define Computer Hardware Servicing (CHS);</li><li>establish the importance of CHS; and</li><li>discuss components of CHS and recent trends.</li></ol>",
+    "sections": [
+      {
+        "id": 1775983898577,
+        "file": null,
+        "type": "topic",
+        "order": 1,
+        "title": "Topic 1: What is Computer Hardware Servicing?",
+        "caption": "",
+        "content": "",
+        "fileName": null
+      },
+      {
+        "id": 1775983898578,
+        "file": null,
+        "type": "paragraph",
+        "order": 2,
+        "title": "",
+        "caption": "",
+        "content": "<p>\tWhen it comes to the technological demands of the modern times, where our everyday lives are integrated with one or more devices to function, the ability to understand how these devices work, how it can be repaired in case of experiencing issues, and maintaining its quality and performance became an essential skill to have. Specifically, since computers have become essential to business operations, communication, education, and entertainment<strong><sup>[1]</sup></strong>, ensuring that a professional possessing these skills can help these fields manage and operate their work efficiently on a daily basis.  </p><p>Computer Hardware Servicing (CHS) is the procedural workflow of installing, repairing, and maintaining hardware components of a computer<strong><sup>[2]</sup></strong>. There are some procedures you can do by yourself such as </p><ol style=\"list-style-type: decimal;\"><li>maintaining computer hardware;</li><li>routine diagnosis, and with the help of an expert computer technician in terms of upgrading, replacing, or checking internal hardware issues if you don’t have proper tools.</li></ol><p>On your learning path, we will be discussing the parts of a computer, the tools needed to perform hardware components assembly repair, and maintenance, and the practices that serve as the foundation of skill a computer technician must have. This also covers the specific processes of configuring system tools and settings, installing software, and proper documentation.</p>",
+        "fileName": null,
+        "tableData": null,
+        "contentLayout": "text"
+      },
+      {
+        "id": 1775983898580,
+        "file": null,
+        "type": "review-multiple-choice",
+        "order": 3,
+        "title": "",
+        "caption": "",
+        "content": "",
+        "fileName": null,
+        "questions": [
+          {
+            "id": 1775983898579,
+            "skill": "Critical Thinking",
+            "options": [
+              "Repairing",
+              "Maintenance",
+              "Coding Games",
+              "Installing computer hardware components"
+            ],
+            "question": "From the choices below, which does not belong to the workflow of Computer Hardware Servicing?",
+            "questionType": "Easy",
+            "correctAnswer": 2
+          }
+        ]
+      },
+      {
+        "id": 1775983898581,
+        "file": null,
+        "type": "topic",
+        "order": 4,
+        "title": "Topic 2: Importance of Computer Hardware Servicing",
+        "caption": "",
+        "content": "",
+        "fileName": null
+      },
+      {
+        "id": 1775983898582,
+        "file": null,
+        "type": "paragraph",
+        "order": 5,
+        "title": "",
+        "caption": "",
+        "content": "<p>\tCHS encompasses basic troubleshooting skills, performing complex repairs, and understanding the types, functions, and specifications of various hardware components<strong><sup>[3]</sup></strong>. But why does having skills related to CHS relevant today? As discussed previously, computers had become crucial to every day activities and operations in various professional fields. Over time, its hardware components degrade or get damaged due to numerous reasons, all of which will be further discussed along your learning path. Professionals trained to perform CHS responsibilities address these concerns to ensure the optimal operation of the computers they are handling. The following points highlight the importance of CHS: </p><ul style=\"list-style-type: disc;\"><li><ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Performance</strong> - Upgrading and tuning hardware components and systems make computer performance optimal, making the experience better for the users. Mitigating performance degrading issues, like overheating caused by dust buildup, is one of the major importance of CHS.<strong><sup>[3][4]</sup></strong></li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Cost Efficiency</strong> - Maintenance and regular checks help by being proactive with addressing minor issues, which can prevent further escalation to major issues that may require expensive resolutions.<strong><sup>[4]</sup></strong>  </li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Data Protection</strong> - System downs and failures may lead to the loss of important data stored in computers. Identifying risks of such scenarios can minimize potential damages to data beforehand.<strong><sup>[3][4]</sup></strong></li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Longevity</strong> - Habitual actions to maintaining computer hardware components extends its lifespan, as expensive costs and frequent reconfiguration may be experienced if neglected.<strong><sup>[3][4]</sup></strong></li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Safety</strong> - Faulty components may trigger safety hazards, such as electrical fires due and overheating; Possessing CHS related skills helps identify possible risks and design correct course of action to prevent safety risks.<strong><sup>[3]</sup></strong></li></ul></li></ul>",
+        "fileName": null,
+        "tableData": null,
+        "contentLayout": "text"
+      },
+      {
+        "id": 1775983898586,
+        "file": null,
+        "type": "review-multiple-choice",
+        "order": 6,
+        "title": "",
+        "caption": "",
+        "content": "",
+        "fileName": null,
+        "questions": [
+          {
+            "id": 1775983898583,
+            "skill": "Analytical Thinking",
+            "options": [
+              "Its performance improves",
+              "Hardware components require duplicates",
+              "It degrades and may have damages due to various factors",
+              "Hardware components stops working completely at any moment"
+            ],
+            "question": "What is expected from computer hardware components as time goes by?",
+            "questionType": "Easy",
+            "correctAnswer": 2
+          },
+          {
+            "id": 1775983898584,
+            "skill": "Memorization",
+            "options": [
+              "Cost Efficiency",
+              "Longevity",
+              "Data Protection",
+              "Performance"
+            ],
+            "question": "Which importance of CHS highlights the potential to minimize the need for expensive resolutions?",
+            "questionType": "Easy",
+            "correctAnswer": 0
+          },
+          {
+            "id": 1775983898585,
+            "skill": "Technical Comprehension",
+            "options": [
+              "Performance",
+              "Longevity",
+              "Cost Efficiency",
+              "Safety"
+            ],
+            "question": "Which of the following descriptions highlights the importance of CHS as it prevents computers and its parts to be replaced as long as possible?",
+            "questionType": "Easy",
+            "correctAnswer": 1
+          }
+        ]
+      },
+      {
+        "id": 1775983898587,
+        "file": null,
+        "type": "topic",
+        "order": 7,
+        "title": "Topic 3: Trends Surrounding Computer Hardware Servicing",
+        "caption": "",
+        "content": "",
+        "fileName": null
+      },
+      {
+        "id": 1775983898588,
+        "file": null,
+        "type": "paragraph",
+        "order": 8,
+        "title": "",
+        "caption": "",
+        "content": "<p>Everyday, devices are getting designed to be more complex. To not be left behind, developing skills related to these advancements in technologies is necessary. It is important to recognize several trends that are influencing the field of computer hardware servicing so that knowledge about sustaining further advancements of technology can keep up.</p><ol style=\"list-style-type: decimal;\"><li><strong>Artificial Intelligence (AI) </strong>- Computer systems are now being made for automation using various technologies under the umbrella of AI.<strong><sup>[5]</sup></strong> Not only does CHS help with AI from the perspective of maintaining efficient hardware performance, the technology itself also offers aid in CHS-related tasks, such as automating diagnostic checks or predictive maintenance, alerting technicians to potential issues before they become critical, and general digital tools that make tasks easier and faster.<strong><sup>[3]</sup></strong> Alongside these progress in technology, the need for skilled technicians to maintain AI-driven systems is much more prevalent. </li><li><strong>The Internet of Things (IoT)</strong> - More often than not, most devices of this age have capability of interconnection through a network, such as smart home devices, mobile devices, and wearables.<strong><sup>[3]</sup></strong> To put it simply, physical objects, typically found within our homes, are now functional due to being embedded with sensors, software, and other technologies, with the intent of interconnection and data exchange to other devices connected to the internet. CHS may expand to cater to these devices, and further understanding of computer networks will be needed. </li><li><strong>Remote Servicing</strong> - A tangent to CHS trends involving networking and internet would be the ability for remote servicing. Online platforms allow the conveyance of support, maintenance, and consulting services, allowing technicians to troubleshoot while not present on-site.<strong><sup>[3][7]</sup></strong> This is particularly useful for businesses that depend on minimizing downtime. </li><li><strong>Virtual Reality (VR) and Augmented Reality (AR) </strong>- CHS may encounter new and intricate systems with the rise of technologies that utilize VR and AR. VR devices use technology to create a simulated environment to perceive as reality while AR devices involve the use of technology that enhances an experience by overlaying digital information on the real world<strong><sup>[8]</sup></strong>, both of which often integrate hardware components and software configurations.<strong><sup>[3]</sup></strong></li><li><strong>Sustainability Concerns - </strong>Environmental awareness is not a new topic anymore, and certain workflows adapt to responsible consumption and sustainable practices. In CHS, several implementations, such as recycling old components, utilizing energy-efficient hardware, and minimizing e-waste, are observed as an integral part of the work and training.<strong><sup>[3][4]</sup></strong> Further lessons, specially tackling assembly, repair, and maintenance of computer and its components incorporates sustainable practices that one must observe while training.</li></ol>",
+        "fileName": null,
+        "tableData": null,
+        "contentLayout": "text"
+      },
+      {
+        "id": 1775983898591,
+        "file": null,
+        "type": "review-multiple-choice",
+        "order": 9,
+        "title": "",
+        "caption": "",
+        "content": "",
+        "fileName": null,
+        "questions": [
+          {
+            "id": 1775983898589,
+            "skill": "Memorization",
+            "options": [
+              "Remote Servicing",
+              "Virtual Reality (VR) and Augmented Reality (AR)",
+              "Internet of Things (IoT)",
+              "Artificial Intelligence (AI)"
+            ],
+            "question": "Which trend of CHS pertains to the ability to provide diagnosis, advice, and troubleshooting while not present on-site?",
+            "questionType": "Easy",
+            "correctAnswer": 0
+          },
+          {
+            "id": 1775983898590,
+            "skill": "Technical Comprehension",
+            "options": [
+              "Sustainability Concerns",
+              "Remote Servicing",
+              "Virtual Reality (VR) and Augmented Reality (AR)",
+              "Artificial Intelligence (AI)"
+            ],
+            "question": "Which trend of CHS introduces computer systems that are able to operate without human presence?",
+            "questionType": "Easy",
+            "correctAnswer": 3
+          }
+        ]
+      },
+      {
+        "id": 1775983898592,
+        "file": null,
+        "type": "topic",
+        "order": 10,
+        "title": "Topic 4: Components of Computer Hardware Servicing",
+        "caption": "",
+        "content": "",
+        "fileName": null
+      },
+      {
+        "id": 1775983898593,
+        "file": null,
+        "type": "paragraph",
+        "order": 11,
+        "title": "",
+        "caption": "",
+        "content": "<p>\tYou are just about another step to start with your Computer Hardware Servicing Training! While you are breaking down and absorbing what you’ve learned so far about CHS, we will also give you an overview of the components of your training in ModuLearn. We will tackle <strong>basic Computer Hardware Operations</strong>, <strong>assembly and disassembly</strong>, <strong>troubleshooting and maintenance of </strong>computer hardware.</p><p><strong>Computer hardware </strong>the physical parts of a computer that you can see and touch are referred to as computer hardware. These components work together to process input and deliver output based on user instructions.</p><p>Computer hardware has <strong>four main basic operations</strong> namely: input, processing, storage and output.</p><ul style=\"list-style-type: disc;\"><li><strong>Inputting Data - </strong>Inputting data is a computer's first basic operation. The process of giving data or information to a computer is known as input operations. A keyboard, mouse, microphone, camera, and other input devices can all be used to enter data into a computer. The process of feeding information into a computer, where it is processed and transformed into a format that it can understand, is known as data input.</li><li><strong>Processing Data </strong>- After the data is inputted, the computer processes the data. In order to get the outcome you want, data processing involves adjusting and converting the incoming data. The manipulation of input data by a computer to generate meaningful information is referred to as processing operations. The central processing unit (CPU), the computer's brain and will be discussed later, is responsible for carrying out these functions.</li><li><strong>Storing Data </strong>- Storing data is the process of storing processed data on a hard drive, solid-state drive, or flash drive. Even when the computer is shut down, the data is kept on the storage device so it can be used later. Storing information and data in memory or on secondary storage devices such as cloud storage (saving files and data on the internet instead of a hard drive.), hard disks, flash drives, CDs, and DVDs is also possible.</li><li><strong>Output/Outputting Data</strong> - Output operations refer to the presentation of processed data in a useful form. Outputting data is the process of presenting the processed data to the user in a readable form. Output devices such as a monitor, printer, or speaker are used to display or play the processed data. </li></ul><p><strong>Computer assembly</strong> is the process of fitting all the internal parts needed for the computer system to enable it to work. There is a proper sequence of attachment of each and every component into the computer system. To provide you with an insight, assembling a computer typically follows the following sequence:</p><ol style=\"list-style-type: decimal;\"><li>Open the case.</li><li>Install the power supply.</li><li>Attach the components to the motherboard.</li><li>Install the motherboard.</li><li>Install internal drives.</li><li>Connect all internal cables.</li><li>Install motherboard power connections</li><li>Connect external cables to the computer.</li><li>Boot the computer for the first time.  </li></ol>",
+        "fileName": null,
+        "tableData": null,
+        "contentLayout": "text"
+      },
+      {
+        "id": 1775983898594,
+        "file": null,
+        "type": "paragraph",
+        "order": 12,
+        "title": "",
+        "caption": "",
+        "content": "<p><strong>Computer disassembly</strong>, on the other hand, is the process of breaking down a device into separate parts. Disassembly of any device is required to determine a problem, to replace a part, or take the parts and use them in another device. Just like in computer assembly, there is a standard process of computer disassembly like listed in the following:</p><ol style=\"list-style-type: decimal;\"><li>Unplugging.</li><li>Open the case.</li><li>Disconnect all the connectors.</li><li>Remove the fan.</li><li>Remove the power supply.</li><li>Removing HDD and optical drive.</li><li>Removing RAM (random access memory) modules.</li><li>Remove expansion cards.</li><li>Remove the motherboard.</li><li>Reassembling of components.</li></ol>",
+        "fileName": null,
+        "tableData": null,
+        "contentLayout": "text"
+      },
+      {
+        "id": 1775983898595,
+        "file": null,
+        "type": "paragraph",
+        "order": 13,
+        "title": "",
+        "caption": "",
+        "content": "<p><strong>Troubleshooting </strong>involves identifying, diagnosing, and fixing issues related to the physical components of a computer. Knowing how to troubleshoot these components can save you time, money, and a lot of frustration.</p><p>In this training, we will follow the following troubleshooting steps as a foundation to developing proper troubleshooting and diagnosis:</p><ol style=\"list-style-type: decimal;\"><li><strong>Identify the problem</strong> - Begin by understanding the symptoms. Is the computer completely dead, or is it just a specific component that’s malfunctioning?</li><li><strong>Gather information </strong>- Research the symptoms. Use forums, manufacturer websites, and tech support resources. Sometimes, a quick search can lead you to a solution.</li><li><strong>Test hypothesis</strong> - Based on your research, start testing potential solutions. For example, if the computer won’t turn on, test the power supply first.</li><li><strong>Implement solutions</strong> - Once you identify the probable cause, implement the solution. Like replacing faulty components, updating drivers, or cleaning out dust.</li><li><strong>Verify fix</strong> - After implementing a fix, verify that the problem is resolved. For example, restart the computer and check if it operates normally.</li></ol>",
+        "fileName": null,
+        "tableData": null,
+        "contentLayout": "text"
+      },
+      {
+        "id": 1775983898596,
+        "file": null,
+        "type": "paragraph",
+        "order": 14,
+        "title": "",
+        "caption": "",
+        "content": "<p>All of the tasks necessary to keep your computer operating effectively and consistently are included in computer maintenance. It covers both software and hardware maintenance procedures that help protect your device from potential threats, enhance performance, and prevent system problems. Your computer's lifespan can be increased by many years and its best performance can be maintained with routine maintenance.</p><p>Preventing problems before they exist is just as important as correcting them when they do occur. Consider it similar to car maintenance: routine tune-ups and oil changes avoid serious malfunctions and expensive repairs. Computer maintenance helps it to have the following:</p><ol style=\"list-style-type: decimal;\"><li><strong>Extended device lifespan</strong> - proper maintenance can add years to your computer’s life</li><li><strong>Improved system performance -</strong> regular cleanup keeps your PC running faster</li><li><strong>Enhanced data security</strong> - updated software protects against threats</li><li><strong>Reduced repair costs </strong>- preventing problems is cheaper than fixing them</li><li><strong>Better user experience</strong> - a well-maintained computer is more reliable and responsive</li></ol>",
+        "fileName": null,
+        "tableData": null,
+        "contentLayout": "text"
+      },
+      {
+        "id": 1775983898597,
+        "file": null,
+        "type": "paragraph",
+        "order": 15,
+        "title": "",
+        "caption": "",
+        "content": "<p><strong>You are now at the end of lesson 1. Good job on finishing the first lesson. Next step is the final assessment for the whole lesson. You can take it any time. If you wish to review or re-read the lesson, feel free to do so! Just remember, you cannot retake the final assessment, and you cannot pause while answering. An honest take is our priority, and we discourage you to take any kinds of cheating.</strong></p>",
+        "fileName": null,
+        "tableData": null,
+        "contentLayout": "text"
+      },
+      {
+        "id": 1775983898601,
+        "file": null,
+        "type": "review-multiple-choice",
+        "order": 16,
+        "title": "",
+        "caption": "",
+        "content": "",
+        "fileName": null,
+        "questions": [
+          {
+            "id": 1775983898598,
+            "skill": "Analytical Thinking",
+            "options": [
+              "Inputting Data",
+              "Input Operations",
+              "Outputting Data",
+              "Output Operations"
+            ],
+            "question": "What basic computer hardware operation is the procedure for providing the user with the processed data in a clear format?",
+            "questionType": "Easy",
+            "correctAnswer": 3
+          },
+          {
+            "id": 1775983898599,
+            "skill": "Problem Solving",
+            "options": [
+              "time and expensive costs",
+              "effort and expensive costs",
+              "knowledge and effort",
+              "time and knowledge"
+            ],
+            "question": "Knowing how troubleshooting and maintenance of computers saves you ____?",
+            "questionType": "Easy",
+            "correctAnswer": 0
+          },
+          {
+            "id": 1775983898600,
+            "skill": "Critical Thinking",
+            "options": [
+              "slow download speed",
+              "slow computer response",
+              "threats",
+              "computer getting dirty"
+            ],
+            "question": "By maintaining data security, your computer gets protected from?",
+            "questionType": "Easy",
+            "correctAnswer": 2
+          }
+        ]
+      },
+      {
+        "id": 1775983898602,
+        "file": null,
+        "type": "references",
+        "order": 17,
+        "title": "",
+        "caption": "",
+        "content": "https://medium.com/@zargull/the-importance-of-computers-in-the-modern-world-cf80eb3ecf0c\nhttps://ticktocktech.com/blog/2022/08/28/what-is-computer-hardware-servicing-and-how-is-it-done-in-2022/\nhttps://umatechnology.org/what-is-computer-hardware-servicing/\nhttps://mefmobile.org/what-is-computer-hardware-servicing/\nhttps://www.coursera.org/articles/what-is-artificial-intelligence?msockid=133d0c738b796b820b6e1a398a6d6a23\nhttps://www.oracle.com/asean/internet-of-things/\nhttps://www.teamviewer.com/apac/insights/remote-servicing-in-modern-business-operations/\nhttps://www.geeksforgeeks.org/python/virtual-reality-vs-augmented-reality-whats-the-difference/\nhttps://ticktocktech.com/blog/2022/08/28/what-is-computer-hardware-servicing-and-how-is-it-done-in-2022/#google_vignette\nhttps://www.geeksforgeeks.org/computer-science-fundamentals/computer-hardware/\nhttps://rpatoolstutorial.com/basic-operations-of-computer/\nhttps://ncert.nic.in/vocational/pdf/keit104.pdf\nhttps://www.techallabout.com/computer-hardware-troubleshooting-a-comprehensive-guide/\nhttps://www.hp.com/us-en/shop/tech-takes/pc-maintenance-and-repair-tips?pStoreID=techsoup%27%5B0%5D&msockid=377c7f12845d6e621d65697d85d56f25",
+        "fileName": null
+      }
+    ],
+    "diagnosticQuestions": [
+      {
+        "id": 1775983898676,
+        "skill": "Critical Thinking",
+        "options": [
+          "Repairing",
+          "Maintenance",
+          "Coding Games",
+          "Installing computer hardware components"
+        ],
+        "question": "From the choices below, which does not belong to the workflow of Computer Hardware Servicing?",
+        "questionType": "Easy",
+        "correctAnswer": 2
+      },
+      {
+        "id": 1775983898677,
+        "skill": "Analytical Thinking",
+        "options": [
+          "Its performance improves",
+          "Hardware components require duplicates",
+          "It degrades and may have damages due to various factors",
+          "Hardware components stops working completely at any moment"
+        ],
+        "question": "What is expected from computer hardware components as time goes by?",
+        "questionType": "Easy",
+        "correctAnswer": 2
+      },
+      {
+        "id": 1775983898678,
+        "skill": "Memorization",
+        "options": [
+          "Cost Efficiency",
+          "Longevity",
+          "Data Protection",
+          "Performance"
+        ],
+        "question": "Which importance of CHS highlights the potential to minimize the need for expensive resolutions?",
+        "questionType": "Easy",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898679,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Performance",
+          "Longevity",
+          "Cost Efficiency",
+          "Safety"
+        ],
+        "question": "Which of the following descriptions highlights the importance of CHS as it prevents computers and its parts to be replaced as long as possible?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898680,
+        "skill": "Memorization",
+        "options": [
+          "Remote Servicing",
+          "Virtual Reality (VR) and Augmented Reality (AR)",
+          "Internet of Things (IoT)",
+          "Artificial Intelligence (AI)"
+        ],
+        "question": "Which trend of CHS pertains to the ability to provide diagnosis, advice, and troubleshooting while not present on-site?",
+        "questionType": "Easy",
+        "correctAnswer": 0
+      }
+    ],
+    "reviewQuestions": [
+      {
+        "id": 1775983898626,
+        "skill": "Critical Thinking",
+        "options": [
+          "Repairing",
+          "Maintenance",
+          "Coding Games",
+          "Installing computer hardware components"
+        ],
+        "question": "From the choices below, which does not belong to the workflow of Computer Hardware Servicing?",
+        "questionType": "Easy",
+        "correctAnswer": 2
+      },
+      {
+        "id": 1775983898627,
+        "skill": "Analytical Thinking",
+        "options": [
+          "Its performance improves",
+          "Hardware components require duplicates",
+          "It degrades and may have damages due to various factors",
+          "Hardware components stops working completely at any moment"
+        ],
+        "question": "What is expected from computer hardware components as time goes by?",
+        "questionType": "Easy",
+        "correctAnswer": 2
+      },
+      {
+        "id": 1775983898628,
+        "skill": "Memorization",
+        "options": [
+          "Cost Efficiency",
+          "Longevity",
+          "Data Protection",
+          "Performance"
+        ],
+        "question": "Which importance of CHS highlights the potential to minimize the need for expensive resolutions?",
+        "questionType": "Easy",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898629,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Performance",
+          "Longevity",
+          "Cost Efficiency",
+          "Safety"
+        ],
+        "question": "Which of the following descriptions highlights the importance of CHS as it prevents computers and its parts to be replaced as long as possible?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898630,
+        "skill": "Memorization",
+        "options": [
+          "Remote Servicing",
+          "Virtual Reality (VR) and Augmented Reality (AR)",
+          "Internet of Things (IoT)",
+          "Artificial Intelligence (AI)"
+        ],
+        "question": "Which trend of CHS pertains to the ability to provide diagnosis, advice, and troubleshooting while not present on-site?",
+        "questionType": "Easy",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898631,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Sustainability Concerns",
+          "Remote Servicing",
+          "Virtual Reality (VR) and Augmented Reality (AR)",
+          "Artificial Intelligence (AI)"
+        ],
+        "question": "Which trend of CHS introduces computer systems that are able to operate without human presence?",
+        "questionType": "Easy",
+        "correctAnswer": 3
+      },
+      {
+        "id": 1775983898632,
+        "skill": "Analytical Thinking",
+        "options": [
+          "Inputting Data",
+          "Input Operations",
+          "Outputting Data",
+          "Output Operations"
+        ],
+        "question": "What basic computer hardware operation is the procedure for providing the user with the processed data in a clear format?",
+        "questionType": "Easy",
+        "correctAnswer": 3
+      },
+      {
+        "id": 1775983898633,
+        "skill": "Problem Solving",
+        "options": [
+          "time and expensive costs",
+          "effort and expensive costs",
+          "knowledge and effort",
+          "time and knowledge"
+        ],
+        "question": "Knowing how troubleshooting and maintenance of computers saves you ____?",
+        "questionType": "Easy",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898634,
+        "skill": "Critical Thinking",
+        "options": [
+          "slow download speed",
+          "slow computer response",
+          "threats",
+          "computer getting dirty"
+        ],
+        "question": "By maintaining data security, your computer gets protected from?",
+        "questionType": "Easy",
+        "correctAnswer": 2
+      },
+      {
+        "id": 1775983898635,
+        "skill": "Problem Solving",
+        "options": [
+          "Unplugging",
+          "Reassemble of components",
+          "Disconnect all the connectors",
+          "Attach the components to the motherboard"
+        ],
+        "question": "If computer assembly is the process of fitting all the internal parts needed, and computer disassembly is the process of breaking down a device into separate parts, which step indicates computer assembly?",
+        "questionType": "Easy",
+        "correctAnswer": 3
+      }
+    ],
+    "finalQuestions": [
+      {
+        "id": 1775983898636,
+        "skill": "Analytical Thinking",
+        "options": [
+          "The process of creating software for computers",
+          "The procedural workflow of installing, repairing, and maintaining hardware components",
+          "The management of computer networks only",
+          "The designing of new computer systems"
+        ],
+        "question": "Question: A technician is assigned to install new RAM, repair a damaged hard drive, and regularly maintain computers in an office. Which description best represents the work being performed?",
+        "questionType": "Situational",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898637,
+        "skill": "Memorization",
+        "options": [
+          "Routine diagnosis and maintenance",
+          "Immediate hardware replacement",
+          "Installing new software",
+          "Complete system disassembly"
+        ],
+        "question": "Question: A user reports that their computer is running slower than usual. Which TWO CHS procedures would be MOST appropriate as initial steps?",
+        "questionType": "Situational",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898638,
+        "skill": "Problem Solving",
+        "options": [
+          "Attempt the repair anyway without tools",
+          "Only perform maintenance and routine diagnosis, consulting an expert for internal issues",
+          "Refuse to help completely",
+          "Purchase all professional tools immediately"
+        ],
+        "question": "Question: You've been asked to help maintain computers in a small office, but you lack proper tools for internal hardware checks. According to the lesson, what should you do?",
+        "questionType": "Situational",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898639,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Performance",
+          "Cost Efficiency",
+          "Data Protection",
+          "Longevity"
+        ],
+        "question": "Question: A company's server unexpectedly shuts down, and important client data becomes inaccessible. Which importance of CHS was MOST likely neglected?",
+        "questionType": "Situational",
+        "correctAnswer": 2
+      },
+      {
+        "id": 1775983898640,
+        "skill": "Problem Solving",
+        "options": [
+          "Safety and Performance",
+          "Cost Efficiency and Data Protection",
+          "Longevity and Safety",
+          "Performance and Longevity"
+        ],
+        "question": "Question: A computer technician notices a burning smell coming from a desktop computer and identifies a faulty power supply. Which TWO importances of CHS are being addressed by replacing this component?",
+        "questionType": "Situational",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898641,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Artificial Intelligence – because devices make automated decisions",
+          "Internet of Things – because physical objects are interconnected through networks",
+          "Remote Servicing – because devices can be controlled remotely",
+          "Augmented Reality – because devices enhance user experience"
+        ],
+        "question": "Question: A technician is working with smart home devices that communicate with each other through a network. The devices include sensors, embedded software, and exchange data over the internet. Which trend does this PRIMARILY represent?",
+        "questionType": "Situational",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898642,
+        "skill": "Memorization",
+        "options": [
+          "Artificial Intelligence",
+          "Sustainability Concerns",
+          "Internet of Things",
+          "Remote Servicing"
+        ],
+        "question": "Question: A CHS training program emphasizes recycling old components, using energy-efficient hardware, and minimizing e-waste. Which trend is being implemented?",
+        "questionType": "Situational",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898643,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Inputting Data",
+          "Processing Data",
+          "Storing Data",
+          "Outputting Data"
+        ],
+        "question": "Question: When a computer performs calculations, executes program instructions, and processes commands from software, which hardware operation is taking place?",
+        "questionType": "Situational",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898644,
+        "skill": "Problem Solving",
+        "options": [
+          "Implement solutions",
+          "Identify the problem",
+          "Test hypothesis",
+          "Gather information"
+        ],
+        "question": "Question: A technician begins troubleshooting by collecting system symptoms, user reports, and device behavior before forming possible solutions. Which troubleshooting step is being performed?",
+        "questionType": "Situational",
+        "correctAnswer": 3
+      },
+      {
+        "id": 1775983898645,
+        "skill": "Analytical Thinking",
+        "options": [
+          "Clicking a mouse to open a folder",
+          "Taking a photo with a webcam, editing it, saving it to a flash drive, and printing it",
+          "Listening to music stored on a hard drive",
+          "Typing text into a word processor without saving"
+        ],
+        "question": "Question: Which of the following scenarios demonstrates ALL FOUR basic computer hardware operations?",
+        "questionType": "Situational",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898646,
+        "skill": "Critical Thinking",
+        "options": [
+          "Motherboard",
+          "Power supply",
+          "Internal drives",
+          "RAM modules"
+        ],
+        "question": "Question: While assembling a desktop computer, a technician prepares the case and begins installing internal components. According to the correct assembly sequence, which component should be installed first?",
+        "questionType": "Situational",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898647,
+        "skill": "Critical Thinking",
+        "options": [
+          "Regular maintenance, upgrading components when needed, and recycling old parts",
+          "Replacing all computers every year with new energy-efficient models",
+          "Only repairing systems after complete failure",
+          "Using only remote servicing tools"
+        ],
+        "question": "Question: A small business owner asks you to help extend the life of their office computers while keeping costs low and reducing environmental impact. Which CHS approach BEST satisfies these goals?",
+        "questionType": "Situational",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898648,
+        "skill": "Critical Thinking",
+        "options": [
+          "Continue with the assembly and install the power supply last",
+          "Force the power supply into place around the motherboard",
+          "Remove the motherboard and install the power supply in the correct sequence",
+          "Leave the power supply out and use an external power source"
+        ],
+        "question": "Question: During computer assembly, you've installed the motherboard but forgot to install the power supply first. What is the BEST course of action?",
+        "questionType": "Situational",
+        "correctAnswer": 2
+      },
+      {
+        "id": 1775983898649,
+        "skill": "Memorization",
+        "options": [
+          "Artificial Intelligence (AI)",
+          "Remote Servicing",
+          "Sustainability Concerns",
+          "Internet of Things (IoT)"
+        ],
+        "question": "Question: A technician was asked to fix a device that seems to have a sensor, which the customer uses to connect other devices within their home through the internet. Which trend of CHS is being shown?",
+        "questionType": "Situational",
+        "correctAnswer": 3
+      },
+      {
+        "id": 1775983898650,
+        "skill": "Analytical Thinking",
+        "options": [
+          "maintaining computer hardware and performing routine diagnosis",
+          "using tools to solder resistors to an electric circuit board of an appliance",
+          "creating a code to make a game character to jump through a development software",
+          "creating schematics for network architecture of a company"
+        ],
+        "question": "Question: Claire found out that cleaning her friend’s computer system unit monthly helps lessen the frequency of which her friend would need to bring their computer to a technician to be fixed. Which procedure of CHS is being shown?",
+        "questionType": "Situational",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898666,
+        "skill": "Critical Thinking",
+        "options": [
+          "Repairing",
+          "Maintenance",
+          "Coding Games",
+          "Installing computer hardware components"
+        ],
+        "question": "Question: A senior student in the Computer Hardware Servicing (CHS) program is asked to help prepare activities for a laboratory session that focuses strictly on hardware servicing skills. The instructor reminds the student that the activities should involve tasks directly related to diagnosing, maintaining, or assembling computer components. Which of the following activities would be least appropriate to include in the laboratory session?",
+        "questionType": "Situational",
+        "correctAnswer": 2
+      },
+      {
+        "id": 1775983898667,
+        "skill": "Analytical Thinking",
+        "options": [
+          "Its performance improves",
+          "Hardware components require duplicates",
+          "It degrades and may have damages due to various factors",
+          "Hardware components stops working completely at any moment"
+        ],
+        "question": "Question: After several years of use, a technician notices that a computer’s components are not performing as efficiently as before due to dust buildup, heat exposure, and wear. What normally happens to hardware components over time?",
+        "questionType": "Situational",
+        "correctAnswer": 2
+      },
+      {
+        "id": 1775983898668,
+        "skill": "Memorization",
+        "options": [
+          "Cost Efficiency",
+          "Longevity",
+          "Data Protection",
+          "Performance"
+        ],
+        "question": "Question: A company regularly performs preventive maintenance on its computers so that small hardware problems can be fixed before they become major failures requiring costly replacements. Which importance of CHS does this situation demonstrate?",
+        "questionType": "Situational",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898669,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Performance",
+          "Longevity",
+          "Cost Efficiency",
+          "Safety"
+        ],
+        "question": "Question: A technician regularly cleans internal components, checks cooling systems, and ensures that hardware parts function properly so the computers can be used for many more years without replacement. Which importance of CHS is being demonstrated?",
+        "questionType": "Situational",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898670,
+        "skill": "Memorization",
+        "options": [
+          "Remote Servicing",
+          "Virtual Reality (VR) and Augmented Reality (AR)",
+          "Internet of Things (IoT)",
+          "Artificial Intelligence (AI)"
+        ],
+        "question": "Question: A technician helps a user fix a computer problem by connecting through the internet, checking system settings, and guiding the user through troubleshooting steps without physically visiting the location. Which CHS trend does this represent?",
+        "questionType": "Situational",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898671,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Sustainability Concerns",
+          "Remote Servicing",
+          "Virtual Reality (VR) and Augmented Reality (AR)",
+          "Artificial Intelligence (AI)"
+        ],
+        "question": "Question: A computer system automatically analyzes hardware conditions, predicts failures, and performs certain adjustments without requiring direct human intervention. Which CHS trend does this example represent?",
+        "questionType": "Situational",
+        "correctAnswer": 3
+      },
+      {
+        "id": 1775983898672,
+        "skill": "Analytical Thinking",
+        "options": [
+          "Inputting Data",
+          "Input Operations",
+          "Outputting Data",
+          "Output Operations"
+        ],
+        "question": "Question: After processing a user’s request, the computer displays the results on a monitor so the user can read and understand the information. Which hardware operation is being performed?",
+        "questionType": "Situational",
+        "correctAnswer": 3
+      },
+      {
+        "id": 1775983898673,
+        "skill": "Problem Solving",
+        "options": [
+          "time and expensive costs",
+          "effort and expensive costs",
+          "knowledge and effort",
+          "time and knowledge"
+        ],
+        "question": "Question: A user learns basic troubleshooting and maintenance skills so they can solve minor computer issues without calling a technician each time a problem occurs. What benefit does this provide?",
+        "questionType": "Situational",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898674,
+        "skill": "Critical Thinking",
+        "options": [
+          "slow download speed",
+          "slow computer response",
+          "threats",
+          "computer getting dirty"
+        ],
+        "question": "Question: A technician installs security updates, uses strong passwords, and ensures antivirus protection so that harmful activities cannot compromise the system or its stored information. What does maintaining data security primarily protect the computer from?",
+        "questionType": "Situational",
+        "correctAnswer": 2
+      },
+      {
+        "id": 1775983898675,
+        "skill": "Problem Solving",
+        "options": [
+          "Unplugging",
+          "Reassemble of components",
+          "Disconnect all the connectors",
+          "Attach the components to the motherboard"
+        ],
+        "question": "Question: During the building of a desktop computer, a technician carefully places and secures different hardware components into their proper locations on the motherboard so the system can function properly. Which step represents computer assembly?",
+        "questionType": "Situational",
+        "correctAnswer": 3
+      },
+      {
+        "id": 1775983898651,
+        "skill": "Analytical Thinking",
+        "options": [
+          "The process of creating software for computers",
+          "The procedural workflow of installing, repairing, and maintaining hardware components",
+          "The management of computer networks only",
+          "The designing of new computer systems"
+        ],
+        "question": "Computer Hardware Servicing (CHS) is best defined as?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898652,
+        "skill": "Memorization",
+        "options": [
+          "Routine diagnosis and maintenance",
+          "Immediate hardware replacement",
+          "Installing new software",
+          "Complete system disassembly"
+        ],
+        "question": "Which TWO activities are considered appropriate initial procedures in Computer Hardware Servicing when diagnosing a slow computer?",
+        "questionType": "Easy",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898653,
+        "skill": "Problem Solving",
+        "options": [
+          "Attempt the repair anyway without tools",
+          "Only perform maintenance and routine diagnosis, consulting an expert for internal issues",
+          "Refuse to help completely",
+          "Purchase all professional tools immediately"
+        ],
+        "question": "What is the most appropriate action if a technician lacks proper tools for internal hardware checks?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898654,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Performance",
+          "Cost Efficiency",
+          "Data Protection",
+          "Longevity"
+        ],
+        "question": "Which importance of Computer Hardware Servicing focuses on protecting files and digital information from loss?",
+        "questionType": "Easy",
+        "correctAnswer": 2
+      },
+      {
+        "id": 1775983898655,
+        "skill": "Problem Solving",
+        "options": [
+          "Safety and Performance",
+          "Cost Efficiency and Data Protection",
+          "Longevity and Safety",
+          "Performance and Longevity"
+        ],
+        "question": "Replacing faulty components that overheat or emit burning smells helps address which two important goals of CHS?",
+        "questionType": "Easy",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898656,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Artificial Intelligence – because devices make automated decisions",
+          "Internet of Things – because physical objects are interconnected through networks",
+          "Remote Servicing – because devices can be controlled remotely",
+          "Augmented Reality – because devices enhance user experience"
+        ],
+        "question": "Which technological trend refers to devices connected through the internet that communicate and exchange data with each other?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898657,
+        "skill": "Memorization",
+        "options": [
+          "Artificial Intelligence",
+          "Sustainability Concerns",
+          "Internet of Things",
+          "Remote Servicing"
+        ],
+        "question": "Which CHS trend focuses on reducing electronic waste and promoting environmentally responsible practices?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898658,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Inputting Data",
+          "Processing Data",
+          "Storing Data",
+          "Outputting Data"
+        ],
+        "question": "The Central Processing Unit (CPU) is responsible for which basic computer hardware operation?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898659,
+        "skill": "Problem Solving",
+        "options": [
+          "Implement solutions",
+          "Identify the problem",
+          "Test hypothesis",
+          "Gather information"
+        ],
+        "question": "What is the FIRST step in the hardware troubleshooting process?",
+        "questionType": "Easy",
+        "correctAnswer": 3
+      },
+      {
+        "id": 1775983898660,
+        "skill": "Analytical Thinking",
+        "options": [
+          "Clicking a mouse to open a folder",
+          "Taking a photo with a webcam, editing it, saving it to a flash drive, and printing it",
+          "Listening to music stored on a hard drive",
+          "Typing text into a word processor without saving"
+        ],
+        "question": "Which activity demonstrates all four basic computer hardware operations (input, processing, storage, output)?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898661,
+        "skill": "Critical Thinking",
+        "options": [
+          "Motherboard",
+          "Power supply",
+          "Internal drives",
+          "RAM modules"
+        ],
+        "question": "According to the proper sequence for computer assembly, which component should be installed FIRST after opening the case?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898662,
+        "skill": "Critical Thinking",
+        "options": [
+          "Regular maintenance, upgrading components when needed, and recycling old parts",
+          "Replacing all computers every year with new energy-efficient models",
+          "Only repairing systems after complete failure",
+          "Using only remote servicing tools"
+        ],
+        "question": "Which CHS practice helps extend computer lifespan while minimizing cost and environmental impact?",
+        "questionType": "Easy",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898663,
+        "skill": "Critical Thinking",
+        "options": [
+          "Continue with the assembly and install the power supply last",
+          "Force the power supply into place around the motherboard",
+          "Remove the motherboard and install the power supply in the correct sequence",
+          "Leave the power supply out and use an external power source"
+        ],
+        "question": "What should a technician do if they installed components in the wrong order during computer assembly?",
+        "questionType": "Easy",
+        "correctAnswer": 2
+      },
+      {
+        "id": 1775983898664,
+        "skill": "Memorization",
+        "options": [
+          "Artificial Intelligence (AI)",
+          "Remote Servicing",
+          "Sustainability Concerns",
+          "Internet of Things (IoT)"
+        ],
+        "question": "It is a trend in CHS where devices typically found within homes are now functional due to being embedded with sensors, software, and other technologies, with the intent of interconnection and data exchange to other devices connected to the internet.",
+        "questionType": "Easy",
+        "correctAnswer": 3
+      },
+      {
+        "id": 1775983898665,
+        "skill": "Analytical Thinking",
+        "options": [
+          "maintaining computer hardware and performing routine diagnosis",
+          "using tools to solder resistors to an electric circuit board of an appliance",
+          "creating a code to make a game character to jump through a development software",
+          "creating schematics for network architecture of a company"
+        ],
+        "question": "Among the situations below, which is the appropriate description about what CHS is all about?",
+        "questionType": "Easy",
+        "correctAnswer": 0
+      }
+    ]
+  },
+  {
+    "ModuleID": 5,
+    "ModuleTitle": "Introduksyon sa Computer Hardware Servicing",
+    "LessonOrder": 1,
+    "LessonLanguage": "Taglish",
+    "Description": "<div>Ang saligan ng Computer Hardware Servicing at ang kahalagahan nito sa makabagong propesyonal na operasyon at pangkalahatang gamit ng mga kompyuter.</div><p><br></p><p><strong>Mga Layunin:</strong></p><p>Layunin ng araling ito na:</p><ol style=\"list-style-type: decimal;\"><li>I-define ang Computer Hardware Servicing (CHS);</li><li>I-establish ang importansya ng CHS; and</li><li>I-discuss ang components ng CHS at recent trends.</li></ol>",
+    "sections": [
+      {
+        "id": 1775983898603,
+        "file": null,
+        "type": "topic",
+        "order": 1,
+        "title": "Paksa 1: Ano ang Computer Hardware Servicing?",
+        "caption": "",
+        "content": "",
+        "fileName": null
+      },
+      {
+        "id": 1775983898604,
+        "file": null,
+        "type": "paragraph",
+        "order": 2,
+        "title": "",
+        "caption": "",
+        "content": "<p>Sa panahon ngayon na sobrang taas ng technological demands, halos ang daily life natin ay pinagsama sa isa o higit pang devices. Kaya mahalaga na maintindihan kung paano gumagana ang mga ito, paano i-repair kapag nagka-problema, at paano i-maintain ang quality at performance. Dahil ang computers ay naging mahalaga sa business operations, communication, education, at entertainment<sup>[1]</sup>, ang pagkakaroon ng isang propesyunal ng ganitong skills ay malaking tulong para ma-manage at ma-operate ang trabaho nang mahusay sa araw-araw.</p><p>Computer Hardware Servicing (CHS) ay ang procedural workflow ng pag-install, pag-repair, at pag-maintain ng hardware components ng isang computer<strong><sup>[2]</sup></strong>. May ilang mga pamamaraan na maaari mong gawin ng pang-sarili tulad ng:</p><ol style=\"list-style-type: decimal;\"><li>Pag-maintain ng computer hardware;</li><li>Routine diagnosis; pero kapag kailangan ng upgrading, replacement, o internal hardware checks na wala kang proper tools, mas mabuti na mag-consult sa expert computer technician.</li></ol><p>Sa learning path na ito, pag-uusapan natin ang parts ng computer, tools na kailangan para sa assembly, repair, at maintenance ng hardware components, at practices na nagsisilbing <em>foundation</em> ng skills na dapat meron ang isang computer technician. Kasama rin dito ang processes ng pag-configure ng system tools and settings, pag-install ng software, at tamang documentation.</p>",
+        "fileName": null,
+        "tableData": null,
+        "contentLayout": "text"
+      },
+      {
+        "id": 1775983898608,
+        "file": null,
+        "type": "review-multiple-choice",
+        "order": 3,
+        "title": "",
+        "caption": "",
+        "content": "",
+        "fileName": null,
+        "questions": [
+          {
+            "id": 1775983898605,
+            "skill": "Critical Thinking",
+            "options": [
+              "Pag-aayos (Repairing)",
+              "Pagpapanatili (Maintenance)",
+              "Pagko-coding ng mga laro (Coding Games)",
+              "Pag-install ng mga bahagi ng computer (Installing computer hardware components)"
+            ],
+            "question": "Sa mga pagpipilian sa ibaba, alin ang hindi kabilang sa workflow ng Computer Hardware Servicing?",
+            "questionType": "Easy",
+            "correctAnswer": 1
+          },
+          {
+            "id": 1775983898606,
+            "skill": "Analytical Thinking",
+            "options": [
+              "Mas bumubuti ang performance nito",
+              "Nangangailangan ng mga duplicate ang mga bahagi ng hardware",
+              "Unti-unting humihina at maaaring masira dahil sa iba’t ibang dahilan",
+              "Biglang tumitigil sa paggana ang mga bahagi ng hardware anumang oras"
+            ],
+            "question": "Ano ang inaasahan mula sa mga bahagi ng computer hardware habang tumatagal ang panahon?",
+            "questionType": "Easy",
+            "correctAnswer": 0
+          },
+          {
+            "id": 1775983898607,
+            "skill": "Memorization",
+            "options": [
+              "Pagiging Matipid sa Gastos (Cost Efficiency)",
+              "Mas Mahabang Buhay ng Kagamitan (Longevity)",
+              "Proteksyon ng Datos Data (Protection)",
+              "Pagganap (Performance)"
+            ],
+            "question": "Alin sa kahalagahan ng CHS ang nagbibigay-diin sa kakayahang mabawasan ang pangangailangan para sa magastos na solusyon?",
+            "questionType": "Easy",
+            "correctAnswer": 0
+          }
+        ]
+      },
+      {
+        "id": 1775983898609,
+        "file": null,
+        "type": "topic",
+        "order": 4,
+        "title": "Paksa 2: Importansya ng Computer Hardware Servicing",
+        "caption": "",
+        "content": "",
+        "fileName": null
+      },
+      {
+        "id": 1775983898610,
+        "file": null,
+        "type": "paragraph",
+        "order": 5,
+        "title": "",
+        "caption": "",
+        "content": "<p>\tAng CHS ay sumasaklaw sa basic troubleshooting skills, complex repairs, at pag-intindi ng iba’t ibang types, functions, at specifications ng hardware components<sup>[3]</sup>. Pero bakit nga ba mahalaga ang CHS ngayon? Tulad ng unang napag-usapan, computers ay naging crucial sa daily activities at operations ng iba’t ibang professional fields. Sa paglipas ng panahon, ang hardware components ay nagde-degrade o nasisira dahil sa maraming factors, na tatalakayin pa sa mga susunod na lesson. Dito pumapasok ang mga professionals na trained sa CHS — sila ang nag-a-address ng mga issues para masigurado ang optimal operation ng computers. And sumusunod na mga punto ay nagha-highlight sa kahalagahan ng CHS:</p><ul style=\"list-style-type: disc;\"><li><ul style=\"list-style-type: circle;\"><li><strong>Performance </strong>- Ang pag-upgrade at pag-tune ng mga hardware component at sistema ay nagpapabuti sa performance ng computer, na nagiging mas maganda ang karanasan para sa mga gumagamit.<sup>[3][4]</sup> </li><li><strong>Cost Efficiency - </strong>Ang pagpapanatili at regular na pagsusuri ay nakakatulong sa pamamagitan ng pagiging maagap sa pagtugon sa maliliit na isyu, na maaaring maiwasan ang paglaki ng mga pangunahing isyu na maaaring mangailangan ng mahal na solusyon.<sup>[4]</sup></li><li><strong>Data Protection - </strong>System failures ay pwedeng magresulta sa pagkawala ng importanteng data na nakatabi o nakaimbak sa mga computer. Ang pagtukoy sa mga risks ng ganitong mga senaryo ay maaaring mabawasan ang potensyal na pinsala sa datos nang maaga.<sup>[3][4]</sup></li><li><strong>Longevity - </strong>Ang mga nakagawiang aksyon sa pagpapanatili ng mga bahagi ng computer hardware ay nagpapahaba ng kanilang buhay, dahil ang mahal na gastos at madalas na muling pagsasaayos ay maaaring maranasan kung pababayaan.<sup>[3][4]</sup></li><li><strong>Safety - </strong>Ang mga defective o sirang components ay maaaring magdulot ng mga panganib sa kaligtasan, tulad ng mga sunog dahil sa kuryente at sobrang pag-init; Ang pagkakaroon ng mga kasanayan na may kaugnayan sa CHS ay nakakatulong upang matukoy ang mga posibleng panganib at magdisenyo ng tamang hakbang upang maiwasan ang mga panganib.<sup>[3]</sup></li></ul></li></ul>",
+        "fileName": null,
+        "tableData": null,
+        "contentLayout": "text"
+      },
+      {
+        "id": 1775983898614,
+        "file": null,
+        "type": "review-multiple-choice",
+        "order": 6,
+        "title": "",
+        "caption": "",
+        "content": "",
+        "fileName": null,
+        "questions": [
+          {
+            "id": 1775983898611,
+            "skill": "Technical Comprehension",
+            "options": [
+              "Performance",
+              "Mas Mahabang Buhay ng Kagamitan (Longevity)",
+              "Pagiging Matipid sa Gastos (Cost Efficiency)",
+              "Kaligtasan (Safety)"
+            ],
+            "question": "Alin sa mga sumusunod na paglalarawan ang nagbibigay-diin sa kahalagahan ng CHS dahil nakatutulong itong maiwasan ang pagpapalit ng mga computer at mga bahagi nito hangga’t maaari?",
+            "questionType": "Easy",
+            "correctAnswer": 1
+          },
+          {
+            "id": 1775983898612,
+            "skill": "Memorization",
+            "options": [
+              "Remote Servicing (Serbisyong Malayo)",
+              "Virtual Reality (VR) at Augmented Reality (AR)",
+              "Internet of Things (IoT)",
+              "Artificial Intelligence (AI)"
+            ],
+            "question": "Alin sa mga trend ng CHS ang tumutukoy sa kakayahang magbigay ng diagnosis, payo, at troubleshooting nang hindi naroroon sa mismong lugar?",
+            "questionType": "Easy",
+            "correctAnswer": 0
+          },
+          {
+            "id": 1775983898613,
+            "skill": "Technical Comprehension",
+            "options": [
+              "Sustainability Concerns",
+              "Remote Servicing",
+              "Virtual Reality (VR) and Augmented Reality (AR)",
+              "Artificial Intelligence (AI)"
+            ],
+            "question": "Alin sa mga trend ng CHS ang nagpapakilala ng mga sistema ng computer na kayang gumana nang walang presensya ng tao?",
+            "questionType": "Easy",
+            "correctAnswer": 3
+          }
+        ]
+      },
+      {
+        "id": 1775983898615,
+        "file": null,
+        "type": "topic",
+        "order": 7,
+        "title": "Paksa 3: Mga Uso sa Paligid ng Computer Hardware Servicing",
+        "caption": "",
+        "content": "",
+        "fileName": null
+      },
+      {
+        "id": 1775983898616,
+        "file": null,
+        "type": "paragraph",
+        "order": 8,
+        "title": "",
+        "caption": "",
+        "content": "<p>Araw-araw, ang mga device ay dinisenyo upang maging mas kumplikado. Upang hindi mapag-iwanan, kinakailangan ang pag-develop ng mga skills na may kaugnayan sa mga pag-unlad ng teknolohiya. Mahalagang kilalanin ang ilang mga uso na nakakaimpluwensya sa larangan ng computer hardware servicing upang ang kaalaman tungkol sa pagpapanatili ng karagdagang pag-unlad ng teknolohiya ay makasabay.</p><ol style=\"list-style-type: decimal;\"><li><strong>Artificial Intelligence (AI) - </strong>Ang mga sistema ng computer ay ginagawa na ngayon para sa awtomasyon gamit ang iba't ibang teknolohiya sa ilalim ng AI.<sup>[5] </sup>Ang CHS ay hindi lamang tumutulong sa AI mula sa perspektibo ng pagpapanatili ng mahusay na performance ng hardware, kundi pati na rin ang teknolohiya mismo ay nag-aalok ng tulong sa mga gawain na may kaugnayan sa CHS, tulad ng pag-automate ng mga diagnostic check o predictive maintenance, pag-alerto sa mga technicians sa mga potensyal na isyu bago pa ito maging kritikal, at mga pangkalahatang digital tool na nagpapadali at nagpapabilis ng mga gawain.<sup>[3]</sup> Kasabay ng mga pag-unlad ng teknolohiya, ang pangangailangan para sa mga bihasang technicians upang mapanatili ang mga sistemang pinapatakbo ng AI ay mas laganap.</li><li><strong>The Internet of Things (IoT) - </strong>Kadalasan, karamihan sa mga devices sa panahong ito ay may kakayahang makipag-ugnayan sa pamamagitan ng isang network, tulad ng mga smart home device, mobile device, at wearables.<sup>[3]</sup> Sa madaling salita, ang mga pisikal na bagay, karaniwang matatagpuan sa loob ng ating mga tahanan, ay ngayon ay gumagana dahil sa pagkakaroon ng mga sensor, software, at iba pang teknolohiya, na may layuning makipag-ugnayan at magpalitan ng datos sa iba pang mga aparatong nakakonekta sa internet. Maaaring palawakin ng CHS ang kanilang serbisyo para sa mga aparatong ito, at kinakailangan ang mas malalim na pag-unawa sa mga computer network. </li><li><strong>Remote Servicing - </strong>Isang kaugnay na aspeto ng mga trend sa CHS na may kinalaman sa networking at internet ay ang kakayahang magbigay ng remote servicing. Pinapayagan ng mga online platform ang paghahatid ng suporta, pagpapanatili, at mga serbisyong konsultasyon, na nagpapahintulot sa mga technician na mag-troubleshoot kahit wala sa mismong lugar.<sup>[3][7]</sup> Ito ay partikular na kapaki-pakinabang para sa mga negosyo na umaasa sa pagpapababa ng downtime. </li><li><strong>Virtual Reality (VR) and Augmented Reality (AR) - </strong>Maaaring makatagpo ang CHS ng mga bagong at magulong sistema sa pag-usbong ng mga teknolohiya na gumagamit ng VR at AR. Ang mga VR device ay gumagamit ng teknolohiya upang lumikha ng isang simulated na kapaligiran na tila totoong buhay, habang ang mga AR device ay gumagamit ng teknolohiya na nagpapahusay ng karanasan sa pamamagitan ng pag-overlay ng digital na impormasyon sa totoong mundo<sup>[8]</sup>, na parehong kadalasang nag-iintegrate ng mga hardware component at software configurations.<sup>[3]</sup></li><li><strong>Sustainability Concerns - </strong>Ang kamalayan sa kapaligiran ay hindi na isang bagong paksa, at ang ilang mga daloy ng trabaho ay umaangkop sa responsableng pagkonsumo at mga napapanatiling gawain. Sa CHS, ilang mga implementasyon, tulad ng pag-recycle ng mga lumang components, paggamit ng energy-efficient na hardware, at pagbabawas ng e-waste, ay nakikita bilang isang mahalagang bahagi ng trabaho at pagsasanay.<sup>[3][4</sup>] Ang karagdagang mga aralin, lalo na ang pagtutok sa pagbuo, pag-aayos, at pagpapanatili ng computer at mga bahagi nito, ay nagsasama ng mga napapanatiling praktis na dapat sundin habang nag-aaral.</li></ol>",
+        "fileName": null,
+        "tableData": null,
+        "contentLayout": "text"
+      },
+      {
+        "id": 1775983898620,
+        "file": null,
+        "type": "review-multiple-choice",
+        "order": 9,
+        "title": "",
+        "caption": "",
+        "content": "",
+        "fileName": null,
+        "questions": [
+          {
+            "id": 1775983898617,
+            "skill": "Analytical Thinking",
+            "options": [
+              "Inputting Data (Paglalagay ng Datos)",
+              "Input Operations (Mga Operasyong Input)",
+              "Outputting Data (Paglalabas ng Datos)",
+              "Output Operations (Mga Operasyong Output)"
+            ],
+            "question": "Alin sa pangunahing operasyon ng computer hardware ang tumutukoy sa proseso ng pagbibigay sa gumagamit ng naprosesong datos sa malinaw na anyo?",
+            "questionType": "Easy",
+            "correctAnswer": 3
+          },
+          {
+            "id": 1775983898618,
+            "skill": "Problem Solving",
+            "options": [
+              "Pag-unplug (Unplugging)",
+              "Muling pag-assemble ng mga bahagi (Reassemble of components)",
+              "Pagdiskonekta ng lahat ng konektor (Disconnect all the connectors)",
+              "Pagkabit ng mga bahagi sa motherboard (Attach the components to the motherboar"
+            ],
+            "question": "Kung ang computer assembly ay proseso ng paglalagay ng lahat ng internal na bahagi na kailangan, at ang computer disassembly ay proseso ng paghihiwalay ng isang device sa magkakahiwalay na bahagi, aling hakbang ang tumutukoy sa computer assembly?",
+            "questionType": "Easy",
+            "correctAnswer": 3
+          },
+          {
+            "id": 1775983898619,
+            "skill": "Problem Solving",
+            "options": [
+              "oras at mahal na gastos (time and expensive costs)",
+              "pagsisikap at magastos na gastos (effort and expensive costs)",
+              "kaalaman at pagsisikap (knowledge and effort)",
+              "oras at kaalaman (time and knowledge)"
+            ],
+            "question": "Ang kaalaman sa troubleshooting at maintenance ng computer ay nakakatipid sa iyo ng ____?",
+            "questionType": "Easy",
+            "correctAnswer": 0
+          }
+        ]
+      },
+      {
+        "id": 1775983898621,
+        "file": null,
+        "type": "topic",
+        "order": 10,
+        "title": "Paksa 4: Mga Components ng Computer Hardware Servicing",
+        "caption": "",
+        "content": "",
+        "fileName": null
+      },
+      {
+        "id": 1775983898622,
+        "file": null,
+        "type": "paragraph",
+        "order": 11,
+        "title": "",
+        "caption": "",
+        "content": "<p>Malapit ka na sa susunod na hakbang para simulan ang iyong Pagsasanay sa Computer Hardware Servicing! Habang pinoproseso at tinatanggap mo ang mga natutunan mo tungkol sa CHS, bibigyan ka rin namin ng pangkalahatang-ideya ng mga bahagi ng iyong pagsasanay sa ModuLearn. Tatalakayin natin ang mga pangunahing Operasyon ng Computer Hardware, pagbuo at pag-disassemble, pag-troubleshoot at pagpapanatili ng computer hardware.</p><p>Ang computer hardware, ang mga pisikal na bahagi ng isang computer na maaari mong makita at mahawakan, ay tinatawag na computer hardware. Ang mga komponent na ito ay nagtutulungan upang iproseso ang input at magbigay ng output batay sa mga instruksyon ng gumagamit.</p><p>Ang hardware ng computer ay may apat na pangunahing operasyon: input, processing, storage, at output.</p><ul style=\"list-style-type: disc;\"><li><strong>Inputting Data - </strong>Ang pag-input ng data (inputting data) ay ang unang pangunahing operasyon ng isang kompyuter. Ang proseso ng pagbibigay ng data o impormasyon sa isang computer ay kilala bilang input operations. Ang keyboard, mouse, mikropono, kamera, at iba pang mga input device ay maaaring gamitin upang maglagay ng data sa isang computer. Ang proseso ng pagpasok ng impormasyon sa isang kompyuter, kung saan ito ay pinoproseso at binabago sa ibang format na maaari nitong maunawaan, ay kilala bilang pag-input ng datos (inputting data).</li><li><strong>Processing Data - </strong>Pagkatapos mailagay ang data, ito ay pinoproseso ng computer (processing data). Upang makuha ang nais mong resulta, ang pagproseso ng data ay kinapapalooban ng pag-aayos at pag-convert ng papasok na data. Ang pagmamanipula ng input data ng isang computer upang makabuo ng makabuluhang impormasyon ay tinatawag na mga operasyon ng pagproseso o processing operations. Ang central processing unit (CPU), ang utak ng computer na tatalakayin mamaya, ang responsable sa pagsasagawa ng mga gawaing ito.</li><li><strong>Storing Data - </strong>Ang pag-iimbak ng data (storing data) ay ang proseso ng pag-iimbak ng na-prosesong data sa isang hard drive, solid-state drive, o flash drive. Kahit na naka-shutdown ang computer, ang data ay nananatili sa storage device upang magamit ito sa hinaharap. Posible rin ang pag-iimbak ng impormasyon at data sa memorya o sa mga pangalawang imbakan (secondary storage) tulad ng cloud storage, hard disks, flash drives, CDs, at DVDs.</li><li><strong>Output/Outputting Data - </strong>Ang mga operasyon ng output ay tumutukoy sa pagpapakita ng na-prosesong datos sa isang kapaki-pakinabang na anyo o pormat. Ang pag-output ng data ay ang proseso ng pagpapakita ng na-prosesong data sa gumagamit sa isang nababasang anyo. Ang mga output device tulad ng monitor, printer, o speaker ay ginagamit upang ipakita ang na-prosesong data. </li></ul><p>Ang pagbuo ng computer ay ang proseso ng paglalagay ng lahat ng panloob na bahagi o parte ng computer na kinakailangan para sa sistema ng computer upang ito ay gumana. May tamang pagkakasunod-sunod ng paglalagay ng bawat bahagi sa sistema ng computer. Upang bigyan ka ng ideya, ang pagbuo ng isang computer ay karaniwang sinusundan ng mga sumusunod na hakbang:</p><ol style=\"list-style-type: decimal;\"><li>Buksan ang pinaka takip. </li><li>I-install ang power supply. </li><li>Ikabit ang mga bahagi sa motherboard. </li><li>I-install ang motherboard.</li><li>Mag-install ng internal drives. </li><li>I-konekta ang mga internal cables. </li><li>I-install ang power connections sa motherboard.</li><li>I-konekta ang mga external cables sa computer. </li><li>I-boot ang computer sa unang pagkakataon.</li></ol><p>Ang pag-disassemble ng computer, sa kabilang banda, ay ang proseso ng paghihiwa-hiwalay ng isang device sa mga bahagi. Ang pag-disassemble ng anumang device ay kinakailangan upang matukoy ang isang problema, palitan ang isang bahagi, o kunin ang mga bahagi at gamitin ang mga ito sa ibang device. Tulad ng sa pagbuo ng computer, mayroong isang pamantayang proseso ng pag-disassemble ng computer tulad ng nakalista sa mga sumusunod:</p><ol style=\"list-style-type: decimal;\"><li>Pag-unplug.</li><li>Buksan ang pinaka takip.</li><li>Idiskonekta ang lahat ng mga konektor.</li><li>Alisin ang bentilador.</li><li>Alisin ang power supply.</li><li>Pag-alis ng HDD at optical drive.</li><li>Pag-alis ng mga RAM (random access memory) module.</li><li>Alisin ang mga expansion cards.</li><li>Alisin ang motherboard.</li><li>Pagbabalik ng mga components.</li></ol><p>Ang pag-troubleshoot ay kinapapalooban ng pagtukoy, pag-diagnose, at pag-aayos ng mga isyu na may kaugnayan sa mga pisikal na bahagi ng isang computer. Ang kaalaman kung paano ayusin ang mga komponent na ito ay makakatipid sa iyo ng oras, pera, at pakiramdam ng pagkainis o pagkabigo.</p><p>Sa pagsasanay na ito, susundan natin ang mga sumusunod na hakbang sa pag-troubleshoot bilang pundasyon sa pagbuo ng tamang pag-troubleshoot at diagnosis:</p><ol style=\"list-style-type: decimal;\"><li><strong>Identify the problem</strong> (Tukuyin ang Problema) - Simulan sa pag-unawa sa mga sintomas. Ang computer ba ay tuluyang patay, o may partikular na bahagi lamang na hindi gumagana?</li><li><strong>Gather information </strong>(Kumuha ng Impormasyon) - Mag-research tungkol sa mga sintomas. Gumamit ng mga forum, manufacturer websites, at mga mapagkukunan ng suporta sa teknolohiya. Minsan, ang mabilis na paghahanap ay maaaring magdala sa iyo ng solusyon.</li><li><strong>Test hypothesis</strong> (Subukan ang hypothesis) - Batay sa iyong pananaliksik, simulan ang pagsubok sa mga potensyal na solusyon. Halimbawa, kung hindi mag-on ang computer, subukan muna ang power supply.</li><li><strong>Implement solutions</strong> (Isagawa ang mga solusyon) - Kapag natukoy mo na ang posibleng sanhi, maaari mo ng igawa ang (mga) solusyon. Tulad ng pagpapalit ng mga sira na bahagi, pag-update ng mga driver, o paglilinis ng alikabok.</li><li><strong>Verify fix</strong> (Beripikahin ang solusyon) - Pagkatapos isagawa ang solusyon, beripikahin na ang problema ay nalutas. Halimbawa, i-restart ang computer at tingnan kung ito ay gumagana nang maayos.</li></ol><p>Lahat ng mga gawain na kinakailangan upang mapanatiling epektibo at tuloy-tuloy ang operasyon ng iyong computer ay kasama sa computer maintenance. Sinasaklaw nito ang mga pamamaraan ng pagpapanatili ng software at hardware na tumutulong protektahan ang iyong device mula sa mga potensyal na banta, pagbutihin ang perpormans, at maiwasan ang mga problema sa sistema. Ang buhay ng iyong computer ay maaaring mapahaba ng maraming taon at ang pinakamahusay na perpormans nito ay maaaring mapanatili sa pamamagitan ng regular na maintenance.</p><p>Ang pag-iwas sa mga problema bago pa man ito mangyari ay kasinghalaga ng pagwawasto sa mga ito kapag nangyari na. Isipin mo ito na katulad ng pag-aalaga sa sasakyan: ang regular na pag-tune-up at pagpapalit ng langis ay nakakaiwas sa malubhang sira at mahal na pagkukumpuni. Ang pagpapanatili ng computer ay tumutulong dito na magkaroon ng mga sumusunod:</p><ol style=\"list-style-type: decimal;\"><li><strong>Extended device lifespan </strong>(Pinalawig na buhay ng aparato) - ang tamang pagpapanatili ay maaaring magdagdag ng mga taon sa buhay ng iyong computer</li><li><strong>Improved system performance</strong> (Pinahusay na pagganap ng sistema) - ang regular na paglilinis ay nagpapanatili ng mas mabilis na takbo ng iyong PC</li><li><strong>Enhanced data security </strong>(Pinahusay na seguridad ng datos) - ang na-update na software ay nagpoprotekta laban sa mga banta tulad ng malware</li><li><strong>Reduced repair costs</strong> (Nabawasan ang mga gastos sa pagkukumpuni) - mas mura ang magagastos kapag naiwasan ang mga problema kaysa sa paulit-ulit na g-aayos ng mga ito</li><li><strong>Better user experience </strong>(Mas magandang karanasan ng gumagamit) - ang pagpapanatiling maayos na computer ay mas maaasahan at tumutugon nang mas mabilis.</li></ol><table><thead><tr><th><p>Medyo nalilito ka ba tungkol sa mga Komponent ng Computer Hardware Servicing? Huwag nang mag-alala! Ang paksang ito ay isang paunang kaalaman lamang upang magkaroon ka ng ideya sa mga susunod na aralin upang hindi ka malito sa mga susunod na aralin.</p></th></tr></thead></table><p>Nasa dulo ka na ng unang aralin. Mahusay sa pagtatapos ng unang aralin. Susunod na hakbang ay ang pangwakas na pagsusuri para sa buong aralin. Maaari mo itong gawin anumang oras. Kung nais mong suriin o muling basahin ang aralin, huwag mag-atubiling gawin ito! Tandaan mo lang, hindi mo maaring ulitin ang huling pagsusuri, at hindi ka pwedeng huminto habang sumasagot. Ang tapat na sagot ang aming prayoridad, at hinihimok namin kayong umiwas sa anumang uri ng pandaraya.</p>",
+        "fileName": null,
+        "tableData": null,
+        "contentLayout": "text"
+      },
+      {
+        "id": 1775983898624,
+        "file": null,
+        "type": "review-multiple-choice",
+        "order": 12,
+        "title": "",
+        "caption": "",
+        "content": "",
+        "fileName": null,
+        "questions": [
+          {
+            "id": 1775983898623,
+            "skill": "Critical Thinking",
+            "options": [
+              "Mabagal na takbo ng pag-download (slow download spee",
+              "b. Mabagal na tugon ng computer (slow computer response)",
+              "Mga banta (threats)",
+              "Pagiging marumi ng computer (computer getting dirty)"
+            ],
+            "question": "Sa pamamagitan ng pagpapanatili ng seguridad ng datos, ang iyong computer ay napoprotektahan laban sa?",
+            "questionType": "Easy",
+            "correctAnswer": 2
+          }
+        ]
+      },
+      {
+        "id": 1775983898625,
+        "file": null,
+        "type": "references",
+        "order": 13,
+        "title": "",
+        "caption": "",
+        "content": "https://medium.com/@zargull/the-importance-of-computers-in-the-modern-world-cf80eb3ecf0c\nhttps://ticktocktech.com/blog/2022/08/28/what-is-computer-hardware-servicing-and-how-is-it-done-in-2022/\nhttps://umatechnology.org/what-is-computer-hardware-servicing/\nhttps://mefmobile.org/what-is-computer-hardware-servicing/\nhttps://www.coursera.org/articles/what-is-artificial-intelligence?msockid=133d0c738b796b820b6e1a398a6d6a23\nhttps://www.oracle.com/asean/internet-of-things/\nhttps://www.teamviewer.com/apac/insights/remote-servicing-in-modern-business-operations/\nhttps://www.geeksforgeeks.org/python/virtual-reality-vs-augmented-reality-whats-the-difference/\nhttps://ticktocktech.com/blog/2022/08/28/what-is-computer-hardware-servicing-and-how-is-it-done-in-2022/#google_vignette\nhttps://www.geeksforgeeks.org/computer-science-fundamentals/computer-hardware/\nhttps://rpatoolstutorial.com/basic-operations-of-computer/\nhttps://ncert.nic.in/vocational/pdf/keit104.pdf\nhttps://www.techallabout.com/computer-hardware-troubleshooting-a-comprehensive-guide/\nhttps://www.hp.com/us-en/shop/tech-takes/pc-maintenance-and-repair-tips?pStoreID=techsoup%27%5B0%5D&msockid=377c7f12845d6e621d65697d85d56f25",
+        "fileName": null
+      }
+    ],
+    "diagnosticQuestions": [
+      {
+        "id": 1775983898731,
+        "skill": "Critical Thinking",
+        "options": [
+          "Pag-aayos (Repairing)",
+          "Pagpapanatili (Maintenance)",
+          "Pagko-coding ng mga laro (Coding Games)",
+          "Pag-install ng mga bahagi ng computer (Installing computer hardware components)"
+        ],
+        "question": "Sa mga pagpipilian sa ibaba, alin ang hindi kabilang sa workflow ng Computer Hardware Servicing?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898732,
+        "skill": "Analytical Thinking",
+        "options": [
+          "Mas bumubuti ang performance nito",
+          "Nangangailangan ng mga duplicate ang mga bahagi ng hardware",
+          "Unti-unting humihina at maaaring masira dahil sa iba’t ibang dahilan",
+          "Biglang tumitigil sa paggana ang mga bahagi ng hardware anumang oras"
+        ],
+        "question": "Ano ang inaasahan mula sa mga bahagi ng computer hardware habang tumatagal ang panahon?",
+        "questionType": "Easy",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898733,
+        "skill": "Memorization",
+        "options": [
+          "Pagiging Matipid sa Gastos (Cost Efficiency)",
+          "Mas Mahabang Buhay ng Kagamitan (Longevity)",
+          "Proteksyon ng Datos Data (Protection)",
+          "Pagganap (Performance)"
+        ],
+        "question": "Alin sa kahalagahan ng CHS ang nagbibigay-diin sa kakayahang mabawasan ang pangangailangan para sa magastos na solusyon?",
+        "questionType": "Easy",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898734,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Performance",
+          "Mas Mahabang Buhay ng Kagamitan (Longevity)",
+          "Pagiging Matipid sa Gastos (Cost Efficiency)",
+          "Kaligtasan (Safety)"
+        ],
+        "question": "Alin sa mga sumusunod na paglalarawan ang nagbibigay-diin sa kahalagahan ng CHS dahil nakatutulong itong maiwasan ang pagpapalit ng mga computer at mga bahagi nito hangga’t maaari?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898735,
+        "skill": "Memorization",
+        "options": [
+          "Remote Servicing (Serbisyong Malayo)",
+          "Virtual Reality (VR) at Augmented Reality (AR)",
+          "Internet of Things (IoT)",
+          "Artificial Intelligence (AI)"
+        ],
+        "question": "Alin sa mga trend ng CHS ang tumutukoy sa kakayahang magbigay ng diagnosis, payo, at troubleshooting nang hindi naroroon sa mismong lugar?",
+        "questionType": "Easy",
+        "correctAnswer": 0
+      }
+    ],
+    "reviewQuestions": [
+      {
+        "id": 1775983898681,
+        "skill": "Critical Thinking",
+        "options": [
+          "Pag-aayos (Repairing)",
+          "Pagpapanatili (Maintenance)",
+          "Pagko-coding ng mga laro (Coding Games)",
+          "Pag-install ng mga bahagi ng computer (Installing computer hardware components)"
+        ],
+        "question": "Sa mga pagpipilian sa ibaba, alin ang hindi kabilang sa workflow ng Computer Hardware Servicing?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898682,
+        "skill": "Analytical Thinking",
+        "options": [
+          "Mas bumubuti ang performance nito",
+          "Nangangailangan ng mga duplicate ang mga bahagi ng hardware",
+          "Unti-unting humihina at maaaring masira dahil sa iba’t ibang dahilan",
+          "Biglang tumitigil sa paggana ang mga bahagi ng hardware anumang oras"
+        ],
+        "question": "Ano ang inaasahan mula sa mga bahagi ng computer hardware habang tumatagal ang panahon?",
+        "questionType": "Easy",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898683,
+        "skill": "Memorization",
+        "options": [
+          "Pagiging Matipid sa Gastos (Cost Efficiency)",
+          "Mas Mahabang Buhay ng Kagamitan (Longevity)",
+          "Proteksyon ng Datos Data (Protection)",
+          "Pagganap (Performance)"
+        ],
+        "question": "Alin sa kahalagahan ng CHS ang nagbibigay-diin sa kakayahang mabawasan ang pangangailangan para sa magastos na solusyon?",
+        "questionType": "Easy",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898684,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Performance",
+          "Mas Mahabang Buhay ng Kagamitan (Longevity)",
+          "Pagiging Matipid sa Gastos (Cost Efficiency)",
+          "Kaligtasan (Safety)"
+        ],
+        "question": "Alin sa mga sumusunod na paglalarawan ang nagbibigay-diin sa kahalagahan ng CHS dahil nakatutulong itong maiwasan ang pagpapalit ng mga computer at mga bahagi nito hangga’t maaari?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898685,
+        "skill": "Memorization",
+        "options": [
+          "Remote Servicing (Serbisyong Malayo)",
+          "Virtual Reality (VR) at Augmented Reality (AR)",
+          "Internet of Things (IoT)",
+          "Artificial Intelligence (AI)"
+        ],
+        "question": "Alin sa mga trend ng CHS ang tumutukoy sa kakayahang magbigay ng diagnosis, payo, at troubleshooting nang hindi naroroon sa mismong lugar?",
+        "questionType": "Easy",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898686,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Sustainability Concerns",
+          "Remote Servicing",
+          "Virtual Reality (VR) and Augmented Reality (AR)",
+          "Artificial Intelligence (AI)"
+        ],
+        "question": "Alin sa mga trend ng CHS ang nagpapakilala ng mga sistema ng computer na kayang gumana nang walang presensya ng tao?",
+        "questionType": "Easy",
+        "correctAnswer": 3
+      },
+      {
+        "id": 1775983898687,
+        "skill": "Analytical Thinking",
+        "options": [
+          "Inputting Data (Paglalagay ng Datos)",
+          "Input Operations (Mga Operasyong Input)",
+          "Outputting Data (Paglalabas ng Datos)",
+          "Output Operations (Mga Operasyong Output)"
+        ],
+        "question": "Alin sa pangunahing operasyon ng computer hardware ang tumutukoy sa proseso ng pagbibigay sa gumagamit ng naprosesong datos sa malinaw na anyo?",
+        "questionType": "Easy",
+        "correctAnswer": 3
+      },
+      {
+        "id": 1775983898688,
+        "skill": "Problem Solving",
+        "options": [
+          "Pag-unplug (Unplugging)",
+          "Muling pag-assemble ng mga bahagi (Reassemble of components)",
+          "Pagdiskonekta ng lahat ng konektor (Disconnect all the connectors)",
+          "Pagkabit ng mga bahagi sa motherboard (Attach the components to the motherboar"
+        ],
+        "question": "Kung ang computer assembly ay proseso ng paglalagay ng lahat ng internal na bahagi na kailangan, at ang computer disassembly ay proseso ng paghihiwalay ng isang device sa magkakahiwalay na bahagi, aling hakbang ang tumutukoy sa computer assembly?",
+        "questionType": "Easy",
+        "correctAnswer": 3
+      },
+      {
+        "id": 1775983898689,
+        "skill": "Problem Solving",
+        "options": [
+          "oras at mahal na gastos (time and expensive costs)",
+          "pagsisikap at magastos na gastos (effort and expensive costs)",
+          "kaalaman at pagsisikap (knowledge and effort)",
+          "oras at kaalaman (time and knowledge)"
+        ],
+        "question": "Ang kaalaman sa troubleshooting at maintenance ng computer ay nakakatipid sa iyo ng ____?",
+        "questionType": "Easy",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898690,
+        "skill": "Critical Thinking",
+        "options": [
+          "Mabagal na takbo ng pag-download (slow download spee",
+          "b. Mabagal na tugon ng computer (slow computer response)",
+          "Mga banta (threats)",
+          "Pagiging marumi ng computer (computer getting dirty)"
+        ],
+        "question": "Sa pamamagitan ng pagpapanatili ng seguridad ng datos, ang iyong computer ay napoprotektahan laban sa?",
+        "questionType": "Easy",
+        "correctAnswer": 2
+      }
+    ],
+    "finalQuestions": [
+      {
+        "id": 1775983898691,
+        "skill": "Analytical Thinking",
+        "options": [
+          "Ang proseso ng paggawa ng software para sa mga computer",
+          "Ang suno",
+          "sunod na workflow ng pag-install, pagkukumpuni, at pagpapanatili ng mga bahagi ng hardware",
+          "Ang pamamahala ng mga computer network lamang"
+        ],
+        "question": "Isang teknisyan ang inatasang mag-install ng bagong RAM, ayusin ang sirang hard drive, at regular na magpanatili ng mga computer sa isang opisina. Aling paglalarawan ang pinakamainam na kumakatawan sa trabahong isinasagawa?",
+        "questionType": "Situational",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898692,
+        "skill": "Memorization",
+        "options": [
+          "Regular na diagnosis at maintenance",
+          "Agarang pagpapalit ng hardware",
+          "Pag-install ng bagong software",
+          "Kumpletong pag-disassemble ng system"
+        ],
+        "question": "Isang gumagamit ang nag-ulat na mas mabagal kaysa karaniwan ang takbo ng kanyang computer. Alin sa DALAWANG pamamaraan ng CHS ang PINAKA-angkop bilang paunang hakbang?",
+        "questionType": "Situational",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898693,
+        "skill": "Problem Solving",
+        "options": [
+          "Subukang ayusin pa rin kahit walang kagamitan",
+          "Gawin lamang ang maintenance at regular na diagnosis, at kumonsulta sa eksperto para sa mga internal na isyu",
+          "Ganap na tumanggi na tumulong",
+          "Agad na bumili ng lahat ng propesyonal na kagamitan"
+        ],
+        "question": "Ikaw ay inatasang tumulong sa pagpapanatili ng mga computer sa isang maliit na opisina, ngunit wala kang tamang kagamitan para sa internal na pagsusuri ng hardware. Ayon sa aralin, ano ang dapat mong gawin?",
+        "questionType": "Situational",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898694,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Pagganap (Performance)",
+          "Pagiging Matipid sa Gastos (Cost Efficiency)",
+          "Proteksyon ng Datos (Data Protection)",
+          "Mas Mahabang Buhay ng Kagamitan (Longevity)"
+        ],
+        "question": "Biglang nag-shutdown ang server ng isang kompanya, at naging hindi maa-access ang mahahalagang datos ng kliyente. Alin sa kahalagahan ng CHS ang PINAKA napabayaan?",
+        "questionType": "Situational",
+        "correctAnswer": 2
+      },
+      {
+        "id": 1775983898695,
+        "skill": "Problem Solving",
+        "options": [
+          "Kaligtasan at Pagganap (Safety and Performance)",
+          "Pagiging Matipid sa Gastos at Proteksyon ng Datos (Cost Efficiency and Data Protection)",
+          "Mas Mahabang Buhay at Kaligtasan (Longevity and Safety)",
+          "Pagganap at Mas Mahabang Buhay (Performance and Longevity)"
+        ],
+        "question": "Napansin ng isang teknisyan ang amoy ng nasusunog mula sa isang desktop computer at natukoy na may depektibong power supply. Alin sa DALAWANG kahalagahan ng CHS ang natutugunan sa pagpapalit ng bahaging ito?",
+        "questionType": "Situational",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898696,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Artificial Intelligence – dahil gumagawa ng awtomatikong desisyon ang mga device",
+          "Internet of Things – dahil ang mga pisikal na bagay ay magkakaugnay sa pamamagitan ng network",
+          "Remote Servicing – dahil maaaring kontrolin ang mga device nang malayo",
+          "Augmented Reality – dahil pinapahusay nito ang karanasan ng gumagamit"
+        ],
+        "question": "Isang teknisyan ang nagtatrabaho gamit ang mga smart home devices na nakikipag-ugnayan sa isa’t isa sa pamamagitan ng network. Kasama rito ang mga sensor, embedded software, at pagpapalitan ng datos sa internet. Alin sa trend ang pangunahing kinakatawan nito?",
+        "questionType": "Situational",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898697,
+        "skill": "Memorization",
+        "options": [
+          "Artificial Intelligence",
+          "Sustainability Concerns",
+          "Internet of Things",
+          "Remote Servicing"
+        ],
+        "question": "Ang isang programa sa pagsasanay ng CHS ay nagbibigay-diin sa pagrerecycle ng lumang bahagi, paggamit ng energy-efficient hardware, at pagbabawas ng e-waste. Alin sa trend ang ipinatutupad?",
+        "questionType": "Situational",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898698,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Inputting Data",
+          "Processing Data",
+          "Storing Data",
+          "Outputting Data"
+        ],
+        "question": "Kapag ang isang computer ay nagsasagawa ng kalkulasyon, isagawa ang mga utos ng programa, at nagpoproseso ng mga command mula sa software, aling operasyon ng hardware ang nagaganap?",
+        "questionType": "Situational",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898699,
+        "skill": "Problem Solving",
+        "options": [
+          "Implement solutions",
+          "Identify the problem",
+          "Test hypothesis",
+          "Gather information"
+        ],
+        "question": "Nagsisimula ang isang teknisyan sa troubleshooting sa pamamagitan ng pagkolekta ng mga sintomas ng isang system, ulat ng gumagamit, at pag-uugali ng device bago bumuo ng posibleng solusyon. Aling hakbang sa troubleshooting ang isinasagawa?",
+        "questionType": "Situational",
+        "correctAnswer": 3
+      },
+      {
+        "id": 1775983898700,
+        "skill": "Analytical Thinking",
+        "options": [
+          "Pag-click ng mouse upang magbukas ng folder",
+          "Pagkuha ng larawan gamit ang webcam, pag-edit nito, pag-save sa flash drive, at pag-print nito",
+          "Pakikinig ng musika na nakaimbak sa hard drive",
+          "Pag-type ng teksto sa word processor nang hindi sine-save"
+        ],
+        "question": "Alin sa mga sumusunod na sitwasyon ang nagpapakita ng LAHAT NG APAT na pangunahing operasyon ng computer hardware?",
+        "questionType": "Situational",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898701,
+        "skill": "Critical Thinking",
+        "options": [
+          "Motherboard",
+          "Power supply",
+          "Internal drives",
+          "RAM modules"
+        ],
+        "question": "Habang nag-a-assemble ng isang desktop computer, inihahanda ng teknisyan ang case at nagsisimula sa paglalagay ng mga internal na bahagi. Ayon sa tamang pagkakasunod-sunod ng assembly, aling bahagi ang dapat unang i-install?",
+        "questionType": "Situational",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898702,
+        "skill": "Critical Thinking",
+        "options": [
+          "Regular na maintenance, pag-upgrade ng mga bahagi kung kinakailangan, at pagrerecycle ng mga lumang pyesa",
+          "Pagpapalit ng lahat ng computer bawat taon gamit ang mga bagong energy-efficient na modelo",
+          "Pag-aayos lamang ng isang system kapag tuluyang nasira",
+          "Paggamit lamang ng mga remote servicing tools"
+        ],
+        "question": "Humihiling ang isang may-ari ng maliit na negosyo na tulungan kang mapahaba ang buhay ng kanilang mga office computer habang nananatiling mababa ang gastos at nababawasan ang epekto sa kapaligiran. Aling CHS approach ang PINAKA-angkop upang matugunan ang mga layuning ito?",
+        "questionType": "Situational",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898703,
+        "skill": "Critical Thinking",
+        "options": [
+          "Ipagpatuloy ang assembly at i-install ang power supply sa huli",
+          "Pilitin na ipasok ang power supply sa paligid ng motherboard",
+          "Alisin ang motherboard at i-install muna ang power supply ayon sa tamang pagkakasuno",
+          "sunod"
+        ],
+        "question": "Sa proseso ng computer assembly, na-install mo na ang motherboard ngunit nakalimutan mong i-install muna ang power supply. Ano ang PINAKA-angkop na hakbang na dapat gawin?",
+        "questionType": "Situational",
+        "correctAnswer": 2
+      },
+      {
+        "id": 1775983898704,
+        "skill": "Memorization",
+        "options": [
+          "Artificial Intelligence (AI)",
+          "Remote Servicing",
+          "Sustainability Concerns",
+          "Internet of Things (IoT)"
+        ],
+        "question": "Isang teknisyan ang inatasang ayusin ang isang device na tila may sensor, na ginagamit ng consumer upang ikonekta ang iba pang device sa kanilang bahay sa pamamagitan ng internet. Aling trend ng CHS ang ipinapakita rito?",
+        "questionType": "Situational",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898705,
+        "skill": "Analytical Thinking",
+        "options": [
+          "Pagpapanatili ng computer hardware at pagsasagawa ng regular na diagnosis",
+          "Paggamit ng mga kagamitan upang mag-solder ng mga resistor sa electric circuit board ng isang appliance",
+          "Paglikha ng code upang magawa ang isang karakter sa laro na tumalon gamit ang development software",
+          "Pagbuo ng mga schematics para sa arkitektura ng network ng isang kompanya"
+        ],
+        "question": "Natuklasan ni Claire na ang paglilinis ng system unit ng computer ng kanyang kaibigan kada buwan ay nakatutulong upang mabawasan ang dalas ng pagdadala ng computer sa teknisyan para ipagawa. Aling pamamaraan ng CHS ang ipinapakita rito?",
+        "questionType": "Situational",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898721,
+        "skill": "Critical Thinking",
+        "options": [
+          "Pag-aayos (Repairing)",
+          "Pagpapanatili (Maintenance)",
+          "Pagko-coding ng mga laro (Coding Games)",
+          "Pag-install ng mga bahagi ng computer (Installing computer hardware components)"
+        ],
+        "question": "Isang senior student sa programang Computer Hardware Servicing (CHS) ang inatasang tumulong sa paghahanda ng mga gawain para sa isang laboratory session na nakatuon lamang sa kasanayan sa hardware servicing. Ipinaalala ng guro na ang mga gawain ay dapat may kinalaman sa mga tungkulin na direktang kaugnay ng pag-diagnose, pag-maintain, o pag-assemble ng mga bahagi ng computer. Alin sa mga sumusunod na gawain ang hindi angkop na isama sa laboratory session?",
+        "questionType": "Situational",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898722,
+        "skill": "Analytical Thinking",
+        "options": [
+          "Mas bumubuti ang performance nito",
+          "Nangangailangan ng mga duplicate ang mga bahagi ng hardware",
+          "Unti-unting humihina at maaaring masira dahil sa iba’t ibang dahilan",
+          "Biglang tumitigil sa paggana ang mga bahagi ng hardware anumang oras"
+        ],
+        "question": "Pagkalipas ng ilang taon ng paggamit, napansin ng isang teknisyan na ang mga bahagi ng computer ay hindi na kasing-epektibo ng dati dahil sa naipong alikabok, pagkaka-expose sa init, at pagkasira. Ano ang karaniwang nangyayari sa mga bahagi ng hardware sa paglipas ng panahon?",
+        "questionType": "Situational",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898723,
+        "skill": "Memorization",
+        "options": [
+          "Pagiging Matipid sa Gastos (Cost Efficiency)",
+          "Mas Mahabang Buhay ng Kagamitan (Longevity)",
+          "Proteksyon ng Datos Data (Protection)",
+          "Pagganap (Performance)"
+        ],
+        "question": "Isang kompanya ang regular na nagsasagawa ng preventive maintenance sa mga computer nito upang ang maliliit na problema sa hardware ay maayos bago pa ito maging malalaking pagkasira na mangangailangan ng magastos na pagpapalit. Alin sa mga sumusunod na kahalagahan ng CHS ang ipinapakita ng sitwasyong ito?",
+        "questionType": "Situational",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898724,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Performance",
+          "Mas Mahabang Buhay ng Kagamitan (Longevity)",
+          "Pagiging Matipid sa Gastos (Cost Efficiency)",
+          "Kaligtasan (Safety)"
+        ],
+        "question": "Isang teknisyan ang regular na naglilinis ng mga internal na bahagi, nagsusuri ng mga cooling system, at tinitiyak na maayos ang paggana ng mga bahagi ng hardware upang magamit pa ang mga computer sa loob ng maraming taon nang hindi kinakailangang palitan. Alin sa mga sumusunod na kahalagahan ng CHS ang ipinapakita ng sitwasyong ito?",
+        "questionType": "Situational",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898725,
+        "skill": "Memorization",
+        "options": [
+          "Remote Servicing (Serbisyong Malayo)",
+          "Virtual Reality (VR) at Augmented Reality (AR)",
+          "Internet of Things (IoT)",
+          "Artificial Intelligence (AI)"
+        ],
+        "question": "Isang teknisyan ang tumutulong sa isang gumagamit na ayusin ang problema sa computer sa pamamagitan ng pagkonekta sa internet, pagsuri ng mga system settings, at paggabay sa gumagamit sa mga hakbang ng troubleshooting nang hindi pisikal na bumibisita sa lokasyon. Alin sa mga sumusunod na trend ng CHS ang ipinapakita ng sitwasyong ito?",
+        "questionType": "Situational",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898726,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Sustainability Concerns",
+          "Remote Servicing",
+          "Virtual Reality (VR) and Augmented Reality (AR)",
+          "Artificial Intelligence (AI)"
+        ],
+        "question": "Isang sistema ng computer ang awtomatikong nagsusuri ng kondisyon ng hardware, nagtataya ng mga posibleng pagkasira, at nagsasagawa ng ilang pagsasaayos nang hindi nangangailangan ng direktang interbensyon ng tao. Alin sa mga sumusunod na trend ng CHS ang ipinapakita ng halimbawang ito?",
+        "questionType": "Situational",
+        "correctAnswer": 3
+      },
+      {
+        "id": 1775983898727,
+        "skill": "Analytical Thinking",
+        "options": [
+          "Inputting Data (Paglalagay ng Datos)",
+          "Input Operations (Mga Operasyong Input)",
+          "Outputting Data (Paglalabas ng Datos)",
+          "Output Operations (Mga Operasyong Output)"
+        ],
+        "question": "Matapos iproseso ang kahilingan ng isang gumagamit, ipinapakita ng computer ang resulta sa monitor upang mabasa at maunawaan ng gumagamit ang impormasyon. Aling operasyon ng hardware ang isinasagawa?",
+        "questionType": "Situational",
+        "correctAnswer": 3
+      },
+      {
+        "id": 1775983898728,
+        "skill": "Problem Solving",
+        "options": [
+          "oras at mahal na gastos (time and expensive costs)",
+          "pagsisikap at magastos na gastos (effort and expensive costs)",
+          "kaalaman at pagsisikap (knowledge and effort)",
+          "oras at kaalaman (time and knowledge)"
+        ],
+        "question": "Isang gumagamit ang natututo ng mga batayang kasanayan sa troubleshooting at maintenance upang malutas ang maliliit na problema sa computer nang hindi na kailangang tumawag ng teknisyan sa bawat pagkakataon. Anong benepisyo ang naibibigay nito?",
+        "questionType": "Situational",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898729,
+        "skill": "Critical Thinking",
+        "options": [
+          "Mabagal na takbo ng pag-download (slow download spee",
+          "b. Mabagal na tugon ng computer (slow computer response)",
+          "Mga banta (threats)",
+          "Pagiging marumi ng computer (computer getting dirty)"
+        ],
+        "question": "Nag-iinstall ang isang teknisyan ng mga security updates, gumagamit ng matitibay na password, at tinitiyak ang proteksyon ng antivirus upang hindi makompromiso ng mga mapanganib na gawain ang sistema o ang nakaimbak na impormasyon. Laban saan pangunahing napoprotektahan ng pagpapanatili ng seguridad ng datos ang computer?",
+        "questionType": "Situational",
+        "correctAnswer": 2
+      },
+      {
+        "id": 1775983898730,
+        "skill": "Problem Solving",
+        "options": [
+          "Pag-unplug (Unplugging)",
+          "Muling pag-assemble ng mga bahagi (Reassemble of components)",
+          "Pagdiskonekta ng lahat ng konektor (Disconnect all the connectors)",
+          "Pagkabit ng mga bahagi sa motherboard (Attach the components to the motherboar"
+        ],
+        "question": "Sa paggawa ng isang desktop computer, maingat na inilalagay at ini-secure ng teknisyan ang iba’t ibang bahagi ng hardware sa tamang puwesto sa motherboard upang gumana nang maayos ang sistema. Aling hakbang ang kumakatawan sa computer assembly?",
+        "questionType": "Situational",
+        "correctAnswer": 3
+      },
+      {
+        "id": 1775983898706,
+        "skill": "Analytical Thinking",
+        "options": [
+          "Ang proseso ng paggawa ng software para sa mga computer",
+          "Ang suno",
+          "sunod na workflow ng pag-install, pagkukumpuni, at pagpapanatili ng mga bahagi ng hardware",
+          "Ang pamamahala ng mga computer network lamang"
+        ],
+        "question": "Ang Computer Hardware Servicing (CHS) ay pinakamainam na inilalarawan bilang?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898707,
+        "skill": "Memorization",
+        "options": [
+          "Regular na diagnosis at maintenance",
+          "Agarang pagpapalit ng hardware",
+          "Pag-install ng bagong software",
+          "Kumpletong pag-disassemble ng system"
+        ],
+        "question": "Alin sa DALAWANG gawain ang itinuturing na angkop na paunang pamamaraan sa Computer Hardware Servicing (CHS) kapag nag-diagnose ng mabagal na computer?",
+        "questionType": "Easy",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898708,
+        "skill": "Problem Solving",
+        "options": [
+          "Subukang ayusin pa rin kahit walang kagamitan",
+          "Gawin lamang ang maintenance at regular na diagnosis, at kumonsulta sa eksperto para sa mga internal na isyu",
+          "Ganap na tumanggi na tumulong",
+          "Agad na bumili ng lahat ng propesyonal na kagamitan"
+        ],
+        "question": "Ano ang pinaka-angkop na aksyon kung ang isang teknisyan ay walang tamang kagamitan para sa internal na pagsusuri ng hardware?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898709,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Pagganap (Performance)",
+          "Pagiging Matipid sa Gastos (Cost Efficiency)",
+          "Proteksyon ng Datos (Data Protection)",
+          "Mas Mahabang Buhay ng Kagamitan (Longevity)"
+        ],
+        "question": "Alin sa kahalagahan ng Computer Hardware Servicing (CHS) ang nakatuon sa pagprotekta ng mga file at digital na impormasyon laban sa pagkawala?",
+        "questionType": "Easy",
+        "correctAnswer": 2
+      },
+      {
+        "id": 1775983898710,
+        "skill": "Problem Solving",
+        "options": [
+          "Kaligtasan at Pagganap (Safety and Performance)",
+          "Pagiging Matipid sa Gastos at Proteksyon ng Datos (Cost Efficiency and Data Protection)",
+          "Mas Mahabang Buhay at Kaligtasan (Longevity and Safety)",
+          "Pagganap at Mas Mahabang Buhay (Performance and Longevity)"
+        ],
+        "question": "Ang pagpapalit ng mga sira at nag-o-overheat na bahagi, o yaong naglalabas ng amoy ng nasusunog, ay tumutugon sa aling DALAWANG mahahalagang layunin ng CHS?",
+        "questionType": "Easy",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898711,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Artificial Intelligence – dahil gumagawa ng awtomatikong desisyon ang mga device",
+          "Internet of Things – dahil ang mga pisikal na bagay ay magkakaugnay sa pamamagitan ng network",
+          "Remote Servicing – dahil maaaring kontrolin ang mga device nang malayo",
+          "Augmented Reality – dahil pinapahusay nito ang karanasan ng gumagamit"
+        ],
+        "question": "Alin sa technological trend ang tumutukoy sa mga device na konektado sa internet na nakikipag-ugnayan at nagpapalitan ng datos sa isa’t isa?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898712,
+        "skill": "Memorization",
+        "options": [
+          "Artificial Intelligence",
+          "Sustainability Concerns",
+          "Internet of Things",
+          "Remote Servicing"
+        ],
+        "question": "Alin sa CHS trend ang nakatuon sa pagbawas ng electronic waste at pagsusulong ng mga makakalikasan at responsableng gawain?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898713,
+        "skill": "Technical Comprehension",
+        "options": [
+          "Inputting Data",
+          "Processing Data",
+          "Storing Data",
+          "Outputting Data"
+        ],
+        "question": "Ang Central Processing Unit (CPU) ay responsable sa aling pangunahing operasyon ng computer hardware?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898714,
+        "skill": "Problem Solving",
+        "options": [
+          "Implement solutions",
+          "Identify the problem",
+          "Test hypothesis",
+          "Gather information"
+        ],
+        "question": "Ano ang UNANG hakbang sa proseso ng hardware troubleshooting?",
+        "questionType": "Easy",
+        "correctAnswer": 3
+      },
+      {
+        "id": 1775983898715,
+        "skill": "Analytical Thinking",
+        "options": [
+          "Pag-click ng mouse upang magbukas ng folder",
+          "Pagkuha ng larawan gamit ang webcam, pag-edit nito, pag-save sa flash drive, at pag-print nito",
+          "Pakikinig ng musika na nakaimbak sa hard drive",
+          "Pag-type ng teksto sa word processor nang hindi sine-save"
+        ],
+        "question": "Alin sa mga gawain ang nagpapakita ng lahat ng apat na pangunahing operasyon ng computer hardware (input, processing, storage, output)?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898716,
+        "skill": "Critical Thinking",
+        "options": [
+          "Motherboard",
+          "Power supply",
+          "Internal drives",
+          "RAM modules"
+        ],
+        "question": "Ayon sa tamang pagkakasunod-sunod ng computer assembly, aling bahagi ang dapat unang i-install matapos buksan ang case?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898717,
+        "skill": "Critical Thinking",
+        "options": [
+          "Regular na maintenance, pag-upgrade ng mga bahagi kung kinakailangan, at pagrerecycle ng mga lumang pyesa",
+          "Pagpapalit ng lahat ng computer bawat taon gamit ang mga bagong energy-efficient na modelo",
+          "Pag-aayos lamang ng isang system kapag tuluyang nasira",
+          "Paggamit lamang ng mga remote servicing tools"
+        ],
+        "question": "Alin sa mga gawain sa Computer Hardware Servicing (CHS) ang nakatutulong na mapahaba ang buhay ng computer habang pinapaliit ang gastos at epekto sa kapaligiran?",
+        "questionType": "Easy",
+        "correctAnswer": 0
+      },
+      {
+        "id": 1775983898718,
+        "skill": "Critical Thinking",
+        "options": [
+          "Ipagpatuloy ang assembly at i-install ang power supply sa huli",
+          "Pilitin na ipasok ang power supply sa paligid ng motherboard",
+          "Alisin ang motherboard at i-install muna ang power supply ayon sa tamang pagkakasuno",
+          "sunod"
+        ],
+        "question": "Ano ang dapat gawin ng isang teknisyan kung nailagay niya ang mga bahagi sa maling pagkakasunod-sunod habang nag-a-assemble ng computer?",
+        "questionType": "Easy",
+        "correctAnswer": 2
+      },
+      {
+        "id": 1775983898719,
+        "skill": "Memorization",
+        "options": [
+          "Artificial Intelligence (AI)",
+          "Remote Servicing",
+          "Sustainability Concerns",
+          "Internet of Things (IoT)"
+        ],
+        "question": "Isa itong trend sa Computer Hardware Servicing (CHS) kung saan ang mga device na karaniwang matatagpuan sa loob ng bahay ay nagiging functional dahil nilagyan ng mga sensor, software, at iba pang teknolohiya, na may layuning makipag-ugnayan at magpalitan ng datos sa iba pang device na konektado sa internet.",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      },
+      {
+        "id": 1775983898720,
+        "skill": "Analytical Thinking",
+        "options": [
+          "Pagpapanatili ng computer hardware at pagsasagawa ng regular na diagnosis",
+          "Paggamit ng mga kagamitan upang mag-solder ng mga resistor sa electric circuit board ng isang appliance",
+          "Paglikha ng code upang magawa ang isang karakter sa laro na tumalon gamit ang development software",
+          "Pagbuo ng mga schematics para sa arkitektura ng network ng isang kompanya"
+        ],
+        "question": "Sa mga sitwasyong nakasaad sa ibaba, alin ang angkop na paglalarawan tungkol sa kung ano ang saklaw ng Computer Hardware Servicing (CHS)?",
+        "questionType": "Easy",
+        "correctAnswer": 1
+      }
+    ]
+  }
+]
