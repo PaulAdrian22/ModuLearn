@@ -61,6 +61,29 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
+      - name: Check GitHub Pages configuration
+        id: pages_check
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: Bearer ${{ github.token }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pages")
+
+          if [ "$STATUS" = "200" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            echo "GitHub Pages is enabled."
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "GitHub Pages is not enabled (status: $STATUS). Skipping deploy."
+          fi
+
       - name: Deploy to GitHub Pages
+        if: ${{ steps.pages_check.outputs.enabled == 'true' }}
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Deployment skipped notice
+        if: ${{ steps.pages_check.outputs.enabled != 'true' }}
+        run: |
+          echo "Skipping GitHub Pages deployment because Pages is disabled for this repository."
+          echo "Enable it at: https://github.com/${{ github.repository }}/settings/pages"

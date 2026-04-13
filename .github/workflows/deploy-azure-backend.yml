@@ -20,7 +20,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      AZURE_WEBAPP_NAME: ${{ vars.AZURE_WEBAPP_NAME }}
+      AZURE_WEBAPP_NAME: ${{ vars.AZURE_WEBAPP_NAME || 'modulearn-api-260412162638' }}
       AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -66,9 +66,8 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           package: backend
 
-      - name: Fail when no Azure credentials are configured
+      - name: Skip deploy when no Azure credentials are configured
         if: ${{ env.AZURE_WEBAPP_PUBLISH_PROFILE == '' && env.AZURE_CREDENTIALS == '' }}
         run: |
-          echo "No Azure deployment credentials configured."
-          echo "Add either AZURE_WEBAPP_PUBLISH_PROFILE or AZURE_CREDENTIALS in repository secrets."
-          exit 1
+          echo "No Azure deployment credentials configured; skipping deployment."
+          echo "Set AZURE_WEBAPP_PUBLISH_PROFILE or AZURE_CREDENTIALS to enable backend deployment."

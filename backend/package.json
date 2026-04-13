@@ -14,8 +14,10 @@
     "import:lesson3": "node import_lesson3_text.js",
     "import:lesson4": "node import_lesson4_text.js",
     "import:lesson5": "node import_lesson5_text.js",
+    "import:lesson6": "node import_lesson6_text.js",
     "import:lesson7": "node import_lesson7_text.js",
-    "seed:simulations": "node seed_simulation_activities.js"
+    "seed:simulations": "node seed_simulation_activities.js",
+    "sync:remote:api": "node sync_local_to_remote_api.js"
   },
   "keywords": [
     "education",
