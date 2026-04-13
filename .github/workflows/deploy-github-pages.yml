@@ -38,6 +38,7 @@ jobs:
 
       - name: Build frontend
         env:
+          CI: false
           PUBLIC_URL: /${{ github.event.repository.name }}
           REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
         run: npm run build --prefix frontend
