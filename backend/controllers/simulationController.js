@@ -34,15 +34,17 @@ const getAllSimulations = async (req, res) => {
     const userId = req.query.userId;
     
     let query = `
-      SELECT 
-        s.*,
+      SELECT
+        s.SimulationID, s.ModuleID, s.SimulationTitle, s.Description,
+        s.ActivityType, s.MaxScore, s.TimeLimit, s.Instructions,
+        s.SimulationOrder, s.Is_Locked, s.created_at, s.updated_at,
         sp.Score,
         sp.Attempts,
         sp.TimeSpent,
         sp.CompletionStatus,
         sp.DateCompleted
       FROM simulation s
-      LEFT JOIN simulation_progress sp ON s.SimulationID = sp.SimulationID 
+      LEFT JOIN simulation_progress sp ON s.SimulationID = sp.SimulationID
         ${userId ? 'AND sp.UserID = ?' : ''}
       ORDER BY s.SimulationOrder
     `;
@@ -74,15 +76,17 @@ const getSimulationsByModule = async (req, res) => {
     const hasModuleColumn = columns.has('ModuleID');
 
     const baseSelect = `
-      SELECT 
-        s.*,
+      SELECT
+        s.SimulationID, s.ModuleID, s.SimulationTitle, s.Description,
+        s.ActivityType, s.MaxScore, s.TimeLimit, s.Instructions,
+        s.SimulationOrder, s.Is_Locked, s.created_at, s.updated_at,
         sp.Score,
         sp.Attempts,
         sp.TimeSpent,
         sp.CompletionStatus,
         sp.DateCompleted
       FROM simulation s
-      LEFT JOIN simulation_progress sp ON s.SimulationID = sp.SimulationID 
+      LEFT JOIN simulation_progress sp ON s.SimulationID = sp.SimulationID
         AND sp.UserID = ?
     `;
 
