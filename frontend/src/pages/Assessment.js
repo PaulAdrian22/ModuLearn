@@ -109,6 +109,12 @@ const Assessment = () => {
     setCurrentQuestion(index);
   };
 
+  const notifyAchievementRefresh = () => {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('achievementMetricsUpdated'));
+    }
+  };
+
   const handleSubmit = async () => {
     const shouldSubmit = await themedConfirm({
       title: 'Submit Assessment?',
@@ -154,6 +160,8 @@ const Assessment = () => {
           score: gradeResponse.data.score || 0
         });
       }
+
+      notifyAchievementRefresh();
     } catch (err) {
       console.error('Error submitting assessment:', err);
     } finally {
@@ -163,7 +171,7 @@ const Assessment = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F5F7FA]">
+      <div className="min-h-screen bg-background">
         <Navbar />
         <div className="flex items-center justify-center h-96">
           <div className="spinner"></div>
@@ -174,7 +182,7 @@ const Assessment = () => {
 
   if (!assessment || questions.length === 0) {
     return (
-      <div className="min-h-screen bg-[#F5F7FA]">
+      <div className="min-h-screen bg-background">
         <Navbar />
         <div className="w-full px-8 py-8">
           <div className="bg-error/20 border border-error text-error px-4 py-3 rounded-lg">
@@ -189,13 +197,13 @@ const Assessment = () => {
     const passed = results.score >= 75;
     
     return (
-      <div className="min-h-screen bg-[#F5F7FA]">
+      <div className="min-h-screen bg-background">
         <Navbar />
         
         <div className="max-w-4xl mx-auto px-6 py-12">
           <div className="bg-white rounded-3xl shadow-2xl p-12 text-center border-2 border-[#E5E7EB]">
             <div className={`w-40 h-40 rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg ${
-              passed ? 'bg-[#2BC4B3]' : 'bg-[#EF5350]'
+              passed ? 'bg-highlight' : 'bg-[#EF5350]'
             }`}>
               {passed ? (
                 <svg className="w-20 h-20 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -208,7 +216,7 @@ const Assessment = () => {
               )}
             </div>
 
-            <h1 className="text-5xl font-bold mb-4 text-[#0B2B4C]">
+            <h1 className="text-5xl font-bold mb-4 text-text-primary">
               {passed ? 'Congratulations! 🎉' : 'Assessment Complete'}
             </h1>
 
@@ -303,20 +311,20 @@ const Assessment = () => {
   const isAnswered = answers[currentQ.QuestionID] !== undefined;
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA]">
+    <div className="min-h-screen bg-background">
       <Navbar />
       
       <div className="max-w-5xl mx-auto px-6 py-10">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-[#0B2B4C] mb-2">{assessment.AssessmentType} Assessment</h1>
+          <h1 className="text-4xl font-bold text-text-primary mb-2">{assessment.AssessmentType} Assessment</h1>
           <p className="text-gray-600 text-lg">Answer all questions to the best of your ability</p>
         </div>
 
         {/* Progress */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border-2 border-[#E5E7EB]">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="font-bold text-lg text-[#0B2B4C]">Question {currentQuestion + 1} of {questions.length}</h3>
+            <h3 className="font-bold text-lg text-text-primary">Question {currentQuestion + 1} of {questions.length}</h3>
             <div className="text-right">
               <span className="text-gray-600 font-medium block">
                 {Object.keys(answers).length}/{questions.length} answered
@@ -326,7 +334,7 @@ const Assessment = () => {
           
           <div className="w-full bg-gray-200 rounded-full h-3">
             <div
-              className="h-3 bg-[#2BC4B3] rounded-full"
+              className="h-3 bg-highlight rounded-full"
               style={{ width: `${((currentQuestion + 1) / questions.length) * 100}%` }}
             ></div>
           </div>
@@ -334,7 +342,7 @@ const Assessment = () => {
 
         {/* Question Card */}
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 border-2 border-[#E5E7EB]">
-          <h2 className="text-2xl font-bold text-[#0B2B4C] mb-8">{currentQ.QuestionText}</h2>
+          <h2 className="text-2xl font-bold text-text-primary mb-8">{currentQ.QuestionText}</h2>
           
           <div className="space-y-4">
             {(shuffledOptionsByQuestion[currentQ.QuestionID]
@@ -350,7 +358,7 @@ const Assessment = () => {
                   onClick={() => handleAnswerSelect(currentQ.QuestionID, option)}
                   className={`w-full text-left p-5 rounded-xl border-2 ${
                     answers[currentQ.QuestionID] === option
-                      ? 'border-[#2BC4B3] bg-[#E8F8F5] shadow-md'
+                      ? 'border-highlight bg-[#E8F8F5] shadow-md'
                       : 'border-[#E5E7EB] bg-white'
                   }`}
                 >

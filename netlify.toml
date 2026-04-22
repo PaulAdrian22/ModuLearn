@@ -6,6 +6,13 @@
 [build.environment]
   CI = "false"
   NODE_VERSION = "20"
+  GENERATE_SOURCEMAP = "false"
+
+[[redirects]]
+  from = "/api/*"
+  to = "https://modulearn-api-260412162638.azurewebsites.net/api/:splat"
+  status = 200
+  force = true
 
 [[redirects]]
   from = "/*"

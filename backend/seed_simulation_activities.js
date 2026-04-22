@@ -2,10 +2,17 @@ const fs = require('fs');
 const path = require('path');
 const mammoth = require('mammoth');
 const { query, closePool } = require('./config/database');
+const { uploadAssetFromPath, isAzureStorageEnabled } = require('./utils/uploadStorage');
 
-const SIMULATION_ROOT = path.resolve(__dirname, '..', 'Simulations', 'Simulation');
+const SIMULATION_ROOT = path.resolve(__dirname, '..', 'Simulations', 'simulation webp');
 const DOCX_INSTRUCTIONS_PATH = path.resolve(__dirname, '..', 'Simulations', 'Assessments_ModuLearn.docx');
 const UPLOAD_ROOT = path.resolve(__dirname, 'uploads', 'simulations');
+
+const ACTIVITY_FOLDER_PATTERN = /^Activity\s+(\d+)$/i;
+const STEP_PREFIX_PATTERN = /^(\d+)\s*\.\s*(.+)$/;
+const SUPPORTED_ASSET_EXTENSION_PATTERN = /\.(webp|png|jpg|jpeg)$/i;
+const STRICT_ACTIVITY_FOLDER_MIN = 1;
+const STRICT_ACTIVITY_FOLDER_MAX = 9;
 
 const SKILLS = [
   'Memorization',
@@ -500,8 +507,191 @@ const ensureDirectory = async (dirPath) => {
   await fs.promises.mkdir(dirPath, { recursive: true });
 };
 
+const toPosixPath = (value = '') => String(value || '').replace(/\\/g, '/');
+
+const removeStepPrefix = (value = '') => {
+  const match = String(value || '').match(STEP_PREFIX_PATTERN);
+  if (!match) return String(value || '').trim();
+  return String(match[2] || '').trim();
+};
+
+const deriveStepOrderFromRelativePath = (relativePath = '') => {
+  const segments = toPosixPath(relativePath).split('/').filter(Boolean);
+
+  for (const segment of segments) {
+    const nameOnly = String(segment || '').replace(/\.[^.]+$/, '').trim();
+    const match = nameOnly.match(STEP_PREFIX_PATTERN);
+    if (match?.[1]) {
+      return Number(match[1]);
+    }
+  }
+
+  return null;
+};
+
+const buildStepLabelFromRelativePath = (relativePath = '') => {
+  const normalizedPath = toPosixPath(relativePath);
+  const segments = normalizedPath.split('/').filter(Boolean);
+  const lastSegment = segments[segments.length - 1] || '';
+  const withoutExt = lastSegment.replace(/\.[^.]+$/, '');
+  const cleaned = normalizeLine(removeStepPrefix(withoutExt).replace(/[_-]+/g, ' '));
+
+  if (cleaned) return cleaned;
+
+  const fallbackName = removeStepPrefix(withoutExt);
+  return fallbackName || 'Step Layer';
+};
+
+const walkActivityFolderAssets = async (absoluteFolderPath, relativePrefix = '') => {
+  const directoryEntries = await fs.promises.readdir(absoluteFolderPath, { withFileTypes: true });
+  let collected = [];
+
+  for (const directoryEntry of directoryEntries) {
+    const absoluteEntryPath = path.join(absoluteFolderPath, directoryEntry.name);
+    const relativeEntryPath = relativePrefix
+      ? `${relativePrefix}/${directoryEntry.name}`
+      : directoryEntry.name;
+
+    if (directoryEntry.isDirectory()) {
+      const nested = await walkActivityFolderAssets(absoluteEntryPath, relativeEntryPath);
+      collected = collected.concat(nested);
+      continue;
+    }
+
+    if (!SUPPORTED_ASSET_EXTENSION_PATTERN.test(directoryEntry.name)) {
+      continue;
+    }
+
+    collected.push(toPosixPath(relativeEntryPath));
+  }
+
+  return collected;
+};
+
+const getOrderedAssetsForActivityFolder = async (activityFolderName = '') => {
+  const absoluteFolderPath = path.join(SIMULATION_ROOT, activityFolderName);
+
+  let rawRelativePaths = [];
+  try {
+    rawRelativePaths = await walkActivityFolderAssets(absoluteFolderPath);
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      return [];
+    }
+    throw error;
+  }
+
+  const enriched = rawRelativePaths
+    .map((relativePath) => ({
+      relativePath,
+      stepOrder: deriveStepOrderFromRelativePath(relativePath),
+      label: buildStepLabelFromRelativePath(relativePath)
+    }))
+    .filter((entry) => Number.isFinite(Number(entry.stepOrder)))
+    .sort((a, b) => {
+      const stepDelta = Number(a.stepOrder) - Number(b.stepOrder);
+      if (stepDelta !== 0) return stepDelta;
+      return a.relativePath.localeCompare(b.relativePath);
+    });
+
+  const stepCounters = {};
+
+  return enriched.map((entry) => {
+    const key = String(entry.stepOrder);
+    const sameStepIndex = stepCounters[key] || 0;
+    stepCounters[key] = sameStepIndex + 1;
+
+    const layerOrder = Number((Number(entry.stepOrder) + sameStepIndex * 0.01).toFixed(2));
+
+    return {
+      ...entry,
+      layerOrder
+    };
+  });
+};
+
+const listAvailableActivityFolders = async () => {
+  let entries = [];
+  try {
+    entries = await fs.promises.readdir(SIMULATION_ROOT, { withFileTypes: true });
+  } catch (error) {
+    if (error.code === 'ENOENT') return [];
+    throw error;
+  }
+
+  return entries
+    .filter((entry) => entry.isDirectory() && ACTIVITY_FOLDER_PATTERN.test(entry.name))
+    .map((entry) => entry.name)
+    .sort((a, b) => {
+      const aMatch = a.match(ACTIVITY_FOLDER_PATTERN);
+      const bMatch = b.match(ACTIVITY_FOLDER_PATTERN);
+      const aIndex = aMatch ? Number(aMatch[1]) : Number.MAX_SAFE_INTEGER;
+      const bIndex = bMatch ? Number(bMatch[1]) : Number.MAX_SAFE_INTEGER;
+      return aIndex - bIndex;
+    });
+};
+
+const parseActivityFolderIndex = (folderName = '') => {
+  const match = String(folderName || '').match(ACTIVITY_FOLDER_PATTERN);
+  if (!match) return null;
+
+  const parsed = Number(match[1]);
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
+const getStrictActivityFolders = (folders = []) => {
+  return folders.filter((folderName) => {
+    const index = parseActivityFolderIndex(folderName);
+    if (!Number.isFinite(index)) return false;
+    return index >= STRICT_ACTIVITY_FOLDER_MIN && index <= STRICT_ACTIVITY_FOLDER_MAX;
+  });
+};
+
+const getActivityIdentity = (activity = {}) => {
+  return `${String(activity.moduleId || 0)}:${String(activity.simulationOrder || 0)}:${String(activity.title || '')}`;
+};
+
+const resolveActivityFolderName = (activity = {}, availableFolders = []) => {
+  const normalizedFolderMap = new Map(
+    availableFolders.map((folderName) => [folderName.toLowerCase(), folderName])
+  );
+
+  const candidates = [
+    activity.activityFolderHint,
+    Number.isFinite(Number(activity.activityIndex)) ? `Activity ${Number(activity.activityIndex)}` : ''
+  ].filter(Boolean);
+
+  for (const candidate of candidates) {
+    const resolved = normalizedFolderMap.get(String(candidate).toLowerCase());
+    if (resolved) return resolved;
+  }
+
+  return null;
+};
+
 const copyAssetToUploads = async (relativePath) => {
   const sourcePath = path.join(SIMULATION_ROOT, ...relativePath.split('/'));
+  const normalized = relativePath.replace(/\\/g, '/');
+
+  if (isAzureStorageEnabled()) {
+    try {
+      await fs.promises.access(sourcePath, fs.constants.R_OK);
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        console.warn(`Missing asset: ${relativePath}`);
+        return null;
+      }
+      throw error;
+    }
+
+    return uploadAssetFromPath(sourcePath, {
+      category: 'simulations',
+      preserveFileName: true,
+      blobPath: `simulations/${normalized}`,
+      deleteSource: false,
+    });
+  }
+
   const destinationPath = path.join(UPLOAD_ROOT, ...relativePath.split('/'));
 
   await ensureDirectory(path.dirname(destinationPath));
@@ -516,7 +706,6 @@ const copyAssetToUploads = async (relativePath) => {
     throw error;
   }
 
-  const normalized = relativePath.replace(/\\/g, '/');
   return `/uploads/simulations/${normalized}`;
 };
 
@@ -740,16 +929,12 @@ const parseActivitiesFromDocx = async () => {
       ...fallbackInstructionLines
     ]);
 
-    const flowSteps = htmlStructured?.processSteps?.length > 0
-      ? htmlStructured.processSteps
-      : (alphabetProcessSteps.length > 0 ? alphabetProcessSteps : instructionLines);
-
     const normalizedTitle = sanitizeStepLine(current.title);
     const normalizedDescription = sanitizeStepLine(current.description);
     const normalizedSkill = normalizeSkill(current.skillType);
-    const resolvedFlowSteps = flowSteps.length > 0 ? flowSteps : instructionLines;
+    const numberedFlowSteps = instructionLines.length > 0 ? instructionLines : fallbackInstructionLines;
 
-    if (!normalizedTitle || resolvedFlowSteps.length === 0) {
+    if (!normalizedTitle || numberedFlowSteps.length === 0) {
       current = null;
       inSteps = false;
       metadataField = null;
@@ -762,8 +947,8 @@ const parseActivitiesFromDocx = async () => {
       skillType: normalizedSkill,
       title: normalizedTitle,
       description: normalizedDescription || 'Simulation activity imported from Assessments_ModuLearn.docx.',
-      steps: resolvedFlowSteps,
-      instructionLines: instructionLines.length > 0 ? instructionLines : resolvedFlowSteps
+      steps: numberedFlowSteps,
+      instructionLines: numberedFlowSteps
     };
 
     activity.areas = inferAreasFromActivity(activity);
@@ -852,12 +1037,21 @@ const parseActivitiesFromDocx = async () => {
 
   flushCurrent();
 
-  return activities
+  const orderedActivities = activities
     .filter((activity) => Number(activity.moduleId) === 3 || Number(activity.moduleId) === 4)
     .sort((a, b) => {
       if (a.moduleId !== b.moduleId) return a.moduleId - b.moduleId;
       return a.simulationOrder - b.simulationOrder;
     });
+
+  return orderedActivities.map((activity, index) => {
+    const activityIndex = index + 1;
+    return {
+      ...activity,
+      activityIndex,
+      activityFolderHint: `Activity ${activityIndex}`
+    };
+  });
 };
 
 const resolvePrimaryAreaName = (activity = {}) => {
@@ -1121,6 +1315,31 @@ const buildPerspective = async (areaName, perspectiveId, allowedLabels = null, o
 
 const buildInstructionText = (steps = []) => steps.map((step, index) => `${index + 1}. ${step}`).join('\n');
 
+const buildFlowStepsFromImageOrder = (instructionSteps = [], dropZones = [], perspectiveId = 1) => {
+  const normalizedSteps = dedupeLines(instructionSteps);
+  const orderedZones = [...dropZones].sort((a, b) => {
+    const orderDelta = Number(a?.layerOrder || 0) - Number(b?.layerOrder || 0);
+    if (orderDelta !== 0) return orderDelta;
+
+    return Number(a?.id || 0) - Number(b?.id || 0);
+  });
+
+  return orderedZones.map((zone, index) => {
+    const stepText = normalizedSteps[index] || `Place ${zone.label}.`;
+    const targetLabel = zone?.label || '';
+    const actionType = inferActionType(stepText);
+
+    return {
+      id: index + 1,
+      text: stepText,
+      actionType: actionType === 'navigate' ? 'mark' : actionType,
+      perspectiveId,
+      targetLabel,
+      requiredTool: normalizeRequiredTool('', inferRequiredToolForStep(stepText, targetLabel || ''))
+    };
+  });
+};
+
 const inferAreaNameFromStep = (stepText = '', perspectives = []) => {
   const normalized = String(stepText || '').toLowerCase();
   if (!normalized) return null;
@@ -1290,7 +1509,8 @@ const upsertSimulation = async (activity, zoneData, columnSet, resolvedOrder) =>
       flowSteps: zoneData.flowSteps,
       mainAreas: zoneData.mainAreas,
       backgroundImage: zoneData.backgroundImage,
-      dropZones: zoneData.dropZones
+      dropZones: zoneData.dropZones,
+      imageSequence: zoneData.imageSequence || []
     })
   };
 
@@ -1322,53 +1542,97 @@ const upsertSimulation = async (activity, zoneData, columnSet, resolvedOrder) =>
   return { mode: 'created', simulationId: result.insertId };
 };
 
-const buildZoneDataForActivity = async (activity) => {
-  const primaryAreaName = resolvePrimaryAreaName(activity);
-  const startAsAssembled = shouldStartOnAssembledLayer(activity);
-  const areaNames = Array.isArray(activity?.areas) && activity.areas.length > 0
-    ? activity.areas.filter((areaName) => Boolean(AREA_LIBRARY[areaName]))
-    : [primaryAreaName];
+const buildZoneDataForActivity = async (activity, availableFolders = []) => {
+  const activityFolderName = resolveActivityFolderName(activity, availableFolders);
 
-  const uniqueAreas = [...new Set(areaNames)];
-  const mainAreas = [];
-
-  for (let index = 0; index < uniqueAreas.length; index += 1) {
-    const areaName = uniqueAreas[index];
-    const relevantLabels = inferRelevantLabelsForArea(activity, areaName);
-    const shouldIncludeArea = startAsAssembled
-      ? true
-      : (relevantLabels.size > 0 || areaName === primaryAreaName);
-    const labelsForPerspective = startAsAssembled ? null : relevantLabels;
-
-    if (!shouldIncludeArea) continue;
-
-    const perspective = await buildPerspective(areaName, mainAreas.length + 1, labelsForPerspective, {
-      initialVisualState: startAsAssembled && areaName === primaryAreaName ? 'assembled' : 'base'
-    });
-    mainAreas.push(perspective);
+  if (!activityFolderName) {
+    throw new Error(
+      `No matching image folder was found for "${activity.title}". `
+      + `Expected ${activity.activityFolderHint || 'an Activity folder'} in ${SIMULATION_ROOT}.`
+    );
   }
 
-  if (mainAreas.length === 0) {
-    const fallbackPerspective = await buildPerspective(primaryAreaName, 1, null, {
-      initialVisualState: startAsAssembled ? 'assembled' : 'base'
-    });
-    mainAreas.push(fallbackPerspective);
+  const orderedAssets = await getOrderedAssetsForActivityFolder(activityFolderName);
+
+  if (orderedAssets.length === 0) {
+    throw new Error(`No numbered image assets were found inside ${activityFolderName}.`);
   }
 
-  const primaryPerspective =
-    mainAreas.find((perspective) => perspective.name === primaryAreaName)
-    || mainAreas[0];
+  const baseAsset = orderedAssets.find((asset) => Number(asset.stepOrder) === 1) || orderedAssets[0];
+  const baseImagePath = await copyAssetToUploads(`${activityFolderName}/${baseAsset.relativePath}`);
 
-  const flowSource = activity.steps?.length > 0 ? activity.steps : activity.instructionLines;
-  const flowSteps = buildFlowSteps(flowSource, mainAreas);
+  if (!baseImagePath) {
+    throw new Error(`Base image could not be copied for ${activityFolderName}.`);
+  }
+
+  const layerCandidates = orderedAssets.filter((asset) => asset.relativePath !== baseAsset.relativePath);
+  const coordinates = getGridCoordinates(layerCandidates.length || 1);
+  const dropZones = [];
+  const imageSequence = [
+    {
+      order: Number(baseAsset.stepOrder || 1),
+      label: `Step ${Number(baseAsset.stepOrder || 1)}: ${baseAsset.label || 'Base'}`,
+      image: baseImagePath,
+      isBase: true
+    }
+  ];
+
+  for (let index = 0; index < layerCandidates.length; index += 1) {
+    const layerAsset = layerCandidates[index];
+    const copiedLayerPath = await copyAssetToUploads(`${activityFolderName}/${layerAsset.relativePath}`);
+    if (!copiedLayerPath) continue;
+
+    const stepPrefix = Number.isFinite(Number(layerAsset.stepOrder))
+      ? `Step ${Number(layerAsset.stepOrder)}`
+      : `Step ${index + 2}`;
+    const label = `${stepPrefix}: ${layerAsset.label || 'Layer'}`;
+    const coordinate = coordinates[index] || { x: 50, y: 50 };
+
+    dropZones.push({
+      id: index + 1,
+      x: coordinate.x,
+      y: coordinate.y,
+      label,
+      smallImage: copiedLayerPath,
+      layerImage: copiedLayerPath,
+      layerOrder: layerAsset.layerOrder,
+      interactionMode: inferInteractionModeFromLabel(label),
+      requiredTool: inferRequiredToolForStep(label, label)
+    });
+
+    imageSequence.push({
+      order: layerAsset.layerOrder,
+      label,
+      image: copiedLayerPath,
+      isBase: false
+    });
+  }
+
+  const perspectiveId = 1;
+  const perspectiveName = 'Computer Case - External View';
+  const instructionSource = activity.instructionLines?.length > 0
+    ? activity.instructionLines
+    : activity.steps;
+  const flowSteps = buildFlowStepsFromImageOrder(instructionSource, dropZones, perspectiveId);
+
+  const mainAreas = [
+    {
+      id: perspectiveId,
+      name: perspectiveName,
+      backgroundImage: baseImagePath,
+      dropZones
+    }
+  ];
 
   return {
-    instructionText: buildInstructionText(activity.instructionLines?.length > 0 ? activity.instructionLines : flowSource),
+    instructionText: buildInstructionText(instructionSource),
     skillType: activity.skillType,
     flowSteps,
     mainAreas,
-    backgroundImage: primaryPerspective?.backgroundImage || null,
-    dropZones: primaryPerspective?.dropZones || []
+    backgroundImage: baseImagePath,
+    dropZones,
+    imageSequence,
+    activityFolder: activityFolderName
   };
 };
 
@@ -1379,6 +1643,17 @@ const run = async () => {
     await ensureDirectory(UPLOAD_ROOT);
     await ensureZoneDataColumn();
     const simulationColumns = await getSimulationColumnSet();
+    const activityFolders = await listAvailableActivityFolders();
+    const strictActivityFolders = getStrictActivityFolders(activityFolders);
+
+    if (strictActivityFolders.length === 0) {
+      throw new Error(`No Activity folders were found in ${SIMULATION_ROOT}`);
+    }
+
+    console.log(`Detected ${activityFolders.length} activity image folders.`);
+    console.log(
+      `Strict mapping enabled: using only Activity ${STRICT_ACTIVITY_FOLDER_MIN} to Activity ${STRICT_ACTIVITY_FOLDER_MAX}.`
+    );
 
     const activities = await parseActivitiesFromDocx();
     if (activities.length === 0) {
@@ -1387,14 +1662,59 @@ const run = async () => {
 
     console.log(`Parsed ${activities.length} activities from DOCX.`);
 
-    for (const activity of activities) {
-      const zoneData = await buildZoneDataForActivity(activity);
+    let updatedCount = 0;
+    let skippedCount = 0;
+    const seededActivityIdentities = new Set();
+
+    const activityByFolderHint = new Map();
+    activities.forEach((activity) => {
+      const hint = String(activity.activityFolderHint || '').toLowerCase().trim();
+      if (!hint || activityByFolderHint.has(hint)) return;
+      activityByFolderHint.set(hint, activity);
+    });
+
+    for (const folderName of strictActivityFolders) {
+      const key = String(folderName || '').toLowerCase().trim();
+      const activity = activityByFolderHint.get(key);
+
+      if (!activity) {
+        skippedCount += 1;
+        console.warn(`SKIPPED: ${folderName} has no matching DOCX activity in strict 1-to-1 mode.`);
+        continue;
+      }
+
+      const matchedFolder = resolveActivityFolderName(activity, strictActivityFolders);
+      if (!matchedFolder) {
+        skippedCount += 1;
+        console.warn(
+          `SKIPPED: Module ${activity.moduleId} | Order ${activity.simulationOrder} | ${activity.title} (no matching Activity folder)`
+        );
+        continue;
+      }
+
+      const zoneData = await buildZoneDataForActivity(activity, strictActivityFolders);
       const resolvedOrder = await resolveSimulationOrder(activity, simulationColumns);
       const result = await upsertSimulation(activity, zoneData, simulationColumns, resolvedOrder);
-      console.log(`${result.mode.toUpperCase()}: Module ${activity.moduleId} | Order ${resolvedOrder} | ${activity.title}`);
+      updatedCount += 1;
+      seededActivityIdentities.add(getActivityIdentity(activity));
+
+      console.log(
+        `${result.mode.toUpperCase()}: Module ${activity.moduleId} | Order ${resolvedOrder} | ${activity.title} | ${zoneData.activityFolder}`
+      );
     }
 
-    console.log('\nSimulation activity seeding complete.\n');
+    activities.forEach((activity) => {
+      const identity = getActivityIdentity(activity);
+      if (seededActivityIdentities.has(identity)) return;
+
+      skippedCount += 1;
+      console.warn(
+        `SKIPPED: Module ${activity.moduleId} | Order ${activity.simulationOrder} | ${activity.title} `
+        + '(not part of strict Activity 1-9 mapping)'
+      );
+    });
+
+    console.log(`\nSimulation activity seeding complete. Updated: ${updatedCount}, Skipped: ${skippedCount}.\n`);
   } catch (error) {
     console.error('Failed to seed simulation activities:', error.message);
     process.exitCode = 1;

@@ -96,7 +96,7 @@ const ImageCropper = ({
                         onClick={() => setSelectedAspect(option.value)}
                         className={`rounded-md px-3 py-1.5 text-sm font-semibold transition-colors ${
                           selectedAspect === option.value
-                            ? 'bg-[#2BC4B3] text-white'
+                            ? 'bg-highlight text-white'
                             : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
                         }`}
                       >
@@ -120,7 +120,7 @@ const ImageCropper = ({
                   onChange={(e) => setZoom(parseFloat(e.target.value))}
                   className="slider h-2 flex-1 cursor-pointer appearance-none rounded-lg bg-gray-700"
                   style={{
-                    background: `linear-gradient(to right, #2BC4B3 0%, #2BC4B3 ${((zoom - 0.5) / 2.5) * 100}%, #374151 ${((zoom - 0.5) / 2.5) * 100}%, #374151 100%)`
+                    background: `linear-gradient(to right, #42C5B6 0%, #42C5B6 ${((zoom - 0.5) / 2.5) * 100}%, #374151 ${((zoom - 0.5) / 2.5) * 100}%, #374151 100%)`
                   }}
                 />
                 <svg className="h-6 w-6 shrink-0 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -140,7 +140,7 @@ const ImageCropper = ({
               </button>
               <button
                 onClick={handleSave}
-                className="flex-1 rounded-lg bg-[#2BC4B3] px-6 py-3 font-semibold text-white transition-all hover:bg-[#1a9d8f]"
+                className="flex-1 rounded-lg bg-highlight px-6 py-3 font-semibold text-white transition-all hover:bg-highlight-dark"
               >
                 Save & Apply
               </button>

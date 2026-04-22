@@ -412,7 +412,7 @@ const AdminLearners = () => {
 
           <div className="bg-white rounded-lg p-4 border border-border flex items-center space-x-3">
             <div className="w-12 h-12 bg-highlight/10 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-highlight" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-highlight-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
@@ -633,7 +633,7 @@ const AdminLearners = () => {
 
                 <div className="min-w-[300px]">
                   <div className="flex flex-wrap gap-3 mb-3">
-                    <button className="px-5 py-2 bg-[#2BC4B3] text-white rounded-lg font-semibold">Enrolled Lessons</button>
+                    <button className="px-5 py-2 bg-highlight text-white rounded-lg font-semibold">Enrolled Lessons</button>
                     <button className="px-5 py-2 bg-[#4A4A4A] text-white rounded-lg font-semibold">Suspend Learner</button>
                     <button onClick={() => handleDeleteLearner(selectedLearner.UserID)} className="px-5 py-2 bg-[#FF7D7D] text-white rounded-lg font-semibold">Delete Learner</button>
                   </div>
@@ -692,8 +692,8 @@ const AdminLearners = () => {
               </div>
 
               <div className="mt-5 flex flex-wrap justify-end gap-4">
-                <button onClick={exportAsPDF} className="px-6 py-2 bg-[#0F4A8A] text-white rounded-lg text-sm md:text-2xl leading-tight">Download as PDF File</button>
-                <button onClick={exportAsExcel} className="px-6 py-2 bg-[#0F4A8A] text-white rounded-lg text-sm md:text-2xl leading-tight">Download as Excel File</button>
+                <button onClick={exportAsPDF} className="px-6 py-2 bg-[#3A70A1] text-white rounded-lg text-sm md:text-2xl leading-tight">Download as PDF File</button>
+                <button onClick={exportAsExcel} className="px-6 py-2 bg-[#3A70A1] text-white rounded-lg text-sm md:text-2xl leading-tight">Download as Excel File</button>
               </div>
             </div>
           </div>

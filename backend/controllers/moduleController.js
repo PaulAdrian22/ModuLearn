@@ -2,6 +2,7 @@
 // Handles CRUD operations for learning modules
 
 const { query } = require('../config/database');
+const { getCached, setCached, clearNamespace } = require('../utils/responseCache');
 
 let hasModuleDeletedFlagColumn = null;
 let hasModuleLessonLanguageColumn = null;
@@ -112,6 +113,51 @@ const toArray = (value) => {
   return [];
 };
 
+const ROADMAP_STAGE_LABELS = {
+  introduction: 'Introduction',
+  diagnostic: 'Diagnostic',
+  lesson: 'Lesson',
+  final: 'Final Assessment',
+};
+
+const ROADMAP_STAGE_ORDER = ['introduction', 'diagnostic', 'lesson', 'final'];
+
+const normalizeRoadmapStages = (value = []) => {
+  const parsedStages = toArray(value);
+  const stageMap = new Map();
+
+  parsedStages.forEach((stage) => {
+    const stageType = String(stage?.type || '').trim().toLowerCase();
+    if (!ROADMAP_STAGE_ORDER.includes(stageType) || stageMap.has(stageType)) {
+      return;
+    }
+
+    const rawId = stage?.id;
+    const normalizedId =
+      rawId !== undefined && rawId !== null && String(rawId).trim()
+        ? String(rawId)
+        : stageType;
+
+    const normalizedLabel = String(
+      stage?.label || ROADMAP_STAGE_LABELS[stageType] || stageType
+    ).trim();
+
+    stageMap.set(stageType, {
+      id: normalizedId,
+      type: stageType,
+      label: normalizedLabel || ROADMAP_STAGE_LABELS[stageType] || stageType,
+    });
+  });
+
+  return ROADMAP_STAGE_ORDER.map((stageType) =>
+    stageMap.get(stageType) || {
+      id: stageType,
+      type: stageType,
+      label: ROADMAP_STAGE_LABELS[stageType],
+    }
+  );
+};
+
 const toObject = (value, fallback = null) => {
   if (value && typeof value === 'object' && !Array.isArray(value)) {
     return value;
@@ -143,6 +189,62 @@ const extractInlineReviewQuestions = (sections = []) => {
     const sectionQuestions = Array.isArray(section?.questions) ? section.questions : [];
     return [...allQuestions, ...sectionQuestions];
   }, []);
+};
+
+const normalizeQuestionTextKey = (value = '') => String(value || '').trim().toLowerCase().replace(/\s+/g, ' ');
+
+const normalizeReviewQuestion = (question = {}, index = 0) => {
+  const options = Array.isArray(question?.options) ? question.options.slice(0, 4) : [];
+  while (options.length < 4) options.push('');
+
+  const parsedCorrect = Number(question?.correctAnswer);
+  const safeCorrectAnswer = Number.isFinite(parsedCorrect)
+    ? Math.max(0, Math.min(3, Math.floor(parsedCorrect)))
+    : 0;
+
+  return {
+    ...question,
+    id: question?.id ?? `normalized-review-${index}`,
+    question: String(question?.question || ''),
+    skill: String(question?.skill || 'No Skill'),
+    options,
+    questionType: 'Easy',
+    type: 'Easy',
+    correctAnswer: safeCorrectAnswer,
+  };
+};
+
+const buildNormalizedReviewQuestions = (reviewQuestions = [], sections = []) => {
+  const explicitReviewQuestions = Array.isArray(reviewQuestions) ? reviewQuestions : [];
+  const inlineReviewQuestions = extractInlineReviewQuestions(sections);
+
+  const mergedQuestions = [];
+  const seenQuestions = new Set();
+
+  const pushUnique = (question) => {
+    const questionKey = normalizeQuestionTextKey(question?.question);
+    if (!questionKey || seenQuestions.has(questionKey)) return;
+    seenQuestions.add(questionKey);
+    mergedQuestions.push(question);
+  };
+
+  explicitReviewQuestions.forEach(pushUnique);
+  inlineReviewQuestions.forEach(pushUnique);
+
+  const normalizedQuestions = mergedQuestions.map((question, index) =>
+    normalizeReviewQuestion(question, index)
+  );
+
+  if (normalizedQuestions.length === 0) return [];
+
+  const reviewTarget = normalizedQuestions.length >= 20 ? 20 : 10;
+  return normalizedQuestions.slice(0, Math.min(reviewTarget, normalizedQuestions.length));
+};
+
+const getPreferredDiagnosticQuestions = (storedDiagnosticQuestions = [], normalizedReviewQuestions = [], sections = []) => {
+  const stored = toArray(storedDiagnosticQuestions);
+  if (stored.length > 0) return stored;
+  return buildDiagnosticFromReview(normalizedReviewQuestions, sections);
 };
 
 const buildDiagnosticFromReview = (reviewQuestions = [], sections = []) => {
@@ -177,9 +279,9 @@ const buildDiagnosticFromReview = (reviewQuestions = [], sections = []) => {
 
 const getModuleCardStats = (moduleRow = {}) => {
   const sections = toArray(moduleRow.sections);
-  const reviewQuestions = toArray(moduleRow.reviewQuestions);
+  const reviewQuestions = buildNormalizedReviewQuestions(moduleRow.reviewQuestions, sections);
   const finalQuestions = toArray(moduleRow.finalQuestions);
-  const diagnosticQuestions = buildDiagnosticFromReview(reviewQuestions, sections);
+  const diagnosticQuestions = getPreferredDiagnosticQuestions(moduleRow.diagnosticQuestions, reviewQuestions, sections);
 
   const topicCount = sections.filter((section) => {
     const type = String(section?.type || '').toLowerCase().trim();
@@ -207,14 +309,26 @@ const getModuleCardStats = (moduleRow = {}) => {
   return { topicCount, assessmentCount };
 };
 
+const getRequestCacheKey = (req) => {
+  return String(req?.originalUrl || req?.url || '').trim() || String(req?.path || '');
+};
+
 // Get all modules
 const getAllModules = async (req, res) => {
   try {
     const hasDeletedFlag = await getHasModuleDeletedFlagColumn();
     const hasLessonLanguage = await getHasModuleLessonLanguageColumn();
 
-    const { userId, language } = req.query;
+    const { userId, language, includeAssessmentContent } = req.query;
+    const shouldIncludeAssessmentContent = ['1', 'true', 'yes'].includes(
+      String(includeAssessmentContent || '').trim().toLowerCase()
+    );
     const languageFilter = await resolveLanguageFilter({ userId, requestedLanguage: language });
+    const requestCacheKey = getRequestCacheKey(req);
+    const cachedModules = getCached('modules:list', requestCacheKey);
+    if (cachedModules) {
+      return res.json(cachedModules);
+    }
     
     let sql = `
       SELECT 
@@ -295,12 +409,24 @@ const getAllModules = async (req, res) => {
           ...moduleData
         } = moduleRow;
 
+        const assessmentContent = shouldIncludeAssessmentContent
+          ? {
+              sections: toArray(sections),
+              diagnosticQuestions: toArray(diagnosticQuestions),
+              reviewQuestions: toArray(reviewQuestions),
+              finalQuestions: toArray(finalQuestions),
+            }
+          : {};
+
         return {
           ...moduleData,
+          ...assessmentContent,
           topicCount,
           assessmentCount,
         };
       });
+
+      setCached('modules:list', requestCacheKey, enrichedModules);
 
       return res.json(enrichedModules);
     }
@@ -316,6 +442,10 @@ const getAllModules = async (req, res) => {
       filters.push("COALESCE(NULLIF(TRIM(m.LessonLanguage), ''), 'English') = ?");
       params.push(languageFilter);
     }
+
+    if (shouldIncludeAssessmentContent) {
+      sql += ',\n        m.sections,\n        m.diagnosticQuestions,\n        m.reviewQuestions,\n        m.finalQuestions';
+    }
     
     sql += ' FROM module m';
     if (filters.length > 0) {
@@ -324,7 +454,22 @@ const getAllModules = async (req, res) => {
     sql += ' ORDER BY m.LessonOrder';
 
     const modules = await query(sql, params);
-    
+
+    if (shouldIncludeAssessmentContent) {
+      const payload = modules.map((moduleRow) => ({
+        ...moduleRow,
+        sections: toArray(moduleRow.sections),
+        diagnosticQuestions: toArray(moduleRow.diagnosticQuestions),
+        reviewQuestions: toArray(moduleRow.reviewQuestions),
+        finalQuestions: toArray(moduleRow.finalQuestions),
+      }));
+
+      setCached('modules:list', requestCacheKey, payload);
+      return res.json(payload);
+    }
+
+    setCached('modules:list', requestCacheKey, modules);
+
     res.json(modules);
     
   } catch (error) {
@@ -345,6 +490,11 @@ const getModuleById = async (req, res) => {
     const { id } = req.params;
     const { userId, language } = req.query;
     const languageFilter = await resolveLanguageFilter({ userId, requestedLanguage: language });
+    const requestCacheKey = getRequestCacheKey(req);
+    const cachedModule = getCached('modules:item', requestCacheKey);
+    if (cachedModule) {
+      return res.json(cachedModule);
+    }
     
     let sql = `
       SELECT 
@@ -411,13 +561,17 @@ const getModuleById = async (req, res) => {
       const module = modules[0];
       
       module.sections = toArray(module.sections);
-      module.reviewQuestions = toArray(module.reviewQuestions);
+      module.reviewQuestions = buildNormalizedReviewQuestions(module.reviewQuestions, module.sections);
       module.finalQuestions = toArray(module.finalQuestions);
-      module.roadmapStages = toArray(module.roadmapStages);
-      const storedDiagnosticQuestions = toArray(module.diagnosticQuestions);
-      const autoDiagnosticQuestions = buildDiagnosticFromReview(module.reviewQuestions, module.sections);
-      module.diagnosticQuestions = autoDiagnosticQuestions.length > 0 ? autoDiagnosticQuestions : storedDiagnosticQuestions;
+      module.roadmapStages = normalizeRoadmapStages(module.roadmapStages);
+      module.diagnosticQuestions = getPreferredDiagnosticQuestions(
+        module.diagnosticQuestions,
+        module.reviewQuestions,
+        module.sections
+      );
       module.LessonTime = toObject(module.LessonTime, null);
+
+      setCached('modules:item', requestCacheKey, module);
       
       return res.json(module);
     }
@@ -448,13 +602,17 @@ const getModuleById = async (req, res) => {
     const module = modules[0];
     
     module.sections = toArray(module.sections);
-    module.reviewQuestions = toArray(module.reviewQuestions);
+    module.reviewQuestions = buildNormalizedReviewQuestions(module.reviewQuestions, module.sections);
     module.finalQuestions = toArray(module.finalQuestions);
-    module.roadmapStages = toArray(module.roadmapStages);
-    const storedDiagnosticQuestions = toArray(module.diagnosticQuestions);
-    const autoDiagnosticQuestions = buildDiagnosticFromReview(module.reviewQuestions, module.sections);
-    module.diagnosticQuestions = autoDiagnosticQuestions.length > 0 ? autoDiagnosticQuestions : storedDiagnosticQuestions;
+    module.roadmapStages = normalizeRoadmapStages(module.roadmapStages);
+    module.diagnosticQuestions = getPreferredDiagnosticQuestions(
+      module.diagnosticQuestions,
+      module.reviewQuestions,
+      module.sections
+    );
     module.LessonTime = toObject(module.LessonTime, null);
+
+    setCached('modules:item', requestCacheKey, module);
     
     res.json(module);
     
@@ -484,6 +642,9 @@ const createModule = async (req, res) => {
       'SELECT * FROM module WHERE ModuleID = ?',
       [result.insertId]
     );
+
+    clearNamespace('modules:list');
+    clearNamespace('modules:item');
     
     res.status(201).json({
       message: 'Module created successfully',
@@ -530,6 +691,9 @@ const updateModule = async (req, res) => {
       'SELECT * FROM module WHERE ModuleID = ?',
       [id]
     );
+
+    clearNamespace('modules:list');
+    clearNamespace('modules:item');
     
     res.json({
       message: 'Module updated successfully',
@@ -571,6 +735,9 @@ const deleteModule = async (req, res) => {
     }
     
     await query('DELETE FROM module WHERE ModuleID = ?', [id]);
+
+    clearNamespace('modules:list');
+    clearNamespace('modules:item');
     
     res.json({
       message: 'Module deleted successfully'

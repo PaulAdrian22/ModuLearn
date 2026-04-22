@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../App';
 import IntroductionFlow from '../components/IntroductionFlow';
 import Navbar from '../components/Navbar';
-import { themedConfirm } from '../utils/themedConfirm';
-import { withPreferredLanguage } from '../utils/languagePreference';
+import { normalizePreferredLanguage, withPreferredLanguage } from '../utils/languagePreference';
 
 const decodeHtmlEntities = (value = '') => {
   const normalized = String(value)
@@ -31,6 +30,8 @@ const stripObjectivesFromSummary = (value = '') => {
   return plain.slice(0, objectiveStart).trim();
 };
 
+const PENDING_INITIAL_ASSESSMENT_KEY = 'modulearnPendingInitialAssessment';
+
 const formatLastOpened = (dateString) => {
   if (!dateString) return 'Not opened yet';
   const date = new Date(dateString);
@@ -48,8 +49,6 @@ const Dashboard = () => {
   const { user } = useAuth();
   const [modules, setModules] = useState([]);
   const [stats, setStats] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [showLoading, setShowLoading] = useState(false);
   const [error, setError] = useState('');
   const [showIntroduction, setShowIntroduction] = useState(false);
   const [isNewUserLogin, setIsNewUserLogin] = useState(false);
@@ -61,36 +60,30 @@ const Dashboard = () => {
     }
   }, [user, navigate]);
 
-  useEffect(() => {
-    checkNewUser();
-    fetchDashboardData();
-  }, []);
-
-  const checkNewUser = async () => {
+  const checkNewUser = useCallback(async () => {
     try {
-      // Only show introduction flow when coming from login page
-      if (location.state?.fromLogin) {
-        setIsNewUserLogin(Boolean(location.state?.isNewUser));
+      if (!location.state?.fromLogin) return;
+
+      const isNewUser = Boolean(location.state?.isNewUser);
+      setIsNewUserLogin(isNewUser);
+
+      if (isNewUser) {
+        sessionStorage.setItem(PENDING_INITIAL_ASSESSMENT_KEY, 'true');
         setShowIntroduction(true);
-        // Clear the state so refresh doesn't show it again
-        window.history.replaceState({}, document.title);
+      } else {
+        sessionStorage.removeItem(PENDING_INITIAL_ASSESSMENT_KEY);
+        setShowIntroduction(false);
       }
+
+      // Clear routing state so browser refresh or later navigations do not replay onboarding.
+      window.history.replaceState({}, document.title);
     } catch (err) {
       console.error('Error checking user profile:', err);
     }
-  };
+  }, [location.state]);
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
-
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     try {
-      setLoading(true);
-      
-      // Delay showing loading spinner to avoid flicker on fast loads
-      const loadingTimer = setTimeout(() => setShowLoading(true), 200);
-      
       // Fetch modules with user progress
       const [modulesResponse, statsResponse] = await Promise.all([
         axios.get(withPreferredLanguage(`/modules?userId=${user.userId}`)),
@@ -99,31 +92,16 @@ const Dashboard = () => {
       console.log('Dashboard fetched modules:', modulesResponse.data);
       setModules(modulesResponse.data);
       setStats(statsResponse.data);
-      
-      clearTimeout(loadingTimer);
-      setLoading(false);
-      setShowLoading(false);
     } catch (err) {
       console.error('Error fetching dashboard data:', err);
       setError('Failed to load dashboard data');
-      setLoading(false);
-      setShowLoading(false);
     }
-  };
+  }, [user.userId]);
 
-  const handleLogout = async () => {
-    const shouldLogout = await themedConfirm({
-      title: 'Logout',
-      message: 'Are you sure you want to logout?',
-      confirmText: 'Logout',
-      cancelText: 'Stay'
-    });
-
-    if (shouldLogout) {
-      localStorage.removeItem('token');
-      navigate('/login');
-    }
-  };
+  useEffect(() => {
+    checkNewUser();
+    fetchDashboardData();
+  }, [checkNewUser, fetchDashboardData]);
 
   const handleModuleClick = async (module) => {
     if (!module.Is_Unlocked) {
@@ -200,6 +178,7 @@ const Dashboard = () => {
   const userHeadScale = Math.max(0, Math.min(1, userHeadPercent / 100));
   const roadmapEdgeInset = 26;
   const userHeadLeft = `calc(${roadmapEdgeInset}px + (100% - ${roadmapEdgeInset * 2}px) * ${userHeadScale})`;
+  const suppressNavbarTour = showIntroduction;
   const getCheckpointLeft = (columnIndex) => {
     const checkpointScale = totalRoadColumns > 1
       ? ((columnIndex - 1) / (totalRoadColumns - 1))
@@ -208,25 +187,36 @@ const Dashboard = () => {
   };
 
   return (
-    <div className={`min-h-screen bg-[#F5F7FA] ${showIntroduction ? 'overflow-hidden' : ''}`}>
+    <div className={`min-h-screen bg-[#F5F7FA] ${suppressNavbarTour ? 'overflow-hidden' : ''}`}>
       {showIntroduction && (
         <IntroductionFlow 
           isNewUser={isNewUserLogin}
-          onComplete={(language) => {
-            const normalizedLanguage = String(language || '').toLowerCase() === 'filipino' ? 'Taglish' : (language || 'English');
+          onComplete={async (language) => {
+            const normalizedLanguage = normalizePreferredLanguage(language || 'English');
             localStorage.setItem('hasSeenIntroduction', 'true');
             localStorage.setItem('preferredLanguage', normalizedLanguage);
+            window.dispatchEvent(new CustomEvent('preferredLanguageChanged', { detail: normalizedLanguage }));
 
             axios.put('/users/profile', { preferredLanguage: normalizedLanguage }).catch((err) => {
               console.error('Error saving preferred language:', err);
             });
 
             setShowIntroduction(false);
+
+            if (!isNewUserLogin) {
+              return;
+            }
+
+            sessionStorage.setItem(PENDING_INITIAL_ASSESSMENT_KEY, 'true');
+            navigate('/initial-assessment', {
+              replace: true,
+              state: { language: normalizedLanguage },
+            });
           }} 
         />
       )}
       
-      <Navbar />
+      <Navbar suppressAutoTour={suppressNavbarTour} />
 
       <div className="w-full px-8 py-8 min-h-[calc(100vh-80px)] custom-scrollbar">
         {/* Dashboard Section */}
@@ -327,7 +317,7 @@ const Dashboard = () => {
                     }}
                   />
                   <img
-                    src="/png/user.png"
+                    src="/png/user.webp"
                     alt="User"
                     className="absolute top-1/2 -translate-y-[78%] -translate-x-1/2 w-8 h-8 object-contain z-20 pointer-events-none"
                     style={{ left: userHeadLeft }}
@@ -337,7 +327,7 @@ const Dashboard = () => {
                 {/* Start, Flag Points, Trophy */}
                 <div className="absolute left-8 right-8 top-[34%] h-16 pointer-events-none">
                   <img
-                    src="/png/start.png"
+                    src="/png/start.webp"
                     alt="Start"
                     className="absolute w-11 h-11 object-contain z-10 -translate-x-1/2"
                     style={{ left: getCheckpointLeft(1) }}
@@ -391,7 +381,7 @@ const Dashboard = () => {
                   })}
 
                   <img
-                    src="/png/trophy.png"
+                    src="/png/trophy.webp"
                     alt="Trophy"
                     className="absolute w-11 h-11 object-contain z-10 -translate-x-1/2"
                     style={{ left: getCheckpointLeft(totalRoadColumns) }}
@@ -443,7 +433,7 @@ const Dashboard = () => {
                               {module.Difficulty}
                             </span>
                           )}
-                          <p className="text-sm text-gray-600 line-clamp-2">
+                          <p className="text-[18px] leading-[1.45] text-gray-600 line-clamp-2">
                             {stripObjectivesFromSummary(module.Description) || 'The foundation of Computer Hardware Servicing and its importance to modern professional operations.'}
                           </p>
                           <p className="mt-2 text-xs sm:text-sm text-gray-500 leading-relaxed flex flex-col sm:flex-row sm:items-center sm:gap-1">

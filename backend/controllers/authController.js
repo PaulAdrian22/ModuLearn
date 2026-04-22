@@ -77,7 +77,7 @@ const login = async (req, res) => {
     
     // Query user by email (updated to include avatar fields)
     const users = await query(
-      'SELECT UserID, Name, Email, Password, Age, EducationalBackground, profile_picture, avatar_type, default_avatar, Role FROM user WHERE Email = ?',
+      'SELECT UserID, Name, Email, Password, Age, EducationalBackground, profile_picture, avatar_type, default_avatar, Role, last_login FROM user WHERE Email = ?',
       [email]
     );
     
@@ -109,8 +109,9 @@ const login = async (req, res) => {
     // Generate token
     const token = generateToken(user.UserID, user.Email, user.Name, user.Role || 'student');
     
-    // Check if this is a new user (no educational background set and first login)
-    const isNewUser = !user.EducationalBackground;
+    // Only treat a learner as "new" on their first-ever successful login.
+    // This prevents the initial assessment from reappearing for returning users.
+    const isNewUser = !user.last_login;
     
     res.json({
       message: 'Login successful',

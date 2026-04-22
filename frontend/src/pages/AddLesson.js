@@ -440,25 +440,18 @@ const STAGE_LABELS = {
   introduction: 'Introduction',
   diagnostic: 'Diagnostic',
   lesson: 'Lesson',
-  review: 'Review Assessment',
   final: 'Final Assessment',
   simulation: 'Simulation',
 };
 
+const STANDARD_STAGE_ORDER = ['introduction', 'diagnostic', 'lesson', 'final'];
+
 const DEFAULT_ROADMAP_STAGES = [
+  { id: 'introduction', type: 'introduction', label: STAGE_LABELS.introduction },
   { id: 'diagnostic', type: 'diagnostic', label: STAGE_LABELS.diagnostic },
   { id: 'lesson', type: 'lesson', label: STAGE_LABELS.lesson },
-  { id: 'review', type: 'review', label: STAGE_LABELS.review },
   { id: 'final', type: 'final', label: STAGE_LABELS.final },
 ];
-
-const isSupplementaryDifficulty = (difficulty = '') =>
-  String(difficulty || '').trim().toLowerCase() === 'supplementary';
-
-const isCoreLessonOrder = (lessonOrder) => {
-  const parsedOrder = Number(lessonOrder);
-  return Number.isFinite(parsedOrder) && parsedOrder >= 1 && parsedOrder <= 7;
-};
 
 const parseSerializedArray = (value = []) => {
   if (Array.isArray(value)) {
@@ -489,27 +482,40 @@ const parseSerializedArray = (value = []) => {
   return [];
 };
 
-const ensureIntroductionStage = (stages = []) => {
-  const normalizedStages = Array.isArray(stages) ? [...stages] : [];
-  const hasIntroductionStage = normalizedStages.some(
-    (stage) => String(stage?.type || '').toLowerCase() === 'introduction'
+const ensureStandardRoadmapStages = (stages = []) => {
+  const normalizedStages = Array.isArray(stages) ? stages : [];
+  const stageMap = new Map();
+
+  normalizedStages.forEach((stage) => {
+    const normalizedType = String(stage?.type || '').trim().toLowerCase();
+    if (!STANDARD_STAGE_ORDER.includes(normalizedType) || stageMap.has(normalizedType)) {
+      return;
+    }
+
+    const rawId = stage?.id;
+    const normalizedId =
+      rawId !== undefined && rawId !== null && String(rawId).trim()
+        ? String(rawId)
+        : normalizedType;
+
+    const normalizedLabel = String(
+      stage?.label || STAGE_LABELS[normalizedType] || normalizedType
+    ).trim();
+
+    stageMap.set(normalizedType, {
+      id: normalizedId,
+      type: normalizedType,
+      label: normalizedLabel || STAGE_LABELS[normalizedType] || normalizedType,
+    });
+  });
+
+  return STANDARD_STAGE_ORDER.map((stageType) =>
+    stageMap.get(stageType) || {
+      id: stageType,
+      type: stageType,
+      label: STAGE_LABELS[stageType],
+    }
   );
-
-  if (hasIntroductionStage) {
-    return normalizedStages;
-  }
-
-  const introductionStage = { id: 'introduction', type: 'introduction', label: 'Introduction' };
-  const lessonStageIndex = normalizedStages.findIndex(
-    (stage) => String(stage?.type || '').toLowerCase() === 'lesson'
-  );
-
-  if (lessonStageIndex >= 0) {
-    normalizedStages.splice(lessonStageIndex, 0, introductionStage);
-    return normalizedStages;
-  }
-
-  return [introductionStage, ...normalizedStages];
 };
 
 const normalizeRoadmapStages = (stages = []) => {
@@ -540,39 +546,7 @@ const normalizeRoadmapStages = (stages = []) => {
     })
     .filter(Boolean);
 
-  return ensureIntroductionStage(normalizedStages);
-};
-
-const ensureReviewStage = (stages = []) => {
-  const normalizedStages = ensureIntroductionStage(Array.isArray(stages) ? [...stages] : []);
-  const hasReviewStage = normalizedStages.some(
-    (stage) => String(stage?.type || '').toLowerCase() === 'review'
-  );
-
-  if (hasReviewStage) {
-    return normalizedStages;
-  }
-
-  const reviewStage = { id: 'review', type: 'review', label: STAGE_LABELS.review };
-  const lessonStageIndex = normalizedStages.findIndex(
-    (stage) => String(stage?.type || '').toLowerCase() === 'lesson'
-  );
-
-  if (lessonStageIndex >= 0) {
-    normalizedStages.splice(lessonStageIndex + 1, 0, reviewStage);
-    return normalizedStages;
-  }
-
-  const finalStageIndex = normalizedStages.findIndex(
-    (stage) => String(stage?.type || '').toLowerCase() === 'final'
-  );
-
-  if (finalStageIndex >= 0) {
-    normalizedStages.splice(finalStageIndex, 0, reviewStage);
-    return normalizedStages;
-  }
-
-  return [...normalizedStages, reviewStage];
+  return ensureStandardRoadmapStages(normalizedStages);
 };
 
 const syncRoadmapStagesForLessonRules = ({
@@ -580,15 +554,10 @@ const syncRoadmapStagesForLessonRules = ({
   difficulty = 'Easy',
   lessonOrder,
 }) => {
+  void difficulty;
+  void lessonOrder;
   const normalizedStages = normalizeRoadmapStages(stages);
-
-  if (isSupplementaryDifficulty(difficulty) || isCoreLessonOrder(lessonOrder)) {
-    return normalizedStages.filter(
-      (stage) => String(stage?.type || '').toLowerCase() !== 'review'
-    );
-  }
-
-  return ensureReviewStage(normalizedStages);
+  return ensureStandardRoadmapStages(normalizedStages);
 };
 
 const normalizeBooleanFlag = (value = false) => {
@@ -615,6 +584,30 @@ const normalizeQuestionForSnapshot = (question = {}) => ({
   questionType: normalizeQuestionTypeValue(question?.questionType || question?.type || 'Easy'),
 });
 
+const normalizeEditorSectionType = (rawType = '') => {
+  const normalizedType = String(rawType || '').trim().toLowerCase();
+
+  switch (normalizedType) {
+    case 'topic title':
+    case 'topic-title':
+    case 'topic_title':
+      return 'topic';
+    case 'subtopic title':
+    case 'subtopic-title':
+    case 'subtopic_title':
+      return 'subtopic';
+    case 'review - multiple choice':
+    case 'review multiple choice':
+      return 'review-multiple-choice';
+    case 'review-drag-drop':
+    case 'review - drag and drop':
+    case 'review drag and drop':
+      return 'simulation';
+    default:
+      return normalizedType;
+  }
+};
+
 const normalizeImageForSnapshot = (image = {}) => ({
   url: String(image?.url || ''),
   fileName: String(image?.fileName || ''),
@@ -623,7 +616,7 @@ const normalizeImageForSnapshot = (image = {}) => ({
 
 const normalizeSectionForSnapshot = (section = {}) => ({
   id: section?.id ?? null,
-  type: String(section?.type || ''),
+  type: normalizeEditorSectionType(section?.type),
   title: String(section?.title || ''),
   tableTitle: String(section?.tableData?.title || section?.tableTitle || ''),
   content: String(section?.content || ''),
@@ -766,6 +759,7 @@ const AddLesson = () => {
   const [imageToCrop, setImageToCrop] = useState(null);
   const [imageCropTarget, setImageCropTarget] = useState(null);
   const [isCompletionLocked, setIsCompletionLocked] = useState(false);
+  const [languageModuleMap, setLanguageModuleMap] = useState({ English: null, Taglish: null });
   const [saveStatusToast, setSaveStatusToast] = useState(null);
   const baselineSnapshotRef = useRef('');
   const backGuardArmedRef = useRef(false);
@@ -813,9 +807,8 @@ const AddLesson = () => {
   const isEditLockedByCompletion = isEditMode && isCompletionLocked;
   const isSaveDisabled = loading || isEditLockedByCompletion;
   const saveLessonButtonText = isSupplementaryCreateMode ? 'Save Supplementary Lesson' : 'Save Lesson';
-  const difficultyOptions = isSupplementaryCreateMode
-    ? ['Supplementary']
-    : ['Easy', 'Challenging', 'Advanced', 'Supplementary'];
+  const isSupplementaryLesson = String(lessonData.Difficulty || '').trim().toLowerCase() === 'supplementary';
+  const difficultyOptions = ['Easy', 'Challenging', 'Advanced'];
 
   const getSaveButtonLabel = (defaultLabel = 'Save Lesson') => {
     if (loading) return 'Saving...';
@@ -1240,6 +1233,36 @@ const AddLesson = () => {
         ? adminModulesResponse.data.find((moduleItem) => Number(moduleItem?.ModuleID) === Number(id))
         : null;
 
+      if (Array.isArray(adminModulesResponse?.data)) {
+        const siblingLanguageMap = { English: null, Taglish: null };
+        const sameLessonRows = adminModulesResponse.data.filter((moduleItem) => {
+          return (
+            Number(moduleItem?.LessonOrder) === Number(response.data?.LessonOrder) &&
+            !normalizeBooleanFlag(moduleItem?.Is_Deleted)
+          );
+        });
+
+        sameLessonRows.forEach((moduleItem) => {
+          const normalizedLang = normalizeLessonLanguage(moduleItem?.LessonLanguage || 'English');
+          const moduleId = Number(moduleItem?.ModuleID);
+          if ((normalizedLang === 'English' || normalizedLang === 'Taglish') && Number.isFinite(moduleId) && moduleId > 0) {
+            siblingLanguageMap[normalizedLang] = moduleId;
+          }
+        });
+
+        const currentModuleId = Number(id);
+        if (Number.isFinite(currentModuleId) && currentModuleId > 0) {
+          const currentLang = normalizeLessonLanguage(
+            adminLesson?.LessonLanguage || response.data?.LessonLanguage || 'English'
+          );
+          siblingLanguageMap[currentLang] = currentModuleId;
+        }
+
+        setLanguageModuleMap(siblingLanguageMap);
+      } else {
+        setLanguageModuleMap({ English: null, Taglish: null });
+      }
+
       setIsCompletionLocked(normalizeBooleanFlag(adminLesson?.Is_Completed));
 
       console.log('Fetched lesson data:', response.data);
@@ -1312,12 +1335,8 @@ const AddLesson = () => {
         
         // Process sections to ensure proper URLs and fields
         const processedSections = editableSections.map(section => {
-          const processed = { ...section };
-          const normalizedSectionType = String(section?.type || '').toLowerCase().trim();
-
-          if (normalizedSectionType === 'review-drag-drop' || normalizedSectionType === 'review - drag and drop') {
-            processed.type = 'simulation';
-          }
+          const normalizedSectionType = normalizeEditorSectionType(section?.type);
+          const processed = { ...section, type: normalizedSectionType };
 
           if (processed.type === 'paragraph') {
             const normalizedTableData = normalizeTableData(section.tableData);
@@ -1378,6 +1397,44 @@ const AddLesson = () => {
             } else {
               processed.layout = '';
             }
+          }
+
+          if (processed.type === 'image' && (processed.layout === 'text-left' || processed.layout === 'text-right')) {
+            const fallbackSideTexts = section.sideText ? [String(section.sideText)] : [''];
+            const normalizedSideTexts = Array.isArray(section.sideTexts) && section.sideTexts.length > 0
+              ? section.sideTexts.map((text) => String(text || ''))
+              : fallbackSideTexts;
+
+            const fallbackLayerImages = (Array.isArray(processed.images) ? processed.images : []).map((image) => [image]);
+            const normalizedLayerImages = Array.isArray(processed.layerImages) && processed.layerImages.length > 0
+              ? processed.layerImages.map((layer) =>
+                  (Array.isArray(layer) ? layer : [layer]).map((image) =>
+                    normalizeImageItem(image)
+                  )
+                )
+              : fallbackLayerImages;
+
+            const layerCount = Math.max(normalizedSideTexts.length, normalizedLayerImages.length, 1);
+            const normalizedLayers = Array.from({ length: layerCount }, (_, layerIdx) => {
+              const layer = normalizedLayerImages[layerIdx];
+              if (Array.isArray(layer) && layer.length > 0) {
+                return layer;
+              }
+              return [{ url: '', file: null, fileName: '', caption: '' }];
+            });
+
+            processed.sideTexts = Array.from({ length: layerCount }, (_, layerIdx) =>
+              String(normalizedSideTexts[layerIdx] || '')
+            );
+            processed.layerImages = normalizedLayers;
+
+            if (!Array.isArray(processed.images) || processed.images.length === 0) {
+              processed.images = normalizedLayers.map((layer) => layer[0] || { url: '', file: null, fileName: '', caption: '' });
+            }
+          }
+
+          if ((processed.type === 'topic' || processed.type === 'subtopic') && !String(processed.title || '').trim()) {
+            processed.title = String(processed.content || '');
           }
           
           // Convert server paths to full URLs for images and videos
@@ -1767,6 +1824,9 @@ const AddLesson = () => {
       normalizedHref.includes('youtube.com') ||
       normalizedHref.includes('youtu.be') ||
       normalizedHref.includes('vimeo.com') ||
+      normalizedHref.includes('dropbox.com') ||
+      normalizedHref.includes('dropboxusercontent.com') ||
+      normalizedHref.includes('imgur.com') ||
       normalizedHref.includes('dailymotion.com') ||
       normalizedHref.includes('loom.com') ||
       normalizedHref.includes('/embed/')
@@ -2130,10 +2190,43 @@ const AddLesson = () => {
     }));
   };
 
-  const handleLessonLanguageChange = (lessonLanguage) => {
+  const handleLessonLanguageChange = async (lessonLanguage) => {
+    const normalizedLanguage = normalizeLessonLanguage(lessonLanguage);
+
+    if (!isEditMode) {
+      setLessonData(prev => ({
+        ...prev,
+        LessonLanguage: normalizedLanguage
+      }));
+      return;
+    }
+
+    const currentLanguage = normalizeLessonLanguage(lessonData.LessonLanguage || 'English');
+    if (currentLanguage === normalizedLanguage) {
+      return;
+    }
+
+    const targetModuleId = Number(languageModuleMap[normalizedLanguage]);
+    if (Number.isFinite(targetModuleId) && targetModuleId > 0 && targetModuleId !== Number(id)) {
+      navigateWithEditorGuard(`/admin/lessons/edit/${targetModuleId}`);
+      return;
+    }
+
+    const shouldRelabelCurrent = await themedConfirm({
+      title: `${normalizedLanguage} Lesson Not Found`,
+      message: `No saved ${normalizedLanguage} version exists for Lesson ${lessonData.LessonOrder}. Change the language label of the current lesson instead?`,
+      confirmText: 'Change Label',
+      cancelText: 'Cancel',
+      variant: 'warning'
+    });
+
+    if (!shouldRelabelCurrent) {
+      return;
+    }
+
     setLessonData(prev => ({
       ...prev,
-      LessonLanguage: lessonLanguage
+      LessonLanguage: normalizedLanguage
     }));
   };
 
@@ -3040,7 +3133,7 @@ const AddLesson = () => {
     setSections(prevSections => prevSections.map(section => {
       if (section.id !== sectionId) return section;
       // Create image slots based on layout
-      const currentImages = section.images || [];
+      const currentImages = Array.isArray(section.images) ? section.images : [];
       let newImages = [...currentImages];
       // Add slots if needed, keep existing images
       while (newImages.length < slots) {
@@ -3049,16 +3142,26 @@ const AddLesson = () => {
       // For text+image layouts, initialize sideTexts and layerImages
       const updated = { ...section, layout: layout.id, images: newImages };
       if (layout.id === 'text-left' || layout.id === 'text-right') {
-        if (!updated.sideTexts) {
-          updated.sideTexts = section.sideText ? [section.sideText] : [''];
-        }
-        if (!updated.layerImages) {
-          // Convert flat images to layerImages 2D array (one image per layer)
-          updated.layerImages = (updated.sideTexts || ['']).map((_, i) => {
-            const img = newImages[i] || { url: '', file: null, fileName: '', caption: '' };
-            return [img];
-          });
-        }
+        const baseSideTexts = Array.isArray(section.sideTexts) && section.sideTexts.length > 0
+          ? section.sideTexts
+          : (section.sideText ? [section.sideText] : ['']);
+
+        const baseLayerImages = Array.isArray(section.layerImages) && section.layerImages.length > 0
+          ? section.layerImages
+          : baseSideTexts.map((_, i) => {
+              const img = newImages[i] || { url: '', file: null, fileName: '', caption: '' };
+              return [img];
+            });
+
+        const layerCount = Math.max(baseSideTexts.length, baseLayerImages.length, 1);
+        updated.sideTexts = Array.from({ length: layerCount }, (_, layerIdx) => String(baseSideTexts[layerIdx] || ''));
+        updated.layerImages = Array.from({ length: layerCount }, (_, layerIdx) => {
+          const layer = baseLayerImages[layerIdx];
+          if (Array.isArray(layer) && layer.length > 0) {
+            return layer;
+          }
+          return [{ url: '', file: null, fileName: '', caption: '' }];
+        });
       }
       return updated;
     }));
@@ -3650,11 +3753,15 @@ const AddLesson = () => {
         if (videoId) return `https://player.vimeo.com/video/${videoId}`;
       }
 
-      if (host.includes('dropbox.com')) {
+      if (host.includes('dropbox.com') || host.includes('dropboxusercontent.com')) {
         const directUrl = new URL(parsed.toString());
-        directUrl.hostname = 'dl.dropboxusercontent.com';
+
+        if (host.includes('dropbox.com')) {
+          directUrl.hostname = 'dl.dropboxusercontent.com';
+        }
+
         directUrl.searchParams.delete('dl');
-        directUrl.searchParams.delete('raw');
+        directUrl.searchParams.set('raw', '1');
         return directUrl.toString();
       }
 
@@ -4713,9 +4820,13 @@ const AddLesson = () => {
       // Upload any image/video files to server first
       const uploadedSections = await Promise.all(
         sections.map(async (section) => {
-          // Handle multi-image sections
-          if (section.type === 'image' && section.images && section.images.length > 0) {
+          // Handle image sections, including text+image layouts backed by layerImages.
+          if (section.type === 'image') {
             const uploadSingleImg = async (img) => {
+              if (!img) {
+                return { url: '', file: null, fileName: null, caption: '' };
+              }
+
               if (img.file && img.url?.startsWith('blob:')) {
                 try {
                   const formData = new FormData();
@@ -4741,24 +4852,27 @@ const AddLesson = () => {
               return { ...img, file: null, fileName: null };
             };
 
-            // Upload layerImages if present (text+image layouts)
-            let uploadedLayerImages = undefined;
-            if (section.layerImages && section.layerImages.length > 0) {
-              uploadedLayerImages = await Promise.all(
-                section.layerImages.map(async (layer) => 
-                  Promise.all(layer.map(uploadSingleImg))
-                )
-              );
-            }
+            const normalizedSectionImages = Array.isArray(section.images) ? section.images : [];
+            const uploadedImages = await Promise.all(normalizedSectionImages.map(uploadSingleImg));
 
-            const uploadedImages = await Promise.all(
-              section.images.map(uploadSingleImg)
-            );
+            const normalizedSectionLayerImages = Array.isArray(section.layerImages) ? section.layerImages : [];
+            const uploadedLayerImages = normalizedSectionLayerImages.length > 0
+              ? await Promise.all(
+                  normalizedSectionLayerImages.map(async (layer) =>
+                    Promise.all((Array.isArray(layer) ? layer : [layer]).map(uploadSingleImg))
+                  )
+                )
+              : undefined;
+
+            const firstLayerImageUrl = uploadedLayerImages
+              ? uploadedLayerImages.flat().find((image) => image?.url)?.url || ''
+              : '';
+
             return {
               ...section,
               images: uploadedImages,
               layerImages: uploadedLayerImages,
-              content: uploadedImages[0]?.url || '',
+              content: uploadedImages[0]?.url || firstLayerImageUrl || '',
               file: null,
               fileName: null
             };
@@ -4839,12 +4953,18 @@ const AddLesson = () => {
 
       const sectionsForSave = sectionsForSaveBase
         .map((section) => {
-          if (section?.type !== 'review-multiple-choice' || !Array.isArray(section.questions)) {
-            return section;
+          const normalizedType = normalizeEditorSectionType(section?.type);
+
+          if (normalizedType !== 'review-multiple-choice' || !Array.isArray(section.questions)) {
+            return {
+              ...section,
+              type: normalizedType,
+            };
           }
 
           return {
             ...section,
+            type: normalizedType,
             questions: section.questions.map((question) => normalizeQuestionForSave(question, 'Easy')),
           };
         })
@@ -4950,12 +5070,12 @@ const AddLesson = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA]">
+    <div className="min-h-screen bg-background">
       <AdminNavbar beforeNavigate={confirmLeaveEditor} />
 
       {saveStatusToast && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100]">
-          <div className="bg-[#1e5a8e] text-white px-7 py-3 rounded-lg shadow-lg flex items-center gap-3">
+          <div className="bg-[#346C9A] text-white px-7 py-3 rounded-lg shadow-lg flex items-center gap-3">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" />
             </svg>
@@ -4969,7 +5089,7 @@ const AddLesson = () => {
         <div className="flex items-center gap-4 mb-8">
           <button
             onClick={() => navigateWithEditorGuard('/admin/lessons', { forcePrompt: true })}
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 hover:border-[#2BC4B3] text-[#1e5a8e] hover:text-[#2BC4B3] rounded-lg font-semibold transition-all shadow-sm"
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 hover:border-highlight text-secondary hover:text-highlight-dark rounded-lg font-semibold transition-all shadow-sm"
             title="Exit Editing"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -4977,7 +5097,7 @@ const AddLesson = () => {
             </svg>
             Exit Editing
           </button>
-          <h1 className="text-4xl font-bold text-[#1e5a8e]">
+          <h1 className="text-4xl font-bold text-secondary">
             {isEditMode ? 'Edit Lesson' : isSupplementaryCreateMode ? 'Add Supplementary Lesson' : 'Add Lesson'}
           </h1>
         </div>
@@ -5020,7 +5140,7 @@ const AddLesson = () => {
                   <div className="relative">
                     <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-2 transition-all cursor-grab active:cursor-grabbing ${
                       activeStage === stage.type 
-                        ? 'bg-[#2BC4B3] shadow-lg' 
+                        ? 'bg-highlight shadow-lg' 
                         : 'bg-gray-300 hover:bg-gray-400'
                     }`}>
                       <div className="w-3 h-3 rounded-full bg-white"></div>
@@ -5037,7 +5157,7 @@ const AddLesson = () => {
                     </div>
                   </div>
                   <span className={`text-sm font-semibold whitespace-nowrap ${
-                    activeStage === stage.type ? 'text-[#2BC4B3] font-bold' : 'text-gray-600'
+                    activeStage === stage.type ? 'text-highlight-dark font-bold' : 'text-gray-600'
                   }`}>{stage.label}</span>
                   {stageCounter && (
                     <span className={`text-xs mt-0.5 whitespace-nowrap ${
@@ -5057,12 +5177,12 @@ const AddLesson = () => {
                 className="flex flex-col items-center transition-all hover:scale-110"
                 title="Add stage"
               >
-                <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2 bg-white border-2 border-dashed border-[#1e5a8e] hover:border-[#2BC4B3] hover:bg-[#f0faf9] transition-all">
-                  <svg className="w-6 h-6 text-[#1e5a8e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2 bg-white border-2 border-dashed border-[#346C9A] hover:border-highlight hover:bg-surface-light transition-all">
+                  <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
                   </svg>
                 </div>
-                <span className="text-sm font-semibold text-[#1e5a8e]">Add</span>
+                <span className="text-sm font-semibold text-secondary">Add</span>
               </button>
             </div>
           </div>
@@ -5359,7 +5479,7 @@ const AddLesson = () => {
                 onPaste={(e) => handleRichPaste(e, null, 'module-title')}
                 onFocus={() => setActiveTextarea('input-lesson-title')}
                 data-placeholder="Enter lesson title"
-                className="w-full min-h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none text-gray-900 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+                className="w-full min-h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-900 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
                 style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
               />
             </div>
@@ -5369,7 +5489,7 @@ const AddLesson = () => {
               <label className="block text-lg font-bold text-gray-900 mb-2">
                 Lesson Time
               </label>
-              <div className="flex items-center justify-center gap-1.5 px-2 py-3 border-2 border-gray-300 rounded-lg focus-within:border-[#2BC4B3] h-[48px]">
+              <div className="flex items-center justify-center gap-1.5 px-2 py-3 border-2 border-gray-300 rounded-lg focus-within:border-highlight h-[48px]">
                 <input
                   type="number"
                   min="0"
@@ -5402,7 +5522,7 @@ const AddLesson = () => {
                 min="1"
                 value={lessonData.LessonOrder}
                 onChange={(e) => setLessonData(prev => ({ ...prev, LessonOrder: parseInt(e.target.value) || 1 }))}
-                className="w-full h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none text-center font-bold text-lg"
+                className="w-full h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-center font-bold text-lg"
               />
             </div>
           </div>
@@ -5433,7 +5553,7 @@ const AddLesson = () => {
               onPaste={(e) => handleRichPaste(e, null, 'description')}
               onFocus={() => setActiveTextarea('textarea-description')}
               data-placeholder="Enter lesson description"
-              className="w-full min-h-[100px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none text-gray-900 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+              className="w-full min-h-[100px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-900 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
               style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
             />
           </div>
@@ -5463,7 +5583,7 @@ const AddLesson = () => {
               onPaste={(e) => handleRichPaste(e, null, 'objectives')}
               onFocus={() => setActiveTextarea('textarea-objectives')}
               data-placeholder="Enter lesson objectives"
-              className="w-full min-h-[100px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none text-gray-900 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+              className="w-full min-h-[100px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-900 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
               style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
             />
           </div>
@@ -5480,7 +5600,7 @@ const AddLesson = () => {
               onFocus={() => setActiveTextarea('textarea-reference-links')}
               rows={1}
               placeholder="Type links and press Enter for next item"
-              className="w-full h-14 px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none text-gray-700 font-mono text-sm leading-4 resize-none overflow-hidden"
+              className="w-full h-14 px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-700 font-mono text-sm leading-4 resize-none overflow-hidden"
             />
             <p className="text-xs text-gray-500 mt-2">
               This references list is always available for learners in the sidebar References panel.
@@ -5500,7 +5620,7 @@ const AddLesson = () => {
                     name="lesson-language"
                     checked={lessonData.LessonLanguage === option}
                     onChange={() => handleLessonLanguageChange(option)}
-                    className="w-5 h-5 text-[#2BC4B3] border-gray-300 focus:ring-[#2BC4B3]"
+                    className="w-5 h-5 text-highlight-dark border-gray-300 focus:ring-highlight"
                   />
                   <span className="text-gray-900 font-medium">{option}</span>
                 </label>
@@ -5513,21 +5633,31 @@ const AddLesson = () => {
             <label className="block text-lg font-bold text-gray-900 mb-3">
               Difficulty
             </label>
-            <div className="flex flex-wrap gap-4">
-              {difficultyOptions.map((level) => (
-                <label key={level} className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="difficulty"
-                    checked={lessonData.Difficulty === level}
-                    onChange={() => handleDifficultyChange(level)}
-                    disabled={isSupplementaryCreateMode}
-                    className="w-5 h-5 text-[#2BC4B3] border-gray-300 focus:ring-[#2BC4B3]"
-                  />
-                  <span className="text-gray-900 font-medium">{level}</span>
-                </label>
-              ))}
-            </div>
+            {isSupplementaryLesson ? (
+              <>
+                <div className="inline-flex items-center rounded-full bg-[#8D6EB1]/15 px-4 py-2 text-sm font-semibold text-[#6C4D90]">
+                  Supplementary
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  Supplementary lessons are managed through the dedicated supplementary lesson creation flow.
+                </p>
+              </>
+            ) : (
+              <div className="flex flex-wrap gap-4">
+                {difficultyOptions.map((level) => (
+                  <label key={level} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="difficulty"
+                      checked={lessonData.Difficulty === level}
+                      onChange={() => handleDifficultyChange(level)}
+                      className="w-5 h-5 text-highlight-dark border-gray-300 focus:ring-highlight"
+                    />
+                    <span className="text-gray-900 font-medium">{level}</span>
+                  </label>
+                ))}
+              </div>
+            )}
             {isSupplementaryCreateMode && (
               <p className="text-xs text-gray-500 mt-2">
                 Supplementary lessons are automatically excluded from BKT calculations.
@@ -5542,7 +5672,7 @@ const AddLesson = () => {
               <button
                 onClick={handleSaveLesson}
                 disabled={isSaveDisabled}
-                className="px-8 py-3 bg-[#2BC4B3] hover:bg-[#1a9d8f] text-white rounded-lg font-semibold transition-all shadow-md disabled:opacity-50"
+                className="px-8 py-3 bg-highlight hover:bg-highlight-dark text-white rounded-lg font-semibold transition-all shadow-md disabled:opacity-50"
               >
                 {getSaveButtonLabel(saveLessonButtonText)}
               </button>
@@ -5552,7 +5682,7 @@ const AddLesson = () => {
                 return nextStage ? (
                   <button
                     onClick={() => setActiveStage(nextStage.type)}
-                    className="px-8 py-3 bg-[#1e5a8e] hover:bg-[#164570] text-white rounded-lg font-semibold transition-all shadow-md flex items-center gap-2"
+                    className="px-8 py-3 bg-[#346C9A] hover:bg-[#2A5D84] text-white rounded-lg font-semibold transition-all shadow-md flex items-center gap-2"
                   >
                     Continue to {nextStage.label}
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
@@ -5579,9 +5709,9 @@ const AddLesson = () => {
                   onDrop={(e) => handleDrop(e, section)}
                   className={`bg-white border-2 rounded-lg p-6 flex items-start gap-4 transition-all duration-200 ${
                     draggedSection?.id === section.id 
-                      ? 'border-[#2BC4B3] border-dashed bg-gray-50' 
+                      ? 'border-highlight border-dashed bg-gray-50' 
                       : dragOverSection?.id === section.id
-                      ? 'border-[#2BC4B3] shadow-lg'
+                      ? 'border-highlight shadow-lg'
                       : 'border-gray-300'
                   }`}
                 >
@@ -5600,7 +5730,7 @@ const AddLesson = () => {
                   {/* Content */}
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-xl font-bold text-[#1e5a8e]">
+                      <h3 className="text-xl font-bold text-secondary">
                         {getSectionDisplayTitle(section)}
                       </h3>
                       <div className="flex items-center gap-2">
@@ -5608,7 +5738,7 @@ const AddLesson = () => {
                         <div className="relative" data-material-picker>
                           <button
                             onClick={() => setChangeMaterialPicker(changeMaterialPicker === section.id ? null : section.id)}
-                            className="px-3 py-1.5 text-sm font-semibold text-gray-500 hover:text-[#1e5a8e] hover:bg-gray-100 rounded-lg transition-all flex items-center gap-1.5 flex-shrink-0"
+                            className="px-3 py-1.5 text-sm font-semibold text-gray-500 hover:text-secondary hover:bg-gray-100 rounded-lg transition-all flex items-center gap-1.5 flex-shrink-0"
                             title="Change material type"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
@@ -5630,8 +5760,8 @@ const AddLesson = () => {
                                   onClick={() => handleChangeMaterial(section.id, opt.type)}
                                   className={`w-full text-left px-4 py-2.5 text-sm font-medium transition-all ${
                                     section.type === opt.type
-                                      ? 'bg-[#2BC4B3]/10 text-[#2BC4B3] cursor-default'
-                                      : 'text-gray-700 hover:bg-gray-100 hover:text-[#1e5a8e]'
+                                      ? 'bg-highlight/10 text-highlight-dark cursor-default'
+                                      : 'text-gray-700 hover:bg-gray-100 hover:text-secondary'
                                   }`}
                                   disabled={section.type === opt.type}
                                 >
@@ -5645,7 +5775,7 @@ const AddLesson = () => {
                         {!['topic', 'subtopic'].includes(section.type) && (
                           <button
                             onClick={() => setCollapsedSections(prev => ({ ...prev, [section.id]: !prev[section.id] }))}
-                            className="px-3 py-1.5 text-sm font-semibold text-gray-500 hover:text-[#1e5a8e] hover:bg-gray-100 rounded-lg transition-all flex items-center gap-1.5 flex-shrink-0"
+                            className="px-3 py-1.5 text-sm font-semibold text-gray-500 hover:text-secondary hover:bg-gray-100 rounded-lg transition-all flex items-center gap-1.5 flex-shrink-0"
                             title={collapsedSections[section.id] ? 'Expand section' : 'Minimize section'}
                           >
                             {collapsedSections[section.id] ? (
@@ -5688,7 +5818,7 @@ const AddLesson = () => {
                         onPaste={handlePlainTextPaste}
                         onFocus={() => setActiveTextarea(`input-topic-${section.id}`)}
                         data-placeholder="Enter topic title..."
-                        className="w-full min-h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none text-gray-900 font-semibold text-lg empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+                        className="w-full min-h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-900 font-semibold text-lg empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
                         style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                       />
                     )}
@@ -5717,7 +5847,7 @@ const AddLesson = () => {
                         onPaste={handlePlainTextPaste}
                         onFocus={() => setActiveTextarea(`input-subtopic-${section.id}`)}
                         data-placeholder="Enter subtopic title..."
-                        className="w-full min-h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none text-gray-900 font-medium empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+                        className="w-full min-h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-900 font-medium empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
                         style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                       />
                     )}
@@ -5727,12 +5857,12 @@ const AddLesson = () => {
                       <div className="space-y-3">
                         {/* Controls bar: Layout indicator | Change Layout | Add Table */}
                         <div className="flex items-center gap-3 flex-wrap">
-                          <span className="text-sm font-bold text-[#1e5a8e] bg-[#1e5a8e]/10 px-4 py-1.5 rounded-full">
+                          <span className="text-sm font-bold text-secondary bg-[#346C9A]/10 px-4 py-1.5 rounded-full">
                             {PARAGRAPH_LAYOUTS.find(l => l.id === (section.contentLayout || 'text'))?.icon} {PARAGRAPH_LAYOUTS.find(l => l.id === (section.contentLayout || 'text'))?.label}
                           </span>
                           <button
                             onClick={() => setParagraphLayoutPicker(paragraphLayoutPicker === section.id ? null : section.id)}
-                            className="px-4 py-1.5 text-sm font-semibold text-gray-600 hover:text-[#1e5a8e] hover:bg-gray-100 border border-gray-300 rounded-lg transition-all flex items-center gap-1.5"
+                            className="px-4 py-1.5 text-sm font-semibold text-gray-600 hover:text-secondary hover:bg-gray-100 border border-gray-300 rounded-lg transition-all flex items-center gap-1.5"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
                             Change Layout
@@ -5740,7 +5870,7 @@ const AddLesson = () => {
                           {(section.contentLayout || 'text') !== 'table' && (
                             <button
                               onClick={() => handleAddTableToSection(section.id)}
-                              className="px-4 py-1.5 text-sm font-semibold text-[#1e5a8e] hover:text-white hover:bg-[#1e5a8e] border border-[#1e5a8e]/30 rounded-lg transition-all flex items-center gap-1.5"
+                              className="px-4 py-1.5 text-sm font-semibold text-secondary hover:text-white hover:bg-[#346C9A] border border-[#346C9A]/30 rounded-lg transition-all flex items-center gap-1.5"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M3 14h18M3 6h18M3 18h18M9 6v12M15 6v12" /></svg>
                               Add Table
@@ -5755,13 +5885,13 @@ const AddLesson = () => {
                               <button
                                 key={layout.id}
                                 onClick={() => handleSelectParagraphLayout(section.id, layout.id)}
-                                className={`flex-1 text-left p-3 rounded-lg border-2 transition-all hover:border-[#2BC4B3] hover:bg-[#f0faf9] ${
-                                  (section.contentLayout || 'text') === layout.id ? 'border-[#2BC4B3] bg-[#f0faf9]' : 'border-gray-200'
+                                className={`flex-1 text-left p-3 rounded-lg border-2 transition-all hover:border-highlight hover:bg-surface-light ${
+                                  (section.contentLayout || 'text') === layout.id ? 'border-highlight bg-surface-light' : 'border-gray-200'
                                 }`}
                               >
                                 <div className="flex items-center gap-2 mb-1">
                                   <span className="text-lg">{layout.icon}</span>
-                                  <span className="font-bold text-[#1e3a5f] text-sm">{layout.label}</span>
+                                  <span className="font-bold text-primary text-sm">{layout.label}</span>
                                 </div>
                                 <p className="text-xs text-gray-500">{layout.desc}</p>
                               </button>
@@ -5794,7 +5924,7 @@ const AddLesson = () => {
                               onPaste={(e) => handleRichPaste(e, section.id, 'content')}
                               onFocus={() => setActiveTextarea(`textarea-${section.id}`)}
                               data-placeholder="Enter paragraph content..."
-                              className="w-full min-h-[100px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none text-gray-700 leading-relaxed empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+                              className="w-full min-h-[100px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-700 leading-relaxed empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
                               style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                             />
                           </div>
@@ -5847,7 +5977,7 @@ const AddLesson = () => {
                                   return (
                                     <>
                                       <thead>
-                                        <tr className="bg-[#1e5a8e]/10 border-b border-gray-200">
+                                        <tr className="bg-[#346C9A]/10 border-b border-gray-200">
                                           <th colSpan={columnCount + 1} className="align-top">
                                             <div
                                               id={`table-header-${section.id}-title`}
@@ -5870,12 +6000,12 @@ const AddLesson = () => {
                                               onPaste={(e) => handleRichPaste(e, section.id, 'table')}
                                               onFocus={() => setActiveTextarea(`table-header-${section.id}-title`)}
                                               data-placeholder="Type table header..."
-                                              className="table-rich-content w-full px-3 py-2.5 bg-transparent font-bold text-[#1e3a5f] text-sm focus:outline-none focus:bg-white/50 text-left min-w-[120px] empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+                                              className="table-rich-content w-full px-3 py-2.5 bg-transparent font-bold text-primary text-sm focus:outline-none focus:bg-white/50 text-left min-w-[120px] empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
                                               style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                                             />
                                           </th>
                                         </tr>
-                                        <tr className="bg-[#1e5a8e]/10">
+                                        <tr className="bg-[#346C9A]/10">
                                           {normalizedHeaders.map((header, colIdx) => {
                                             const colSpan = tableHeaderSpans[colIdx] || 0;
                                             if (colSpan <= 0) return null;
@@ -5912,7 +6042,7 @@ const AddLesson = () => {
                                               <th
                                                 key={colIdx}
                                                 colSpan={colSpan}
-                                                className={`relative group/col-header align-top ${isColumnHovered ? 'bg-[#2BC4B3]/15' : ''}`}
+                                                className={`relative group/col-header align-top ${isColumnHovered ? 'bg-highlight/15' : ''}`}
                                                 onMouseEnter={() =>
                                                   setTableHoverTarget({ sectionId: section.id, axis: 'column', index: colIdx })
                                                 }
@@ -5948,7 +6078,7 @@ const AddLesson = () => {
                                                   onPaste={(e) => handleRichPaste(e, section.id, 'table')}
                                                   onFocus={() => setActiveTextarea(`table-header-${section.id}-${colIdx}`)}
                                                   data-placeholder={`Header ${colIdx + 1}`}
-                                                  className="table-rich-content w-full px-3 py-2.5 bg-transparent font-bold text-[#1e3a5f] text-sm focus:outline-none focus:bg-white/50 text-center min-w-[120px] empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+                                                  className="table-rich-content w-full px-3 py-2.5 bg-transparent font-bold text-primary text-sm focus:outline-none focus:bg-white/50 text-center min-w-[120px] empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
                                                   style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                                                 />
                                                 <div className="absolute -top-2 -right-2 z-10 flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover/col-header:opacity-100 transition-opacity">
@@ -5957,7 +6087,7 @@ const AddLesson = () => {
                                                     disabled={!canMoveColumnLeft}
                                                     className={`w-6 h-6 rounded-md transition-colors flex items-center justify-center ${
                                                       canMoveColumnLeft
-                                                        ? 'bg-[#2BC4B3]/15 text-[#1e5a8e] hover:bg-[#2BC4B3]/25'
+                                                        ? 'bg-highlight/15 text-secondary hover:bg-highlight/25'
                                                         : 'bg-gray-100 text-gray-300 cursor-not-allowed'
                                                     }`}
                                                     title="Move column left"
@@ -5969,7 +6099,7 @@ const AddLesson = () => {
                                                     disabled={!canMoveColumnRight}
                                                     className={`w-6 h-6 rounded-md transition-colors flex items-center justify-center ${
                                                       canMoveColumnRight
-                                                        ? 'bg-[#2BC4B3]/15 text-[#1e5a8e] hover:bg-[#2BC4B3]/25'
+                                                        ? 'bg-highlight/15 text-secondary hover:bg-highlight/25'
                                                         : 'bg-gray-100 text-gray-300 cursor-not-allowed'
                                                     }`}
                                                     title="Move column right"
@@ -5978,7 +6108,7 @@ const AddLesson = () => {
                                                   </button>
                                                   <button
                                                     onClick={() => handleInsertTableColumn(section.id, colIdx)}
-                                                    className="w-6 h-6 rounded-md bg-[#2BC4B3]/15 text-[#1e5a8e] hover:bg-[#2BC4B3]/25 transition-colors flex items-center justify-center"
+                                                    className="w-6 h-6 rounded-md bg-highlight/15 text-secondary hover:bg-highlight/25 transition-colors flex items-center justify-center"
                                                     title="Insert column to the right"
                                                   >
                                                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 5v14m7-7H5" /></svg>
@@ -6053,7 +6183,7 @@ const AddLesson = () => {
                                           return (
                                             <tr
                                               key={rowIdx}
-                                              className={`border-t border-gray-200 group/row ${isRowHovered ? 'bg-[#2BC4B3]/10' : rowIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}
+                                              className={`border-t border-gray-200 group/row ${isRowHovered ? 'bg-highlight/10' : rowIdx % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}`}
                                             >
                                               {row.map((cell, colIdx) => {
                                                 const colSpan = rowCellSpans[colIdx] || 0;
@@ -6071,7 +6201,7 @@ const AddLesson = () => {
                                                   <td
                                                     key={colIdx}
                                                     colSpan={colSpan}
-                                                    className={`${hasRightBorder ? 'border-r border-gray-100' : ''} align-top transition-colors ${shouldHighlightCell ? 'bg-[#2BC4B3]/15' : ''}`}
+                                                    className={`${hasRightBorder ? 'border-r border-gray-100' : ''} align-top transition-colors ${shouldHighlightCell ? 'bg-highlight/15' : ''}`}
                                                   >
                                                     <div
                                                       id={`table-cell-${section.id}-${rowIdx}-${colIdx}`}
@@ -6095,14 +6225,14 @@ const AddLesson = () => {
                                                       onPaste={(e) => handleRichPaste(e, section.id, 'table')}
                                                       onFocus={() => setActiveTextarea(`table-cell-${section.id}-${rowIdx}-${colIdx}`)}
                                                       data-placeholder="Enter value..."
-                                                      className="table-rich-content w-full px-3 py-2 text-sm text-gray-700 focus:outline-none focus:bg-[#2BC4B3]/5 min-w-[120px] empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+                                                      className="table-rich-content w-full px-3 py-2 text-sm text-gray-700 focus:outline-none focus:bg-highlight/5 min-w-[120px] empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
                                                       style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                                                     />
                                                   </td>
                                                 );
                                               })}
                                               <td
-                                                className={`w-14 text-center transition-colors ${isRowHovered ? 'bg-[#2BC4B3]/15' : ''}`}
+                                                className={`w-14 text-center transition-colors ${isRowHovered ? 'bg-highlight/15' : ''}`}
                                                 onMouseEnter={() =>
                                                   setTableHoverTarget({ sectionId: section.id, axis: 'row', index: rowIdx })
                                                 }
@@ -6122,7 +6252,7 @@ const AddLesson = () => {
                                                     disabled={!canMoveRowUp}
                                                     className={`w-6 h-6 rounded-md transition-colors flex items-center justify-center ${
                                                       canMoveRowUp
-                                                        ? 'bg-[#2BC4B3]/15 text-[#1e5a8e] hover:bg-[#2BC4B3]/25'
+                                                        ? 'bg-highlight/15 text-secondary hover:bg-highlight/25'
                                                         : 'bg-gray-100 text-gray-300 cursor-not-allowed'
                                                     }`}
                                                     title="Move row up"
@@ -6134,7 +6264,7 @@ const AddLesson = () => {
                                                     disabled={!canMoveRowDown}
                                                     className={`w-6 h-6 rounded-md transition-colors flex items-center justify-center ${
                                                       canMoveRowDown
-                                                        ? 'bg-[#2BC4B3]/15 text-[#1e5a8e] hover:bg-[#2BC4B3]/25'
+                                                        ? 'bg-highlight/15 text-secondary hover:bg-highlight/25'
                                                         : 'bg-gray-100 text-gray-300 cursor-not-allowed'
                                                     }`}
                                                     title="Move row down"
@@ -6143,7 +6273,7 @@ const AddLesson = () => {
                                                   </button>
                                                   <button
                                                     onClick={() => handleInsertTableRow(section.id, rowIdx)}
-                                                    className="w-6 h-6 rounded-md bg-[#2BC4B3]/15 text-[#1e5a8e] hover:bg-[#2BC4B3]/25 transition-colors flex items-center justify-center"
+                                                    className="w-6 h-6 rounded-md bg-highlight/15 text-secondary hover:bg-highlight/25 transition-colors flex items-center justify-center"
                                                     title="Insert row below"
                                                   >
                                                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 5v14m7-7H5" /></svg>
@@ -6190,14 +6320,14 @@ const AddLesson = () => {
                             <div className="flex gap-2">
                               <button
                                 onClick={() => handleAddTableRow(section.id)}
-                                className="px-3 py-1.5 text-sm font-semibold text-[#1e5a8e] hover:bg-[#1e5a8e]/10 border border-[#1e5a8e]/20 rounded-lg transition-all flex items-center gap-1.5"
+                                className="px-3 py-1.5 text-sm font-semibold text-secondary hover:bg-[#346C9A]/10 border border-[#346C9A]/20 rounded-lg transition-all flex items-center gap-1.5"
                               >
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
                                 Add Row
                               </button>
                               <button
                                 onClick={() => handleAddTableColumn(section.id)}
-                                className="px-3 py-1.5 text-sm font-semibold text-[#1e5a8e] hover:bg-[#1e5a8e]/10 border border-[#1e5a8e]/20 rounded-lg transition-all flex items-center gap-1.5"
+                                className="px-3 py-1.5 text-sm font-semibold text-secondary hover:bg-[#346C9A]/10 border border-[#346C9A]/20 rounded-lg transition-all flex items-center gap-1.5"
                               >
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
                                 Add Column
@@ -6215,12 +6345,12 @@ const AddLesson = () => {
                         {/* Controls bar: Layout indicator | Change layout | Add Image | Minimize */}
                         {section.layout && (
                           <div className="flex items-center gap-3 flex-wrap">
-                            <span className="text-sm font-bold text-[#1e5a8e] bg-[#1e5a8e]/10 px-4 py-1.5 rounded-full">
+                            <span className="text-sm font-bold text-secondary bg-[#346C9A]/10 px-4 py-1.5 rounded-full">
                               {IMAGE_LAYOUTS.find(l => l.id === section.layout)?.icon} {IMAGE_LAYOUTS.find(l => l.id === section.layout)?.label}
                             </span>
                             <button
                               onClick={() => setLayoutPickerSection(section.id)}
-                              className="px-4 py-1.5 text-sm font-semibold text-gray-600 hover:text-[#1e5a8e] hover:bg-gray-100 border border-gray-300 rounded-lg transition-all flex items-center gap-1.5"
+                              className="px-4 py-1.5 text-sm font-semibold text-gray-600 hover:text-secondary hover:bg-gray-100 border border-gray-300 rounded-lg transition-all flex items-center gap-1.5"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
                               Change Layout
@@ -6234,7 +6364,7 @@ const AddLesson = () => {
                                   handleAddImageSlot(section.id);
                                 }
                               }}
-                              className="px-4 py-1.5 text-sm font-semibold text-[#1e5a8e] hover:text-white hover:bg-[#1e5a8e] border border-[#1e5a8e]/30 rounded-lg transition-all flex items-center gap-1.5"
+                              className="px-4 py-1.5 text-sm font-semibold text-secondary hover:text-white hover:bg-[#346C9A] border border-[#346C9A]/30 rounded-lg transition-all flex items-center gap-1.5"
                             >
                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg>
                               Add Image
@@ -6242,7 +6372,7 @@ const AddLesson = () => {
                             {(section.layout === 'text-left' || section.layout === 'text-right') && (
                               <button
                                 onClick={() => handleAddTextImageLayer(section.id)}
-                                className="px-4 py-1.5 text-sm font-semibold text-[#1e5a8e] hover:text-white hover:bg-[#1e5a8e] border border-[#1e5a8e]/30 rounded-lg transition-all flex items-center gap-1.5"
+                                className="px-4 py-1.5 text-sm font-semibold text-secondary hover:text-white hover:bg-[#346C9A] border border-[#346C9A]/30 rounded-lg transition-all flex items-center gap-1.5"
                               >
                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
                                 Add Layer
@@ -6256,7 +6386,7 @@ const AddLesson = () => {
                         {section.layout && collapsedSections[section.id] ? (
                           <div
                             onClick={() => setCollapsedSections(prev => ({ ...prev, [section.id]: false }))}
-                            className="border-2 border-dashed border-gray-200 rounded-lg p-4 flex items-center gap-4 cursor-pointer hover:border-[#2BC4B3] transition-colors bg-gray-50"
+                            className="border-2 border-dashed border-gray-200 rounded-lg p-4 flex items-center gap-4 cursor-pointer hover:border-highlight transition-colors bg-gray-50"
                           >
                             <div className="flex gap-2 flex-wrap">
                               {(section.images || []).map((img, i) => {
@@ -6279,9 +6409,15 @@ const AddLesson = () => {
                           /* Text + Image Layout - Multi-layer */
                           <div className="space-y-4">
                             {(() => {
-                              const sideTexts = section.sideTexts || (section.sideText ? [section.sideText] : ['']);
-                              const layerImages = section.layerImages || (section.images || []).map(img => [img]);
-                              const layerCount = Math.max(sideTexts.length, layerImages.length);
+                              const sideTexts = Array.isArray(section.sideTexts) && section.sideTexts.length > 0
+                                ? section.sideTexts
+                                : (section.sideText ? [section.sideText] : ['']);
+                              const layerImages = Array.isArray(section.layerImages) && section.layerImages.length > 0
+                                ? section.layerImages
+                                : (Array.isArray(section.images) && section.images.length > 0
+                                    ? section.images.map(img => [img])
+                                    : [[{ url: '', file: null, fileName: '', caption: '' }]]);
+                              const layerCount = Math.max(sideTexts.length, layerImages.length, 1);
                               return Array.from({ length: layerCount }, (_, layerIdx) => {
                                 const layerImgs = layerImages[layerIdx] || [{ url: '', file: null, fileName: '', caption: '' }];
                                 const textContent = sideTexts[layerIdx] || '';
@@ -6338,7 +6474,7 @@ const AddLesson = () => {
                                             onPaste={(e) => handleRichPaste(e, section.id, 'sideText')}
                                             onFocus={() => setActiveTextarea(`sidetext-${section.id}-${layerIdx}`)}
                                             data-placeholder="Enter text content..."
-                                            className="w-full h-full min-h-[200px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none text-gray-700 leading-relaxed empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+                                            className="w-full h-full min-h-[200px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-700 leading-relaxed empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
                                             style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                                           />
                                           <p className="mt-2 text-[11px] text-gray-500">Video links are auto-detected and saved as clickable links.</p>
@@ -6349,7 +6485,7 @@ const AddLesson = () => {
                                         {layerImgs.map((img, imgIdx) => (
                                           <div
                                             key={imgIdx}
-                                            className="border-2 border-dashed border-gray-300 rounded-lg p-3 text-center focus-within:border-[#2BC4B3] transition-colors relative group/img min-h-[180px] flex-1 min-w-[120px]"
+                                            className="border-2 border-dashed border-gray-300 rounded-lg p-3 text-center focus-within:border-highlight transition-colors relative group/img min-h-[180px] flex-1 min-w-[120px]"
                                             tabIndex={0}
                                             onPaste={(e) => handleLayerPasteImage(section.id, layerIdx, imgIdx, e)}
                                             onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
@@ -6386,7 +6522,7 @@ const AddLesson = () => {
                                                   draggable="false"
                                                 />
                                                 <div className="mt-2 flex items-center justify-center gap-2 flex-wrap">
-                                                  <label className="inline-block px-3 py-1 bg-[#1e5a8e] hover:bg-[#164570] text-white rounded-lg cursor-pointer transition-all text-xs">
+                                                  <label className="inline-block px-3 py-1 bg-[#346C9A] hover:bg-[#2A5D84] text-white rounded-lg cursor-pointer transition-all text-xs">
                                                     Change
                                                     <input
                                                       type="file"
@@ -6409,7 +6545,7 @@ const AddLesson = () => {
                                                 <svg className="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                                 </svg>
-                                                <label className="px-3 py-1.5 bg-[#1e5a8e] hover:bg-[#164570] text-white rounded-lg cursor-pointer transition-all inline-block font-semibold text-xs">
+                                                <label className="px-3 py-1.5 bg-[#346C9A] hover:bg-[#2A5D84] text-white rounded-lg cursor-pointer transition-all inline-block font-semibold text-xs">
                                                   Import
                                                   <input
                                                     type="file"
@@ -6418,7 +6554,7 @@ const AddLesson = () => {
                                                     className="hidden"
                                                   />
                                                 </label>
-                                                <p className="text-[10px] text-gray-400 mt-1">or paste / drag</p>
+                                                <p className="text-xs text-gray-400 mt-1">or paste / drag</p>
                                               </div>
                                             )}
                                             <input
@@ -6426,18 +6562,18 @@ const AddLesson = () => {
                                               value={img.caption || ''}
                                               onChange={(e) => handleLayerImageCaptionChange(section.id, layerIdx, imgIdx, e.target.value)}
                                               placeholder={`Image ${imgIdx + 1} name or description...`}
-                                              className="w-full mt-2 px-2.5 py-1.5 text-xs border border-gray-300 rounded-md focus:border-[#2BC4B3] focus:outline-none text-gray-700 placeholder-gray-400"
+                                              className="w-full mt-2 px-2.5 py-1.5 text-xs border border-gray-300 rounded-md focus:border-highlight focus:outline-none text-gray-700 placeholder-gray-400"
                                             />
                                           </div>
                                         ))}
                                         {/* Inline add image button */}
                                         <button
                                           onClick={() => handleAddLayerImage(section.id, layerIdx)}
-                                          className="border-2 border-dashed border-gray-200 hover:border-[#2BC4B3] rounded-lg min-w-[80px] min-h-[180px] flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-[#1e5a8e] transition-all cursor-pointer"
+                                          className="border-2 border-dashed border-gray-200 hover:border-highlight rounded-lg min-w-[80px] min-h-[180px] flex flex-col items-center justify-center gap-1 text-gray-400 hover:text-secondary transition-all cursor-pointer"
                                           title="Add another image to this layer"
                                         >
                                           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-                                          <span className="text-[10px] font-semibold">Add</span>
+                                          <span className="text-xs font-semibold">Add</span>
                                         </button>
                                       </div>
                                       {section.layout === 'text-right' && (
@@ -6479,7 +6615,7 @@ const AddLesson = () => {
                                             onPaste={(e) => handleRichPaste(e, section.id, 'sideText')}
                                             onFocus={() => setActiveTextarea(`sidetext-${section.id}-${layerIdx}`)}
                                             data-placeholder="Enter text content..."
-                                            className="w-full h-full min-h-[200px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none text-gray-700 leading-relaxed empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+                                            className="w-full h-full min-h-[200px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-700 leading-relaxed empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
                                             style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                                           />
                                           <p className="mt-2 text-[11px] text-gray-500">Video links are auto-detected and saved as clickable links.</p>
@@ -6514,7 +6650,7 @@ const AddLesson = () => {
                                 return (
                                 <div
                                   key={imageSlotKey}
-                                  className={`border-2 border-dashed border-gray-300 rounded-lg p-4 text-center focus-within:border-[#2BC4B3] transition-colors relative group/img min-w-[150px]`}
+                                  className={`border-2 border-dashed border-gray-300 rounded-lg p-4 text-center focus-within:border-highlight transition-colors relative group/img min-w-[150px]`}
                                   tabIndex={0}
                                   onPaste={(e) => handlePasteImage(section.id, e, imgIdx)}
                                   onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
@@ -6546,7 +6682,7 @@ const AddLesson = () => {
                                         draggable="false"
                                       />
                                       <div className="mt-3 flex items-center justify-center gap-2 flex-wrap">
-                                        <label className="inline-block px-4 py-1.5 bg-[#1e5a8e] hover:bg-[#164570] text-white rounded-lg cursor-pointer transition-all text-sm">
+                                        <label className="inline-block px-4 py-1.5 bg-[#346C9A] hover:bg-[#2A5D84] text-white rounded-lg cursor-pointer transition-all text-sm">
                                           Change
                                           <input
                                             type="file"
@@ -6569,7 +6705,7 @@ const AddLesson = () => {
                                       <svg className="w-10 h-10 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                       </svg>
-                                      <label className="px-4 py-2 bg-[#1e5a8e] hover:bg-[#164570] text-white rounded-lg cursor-pointer transition-all inline-block font-semibold text-sm">
+                                      <label className="px-4 py-2 bg-[#346C9A] hover:bg-[#2A5D84] text-white rounded-lg cursor-pointer transition-all inline-block font-semibold text-sm">
                                         Import
                                         <input
                                           type="file"
@@ -6588,7 +6724,7 @@ const AddLesson = () => {
                                     value={img.caption || ''}
                                     onChange={(e) => handleImageCaptionChange(section.id, imgIdx, e.target.value)}
                                     placeholder={`Image ${imgIdx + 1} caption...`}
-                                    className="w-full mt-3 px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none text-gray-600 placeholder-gray-400"
+                                    className="w-full mt-3 px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-600 placeholder-gray-400"
                                   />
                                 </div>
                                 );
@@ -6603,7 +6739,7 @@ const AddLesson = () => {
                             </svg>
                             <button
                               onClick={() => setLayoutPickerSection(section.id)}
-                              className="px-8 py-3 bg-[#1e5a8e] hover:bg-[#164570] text-white rounded-lg transition-all font-semibold text-base shadow-md"
+                              className="px-8 py-3 bg-[#346C9A] hover:bg-[#2A5D84] text-white rounded-lg transition-all font-semibold text-base shadow-md"
                             >
                               Choose a Layout
                             </button>
@@ -6618,7 +6754,7 @@ const AddLesson = () => {
                             <div className="relative bg-white rounded-2xl shadow-2xl max-w-3xl w-full mx-4 max-h-[85vh] overflow-hidden flex flex-col">
                               <div className="p-6 border-b border-gray-200 flex items-center justify-between">
                                 <div>
-                                  <h3 className="text-xl font-bold text-[#1e3a5f]">Choose Image Layout</h3>
+                                  <h3 className="text-xl font-bold text-primary">Choose Image Layout</h3>
                                   <p className="text-sm text-gray-500 mt-1">Select how you want image(s) arranged</p>
                                 </div>
                                 <button onClick={() => setLayoutPickerSection(null)} className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center">
@@ -6631,17 +6767,17 @@ const AddLesson = () => {
                                     <button
                                       key={layout.id}
                                       onClick={() => handleSelectImageLayout(section.id, layout)}
-                                      className={`text-left p-4 rounded-xl border-2 transition-all hover:border-[#2BC4B3] hover:bg-[#f0faf9] ${
-                                        section.layout === layout.id ? 'border-[#2BC4B3] bg-[#f0faf9]' : 'border-gray-200'
+                                      className={`text-left p-4 rounded-xl border-2 transition-all hover:border-highlight hover:bg-surface-light ${
+                                        section.layout === layout.id ? 'border-highlight bg-surface-light' : 'border-gray-200'
                                       }`}
                                     >
                                       <div className="flex items-center gap-3 mb-2">
                                         <span className="text-2xl">{layout.icon}</span>
-                                        <span className="font-bold text-[#1e3a5f] text-sm">{layout.label}</span>
+                                        <span className="font-bold text-primary text-sm">{layout.label}</span>
                                       </div>
                                       <p className="text-xs text-gray-500 leading-relaxed">{layout.desc}</p>
                                       {layout.slots > 0 && (
-                                        <p className="text-xs text-[#2BC4B3] font-semibold mt-1">{layout.slots} image slot{layout.slots > 1 ? 's' : ''}</p>
+                                        <p className="text-xs text-highlight-dark font-semibold mt-1">{layout.slots} image slot{layout.slots > 1 ? 's' : ''}</p>
                                       )}
                                     </button>
                                   ))}
@@ -6659,7 +6795,7 @@ const AddLesson = () => {
                     {section.type === 'video' && !collapsedSections[section.id] && (
                       <div className="space-y-4">
                         <div
-                          className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center focus-within:border-[#2BC4B3] transition-colors"
+                          className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center focus-within:border-highlight transition-colors"
                           tabIndex={0}
                           onPaste={(e) => {
                             const items = e.clipboardData?.items;
@@ -6722,7 +6858,7 @@ const AddLesson = () => {
                                   />
                                 );
                               })()}
-                              <label className="mt-4 inline-block px-6 py-2 bg-[#1e5a8e] hover:bg-[#164570] text-white rounded-lg cursor-pointer transition-all">
+                              <label className="mt-4 inline-block px-6 py-2 bg-[#346C9A] hover:bg-[#2A5D84] text-white rounded-lg cursor-pointer transition-all">
                                 Change Video
                                 <input
                                   type="file"
@@ -6744,7 +6880,7 @@ const AddLesson = () => {
                               <svg className="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                               </svg>
-                              <label className="px-6 py-3 bg-[#1e5a8e] hover:bg-[#164570] text-white rounded-lg cursor-pointer transition-all inline-block font-semibold">
+                              <label className="px-6 py-3 bg-[#346C9A] hover:bg-[#2A5D84] text-white rounded-lg cursor-pointer transition-all inline-block font-semibold">
                                 Import Video
                                 <input
                                   type="file"
@@ -6773,9 +6909,9 @@ const AddLesson = () => {
                               ));
                             }}
                             placeholder="https://www.youtube.com/watch?v=... or https://www.dropbox.com/..."
-                            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none text-gray-700"
+                            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-700"
                           />
-                          <p className="text-xs text-gray-500">Paste a YouTube/Vimeo link for iframe embed, or a Dropbox/Imgur video link for direct playback.</p>
+                          <p className="text-sm text-gray-500">Paste a YouTube/Vimeo link for iframe embed, or a Dropbox/Imgur video link for direct playback.</p>
                         </div>
                         
                         {/* Caption Text Field - Same Width as Video Container */}
@@ -6802,7 +6938,7 @@ const AddLesson = () => {
                             onPaste={(e) => handleRichPaste(e, section.id, 'caption')}
                             onFocus={() => setActiveTextarea(`textarea-video-caption-${section.id}`)}
                             data-placeholder="Enter video caption or description..."
-                            className="w-full min-h-[80px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none text-gray-700 leading-relaxed empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+                            className="w-full min-h-[80px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-700 leading-relaxed empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
                             style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                           />
                         </div>
@@ -6841,7 +6977,7 @@ const AddLesson = () => {
                                   onPaste={handlePlainTextPaste}
                                   onFocus={() => setActiveTextarea(`input-reviewmc-question-${question.id}`)}
                                   data-placeholder="Type in the question here"
-                                  className="w-full min-h-[40px] px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none text-gray-900 mb-3 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+                                  className="w-full min-h-[40px] px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-900 mb-3 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
                                   style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                                 />
                                 <div className="mb-3 flex items-center gap-4 flex-wrap">
@@ -6853,7 +6989,7 @@ const AddLesson = () => {
                                         name={`reviewmc-mastery-${question.id}`}
                                         checked={normalizeSkillValue(question.skill || question.skillTag || 'Memorization', 'Memorization') === masteryType}
                                         onChange={() => handleSectionQuestionChange(section.id, question.id, 'skill', masteryType)}
-                                        className="w-3 h-3 text-[#2BC4B3]"
+                                        className="w-3 h-3 text-highlight-dark"
                                       />
                                       <span className="text-xs text-gray-700">{masteryType}</span>
                                     </label>
@@ -6868,7 +7004,7 @@ const AddLesson = () => {
                                         name={`reviewmc-type-${question.id}`}
                                         checked={normalizeQuestionTypeValue(question.questionType || question.type || 'Easy', 'Easy') === questionType}
                                         onChange={() => handleSectionQuestionChange(section.id, question.id, 'questionType', questionType)}
-                                        className="w-3 h-3 text-[#2BC4B3]"
+                                        className="w-3 h-3 text-highlight-dark"
                                       />
                                       <span className="text-xs text-gray-700">{questionType}</span>
                                     </label>
@@ -6903,7 +7039,7 @@ const AddLesson = () => {
                               </div>
                             </div>
                           ))}
-                          <button onClick={() => handleAddSectionQuestion(section.id)} className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-[#1e5a8e] hover:text-[#1e5a8e] transition-all flex items-center justify-center gap-2">
+                          <button onClick={() => handleAddSectionQuestion(section.id)} className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-[#346C9A] hover:text-secondary transition-all flex items-center justify-center gap-2">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
                             Add Question
                           </button>
@@ -6926,10 +7062,10 @@ const AddLesson = () => {
                             null;
 
                           return sectionSimulation ? (
-                            <div className="border-2 border-[#2BC4B3] rounded-lg p-5 bg-[#f0faf9]">
+                            <div className="border-2 border-highlight rounded-lg p-5 bg-surface-light">
                               <div className="flex items-start justify-between gap-4">
                                 <div>
-                                  <h4 className="text-lg font-bold text-[#1e5a8e]">{sectionSimulation.SimulationTitle}</h4>
+                                  <h4 className="text-lg font-bold text-secondary">{sectionSimulation.SimulationTitle}</h4>
                                   <p className="text-sm text-gray-600 mt-1">
                                     {sectionSimulation.Description || 'Linked simulation activity'}
                                   </p>
@@ -6950,7 +7086,7 @@ const AddLesson = () => {
                                 <div className="flex items-center gap-2">
                                   <button
                                     onClick={() => openSimulationPickerForSection(section.id)}
-                                    className="px-4 py-2 bg-[#1e5a8e] text-white rounded-lg hover:bg-[#164570] transition-all text-sm font-semibold"
+                                    className="px-4 py-2 bg-[#346C9A] text-white rounded-lg hover:bg-[#2A5D84] transition-all text-sm font-semibold"
                                   >
                                     Change
                                   </button>
@@ -6976,7 +7112,7 @@ const AddLesson = () => {
                               <p className="text-gray-600 mb-3 font-semibold">No simulation selected for this section</p>
                               <button
                                 onClick={() => openSimulationPickerForSection(section.id)}
-                                className="px-5 py-2.5 bg-[#1e5a8e] text-white rounded-lg hover:bg-[#164570] transition-all text-sm font-semibold"
+                                className="px-5 py-2.5 bg-[#346C9A] text-white rounded-lg hover:bg-[#2A5D84] transition-all text-sm font-semibold"
                               >
                                 Select Simulation
                               </button>
@@ -7003,7 +7139,7 @@ const AddLesson = () => {
                   <div className="flex justify-center -mt-2 -mb-2">
                     <button
                       onClick={() => { setInsertAtIndex(sectionIndex + 1); setShowSectionModal(true); }}
-                      className="group flex items-center gap-1 px-3 py-1 rounded-full text-gray-300 hover:text-[#2BC4B3] hover:bg-[#2BC4B3]/10 transition-all"
+                      className="group flex items-center gap-1 px-3 py-1 rounded-full text-gray-300 hover:text-highlight-dark hover:bg-highlight/10 transition-all"
                       title="Add section in between"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
@@ -7018,17 +7154,17 @@ const AddLesson = () => {
 
           {/* Add Section Area */}
           <div className="mt-12 pt-8 border-t-2 border-gray-200">
-            <div className="border-2 border-gray-300 rounded-xl p-16 flex flex-col items-center justify-center hover:border-[#1e5a8e] transition-all cursor-pointer group">
+            <div className="border-2 border-gray-300 rounded-xl p-16 flex flex-col items-center justify-center hover:border-[#346C9A] transition-all cursor-pointer group">
               <button
                 onClick={handleAddSection}
                 className="flex flex-col items-center gap-3"
               >
-                <div className="w-20 h-20 bg-[#1e5a8e] rounded-full flex items-center justify-center group-hover:bg-[#2BC4B3] transition-all shadow-lg">
+                <div className="w-20 h-20 bg-[#346C9A] rounded-full flex items-center justify-center group-hover:bg-highlight transition-all shadow-lg">
                   <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" />
                   </svg>
                 </div>
-                <span className="text-xl font-semibold text-gray-700 group-hover:text-[#1e5a8e]">
+                <span className="text-xl font-semibold text-gray-700 group-hover:text-secondary">
                   Add Section
                 </span>
               </button>
@@ -7036,7 +7172,7 @@ const AddLesson = () => {
           </div>
 
           {/* Note */}
-          <div className="mt-6 bg-blue-50 border-l-4 border-[#1e5a8e] p-4">
+          <div className="mt-6 bg-blue-50 border-l-4 border-[#346C9A] p-4">
             <p className="text-sm text-gray-700">
               <span className="font-bold">Note:</span> Include at least 10 total review sections to generate a diagnostic for the lesson
             </p>
@@ -7049,7 +7185,7 @@ const AddLesson = () => {
               <button
                 onClick={handleSaveLesson}
                 disabled={isSaveDisabled}
-                className="px-8 py-3 bg-[#2BC4B3] hover:bg-[#1a9d8f] text-white rounded-lg font-semibold transition-all shadow-md disabled:opacity-50"
+                className="px-8 py-3 bg-highlight hover:bg-highlight-dark text-white rounded-lg font-semibold transition-all shadow-md disabled:opacity-50"
               >
                 {getSaveButtonLabel(saveLessonButtonText)}
               </button>
@@ -7059,7 +7195,7 @@ const AddLesson = () => {
                 return nextStage ? (
                   <button
                     onClick={() => setActiveStage(nextStage.type)}
-                    className="px-8 py-3 bg-[#1e5a8e] hover:bg-[#164570] text-white rounded-lg font-semibold transition-all shadow-md flex items-center gap-2"
+                    className="px-8 py-3 bg-[#346C9A] hover:bg-[#2A5D84] text-white rounded-lg font-semibold transition-all shadow-md flex items-center gap-2"
                   >
                     Continue to {nextStage.label}
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
@@ -7076,9 +7212,9 @@ const AddLesson = () => {
         {/* Diagnostic Stage */}
         {hasMountedStage('diagnostic') && (
         <div className={`bg-white rounded-xl shadow-sm p-8 space-y-6 ${activeStage === 'diagnostic' ? '' : 'hidden'}`}>
-          <h2 className="text-2xl font-bold text-[#1e5a8e] mb-4">Diagnostic Assessment for {stripHtml(lessonData.ModuleTitle) || 'New Lesson'}</h2>
+          <h2 className="text-2xl font-bold text-secondary mb-4">Diagnostic Assessment for {stripHtml(lessonData.ModuleTitle) || 'New Lesson'}</h2>
           <div className="border border-[#BFE7E2] bg-[#F3FCFA] rounded-lg p-4">
-            <p className="text-sm text-[#1e5a8e] font-semibold">Diagnostic questions are auto-generated from existing Review questions.</p>
+            <p className="text-sm text-secondary font-semibold">Diagnostic questions are auto-generated from existing Review questions.</p>
             <p className="text-xs text-gray-600 mt-1">
               Current diagnostic set: {autoDiagnosticQuestions.length}/{diagnosticLimit} items
             </p>
@@ -7092,7 +7228,7 @@ const AddLesson = () => {
                 <div key={question.id || `auto-diagnostic-${index}`} className="border-2 border-gray-300 rounded-lg overflow-hidden">
                   <div className="flex items-center justify-between px-5 py-3 bg-gray-50 border-b-2 border-gray-300">
                     <div className="text-sm font-bold text-gray-600">{index + 1}/{autoDiagnosticQuestions.length}</div>
-                    <span className="text-xs font-semibold px-2 py-1 rounded-full bg-[#1e5a8e]/10 text-[#1e5a8e]">
+                    <span className="text-xs font-semibold px-2 py-1 rounded-full bg-[#346C9A]/10 text-secondary">
                       {normalizeSkillValue(question.skill || question.skillTag || 'Memorization', 'Memorization')}
                     </span>
                   </div>
@@ -7108,7 +7244,7 @@ const AddLesson = () => {
                             name={`diagnostic-type-${question.id || index}`}
                             checked={normalizeQuestionTypeValue(question.questionType || question.type || 'Easy', 'Easy') === questionType}
                             onChange={() => handleDiagnosticQuestionTypeChange(question.id, questionType)}
-                            className="w-3.5 h-3.5 text-[#2BC4B3]"
+                            className="w-3.5 h-3.5 text-highlight-dark"
                           />
                           <span className="text-xs text-gray-700">{questionType}</span>
                         </label>
@@ -7145,7 +7281,7 @@ const AddLesson = () => {
             <button
               onClick={handleSaveLesson}
               disabled={isSaveDisabled}
-              className="px-8 py-4 bg-[#2BC4B3] text-white font-bold text-lg rounded-lg hover:bg-[#1e5a8e] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+              className="px-8 py-4 bg-highlight text-white font-bold text-lg rounded-lg hover:bg-[#346C9A] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
             >
               {getSaveButtonLabel(saveLessonButtonText)}
             </button>
@@ -7155,7 +7291,7 @@ const AddLesson = () => {
               return nextStage ? (
                 <button
                   onClick={() => setActiveStage(nextStage.type)}
-                  className="px-8 py-4 bg-[#1e5a8e] hover:bg-[#164570] text-white font-bold text-lg rounded-lg transition-all shadow-lg flex items-center gap-2"
+                  className="px-8 py-4 bg-[#346C9A] hover:bg-[#2A5D84] text-white font-bold text-lg rounded-lg transition-all shadow-lg flex items-center gap-2"
                 >
                   Continue to {nextStage.label}
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
@@ -7169,7 +7305,7 @@ const AddLesson = () => {
         {/* Review Assessment Stage */}
         {hasMountedStage('review') && (
         <div className={`bg-white rounded-xl shadow-sm p-8 space-y-6 ${activeStage === 'review' ? '' : 'hidden'}`}>
-          <h2 className="text-2xl font-bold text-[#1e5a8e] mb-4">Review Assessment for {stripHtml(lessonData.ModuleTitle) || 'New Lesson'}</h2>
+          <h2 className="text-2xl font-bold text-secondary mb-4">Review Assessment for {stripHtml(lessonData.ModuleTitle) || 'New Lesson'}</h2>
           
           {/* Questions List */}
           <div className="space-y-6 max-h-[600px] overflow-y-auto pr-4">
@@ -7214,7 +7350,7 @@ const AddLesson = () => {
                   onPaste={handlePlainTextPaste}
                   onFocus={() => setActiveTextarea(`input-review-question-${question.id}`)}
                   data-placeholder="Type in the question here"
-                  className="w-full min-h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none text-gray-900 mb-4 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+                  className="w-full min-h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-900 mb-4 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
                   style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                 />
 
@@ -7227,7 +7363,7 @@ const AddLesson = () => {
                         name={`review-mastery-${question.id}`}
                         checked={normalizeSkillValue(question.skill || question.skillTag || 'Memorization', 'Memorization') === masteryType}
                         onChange={() => handleQuestionChange('review', question.id, 'skill', masteryType)}
-                        className="w-4 h-4 text-[#2BC4B3]"
+                        className="w-4 h-4 text-highlight-dark"
                       />
                       <span className="text-gray-700">{masteryType}</span>
                     </label>
@@ -7243,7 +7379,7 @@ const AddLesson = () => {
                         name={`review-type-${question.id}`}
                         checked={normalizeQuestionTypeValue(question.questionType || question.type || 'Easy', 'Easy') === questionType}
                         onChange={() => handleQuestionChange('review', question.id, 'questionType', questionType)}
-                        className="w-4 h-4 text-[#2BC4B3]"
+                        className="w-4 h-4 text-highlight-dark"
                       />
                       <span className="text-gray-700">{questionType}</span>
                     </label>
@@ -7296,17 +7432,17 @@ const AddLesson = () => {
             ))}
 
             {/* Add Question Button */}
-            <div className="border-2 border-gray-300 rounded-lg p-12 flex flex-col items-center justify-center hover:border-[#1e5a8e] transition-all cursor-pointer group">
+            <div className="border-2 border-gray-300 rounded-lg p-12 flex flex-col items-center justify-center hover:border-[#346C9A] transition-all cursor-pointer group">
               <button
                 onClick={() => handleAddQuestion('review')}
                 className="flex flex-col items-center gap-3"
               >
-                <div className="w-16 h-16 bg-[#1e5a8e] rounded-full flex items-center justify-center group-hover:bg-[#2BC4B3] transition-all shadow-lg">
+                <div className="w-16 h-16 bg-[#346C9A] rounded-full flex items-center justify-center group-hover:bg-highlight transition-all shadow-lg">
                   <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" />
                   </svg>
                 </div>
-                <span className="text-lg font-semibold text-gray-700 group-hover:text-[#1e5a8e]">Add Question</span>
+                <span className="text-lg font-semibold text-gray-700 group-hover:text-secondary">Add Question</span>
               </button>
             </div>
           </div>
@@ -7319,7 +7455,7 @@ const AddLesson = () => {
               <div className="mt-6 flex justify-end">
                 <button
                   onClick={() => setActiveStage(nextStage.type)}
-                  className="px-8 py-4 bg-[#1e5a8e] hover:bg-[#164570] text-white font-bold text-lg rounded-lg transition-all shadow-lg flex items-center gap-2"
+                  className="px-8 py-4 bg-[#346C9A] hover:bg-[#2A5D84] text-white font-bold text-lg rounded-lg transition-all shadow-lg flex items-center gap-2"
                 >
                   Continue to {nextStage.label}
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
@@ -7333,12 +7469,12 @@ const AddLesson = () => {
         {/* Final Assessment Stage */}
         {hasMountedStage('final') && (
         <div className={`bg-white rounded-xl shadow-sm p-8 space-y-6 ${activeStage === 'final' ? '' : 'hidden'}`}>
-          <h2 className="text-2xl font-bold text-[#1e5a8e] mb-4">Final Assessment for {stripHtml(lessonData.ModuleTitle) || 'New Lesson'}</h2>
+          <h2 className="text-2xl font-bold text-secondary mb-4">Final Assessment for {stripHtml(lessonData.ModuleTitle) || 'New Lesson'}</h2>
           
           {/* Instruction / Message for Users */}
           <div className="border-2 border-gray-200 rounded-lg p-5 bg-gray-50">
             <label className="block text-sm font-bold text-gray-700 mb-2">
-              <svg className="w-4 h-4 inline mr-1 text-[#1e5a8e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 inline mr-1 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
               Instruction / Message for Students
@@ -7348,9 +7484,9 @@ const AddLesson = () => {
               onChange={(e) => setFinalInstruction(e.target.value)}
               placeholder="e.g., This final assessment affects your learning path progression. Read and answer each question carefully. Good luck!"
               rows={3}
-              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none text-gray-900 resize-none"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-900 resize-none"
             />
-            <p className="text-xs text-gray-400 mt-1">This message will be shown to students before they start the final assessment.</p>
+            <p className="text-sm text-gray-400 mt-1">This message will be shown to students before they start the final assessment.</p>
           </div>
 
           {/* Questions List */}
@@ -7396,7 +7532,7 @@ const AddLesson = () => {
                   onPaste={handlePlainTextPaste}
                   onFocus={() => setActiveTextarea(`input-final-question-${question.id}`)}
                   data-placeholder="Type in the question here"
-                  className="w-full min-h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none text-gray-900 mb-4 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+                  className="w-full min-h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-900 mb-4 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
                   style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                 />
 
@@ -7411,7 +7547,7 @@ const AddLesson = () => {
                           name={`skill-${question.id}`}
                           checked={question.skill === skill}
                           onChange={() => handleQuestionChange('final', question.id, 'skill', skill)}
-                          className="w-4 h-4 text-[#2BC4B3]"
+                          className="w-4 h-4 text-highlight-dark"
                         />
                         <span className={`${skill === 'No Skill' ? 'text-gray-400 italic' : 'text-gray-700'}`}>{skill}</span>
                       </label>
@@ -7429,7 +7565,7 @@ const AddLesson = () => {
                           name={`final-type-${question.id}`}
                           checked={normalizeQuestionTypeValue(question.questionType || question.type || 'Situational', 'Situational') === questionType}
                           onChange={() => handleQuestionChange('final', question.id, 'questionType', questionType)}
-                          className="w-4 h-4 text-[#2BC4B3]"
+                          className="w-4 h-4 text-highlight-dark"
                         />
                         <span className="text-gray-700">{questionType}</span>
                       </label>
@@ -7483,17 +7619,17 @@ const AddLesson = () => {
             ))}
 
             {/* Add Question Button */}
-            <div className="border-2 border-gray-300 rounded-lg p-12 flex flex-col items-center justify-center hover:border-[#1e5a8e] transition-all cursor-pointer group">
+            <div className="border-2 border-gray-300 rounded-lg p-12 flex flex-col items-center justify-center hover:border-[#346C9A] transition-all cursor-pointer group">
               <button
                 onClick={() => handleAddQuestion('final')}
                 className="flex flex-col items-center gap-3"
               >
-                <div className="w-16 h-16 bg-[#1e5a8e] rounded-full flex items-center justify-center group-hover:bg-[#2BC4B3] transition-all shadow-lg">
+                <div className="w-16 h-16 bg-[#346C9A] rounded-full flex items-center justify-center group-hover:bg-highlight transition-all shadow-lg">
                   <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" />
                   </svg>
                 </div>
-                <span className="text-lg font-semibold text-gray-700 group-hover:text-[#1e5a8e]">Add Question</span>
+                <span className="text-lg font-semibold text-gray-700 group-hover:text-secondary">Add Question</span>
               </button>
             </div>
           </div>
@@ -7503,7 +7639,7 @@ const AddLesson = () => {
             <button
               onClick={handleSaveLesson}
               disabled={isSaveDisabled}
-              className="px-8 py-4 bg-[#2BC4B3] text-white font-bold text-lg rounded-lg hover:bg-[#1e5a8e] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+              className="px-8 py-4 bg-highlight text-white font-bold text-lg rounded-lg hover:bg-[#346C9A] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
             >
               {getSaveButtonLabel('Save Final Assessment')}
             </button>
@@ -7513,7 +7649,7 @@ const AddLesson = () => {
               return nextStage ? (
                 <button
                   onClick={() => setActiveStage(nextStage.type)}
-                  className="px-8 py-4 bg-[#1e5a8e] hover:bg-[#164570] text-white font-bold text-lg rounded-lg transition-all shadow-lg flex items-center gap-2"
+                  className="px-8 py-4 bg-[#346C9A] hover:bg-[#2A5D84] text-white font-bold text-lg rounded-lg transition-all shadow-lg flex items-center gap-2"
                 >
                   Continue to {nextStage.label}
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
@@ -7527,12 +7663,12 @@ const AddLesson = () => {
         {/* Simulation Stage */}
         {hasMountedStage('simulation') && (
         <div className={`bg-white rounded-xl shadow-sm p-8 space-y-6 ${activeStage === 'simulation' ? '' : 'hidden'}`}>
-          <h2 className="text-2xl font-bold text-[#1e5a8e] mb-4">Simulation</h2>
+          <h2 className="text-2xl font-bold text-secondary mb-4">Simulation</h2>
           {selectedSimulation ? (
-            <div className="border-2 border-[#2BC4B3] rounded-lg p-6 bg-[#f0faf9]">
+            <div className="border-2 border-highlight rounded-lg p-6 bg-surface-light">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-xl font-bold text-[#1e5a8e]">{selectedSimulation.SimulationTitle}</h3>
+                  <h3 className="text-xl font-bold text-secondary">{selectedSimulation.SimulationTitle}</h3>
                   <p className="text-gray-600 mt-2">{selectedSimulation.Description}</p>
                   <div className="flex gap-4 mt-3 flex-wrap">
                     <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">Type: {selectedSimulation.ActivityType}</span>
@@ -7544,7 +7680,7 @@ const AddLesson = () => {
                 </div>
                 <button
                   onClick={openSimulationPickerForStage}
-                  className="px-5 py-2.5 bg-[#1e5a8e] text-white rounded-lg hover:bg-[#164570] transition-all font-semibold flex-shrink-0 ml-4"
+                  className="px-5 py-2.5 bg-[#346C9A] text-white rounded-lg hover:bg-[#2A5D84] transition-all font-semibold flex-shrink-0 ml-4"
                 >
                   Change
                 </button>
@@ -7558,7 +7694,7 @@ const AddLesson = () => {
               <p className="text-gray-500 text-lg mb-4">No simulation selected</p>
               <button
                 onClick={openSimulationPickerForStage}
-                className="px-6 py-3 bg-[#1e5a8e] text-white rounded-lg hover:bg-[#164570] transition-all font-semibold shadow-md"
+                className="px-6 py-3 bg-[#346C9A] text-white rounded-lg hover:bg-[#2A5D84] transition-all font-semibold shadow-md"
               >
                 Select Simulation
               </button>
@@ -7570,7 +7706,7 @@ const AddLesson = () => {
             <button
               onClick={handleSaveLesson}
               disabled={isSaveDisabled}
-              className="px-8 py-4 bg-[#2BC4B3] text-white font-bold text-lg rounded-lg hover:bg-[#1e5a8e] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+              className="px-8 py-4 bg-highlight text-white font-bold text-lg rounded-lg hover:bg-[#346C9A] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
             >
               {getSaveButtonLabel(saveLessonButtonText)}
             </button>
@@ -7580,7 +7716,7 @@ const AddLesson = () => {
               return nextStage ? (
                 <button
                   onClick={() => setActiveStage(nextStage.type)}
-                  className="px-8 py-4 bg-[#1e5a8e] hover:bg-[#164570] text-white font-bold text-lg rounded-lg transition-all shadow-lg flex items-center gap-2"
+                  className="px-8 py-4 bg-[#346C9A] hover:bg-[#2A5D84] text-white font-bold text-lg rounded-lg transition-all shadow-lg flex items-center gap-2"
                 >
                   Continue to {nextStage.label}
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
@@ -7598,7 +7734,7 @@ const AddLesson = () => {
           <button
             type="button"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="w-11 h-11 rounded-full bg-white border border-gray-300 shadow-md hover:border-[#2BC4B3] hover:text-[#1e5a8e] text-gray-600 flex items-center justify-center transition-all"
+            className="w-11 h-11 rounded-full bg-white border border-gray-300 shadow-md hover:border-highlight hover:text-secondary text-gray-600 flex items-center justify-center transition-all"
             aria-label="Go to top"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -7614,7 +7750,7 @@ const AddLesson = () => {
           <button
             type="button"
             onClick={() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' })}
-            className="w-11 h-11 rounded-full bg-white border border-gray-300 shadow-md hover:border-[#2BC4B3] hover:text-[#1e5a8e] text-gray-600 flex items-center justify-center transition-all"
+            className="w-11 h-11 rounded-full bg-white border border-gray-300 shadow-md hover:border-highlight hover:text-secondary text-gray-600 flex items-center justify-center transition-all"
             aria-label="Go to bottom"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -7640,10 +7776,10 @@ const AddLesson = () => {
           <div className="fixed top-0 right-0 h-full w-96 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out">
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b-2 border-gray-200">
-              <h2 className="text-3xl font-bold text-[#1e5a8e]">Materials</h2>
+              <h2 className="text-3xl font-bold text-secondary">Materials</h2>
               <button
                 onClick={() => { setShowSectionModal(false); setInsertAtIndex(null); }}
-                className="text-[#1e5a8e] hover:text-[#2BC4B3] transition-colors"
+                className="text-secondary hover:text-highlight-dark transition-colors"
               >
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
@@ -7655,49 +7791,49 @@ const AddLesson = () => {
             <div className="p-4 space-y-2 overflow-y-auto h-[calc(100%-88px)]">
               <button
                 onClick={() => handleAddMaterial('topic')}
-                className="w-full py-4 px-6 bg-[#1e5a8e] hover:bg-[#164570] text-white rounded-lg font-bold text-xl transition-all shadow-md"
+                className="w-full py-4 px-6 bg-[#346C9A] hover:bg-[#2A5D84] text-white rounded-lg font-bold text-xl transition-all shadow-md"
               >
                 Topic Title
               </button>
 
               <button
                 onClick={() => handleAddMaterial('subtopic')}
-                className="w-full py-4 px-6 bg-[#1e5a8e] hover:bg-[#164570] text-white rounded-lg font-bold text-xl transition-all shadow-md"
+                className="w-full py-4 px-6 bg-[#346C9A] hover:bg-[#2A5D84] text-white rounded-lg font-bold text-xl transition-all shadow-md"
               >
                 Subtopic Title
               </button>
 
               <button
                 onClick={() => handleAddMaterial('paragraph')}
-                className="w-full py-4 px-6 bg-[#1e5a8e] hover:bg-[#164570] text-white rounded-lg font-bold text-xl transition-all shadow-md"
+                className="w-full py-4 px-6 bg-[#346C9A] hover:bg-[#2A5D84] text-white rounded-lg font-bold text-xl transition-all shadow-md"
               >
                 Paragraph
               </button>
 
               <button
                 onClick={() => handleAddMaterial('image')}
-                className="w-full py-4 px-6 bg-[#1e5a8e] hover:bg-[#164570] text-white rounded-lg font-bold text-xl transition-all shadow-md"
+                className="w-full py-4 px-6 bg-[#346C9A] hover:bg-[#2A5D84] text-white rounded-lg font-bold text-xl transition-all shadow-md"
               >
                 Image
               </button>
 
               <button
                 onClick={() => handleAddMaterial('video')}
-                className="w-full py-4 px-6 bg-[#1e5a8e] hover:bg-[#164570] text-white rounded-lg font-bold text-xl transition-all shadow-md"
+                className="w-full py-4 px-6 bg-[#346C9A] hover:bg-[#2A5D84] text-white rounded-lg font-bold text-xl transition-all shadow-md"
               >
                 Video
               </button>
 
               <button
                 onClick={() => handleAddMaterial('review-multiple-choice')}
-                className="w-full py-4 px-6 bg-[#1e5a8e] hover:bg-[#164570] text-white rounded-lg font-bold text-xl transition-all shadow-md"
+                className="w-full py-4 px-6 bg-[#346C9A] hover:bg-[#2A5D84] text-white rounded-lg font-bold text-xl transition-all shadow-md"
               >
                 Review - Multiple Choice
               </button>
 
               <button
                 onClick={() => handleAddMaterial('simulation')}
-                className="w-full py-4 px-6 bg-[#1e5a8e] hover:bg-[#164570] text-white rounded-lg font-bold text-xl transition-all shadow-md"
+                className="w-full py-4 px-6 bg-[#346C9A] hover:bg-[#2A5D84] text-white rounded-lg font-bold text-xl transition-all shadow-md"
               >
                 Simulation
               </button>
@@ -7715,7 +7851,7 @@ const AddLesson = () => {
           ></div>
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-2xl z-50 p-8 w-[420px]">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-[#1e5a8e]">Add Stage</h2>
+              <h2 className="text-2xl font-bold text-secondary">Add Stage</h2>
               <button
                 onClick={() => setShowAddStageModal(false)}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -7763,11 +7899,11 @@ const AddLesson = () => {
                     className={`w-full py-4 px-5 rounded-lg text-left transition-all flex items-center gap-4 border-2 ${
                       alreadyAdded
                         ? 'bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed'
-                        : 'bg-white border-gray-200 hover:border-[#2BC4B3] hover:bg-[#f0faf9] text-gray-800'
+                        : 'bg-white border-gray-200 hover:border-highlight hover:bg-surface-light text-gray-800'
                     }`}
                   >
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                      alreadyAdded ? 'bg-gray-300 text-white' : 'bg-[#1e5a8e] text-white'
+                      alreadyAdded ? 'bg-gray-300 text-white' : 'bg-[#346C9A] text-white'
                     }`}>
                       {option.icon}
                     </div>
@@ -7795,7 +7931,7 @@ const AddLesson = () => {
           ></div>
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-2xl z-50 p-8 w-[520px] max-h-[80vh] flex flex-col">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-[#1e5a8e]">Select Simulation</h2>
+              <h2 className="text-2xl font-bold text-secondary">Select Simulation</h2>
               <button
                 onClick={closeSimulationPicker}
                 className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -7819,13 +7955,13 @@ const AddLesson = () => {
                   <button
                     key={sim.SimulationID}
                     onClick={() => handleSimulationPicked(sim)}
-                    className={`w-full p-4 rounded-lg border-2 text-left transition-all hover:border-[#2BC4B3] hover:bg-[#f0faf9] ${
+                    className={`w-full p-4 rounded-lg border-2 text-left transition-all hover:border-highlight hover:bg-surface-light ${
                       Number(activeSimulationPickerSelectionId) === Number(sim.SimulationID)
-                        ? 'border-[#2BC4B3] bg-[#f0faf9]'
+                        ? 'border-highlight bg-surface-light'
                         : 'border-gray-200'
                     }`}
                   >
-                    <h3 className="font-bold text-[#1e5a8e] text-lg">{sim.SimulationTitle}</h3>
+                    <h3 className="font-bold text-secondary text-lg">{sim.SimulationTitle}</h3>
                     <p className="text-sm text-gray-600 mt-1 line-clamp-2">{sim.Description}</p>
                     <div className="flex gap-3 mt-2 flex-wrap">
                       <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">Type: {sim.ActivityType}</span>

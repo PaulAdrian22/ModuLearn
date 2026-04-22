@@ -52,7 +52,7 @@ const ThemedConfirmHost = () => {
   return (
     <div className="fixed inset-0 z-[1100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
-        <div className={`px-6 py-4 ${isDanger ? 'bg-[#EF5350]' : 'bg-[#2BC4B3]'}`}>
+        <div className={`px-6 py-4 ${isDanger ? 'bg-[#EF5350]' : 'bg-highlight'}`}>
           <h3 className="text-white text-xl font-bold">{dialog.title || 'Confirmation'}</h3>
         </div>
 
@@ -74,7 +74,7 @@ const ThemedConfirmHost = () => {
             type="button"
             onClick={() => closeDialog(true)}
             className={`px-4 py-2 rounded-lg text-white font-semibold transition-colors ${
-              isDanger ? 'bg-[#EF5350] hover:bg-[#E53935]' : 'bg-[#2BC4B3] hover:bg-[#1e5a8e]'
+              isDanger ? 'bg-[#EF5350] hover:bg-[#E53935]' : 'bg-highlight hover:bg-[#346C9A]'
             }`}
           >
             {dialog.confirmText || 'Confirm'}

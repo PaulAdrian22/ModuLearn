@@ -53,7 +53,7 @@ const Login = () => {
 
   return (
     <div className="h-[100dvh] flex items-center justify-center px-4 pt-14 pb-4 relative overflow-hidden" style={{
-      backgroundImage: 'url(/images/login-bg.svg)',
+      backgroundImage: 'url(/images/login-bg.webp)',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundColor: '#2BC4B3'

@@ -26,6 +26,8 @@ Recommended container name: `modulearn-assets`
 Workflow file:
 
 - `.github/workflows/deploy-azure-backend.yml`
+- `.github/workflows/azure-cost-guardrails.yml` (manual cost tuning)
+- `.github/workflows/azure-nonprod-schedule.yml` (scheduled stop/start)
 
 Required GitHub repository settings:
 
@@ -53,6 +55,11 @@ Set these in Azure Web App > Environment variables:
 - `JWT_SECRET=<long-random-secret>`
 - `JWT_REFRESH_SECRET=<long-random-refresh-secret>`
 - `CORS_ORIGIN=<frontend-origin>`
+- `REQUEST_LOG_MODE=errors-only`
+- `UPLOAD_CACHE_MAX_AGE_SECONDS=86400`
+- `DB_CONNECTION_LIMIT=5`
+- `API_CACHE_TTL_SECONDS=120`
+- `API_CACHE_MAX_ENTRIES=500`
 
 Example `CORS_ORIGIN`:
 
@@ -67,6 +74,13 @@ Example `CORS_ORIGIN`:
   - `AZURE_STORAGE_CONNECTION_STRING=<connection-string>`
   - or both `AZURE_STORAGE_ACCOUNT_NAME` + `AZURE_STORAGE_ACCOUNT_KEY`
 - Optional: `AZURE_STORAGE_PUBLIC_BASE_URL=https://<account>.blob.core.windows.net/<container>`
+
+Cost tip:
+
+- Keep `REQUEST_LOG_MODE=errors-only` in production to reduce log ingestion costs.
+- Increase `UPLOAD_CACHE_MAX_AGE_SECONDS` when upload files are immutable and versioned.
+- Keep `DB_CONNECTION_LIMIT` small (for example `5`) on Burstable MySQL tiers.
+- Use short API cache (`API_CACHE_TTL_SECONDS`) to reduce repeated read load.
 
 ## 4. Prepare MySQL Schema on Azure
 
@@ -107,14 +121,23 @@ For GitHub Pages workflow, set repository secret:
 
 ## 7. Current Upload Scope
 
-Azure Blob integration is scaffolded for profile-picture uploads.
+Azure Blob integration supports these paths when `STORAGE_PROVIDER=azure`:
 
-Still local-file based unless you migrate separately:
+- profile-picture uploads
+- admin lesson media uploads (`/api/admin/upload-media`)
+- simulation seeding assets (`seed_simulation_activities.js`)
+
+Legacy records and import-generated media can still be local until you migrate:
 
 - lesson-import generated assets
 - simulation seeded assets
 
-These can be migrated next using the same storage utility pattern.
+Run migration from the `backend` folder:
+
+```powershell
+npm run migrate:media:azure:dry
+npm run migrate:media:azure
+```
 
 ## 8. Trial Viability Calculator
 
@@ -141,3 +164,103 @@ Important behavior reminder:
 
 - Azure free trial credits expire after 30 days.
 - Without upgrading to pay-as-you-go, resources stop after the trial window.
+
+## 9. Azure Credit Optimization Quick Wins
+
+Apply these in order for highest impact:
+
+1. Use the smallest reliable compute SKU first:
+  - App Service Plan: start with B1 Linux.
+  - MySQL Flexible Server: start with Burstable tier.
+2. Stop non-production resources on a schedule:
+  - Stop backend and dev database during off-hours/weekends.
+  - Restart only during active testing windows.
+3. Cap observability costs:
+  - Set Application Insights daily cap and retention to minimum practical values.
+4. Keep static frontend off Azure compute:
+  - Host frontend on GitHub Pages or Netlify.
+  - Keep Azure for API + database only.
+5. Move all media uploads to Blob Storage:
+  - Avoid serving large files from App Service local disk.
+  - Use Blob URLs/CDN-friendly caching for lessons and simulation assets.
+6. Keep traffic egress low:
+  - Use image/video compression and modern formats before upload.
+  - Keep response compression enabled on backend.
+
+## 10. Automating Items 1-5
+
+### Item 1: App settings defaults
+
+Use workflow:
+
+- `.github/workflows/azure-cost-guardrails.yml`
+
+It applies:
+
+- `NODE_ENV=production`
+- `REQUEST_LOG_MODE=errors-only`
+- `UPLOAD_CACHE_MAX_AGE_SECONDS=86400`
+- `DB_CONNECTION_LIMIT=5`
+- `API_CACHE_TTL_SECONDS=120`
+- `API_CACHE_MAX_ENTRIES=500`
+
+### Item 2: Smallest stable SKU
+
+The same workflow can right-size compute:
+
+- App Service Plan SKU (default `B1`)
+- MySQL Flexible Server SKU (default `Standard_B1ms`, tier `Burstable`)
+
+### Item 3: Non-production stop/start schedule
+
+Use workflow:
+
+- `.github/workflows/azure-nonprod-schedule.yml`
+
+Set guardrail variable before enabling schedule:
+
+- `AZURE_NONPROD_ENABLED=true`
+
+### Item 4: Application Insights cap and retention
+
+`azure-cost-guardrails.yml` configures:
+
+- retention days
+- daily cap (GB)
+
+### Item 5: Migrate lesson/simulation media to Blob
+
+Run from `backend`:
+
+```powershell
+npm run migrate:media:azure:dry
+npm run migrate:media:azure
+```
+
+This updates media URLs in:
+
+- `module.sections`
+- `module.diagnosticQuestions`
+- `module.reviewQuestions`
+- `module.finalQuestions`
+- `simulation.ZoneData`
+- `simulation.Description`
+- `simulation.Instructions`
+
+### Required Repository Secrets and Variables for Automation
+
+Secrets:
+
+- `AZURE_CREDENTIALS`
+
+Variables:
+
+- `AZURE_RESOURCE_GROUP`
+- `AZURE_WEBAPP_NAME`
+- `AZURE_APP_SERVICE_PLAN`
+- `AZURE_MYSQL_SERVER_NAME`
+- `AZURE_APP_INSIGHTS_NAME`
+- `AZURE_NONPROD_RESOURCE_GROUP`
+- `AZURE_NONPROD_WEBAPP_NAME`
+- `AZURE_NONPROD_MYSQL_SERVER_NAME`
+- `AZURE_NONPROD_ENABLED`

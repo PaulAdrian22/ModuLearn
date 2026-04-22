@@ -171,7 +171,7 @@ const Lessons = () => {
                     </span>
                   )}
 
-                  <p className={`text-sm mb-4 line-clamp-3 ${isLocked ? 'text-gray-500' : 'text-gray-600'}`}>
+                  <p className={`text-[18px] leading-[1.45] mb-4 line-clamp-3 ${isLocked ? 'text-gray-500' : 'text-gray-600'}`}>
                     {stripObjectivesFromSummary(module.Description) || 'Learn advanced concepts in Computer Hardware Servicing'}
                   </p>
 

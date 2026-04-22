@@ -6,7 +6,7 @@ import Navbar from '../components/Navbar';
 import QuickAssessment from '../components/QuickAssessment';
 import Diagnostic from '../components/Diagnostic';
 import { API_SERVER_URL } from '../config/api';
-import { withPreferredLanguage } from '../utils/languagePreference';
+import { withPreferredLanguage, getPreferredLanguage } from '../utils/languagePreference';
 import { 
   getPerformance, 
   shouldShowChallenge, 
@@ -58,7 +58,8 @@ const ModuleView = () => {
   const [activeReviewQuestionTimes, setActiveReviewQuestionTimes] = useState({});
   const lessonProgressStorageKey = useMemo(() => {
     if (!moduleId || !user?.userId) return null;
-    return `lesson_progress_u${user.userId}_m${moduleId}`;
+    const language = getPreferredLanguage() || 'English';
+    return `lesson_progress_u${user.userId}_m${moduleId}_lang${language}`;
   }, [moduleId, user?.userId]);
   const progressHydratedRef = useRef(false);
   const progressSyncRef = useRef({ moduleId: null, completionRate: null });
@@ -149,6 +150,30 @@ const ModuleView = () => {
     return normalizedSpans;
   };
 
+  const normalizeLessonSectionType = (rawType = '') => {
+    const normalizedType = String(rawType || '').trim().toLowerCase();
+
+    switch (normalizedType) {
+      case 'topic title':
+      case 'topic-title':
+      case 'topic_title':
+        return 'topic';
+      case 'subtopic title':
+      case 'subtopic-title':
+      case 'subtopic_title':
+        return 'subtopic';
+      case 'review - multiple choice':
+      case 'review multiple choice':
+        return 'review-multiple-choice';
+      case 'review-drag-drop':
+      case 'review - drag and drop':
+      case 'review drag and drop':
+        return 'simulation';
+      default:
+        return normalizedType;
+    }
+  };
+
   const normalizeExternalVideoUrl = (rawUrl) => {
     if (!rawUrl) return '';
     const value = String(rawUrl).trim();
@@ -175,11 +200,15 @@ const ModuleView = () => {
         if (videoId) return `https://player.vimeo.com/video/${videoId}`;
       }
 
-      if (host.includes('dropbox.com')) {
+      if (host.includes('dropbox.com') || host.includes('dropboxusercontent.com')) {
         const directUrl = new URL(parsed.toString());
-        directUrl.hostname = 'dl.dropboxusercontent.com';
+
+        if (host.includes('dropbox.com')) {
+          directUrl.hostname = 'dl.dropboxusercontent.com';
+        }
+
         directUrl.searchParams.delete('dl');
-        directUrl.searchParams.delete('raw');
+        directUrl.searchParams.set('raw', '1');
         return directUrl.toString();
       }
 
@@ -273,6 +302,9 @@ const ModuleView = () => {
       normalizedUrl.includes('youtube.com') ||
       normalizedUrl.includes('youtu.be') ||
       normalizedUrl.includes('vimeo.com') ||
+      normalizedUrl.includes('dropbox.com') ||
+      normalizedUrl.includes('dropboxusercontent.com') ||
+      normalizedUrl.includes('imgur.com') ||
       normalizedUrl.includes('dailymotion.com') ||
       normalizedUrl.includes('loom.com') ||
       normalizedUrl.includes('/embed/')
@@ -319,7 +351,7 @@ const ModuleView = () => {
           anchor.target = '_blank';
           anchor.rel = 'noopener noreferrer';
           anchor.textContent = matchedText;
-          anchor.style.color = '#1e5a8e';
+          anchor.style.color = '#346C9A';
           anchor.style.textDecoration = 'underline';
           anchor.style.fontWeight = '600';
           fragment.appendChild(anchor);
@@ -552,13 +584,10 @@ const ModuleView = () => {
       .filter(Boolean);
 
     const diagnosticIndex = stageTypes.indexOf('diagnostic');
-    if (diagnosticIndex === -1) {
-      return false;
-    }
-
     const introductionIndex = stageTypes.indexOf('introduction');
-    if (introductionIndex === -1) {
-      return true;
+
+    if (diagnosticIndex === -1 || introductionIndex === -1) {
+      return false;
     }
 
     return diagnosticIndex < introductionIndex;
@@ -864,6 +893,10 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
     setShowDiagnostic(false);
   };
 
+  const handleDiagnosticBack = () => {
+    navigate('/lessons');
+  };
+
   const updateModuleProgress = async (completionRate, options = {}) => {
     const { navigateOnComplete = true } = options;
     const numericModuleId = parseInt(moduleId, 10);
@@ -984,7 +1017,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
     const seen = new Set();
 
     lessonSections.forEach((section) => {
-      if (section.type?.toLowerCase() !== 'references') return;
+      if (normalizeLessonSectionType(section?.type) !== 'references') return;
 
       extractReferenceLinks(section.content || '').forEach((link) => {
         const key = link.url.toLowerCase();
@@ -1076,9 +1109,9 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
     let currentPage = [];
     
     lessonSections.forEach((section, index) => {
-      const sectionType = section.type?.toLowerCase();
+      const sectionType = normalizeLessonSectionType(section?.type);
       // Start a new page when we hit a topic title (but not for the very first one if currentPage is empty)
-      if ((sectionType === 'topic' || sectionType === 'topic title') && currentPage.length > 0) {
+      if (sectionType === 'topic' && currentPage.length > 0) {
         pages.push(currentPage);
         currentPage = [];
       }
@@ -1138,7 +1171,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
     const page = topicPages[pageIndex];
     if (!page) return true;
     for (const section of page) {
-      const sType = section.type?.toLowerCase();
+      const sType = normalizeLessonSectionType(section?.type);
       if (sType === 'review' || sType === 'review - multiple choice' || sType === 'review-multiple-choice') {
         const reviewId = section.id || `review-mc-${section.originalIndex}`;
         if (!completedReviews[reviewId]) return false;
@@ -1162,7 +1195,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F5F7FA]">
+      <div className="min-h-screen bg-background">
         <Navbar />
         <div className="flex items-center justify-center h-96">
           <div className="spinner"></div>
@@ -1173,7 +1206,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
 
   if (!module) {
     return (
-      <div className="min-h-screen bg-[#F5F7FA]">
+      <div className="min-h-screen bg-background">
         <Navbar />
         <div className="w-full px-8 py-8">
           <div className="bg-error/20 border border-error text-error px-4 py-3 rounded-lg">
@@ -1200,6 +1233,8 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
         questions={module.diagnosticQuestions}
         onComplete={handleDiagnosticComplete}
         moduleId={moduleId}
+        onBack={handleDiagnosticBack}
+        preferredLanguage={localStorage.getItem('preferredLanguage') || 'English'}
         onSkip={null}
       />
     );
@@ -1208,7 +1243,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
   const currentTopicData = content?.topics[currentTopic];
 
   return (
-    <div className={`${isDbLessonModeActive ? 'h-screen overflow-hidden' : 'min-h-screen'} bg-[#F5F7FA]`}>
+    <div className={`${isDbLessonModeActive ? 'h-screen overflow-hidden' : 'min-h-screen'} bg-background`}>
       {/* Only show navbar if using hardcoded content */}}
       {!lessonSections.length && <Navbar />}
       
@@ -1283,11 +1318,11 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
 
         {/* Lesson Intro Page from Database */}
         {lessonSections.length > 0 && !showQuickAssessment && showLessonIntro && (
-          <div className="fixed inset-0 z-40 bg-[#F5F7FA] flex items-center justify-center px-6">
+          <div className="fixed inset-0 z-40 bg-background flex items-center justify-center px-6">
             <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl border border-gray-200 p-10 relative">
               <button
                 onClick={() => navigate('/dashboard')}
-                className="absolute top-5 left-5 p-2 rounded-lg hover:bg-gray-100 text-[#1e3a5f]"
+                className="absolute top-5 left-5 p-2 rounded-lg hover:bg-gray-100 text-primary"
                 title="Back to Learning Path"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1297,10 +1332,10 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
               </button>
 
               <div className="pt-6 pb-20">
-                <p className="text-sm font-semibold text-[#2BC4B3] uppercase tracking-wider mb-3 text-center">
+                <p className="text-sm font-semibold text-highlight-dark uppercase tracking-wider mb-3 text-center">
                   Lesson {module.LessonOrder}
                 </p>
-                <h1 className="text-4xl font-bold text-[#1e3a5f] mb-5 max-w-3xl mx-auto text-center">
+                <h1 className="text-4xl font-bold text-primary mb-5 max-w-3xl mx-auto text-center">
                   {toPlainText(module.ModuleTitle) || 'Untitled Lesson'}
                 </h1>
                 <div
@@ -1315,7 +1350,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                     setShowLessonIntro(false);
                     goToTopicPage(0);
                   }}
-                  className="px-8 py-3 bg-[#2BC4B3] hover:bg-[#25b0a1] text-white rounded-xl font-semibold shadow-lg transition-colors flex items-center gap-2"
+                  className="px-8 py-3 bg-highlight hover:bg-highlight-dark text-white rounded-xl font-semibold shadow-lg transition-colors flex items-center gap-2"
                 >
                   Start Learning
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -1338,7 +1373,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
               <div className="p-6 border-b border-gray-200">
                 <button 
                   onClick={() => navigate('/dashboard')}
-                  className="flex items-center gap-3 text-[#1e3a5f] group hover:text-[#2BC4B3] transition-colors"
+                  className="flex items-center gap-3 text-primary group hover:text-highlight-dark transition-colors"
                 >
                   <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M19 12H5" />
@@ -1350,7 +1385,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
 
               {/* Sidebar Content */}
               <div className="flex-1 overflow-y-auto p-6">
-                <h3 className="text-lg font-bold text-[#1e3a5f] mb-4">Lesson Topics</h3>
+                <h3 className="text-lg font-bold text-primary mb-4">Lesson Topics</h3>
                 
                 {/* Topic List */}
                 <div className="space-y-1">
@@ -1361,8 +1396,8 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                     let pageIndex = -1;
                     
                     lessonSections.forEach((section, index) => {
-                      const sectionType = section.type?.toLowerCase();
-                      if (sectionType === 'topic' || sectionType === 'topic title') {
+                      const sectionType = normalizeLessonSectionType(section?.type);
+                      if (sectionType === 'topic') {
                         pageIndex++;
                         currentTopicItem = {
                           id: index,
@@ -1371,7 +1406,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                           subtopics: []
                         };
                         topicHierarchy.push(currentTopicItem);
-                      } else if ((sectionType === 'subtopic' || sectionType === 'subtopic title') && currentTopicItem) {
+                      } else if (sectionType === 'subtopic' && currentTopicItem) {
                         currentTopicItem.subtopics.push({
                           id: index,
                           title: section.title || section.content
@@ -1393,8 +1428,8 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                 !accessible
                                   ? 'text-gray-400 cursor-not-allowed'
                                   : currentTopicPage === topic.pageIndex
-                                  ? 'text-[#2BC4B3] bg-[#2BC4B3]/10'
-                                  : 'text-[#1e3a5f] hover:bg-gray-100'
+                                  ? 'text-highlight-dark bg-highlight/10'
+                                  : 'text-primary hover:bg-gray-100'
                               }`}
                               title={!accessible ? 'Complete all review questions on previous topics first' : ''}
                             >
@@ -1410,7 +1445,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                         
                         {/* Subtopics - only show for current topic page */}
                         {topic.subtopics.length > 0 && currentTopicPage === topic.pageIndex && (
-                          <div className="ml-4 mt-1 space-y-1 border-l-2 border-[#2BC4B3]/30 pl-4">
+                          <div className="ml-4 mt-1 space-y-1 border-l-2 border-highlight/30 pl-4">
                             {topic.subtopics.map((subtopic) => (
                               <button
                                 key={subtopic.id}
@@ -1420,7 +1455,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                     document.getElementById(`section-${subtopic.id}`)?.scrollIntoView({ behavior: 'smooth' });
                                   }, 100);
                                 }}
-                                className="w-full text-left text-sm py-1 text-gray-600 hover:text-[#2BC4B3] transition-colors"
+                                className="w-full text-left text-sm py-1 text-gray-600 hover:text-highlight-dark transition-colors"
                                 dangerouslySetInnerHTML={{ __html: subtopic.title }}
                               />
                             ))}
@@ -1443,7 +1478,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                   disabled={!referenceLinks.length}
                   className={`flex items-center gap-3 w-full transition-colors ${
                     referenceLinks.length
-                      ? 'text-[#1e3a5f] hover:text-[#2BC4B3]'
+                      ? 'text-primary hover:text-highlight-dark'
                       : 'text-gray-400 cursor-not-allowed'
                   }`}
                   title={
@@ -1457,14 +1492,14 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                   </svg>
                   <span className="font-medium">References</span>
                   {referenceLinks.length > 0 && (
-                    <span className="ml-auto text-xs font-semibold bg-[#2BC4B3]/15 text-[#1e3a5f] px-2 py-1 rounded-full">
+                    <span className="ml-auto text-xs font-semibold bg-highlight/15 text-primary px-2 py-1 rounded-full">
                       {referenceLinks.length}
                     </span>
                   )}
                 </button>
                 <button 
                   onClick={() => setShowReportModal(true)}
-                  className="flex items-center gap-3 text-[#1e3a5f] w-full hover:text-[#EF5350] transition-colors"
+                  className="flex items-center gap-3 text-primary w-full hover:text-error transition-colors"
                 >
                   <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
@@ -1478,7 +1513,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col">
               {/* Header - Matching image design exactly */}
-              <div className="bg-[#2B5278] text-white py-5 px-8 flex items-center gap-4 shadow-md">
+              <div className="bg-primary text-white py-5 px-8 flex items-center gap-4 shadow-md">
                 <h1 className="text-2xl font-bold">
                   {toRoman(module.LessonOrder)}.  {toPlainText(module.ModuleTitle)}
                 </h1>
@@ -1497,25 +1532,23 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                   {(topicPages[currentTopicPage] || []).map((section) => {
                     const index = section.originalIndex;
                     // Normalize type to handle both formats (lowercase from DB, or capitalized)
-                    const sectionType = section.type?.toLowerCase();
+                    const sectionType = normalizeLessonSectionType(section?.type);
                     
                     switch(sectionType) {
                       case 'topic':
-                      case 'topic title':
                         return (
-                          <div key={index} id={`section-${index}`} className="mb-8 pb-8 border-b border-black scroll-mt-20">
+                          <div key={index} id={`section-${index}`} className="mb-8 pb-8 border-b border-border-light scroll-mt-20">
                             <h2 
-                              className="text-4xl lg:text-5xl font-bold text-[#1B5E87] mb-6" 
+                              className="text-4xl lg:text-5xl font-bold text-primary mb-6" 
                               dangerouslySetInnerHTML={{ __html: section.title || section.content }}
                             ></h2>
                           </div>
                         );
                       case 'subtopic':
-                      case 'subtopic title':
                         return (
                           <div key={index} id={`section-${index}`} className="mb-6 scroll-mt-20">
                             <h3 
-                              className="text-2xl lg:text-3xl font-bold text-[#000000] mb-4 mt-8" 
+                              className="text-2xl lg:text-3xl font-bold text-text-primary mb-4 mt-8" 
                               dangerouslySetInnerHTML={{ __html: section.title || section.content }}
                             ></h3>
                           </div>
@@ -1570,14 +1603,14 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                       <table className="w-full border-collapse">
                                         <thead>
                                           {tableTitle && (
-                                            <tr className="bg-[#1e5a8e]/10 border-b border-gray-200">
+                                            <tr className="bg-primary-light/10 border-b border-gray-200">
                                               <th colSpan={inferredColumnCount} className="px-4 py-3 text-left">
-                                                <div className="table-rich-content text-sm font-bold text-[#1e3a5f]" dangerouslySetInnerHTML={{ __html: normalizeRichTextHtml(tableTitle) }} />
+                                                <div className="table-rich-content text-sm font-bold text-primary" dangerouslySetInnerHTML={{ __html: normalizeRichTextHtml(tableTitle) }} />
                                               </th>
                                             </tr>
                                           )}
                                           {showHeaderRow && (
-                                            <tr className="bg-[#1e5a8e]/10 border-b border-gray-200">
+                                            <tr className="bg-primary-light/10 border-b border-gray-200">
                                               {normalizedHeaders.map((header, cIdx) => {
                                                 const headerColSpan = tableHeaderSpans[cIdx] || 0;
                                                 if (headerColSpan <= 0) return null;
@@ -1587,7 +1620,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                                   <th
                                                     key={`table-header-${cIdx}`}
                                                     colSpan={headerColSpan}
-                                                    className={`px-4 py-3 text-center text-sm font-semibold text-[#1e3a5f] align-top break-words ${hasRightBorder ? 'border-r border-gray-100' : ''}`}
+                                                    className={`px-4 py-3 text-center text-sm font-semibold text-primary align-top break-words ${hasRightBorder ? 'border-r border-gray-100' : ''}`}
                                                   >
                                                     <div className="table-rich-content" dangerouslySetInnerHTML={{ __html: normalizeRichTextHtml(header || '') }} />
                                                   </th>
@@ -1611,7 +1644,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                                     <td
                                                       key={`table-cell-${rIdx}-${cIdx}`}
                                                       colSpan={cellColSpan}
-                                                      className={`px-4 py-3 text-lg text-[#000000] ${hasRightBorder ? 'border-r border-gray-100' : ''} align-top break-words`}
+                                                      className={`px-4 py-3 text-lg text-text-primary ${hasRightBorder ? 'border-r border-gray-100' : ''} align-top break-words`}
                                                     >
                                                       <div className="table-rich-content" dangerouslySetInnerHTML={{ __html: normalizeRichTextHtml(cell || '') }} />
                                                     </td>
@@ -1628,7 +1661,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                               })()
                             ) : (
                               <div 
-                                className="lesson-content text-xl text-[#000000] leading-relaxed" 
+                                className="lesson-content text-xl text-text-primary leading-relaxed" 
                                 dangerouslySetInnerHTML={{ __html: normalizeRichTextHtml(section.content) }}
                               ></div>
                             )}
@@ -1638,7 +1671,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                       case 'bullet list':
                         return (
                           <div key={index} className="mb-6">
-                            <ul className="list-disc list-outside space-y-3 text-xl text-[#000000] ml-8 leading-relaxed">
+                            <ul className="list-disc list-outside space-y-3 text-xl text-text-primary ml-8 leading-relaxed">
                               {(section.content || '').split('\n').filter(item => item.trim()).map((item, i) => (
                                 <li key={i} className="pl-2">{item.replace(/^[•\-]\s*/, '')}</li>
                               ))}
@@ -1649,7 +1682,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                       case 'numbered list':
                         return (
                           <div key={index} className="mb-6">
-                            <ol className="list-decimal list-outside space-y-3 text-xl text-[#000000] ml-8 leading-relaxed">
+                            <ol className="list-decimal list-outside space-y-3 text-xl text-text-primary ml-8 leading-relaxed">
                               {(section.content || '').split('\n').filter(item => item.trim()).map((item, i) => (
                                 <li key={i} className="pl-2">{item.replace(/^\d+[.)\-]\s*/, '')}</li>
                               ))}
@@ -1665,16 +1698,20 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                         };
                         const layout = section.layout || 'single';
                         // Check if text+image layout
-                        if (section.images && section.images.length > 0 && (layout === 'text-left' || layout === 'text-right')) {
-                          const sideTexts = section.sideTexts || (section.sideText ? [section.sideText] : ['']);
+                        if (layout === 'text-left' || layout === 'text-right') {
+                          const sideTexts = Array.isArray(section.sideTexts) && section.sideTexts.length > 0
+                            ? section.sideTexts
+                            : (section.sideText ? [section.sideText] : ['']);
                           // Support layerImages (2D array) with backward compat from flat images
-                          const layerImages = section.layerImages && section.layerImages.length > 0
+                          const layerImages = Array.isArray(section.layerImages) && section.layerImages.length > 0
                             ? section.layerImages
-                            : section.images.map(img => [img]);
+                            : (Array.isArray(section.images) && section.images.length > 0
+                                ? section.images.map(img => [img])
+                                : [[]]);
                           const layerCount = Math.max(sideTexts.length, layerImages.length);
                           return (
                             <div key={index} className="mb-10 mt-8 w-full space-y-6">
-                              <div className="border-b border-black"></div>
+                              <div className="border-b border-border-light"></div>
                               {Array.from({ length: layerCount }, (_, layerIdx) => {
                                 const imgs = layerImages[layerIdx] || [];
                                 const textHtml = linkifyVideoUrlsInTextHtml(
@@ -1684,7 +1721,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
 
                                 const textBlock = (
                                   <div 
-                                    className="lesson-content text-xl text-[#000000] leading-relaxed"
+                                    className="lesson-content text-xl text-text-primary leading-relaxed"
                                     dangerouslySetInnerHTML={{ __html: textHtml }}
                                   ></div>
                                 );
@@ -1723,11 +1760,11 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                   return (
                                     <div key={layerIdx} className="space-y-4">
                                       <div className="w-full flex justify-center">
-                                        <div className="lesson-content text-xl text-[#000000] leading-relaxed text-center max-w-3xl"
+                                        <div className="lesson-content text-xl text-text-primary leading-relaxed text-center max-w-3xl"
                                           dangerouslySetInnerHTML={{ __html: textHtml }}
                                         ></div>
                                       </div>
-                                      {layerIdx < layerCount - 1 && <div className="border-b border-black"></div>}
+                                      {layerIdx < layerCount - 1 && <div className="border-b border-border-light"></div>}
                                     </div>
                                   );
                                 }
@@ -1737,7 +1774,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                   return (
                                     <div key={layerIdx} className="space-y-4">
                                       {imageBlock}
-                                      {layerIdx < layerCount - 1 && <div className="border-b border-black"></div>}
+                                      {layerIdx < layerCount - 1 && <div className="border-b border-border-light"></div>}
                                     </div>
                                   );
                                 }
@@ -1747,7 +1784,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
                                       {layout === 'text-left' ? <>{textBlock}{imageBlock}</> : <>{imageBlock}{textBlock}</>}
                                     </div>
-                                    {layerIdx < layerCount - 1 && <div className="border-b border-black"></div>}
+                                    {layerIdx < layerCount - 1 && <div className="border-b border-border-light"></div>}
                                   </div>
                                 );
                               })}
@@ -2008,7 +2045,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                         )}
                                       </div>
                                       <h3 className="text-2xl font-bold mb-2">{reviewScore >= 75 ? 'Great Job!' : 'Keep Learning!'}</h3>
-                                      <p className="text-4xl font-bold text-[#2BC4B3] mb-4">{reviewScore.toFixed(0)}%</p>
+                                      <p className="text-4xl font-bold text-highlight-dark mb-4">{reviewScore.toFixed(0)}%</p>
                                       <button onClick={() => {
                                         setCompletedReviews(prev => ({ ...prev, [reviewId]: true }));
                                         setActiveReview(null);
@@ -2016,13 +2053,13 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                         setActiveReviewQuestionIndex(0);
                                         setActiveReviewQuestionTimes({});
                                         setActiveReviewQuestionStartTime(null);
-                                      }} className="px-8 py-3 bg-[#2BC4B3] text-white rounded-full text-lg font-semibold shadow-lg">
+                                      }} className="px-8 py-3 bg-highlight text-white rounded-full text-lg font-semibold shadow-lg">
                                         Continue
                                       </button>
                                     </div>
                                   ) : (
                                     <>
-                                      <h2 className="text-2xl font-bold text-[#1e3a5f] mb-6">Review - Multiple Choice</h2>
+                                      <h2 className="text-2xl font-bold text-primary mb-6">Review - Multiple Choice</h2>
                                       <div className="border border-gray-200 rounded-lg p-5">
                                         <p className="text-sm text-gray-500 mb-2">
                                           Question {activeReviewQuestionIndex + 1} of {reviewQuestions.length}
@@ -2034,7 +2071,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                           {(currentReviewQuestion?.options || []).map((opt, oIdx) => (
                                             <label key={oIdx} className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all ${
                                               reviewAnswers[activeReviewQuestionIndex] === oIdx
-                                                ? 'bg-[#2BC4B3]/10 border-2 border-[#2BC4B3]'
+                                                ? 'bg-highlight/10 border-2 border-highlight'
                                                 : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'
                                             }`}>
                                               <input
@@ -2042,7 +2079,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                                 name={`review-q-${reviewId}-${activeReviewQuestionIndex}`}
                                                 checked={reviewAnswers[activeReviewQuestionIndex] === oIdx}
                                                 onChange={() => setReviewAnswers(prev => ({ ...prev, [activeReviewQuestionIndex]: oIdx }))}
-                                                className="w-4 h-4 text-[#2BC4B3]"
+                                                className="w-4 h-4 text-highlight-dark"
                                               />
                                               <span className="text-gray-700">{opt}</span>
                                             </label>
@@ -2070,7 +2107,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                               setActiveReviewQuestionIndex((prev) => Math.min(prev + 1, reviewQuestions.length - 1));
                                             }}
                                             disabled={reviewAnswers[activeReviewQuestionIndex] === undefined}
-                                            className="px-8 py-3 bg-[#2BC4B3] text-white rounded-lg font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                            className="px-8 py-3 bg-highlight text-white rounded-lg font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                                           >
                                             Next
                                           </button>
@@ -2157,7 +2194,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                               setActiveReviewQuestionStartTime(null);
                                             }}
                                             disabled={reviewAnswers[activeReviewQuestionIndex] === undefined}
-                                            className="px-8 py-3 bg-[#2BC4B3] text-white rounded-lg font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                            className="px-8 py-3 bg-highlight text-white rounded-lg font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                                           >
                                             Submit Answers
                                           </button>
@@ -2249,7 +2286,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                                       </svg>
                                     </div>
-                                    <h3 className="text-2xl font-bold text-[#1e3a5f] mb-2">{simulationTitle}</h3>
+                                    <h3 className="text-2xl font-bold text-primary mb-2">{simulationTitle}</h3>
                                     <p className="text-gray-600 mb-6">{simulationDescription}</p>
                                     <div className="flex gap-4 justify-center flex-wrap">
                                       <button
@@ -2308,7 +2345,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                       {currentTopicPage > 0 ? (
                         <button
                           onClick={() => goToTopicPage(currentTopicPage - 1)}
-                          className="flex items-center gap-2 px-6 py-3 text-[#1e3a5f] bg-gray-100 hover:bg-gray-200 rounded-xl font-semibold transition-colors"
+                          className="flex items-center gap-2 px-6 py-3 text-primary bg-gray-100 hover:bg-gray-200 rounded-xl font-semibold transition-colors"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -2322,7 +2359,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                         arePageReviewsCompleted(currentTopicPage) ? (
                           <button
                             onClick={() => goToTopicPage(currentTopicPage + 1)}
-                            className="flex items-center gap-2 px-8 py-3 text-white bg-[#2BC4B3] hover:bg-[#25b0a1] rounded-xl font-semibold shadow-lg transition-colors"
+                            className="flex items-center gap-2 px-8 py-3 text-white bg-highlight hover:bg-highlight-dark rounded-xl font-semibold shadow-lg transition-colors"
                           >
                             Next Topic
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -2357,7 +2394,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                   localStorage.setItem(`lesson_viewed_${moduleId}`, 'true');
                                   navigate(`/assessment/final/${module.ModuleID}`);
                                 }}
-                                className="flex items-center gap-2 px-8 py-3 text-white bg-[#2BC4B3] hover:bg-[#25b0a1] rounded-xl font-semibold shadow-lg transition-colors"
+                                className="flex items-center gap-2 px-8 py-3 text-white bg-highlight hover:bg-highlight-dark rounded-xl font-semibold shadow-lg transition-colors"
                               >
                                 Start Final Assessment
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -2390,7 +2427,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                   localStorage.setItem(`lesson_viewed_${moduleId}`, 'true');
                                   updateModuleProgress(100);
                                 }}
-                                className="flex items-center gap-2 px-8 py-3 text-white bg-[#2BC4B3] hover:bg-[#25b0a1] rounded-xl font-semibold shadow-lg transition-colors"
+                                className="flex items-center gap-2 px-8 py-3 text-white bg-highlight hover:bg-highlight-dark rounded-xl font-semibold shadow-lg transition-colors"
                               >
                                 Finish the Lesson
                                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -2433,10 +2470,10 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
               ></div>
               <div className="fixed top-0 right-0 h-full w-[430px] max-w-[92vw] bg-white shadow-2xl border-l border-gray-200 z-[60] flex flex-col">
                 <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                  <h3 className="text-2xl font-bold text-[#1e3a5f]">References</h3>
+                  <h3 className="text-2xl font-bold text-primary">References</h3>
                   <button
                     onClick={() => setShowReferencesPanel(false)}
-                    className="text-gray-500 hover:text-[#2BC4B3] transition-colors"
+                    className="text-gray-500 hover:text-highlight-dark transition-colors"
                     aria-label="Close references panel"
                   >
                     <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2450,12 +2487,12 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                     <ul className="space-y-3">
                       {apaReferences.map((reference, refIndex) => (
                         <li key={`${reference.url}-${refIndex}`}>
-                          <div className="relative border border-gray-200 rounded-xl p-4 pt-9 bg-[#f8fbff]">
-                            <span className="absolute top-3 left-3 inline-flex items-center justify-center min-w-[24px] h-6 px-2 rounded-full bg-[#1e3a5f]/10 text-[#1e3a5f] text-xs font-bold">
+                          <div className="relative border border-gray-200 rounded-xl p-4 pt-9 bg-surface-light">
+                            <span className="absolute top-3 left-3 inline-flex items-center justify-center min-w-[24px] h-6 px-2 rounded-full bg-primary/10 text-primary text-xs font-bold">
                               {refIndex + 1}
                             </span>
                             <div className="min-w-0">
-                              <p className="text-sm font-semibold text-[#1e3a5f] break-words">
+                              <p className="text-sm font-semibold text-primary break-words">
                                 {reference.apaCitation}
                               </p>
                             </div>
@@ -2484,7 +2521,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
             {/* Learning Objective Card */}
             <div className="card border-l-4 border-primary">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-[#2BC4B3] rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                <div className="w-12 h-12 bg-highlight rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
                   <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -2630,7 +2667,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
               {/* Key Takeaways Summary Card */}
               <div className="bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10 border-2 border-primary/30 rounded-2xl p-6 mb-6 shadow-lg">
                 <div className="flex items-start gap-4">
-                  <div className="w-14 h-14 bg-[#2BC4B3] rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+                  <div className="w-14 h-14 bg-highlight rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
                     <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
@@ -2769,7 +2806,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
           {/* Modal */}
           <div className="relative bg-white rounded-lg shadow-2xl w-full max-w-2xl mx-4 overflow-hidden">
             {/* Header */}
-            <div className="bg-[#2BC4B3] px-6 py-4 flex items-center justify-between">
+            <div className="bg-highlight px-6 py-4 flex items-center justify-between">
               <h2 className="text-xl font-bold text-white">Experiencing Trouble?</h2>
               <button 
                 onClick={() => setShowReportModal(false)}
@@ -2797,7 +2834,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                       value={type}
                       checked={reportType === type}
                       onChange={(e) => setReportType(e.target.value)}
-                      className="w-4 h-4 text-[#2BC4B3] border-gray-300 focus:ring-[#2BC4B3]"
+                      className="w-4 h-4 text-highlight-dark border-gray-300 focus:ring-highlight"
                     />
                     <span className="text-gray-700">{type}</span>
                   </label>
@@ -2809,7 +2846,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                 value={reportDetails}
                 onChange={(e) => setReportDetails(e.target.value)}
                 placeholder="Please provide details..."
-                className="w-full h-32 px-4 py-3 bg-gray-100 border border-gray-200 rounded-lg resize-none focus:outline-none focus:border-[#2BC4B3] text-gray-700"
+                className="w-full h-32 px-4 py-3 bg-gray-100 border border-gray-200 rounded-lg resize-none focus:outline-none focus:border-highlight text-gray-700"
               />
 
               {/* Submit Button */}
@@ -2879,7 +2916,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                   className={`px-8 py-2 rounded-full font-semibold ${
                     !reportDetails.trim() || reportSubmitting
                       ? 'bg-gray-200 text-gray-400 cursor-not-allowed border-2 border-gray-200'
-                      : 'bg-white border-2 border-[#2BC4B3] text-[#2BC4B3]'
+                      : 'bg-white border-2 border-highlight text-highlight-dark'
                   }`}
                 >
                   {reportSubmitting ? 'Submitting...' : 'Submit'}
@@ -2893,7 +2930,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
       {/* Report Success Toast - Global */}
       {showReportSuccess && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100]">
-          <div className="bg-[#2BC4B3] text-white px-8 py-4 rounded-lg shadow-lg flex items-center gap-3">
+          <div className="bg-highlight text-white px-8 py-4 rounded-lg shadow-lg flex items-center gap-3">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>

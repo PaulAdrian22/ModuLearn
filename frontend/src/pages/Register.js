@@ -75,7 +75,7 @@ const Register = () => {
     <div 
       className="h-[100dvh] w-full relative overflow-hidden"
       style={{
-        backgroundImage: 'url(/images/register-bg.svg)',
+        backgroundImage: 'url(/images/register-bg.webp)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
@@ -86,7 +86,7 @@ const Register = () => {
       <div className="w-full max-w-[470px]" style={{ transform: `scale(${registerScale})`, transformOrigin: 'center center' }}>
         <div className="bg-white rounded-3xl shadow-2xl p-7" style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}>
           {/* Register Title */}
-          <h2 className="text-4xl font-bold text-center mb-2" style={{ color: '#0B2B4C' }}>Register</h2>
+          <h2 className="text-4xl font-bold text-center mb-2" style={{ color: '#173F65' }}>Register</h2>
           <p className="text-center text-gray-600 mb-5 text-sm">Create your ModuLearn account</p>
 
           {error && (
@@ -98,7 +98,7 @@ const Register = () => {
           <form onSubmit={handleSubmit} className="space-y-3.5">
             {/* Full Name */}
             <div>
-              <label className="block text-sm font-semibold mb-2" style={{ color: '#0B2B4C' }}>
+              <label className="block text-sm font-semibold mb-2" style={{ color: '#173F65' }}>
                 Full Name <span className="text-red-500">*</span>
               </label>
               <input
@@ -107,15 +107,15 @@ const Register = () => {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Enter your full name"
-                className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-[#2BC4B3] focus:outline-none transition-all placeholder-gray-400"
-                style={{ color: '#0B2B4C' }}
+                className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-highlight focus:outline-none transition-all placeholder-gray-400"
+                style={{ color: '#173F65' }}
                 required
               />
             </div>
 
             {/* Age */}
             <div>
-              <label className="block text-sm font-semibold mb-2" style={{ color: '#0B2B4C' }}>
+              <label className="block text-sm font-semibold mb-2" style={{ color: '#173F65' }}>
                 Age
               </label>
               <input
@@ -124,8 +124,8 @@ const Register = () => {
                 value={formData.age}
                 onChange={handleChange}
                 placeholder="Enter your age"
-                className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-[#2BC4B3] focus:outline-none transition-all placeholder-gray-400"
-                style={{ color: '#0B2B4C' }}
+                className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-highlight focus:outline-none transition-all placeholder-gray-400"
+                style={{ color: '#173F65' }}
                 min="1"
                 max="120"
               />
@@ -133,7 +133,7 @@ const Register = () => {
 
             {/* Email Address */}
             <div>
-              <label className="block text-sm font-semibold mb-2" style={{ color: '#0B2B4C' }}>
+              <label className="block text-sm font-semibold mb-2" style={{ color: '#173F65' }}>
                 Email Address <span className="text-red-500">*</span>
               </label>
               <input
@@ -142,15 +142,15 @@ const Register = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Enter your email"
-                className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-[#2BC4B3] focus:outline-none transition-all placeholder-gray-400"
-                style={{ color: '#0B2B4C' }}
+                className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-highlight focus:outline-none transition-all placeholder-gray-400"
+                style={{ color: '#173F65' }}
                 required
               />
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-semibold mb-2" style={{ color: '#0B2B4C' }}>
+              <label className="block text-sm font-semibold mb-2" style={{ color: '#173F65' }}>
                 Password <span className="text-red-500">*</span>
               </label>
               <div className="relative">
@@ -160,15 +160,15 @@ const Register = () => {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="Minimum 6 characters"
-                  className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-[#2BC4B3] focus:outline-none transition-all pr-12 placeholder-gray-400"
-                  style={{ color: '#0B2B4C' }}
+                  className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-highlight focus:outline-none transition-all pr-12 placeholder-gray-400"
+                  style={{ color: '#173F65' }}
                   required
                   minLength="6"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#0B2B4C] transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-text-primary transition-colors"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     {showPassword ? (
@@ -183,7 +183,7 @@ const Register = () => {
 
             {/* Confirm Password */}
             <div>
-              <label className="block text-sm font-semibold mb-2" style={{ color: '#0B2B4C' }}>
+              <label className="block text-sm font-semibold mb-2" style={{ color: '#173F65' }}>
                 Re-enter Password <span className="text-red-500">*</span>
               </label>
               <div className="relative">
@@ -193,15 +193,15 @@ const Register = () => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   placeholder="Re-enter your password"
-                  className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-[#2BC4B3] focus:outline-none transition-all pr-12 placeholder-gray-400"
-                  style={{ color: '#0B2B4C' }}
+                  className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-highlight focus:outline-none transition-all pr-12 placeholder-gray-400"
+                  style={{ color: '#173F65' }}
                   required
                   minLength="6"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#0B2B4C] transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-text-primary transition-colors"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     {showConfirmPassword ? (
@@ -219,7 +219,7 @@ const Register = () => {
               type="submit"
               disabled={loading}
               className="w-full py-3.5 px-4 rounded-xl font-bold text-white text-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl active:scale-[0.98]"
-              style={{ backgroundColor: '#0B2B4C' }}
+              style={{ backgroundColor: '#173F65' }}
             >
               {loading ? (
                 <span className="flex items-center justify-center">
@@ -234,7 +234,7 @@ const Register = () => {
             {/* Login Link */}
             <div className="text-center mt-4">
               <span className="text-gray-600 text-sm">Already have an account? </span>
-              <Link to="/login" className="font-bold hover:text-[#1a9d8f] transition-colors underline text-sm" style={{ color: '#2BC4B3' }}>
+              <Link to="/login" className="font-bold hover:text-[#37A89C] transition-colors underline text-sm" style={{ color: '#42C5B6' }}>
                 Login
               </Link>
             </div>

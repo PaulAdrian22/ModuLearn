@@ -7,6 +7,7 @@ const { authenticate } = require('../middleware/auth');
 router.get('/', authenticate, simulationController.getAllSimulations);
 router.get('/module/:moduleId', authenticate, simulationController.getSimulationsByModule);
 router.get('/:id', authenticate, simulationController.getSimulation);
+router.get('/:id/config', authenticate, simulationController.getSimulationRuntimeConfig);
 router.post('/start', authenticate, simulationController.startSimulation);
 router.post('/complete', authenticate, simulationController.completeSimulation);
 router.get('/progress/:userId', authenticate, simulationController.getUserProgress);

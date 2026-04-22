@@ -1,8 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --default-copy-size: 18px;
+    --default-copy-line-height: 1.45;
+  }
+
   html {
     background-color: #F5F7FA;
     overflow-y: auto;
@@ -24,6 +31,12 @@
   
   #root {
     min-height: 100dvh;
+  }
+
+  /* Keep default body copy at 18px while preserving explicit text sizing and header styles. */
+  :where(p, span, li, label, td, th, a):not([class*='text-']) {
+    font-size: var(--default-copy-size);
+    line-height: var(--default-copy-line-height);
   }
 }
 

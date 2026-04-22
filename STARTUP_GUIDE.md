@@ -307,7 +307,7 @@ For production deployment, see:
 ## Additional Resources
 
 - **Setup Guide:** `SETUP_AND_RUN_GUIDE.md`
-- **API Documentation:** `docs/API_DOCUMENTATION.md`
+- **API Documentation (Archived):** `useless files/docs/API_DOCUMENTATION.md`
 - **Quick Reference:** `QUICK_REFERENCE.md`
 - **Thesis Alignment:** `useless files/THESIS_ALIGNMENT_ANALYSIS.md`
 - **Admin Guide:** `ADMIN_SETUP_GUIDE.md`

@@ -1,11 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useAuth } from '../App';
 import SkillMasteryResults from './SkillMasteryResults';
 import { resolveCorrectAnswerText, shuffleQuestionChoicesList } from '../utils/assessmentShuffle';
+import { getPreferredLanguage, normalizePreferredLanguage } from '../utils/languagePreference';
 
-const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null }) => {
-  const { user } = useAuth();
+const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null, onBack = null, preferredLanguage = null }) => {
+  const selectedLanguage = normalizePreferredLanguage(
+    preferredLanguage || getPreferredLanguage() || 'English'
+  );
+  const isTaglish = selectedLanguage === 'Taglish';
+  const copy = {
+    diagnostic: isTaglish ? 'Diagnostic' : 'Diagnostic',
+    diagnosticScore: isTaglish ? 'Diagnostic Score' : 'Diagnostic Score',
+    completed: isTaglish ? 'Assessment Complete!' : 'Assessment Complete!',
+    timeSpent: isTaglish ? 'Oras na nagamit' : 'Time spent',
+    answered: isTaglish
+      ? 'Tama mong nasagot'
+      : 'You answered',
+    basedOnPerformance: isTaglish
+      ? "Base sa performance mo, ipo-personalize namin ang learning experience mo!"
+      : "Based on your performance, we'll personalize your learning experience!",
+    continueToLesson: isTaglish ? 'Continue sa Lesson' : 'Continue to Lesson',
+    back: isTaglish ? 'Back' : 'Back',
+    skip: isTaglish ? 'Skip' : 'Skip',
+    instruction: isTaglish
+      ? "Sagutin ang mga tanong base sa alam mo. Huwag mag-alala sa score, gabay lang ito para mas maayos ang learning experience mo!"
+      : "Answer these questions according to what you know. Don't worry about the score, this will only help you have a better learning experience!",
+    questionLabel: isTaglish ? 'Tanong' : 'Question'
+  };
+
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [showResults, setShowResults] = useState(false);
@@ -140,7 +163,7 @@ const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null }) => {
               <line x1="7" y1="12" x2="9" y2="12" stroke="currentColor" strokeWidth="2"/>
               <line x1="15" y1="12" x2="17" y2="12" stroke="currentColor" strokeWidth="2"/>
             </svg>
-            <h1 className="text-2xl font-semibold">Diagnostic Score</h1>
+            <h1 className="text-2xl font-semibold">{copy.diagnosticScore}</h1>
           </div>
         </div>
 
@@ -154,21 +177,21 @@ const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null }) => {
                 </svg>
               </div>
               
-              <h2 className="text-3xl font-bold text-gray-800 mb-4">Assessment Complete!</h2>
+              <h2 className="text-3xl font-bold text-gray-800 mb-4">{copy.completed}</h2>
               <p className="text-5xl font-bold text-[#2BC4B3] mb-4">{score.toFixed(0)}%</p>
               <div className="flex items-center justify-center gap-2 mb-4 text-gray-500">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span className="text-base">Time spent: {formatTime(elapsedTime)}</span>
+                <span className="text-base">{copy.timeSpent}: {formatTime(elapsedTime)}</span>
               </div>
               <p className="text-lg text-gray-600">
-                You answered {correctAnswerCount} out of {assessmentQuestions.length} questions correctly
+                {copy.answered} {correctAnswerCount} / {assessmentQuestions.length}
               </p>
             </div>
 
             <p className="text-base text-gray-600 mb-8">
-              Based on your performance, we'll personalize your learning experience!
+              {copy.basedOnPerformance}
             </p>
 
             {skillResults && skillResults.skills && skillResults.skills.length > 0 && (
@@ -182,7 +205,7 @@ const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null }) => {
               onClick={() => onComplete(score)}
               className="px-10 py-3 bg-[#2BC4B3] hover:bg-[#1a9d8f] text-white rounded-full text-lg font-semibold shadow-lg transition-all hover:scale-105"
             >
-              Continue to Lesson
+              {copy.continueToLesson}
             </button>
           </div>
         </div>
@@ -207,16 +230,26 @@ const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null }) => {
               <line x1="7" y1="12" x2="9" y2="12" stroke="currentColor" strokeWidth="2"/>
               <line x1="15" y1="12" x2="17" y2="12" stroke="currentColor" strokeWidth="2"/>
             </svg>
-            <h1 className="text-2xl font-semibold">Diagnostic</h1>
+            <h1 className="text-2xl font-semibold">{copy.diagnostic}</h1>
           </div>
-          {onSkip && (
-            <button
-              onClick={onSkip}
-              className="px-5 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-all font-medium"
-            >
-              Skip
-            </button>
-          )}
+          <div className="flex items-center gap-2">
+            {onBack && (
+              <button
+                onClick={onBack}
+                className="px-5 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-all font-medium"
+              >
+                {copy.back}
+              </button>
+            )}
+            {onSkip && (
+              <button
+                onClick={onSkip}
+                className="px-5 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-all font-medium"
+              >
+                {copy.skip}
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -226,12 +259,12 @@ const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null }) => {
           {/* Instructions */}
           <div className="text-center mb-6">
             <p className="text-xl font-bold text-gray-800">
-              Answer these questions according to what you know. Don't worry about the score, this will only help you have a better learning experience!
+              {copy.instruction}
             </p>
           </div>
 
           <div className="mb-6 text-right">
-            <p className="text-sm uppercase tracking-wide text-gray-500">Question</p>
+            <p className="text-sm uppercase tracking-wide text-gray-500">{copy.questionLabel}</p>
             <p className="text-xl font-bold text-[#1e3a5f]">
               {currentQuestion + 1} / {assessmentQuestions.length}
             </p>

@@ -9,16 +9,24 @@ const { handleValidationErrors } = require('../middleware/validators');
 const { query } = require('../config/database');
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
+const {
+  getMulterLessonDestination,
+  uploadAssetFromPath,
+  isAzureStorageEnabled,
+} = require('../utils/uploadStorage');
+const { pool } = require('../config/database');
+const { clearNamespace } = require('../utils/responseCache');
+const {
+  getSimulationConfig,
+  normalizeStoredConfig,
+  listActivityAssets,
+  resolveActivityOrder
+} = require('../utils/simulationConfig');
 
 // Configure multer for media uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const uploadDir = path.join(__dirname, '../uploads/lessons');
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
+    cb(null, getMulterLessonDestination());
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -1004,7 +1012,17 @@ router.post('/upload-media', upload.single('file'), async (req, res) => {
       });
     }
 
-    const fileUrl = `/uploads/lessons/${req.file.filename}`;
+    let fileUrl = `/uploads/lessons/${req.file.filename}`;
+
+    if (isAzureStorageEnabled()) {
+      fileUrl = await uploadAssetFromPath(req.file.path, {
+        category: 'lessons',
+        originalName: req.file.originalname,
+        preserveFileName: false,
+        blobPath: `lessons/${req.file.filename}`,
+        deleteSource: true,
+      });
+    }
     
     res.status(200).json({
       message: 'File uploaded successfully',
@@ -1279,6 +1297,183 @@ router.put('/reports/:id/resolve', [
       error: 'Internal Server Error',
       message: 'Failed to update report status'
     });
+  }
+});
+
+// =====================
+// Simulation editor API
+// =====================
+
+const clearSimulationAdminCaches = () => {
+  clearNamespace('simulations:list');
+  clearNamespace('simulations:item');
+};
+
+// GET /api/admin/simulations - List all simulations (admin view)
+router.get('/simulations', async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT SimulationID, SimulationTitle, Description, ActivityType, MaxScore, TimeLimit, SimulationOrder, ZoneData
+       FROM simulation
+       ORDER BY SimulationOrder ASC, SimulationID ASC`
+    );
+
+    const simulations = rows.map((row) => {
+      const activityOrder = resolveActivityOrder(row);
+      const hasOverride = Boolean(row.ZoneData && (() => {
+        try {
+          const parsed = typeof row.ZoneData === 'string' ? JSON.parse(row.ZoneData) : row.ZoneData;
+          return parsed && (parsed.meta || parsed.timeline);
+        } catch { return false; }
+      })());
+      return {
+        SimulationID: row.SimulationID,
+        SimulationTitle: row.SimulationTitle,
+        Description: row.Description,
+        ActivityType: row.ActivityType,
+        MaxScore: row.MaxScore,
+        TimeLimit: row.TimeLimit,
+        SimulationOrder: row.SimulationOrder,
+        activityOrder,
+        hasAdminOverride: hasOverride
+      };
+    });
+
+    res.json(simulations);
+  } catch (error) {
+    console.error('List admin simulations error:', error);
+    res.status(500).json({ error: 'Internal Server Error', message: 'Failed to list simulations' });
+  }
+});
+
+// GET /api/admin/simulations/:id - Get merged config for the simulation editor
+router.get('/simulations/:id', [
+  param('id').isInt({ min: 1 }).withMessage('Invalid simulation ID'),
+  handleValidationErrors
+], async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [rows] = await pool.query(
+      'SELECT SimulationID, SimulationTitle, Description, ActivityType, MaxScore, TimeLimit, SimulationOrder, ZoneData FROM simulation WHERE SimulationID = ?',
+      [id]
+    );
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Not Found', message: 'Simulation not found' });
+    }
+
+    const simulation = rows[0];
+    const { activityOrder, source, config } = getSimulationConfig(simulation);
+
+    res.json({
+      simulation: {
+        SimulationID: simulation.SimulationID,
+        SimulationTitle: simulation.SimulationTitle,
+        Description: simulation.Description,
+        ActivityType: simulation.ActivityType,
+        MaxScore: simulation.MaxScore,
+        TimeLimit: simulation.TimeLimit,
+        SimulationOrder: simulation.SimulationOrder
+      },
+      activityOrder,
+      source,
+      config
+    });
+  } catch (error) {
+    console.error('Get simulation config error:', error);
+    res.status(500).json({ error: 'Internal Server Error', message: 'Failed to load simulation' });
+  }
+});
+
+// PUT /api/admin/simulations/:id - Save edited config (meta + timeline) into ZoneData
+router.put('/simulations/:id', [
+  param('id').isInt({ min: 1 }).withMessage('Invalid simulation ID'),
+  body('config').isObject().withMessage('config object is required'),
+  handleValidationErrors
+], async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { config, simulation: simPatch } = req.body;
+
+    const [rows] = await pool.query(
+      'SELECT SimulationID, SimulationTitle, SimulationOrder FROM simulation WHERE SimulationID = ?',
+      [id]
+    );
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Not Found', message: 'Simulation not found' });
+    }
+
+    const activityOrder = resolveActivityOrder(rows[0]);
+    const normalized = normalizeStoredConfig(config, activityOrder);
+
+    const fields = ['ZoneData = ?'];
+    const values = [JSON.stringify(normalized)];
+
+    if (simPatch && typeof simPatch === 'object') {
+      if (typeof simPatch.SimulationTitle === 'string') {
+        fields.push('SimulationTitle = ?');
+        values.push(simPatch.SimulationTitle.trim());
+      }
+      if (typeof simPatch.Description === 'string') {
+        fields.push('Description = ?');
+        values.push(simPatch.Description);
+      }
+      if (Number.isFinite(Number(simPatch.MaxScore))) {
+        fields.push('MaxScore = ?');
+        values.push(Number(simPatch.MaxScore));
+      }
+      if (Number.isFinite(Number(simPatch.TimeLimit))) {
+        fields.push('TimeLimit = ?');
+        values.push(Number(simPatch.TimeLimit));
+      }
+    }
+
+    values.push(id);
+    await pool.query(`UPDATE simulation SET ${fields.join(', ')} WHERE SimulationID = ?`, values);
+    clearSimulationAdminCaches();
+
+    res.json({ message: 'Simulation saved', activityOrder, config: normalized });
+  } catch (error) {
+    console.error('Save simulation config error:', error);
+    res.status(500).json({ error: 'Internal Server Error', message: 'Failed to save simulation' });
+  }
+});
+
+// DELETE /api/admin/simulations/:id/override - Clear admin override; revert to on-disk manifest
+router.delete('/simulations/:id/override', [
+  param('id').isInt({ min: 1 }).withMessage('Invalid simulation ID'),
+  handleValidationErrors
+], async (req, res) => {
+  try {
+    const { id } = req.params;
+    await pool.query('UPDATE simulation SET ZoneData = NULL WHERE SimulationID = ?', [id]);
+    clearSimulationAdminCaches();
+    res.json({ message: 'Override cleared — simulation will use the on-disk manifest again.' });
+  } catch (error) {
+    console.error('Clear simulation override error:', error);
+    res.status(500).json({ error: 'Internal Server Error', message: 'Failed to clear override' });
+  }
+});
+
+// GET /api/admin/simulations/:id/assets - List available webp assets for editor pickers
+router.get('/simulations/:id/assets', [
+  param('id').isInt({ min: 1 }).withMessage('Invalid simulation ID'),
+  handleValidationErrors
+], async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [rows] = await pool.query(
+      'SELECT SimulationID, SimulationTitle, SimulationOrder FROM simulation WHERE SimulationID = ?',
+      [id]
+    );
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Not Found', message: 'Simulation not found' });
+    }
+    const activityOrder = resolveActivityOrder(rows[0]);
+    const assets = listActivityAssets(activityOrder);
+    res.json({ activityOrder, assets });
+  } catch (error) {
+    console.error('List simulation assets error:', error);
+    res.status(500).json({ error: 'Internal Server Error', message: 'Failed to list assets' });
   }
 });
 

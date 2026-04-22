@@ -21,6 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       AZURE_WEBAPP_NAME: ${{ vars.AZURE_WEBAPP_NAME || 'modulearn-api-260412162638' }}
+      AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
       AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -53,11 +54,25 @@ jobs:
           publish-profile: ${{ env.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: backend
 
-      - name: Azure login (service principal fallback)
-        if: ${{ env.AZURE_WEBAPP_PUBLISH_PROFILE == '' && env.AZURE_CREDENTIALS != '' }}
+      - name: Azure login (service principal)
+        if: ${{ env.AZURE_CREDENTIALS != '' }}
         uses: azure/login@v2
         with:
           creds: ${{ env.AZURE_CREDENTIALS }}
+
+      - name: Apply production app settings defaults
+        if: ${{ env.AZURE_CREDENTIALS != '' && env.AZURE_RESOURCE_GROUP != '' }}
+        run: |
+          az webapp config appsettings set \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --name "$AZURE_WEBAPP_NAME" \
+            --settings \
+              NODE_ENV=production \
+              REQUEST_LOG_MODE=errors-only \
+              UPLOAD_CACHE_MAX_AGE_SECONDS=86400 \
+              DB_CONNECTION_LIMIT=5 \
+              API_CACHE_TTL_SECONDS=120 \
+              API_CACHE_MAX_ENTRIES=500
 
       - name: Deploy to Azure Web App (service principal fallback)
         if: ${{ env.AZURE_WEBAPP_PUBLISH_PROFILE == '' && env.AZURE_CREDENTIALS != '' }}

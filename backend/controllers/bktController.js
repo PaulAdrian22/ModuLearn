@@ -21,6 +21,7 @@ const bkt = require('../utils/bktEngine');
 
 let assessmentTimeColumnReady = false;
 const SUPPLEMENTARY_DIFFICULTY = 'supplementary';
+const ASSESSMENT_PASSING_SCORE = 75;
 
 const ensureAssessmentTimeSpentColumn = async () => {
   if (assessmentTimeColumnReady) {
@@ -48,6 +49,122 @@ const ensureAssessmentTimeSpentColumn = async () => {
 };
 
 const normalizeDifficultyValue = (value = '') => String(value || '').trim().toLowerCase();
+
+const normalizeQuestionLookupText = (value = '') =>
+  String(value || '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+
+const normalizeSkillTagValue = (value = '') => {
+  const normalized = String(value || '').trim().toLowerCase();
+  const canonicalSkill = bkt.SKILL_NAMES.find((skillName) => skillName.toLowerCase() === normalized);
+  return canonicalSkill || String(value || '').trim();
+};
+
+const normalizeQuestionTypeValue = (value = '') => String(value || '').trim().toLowerCase();
+
+const buildModuleFinalQuestionPool = async (connection, totalLessons) => {
+  const [modules] = await connection.execute(
+    `SELECT ModuleID, LessonOrder, finalQuestions
+     FROM module
+     WHERE LessonOrder BETWEEN 1 AND ?`,
+    [totalLessons]
+  );
+
+  const optionsLookup = new Map();
+  const questionPool = [];
+
+  for (const moduleRow of modules) {
+    const moduleId = Number.parseInt(moduleRow?.ModuleID, 10);
+    const lessonOrder = Number.parseInt(moduleRow?.LessonOrder, 10);
+    if (!Number.isFinite(moduleId)) {
+      continue;
+    }
+    if (!Number.isFinite(lessonOrder)) {
+      continue;
+    }
+
+    let finalQuestions = [];
+
+    if (Array.isArray(moduleRow?.finalQuestions)) {
+      finalQuestions = moduleRow.finalQuestions;
+    } else if (typeof moduleRow?.finalQuestions === 'string' && moduleRow.finalQuestions.trim()) {
+      try {
+        const parsed = JSON.parse(moduleRow.finalQuestions);
+        if (Array.isArray(parsed)) {
+          finalQuestions = parsed;
+        }
+      } catch (parseError) {
+        // Ignore malformed JSON rows and continue with available modules.
+      }
+    }
+
+    for (let index = 0; index < finalQuestions.length; index += 1) {
+      const question = finalQuestions[index];
+      const questionText = String(question?.question || question?.QuestionText || '').trim();
+      const normalizedQuestionText = normalizeQuestionLookupText(questionText);
+      if (!normalizedQuestionText) {
+        continue;
+      }
+
+      const normalizedSkillTag = normalizeSkillTagValue(
+        question?.skill || question?.skillTag || question?.SkillTag || ''
+      );
+      if (!normalizedSkillTag) {
+        continue;
+      }
+
+      const normalizedQuestionType = normalizeQuestionTypeValue(
+        question?.questionType || question?.QuestionType || ''
+      );
+      if (!normalizedQuestionType) {
+        continue;
+      }
+
+      const options = (Array.isArray(question?.options) ? question.options : [])
+        .map((option) => String(option || '').trim())
+        .filter(Boolean)
+        .slice(0, 4);
+
+      if (options.length < 2) {
+        continue;
+      }
+
+      const rawQuestionId =
+        question?.id ||
+        question?.QuestionID ||
+        `${moduleId}-${lessonOrder}-${index + 1}`;
+
+      const questionId = String(rawQuestionId).trim() || `${moduleId}-${lessonOrder}-${index + 1}`;
+
+      questionPool.push({
+        QuestionID: questionId,
+        ModuleID: moduleId,
+        QuestionText: questionText,
+        OptionA: options[0] || '',
+        OptionB: options[1] || '',
+        OptionC: options[2] || '',
+        OptionD: options[3] || '',
+        CorrectAnswer: question?.correctAnswer,
+        SkillTag: normalizedSkillTag,
+        QuestionType: 'Situational',
+        LessonOrder: lessonOrder
+      });
+
+      const key = `${moduleId}::${normalizedQuestionText}::${normalizedSkillTag}::${normalizedQuestionType}`;
+
+      if (!optionsLookup.has(key)) {
+        optionsLookup.set(key, options);
+      }
+    }
+  }
+
+  return {
+    optionsLookup,
+    questionPool
+  };
+};
 
 const getModuleBktContext = async (connection, moduleId) => {
   const normalizedModuleId = Number.parseInt(moduleId, 10);
@@ -276,7 +393,7 @@ const getSkillKnowledgeState = async (req, res) => {
 
 /**
  * Start an Initial Assessment session.
- * Selects 35 questions (7 per skill, all situational).
+ * Selects 35 questions (5 per lesson across lessons 1-7, all situational).
  * 
  * POST /api/bkt/initial-assessment/start
  */
@@ -308,16 +425,70 @@ const startInitialAssessment = async (req, res) => {
     );
     const assessmentId = assessmentResult.insertId;
 
-    // Get all situational questions
-    const [allQuestions] = await connection.execute(
-      `SELECT QuestionID, ModuleID, QuestionText, CorrectAnswer, SkillTag, QuestionType 
-       FROM question 
-       WHERE QuestionType = 'Situational' AND SkillTag IS NOT NULL
-       ORDER BY SkillTag, QuestionID`
+    const {
+      optionsLookup,
+      questionPool: moduleFinalQuestionPool
+    } = await buildModuleFinalQuestionPool(connection, bkt.CONSTANTS.TOTAL_LESSONS);
+
+    // Get all situational questions from core lessons with lesson order context.
+    const [questionRows] = await connection.execute(
+      `SELECT
+          q.QuestionID,
+          q.ModuleID,
+          q.QuestionText,
+          q.CorrectAnswer,
+          q.SkillTag,
+          q.QuestionType,
+          m.LessonOrder
+       FROM question q
+       INNER JOIN module m ON q.ModuleID = m.ModuleID
+       WHERE q.QuestionType = 'Situational'
+         AND q.SkillTag IS NOT NULL
+         AND m.LessonOrder BETWEEN 1 AND ?
+       ORDER BY m.LessonOrder ASC, q.SkillTag ASC, q.QuestionID ASC`,
+      [bkt.CONSTANTS.TOTAL_LESSONS]
     );
 
-    // Select 7 per skill (no randomization for initial assessment)
-    const selectedQuestions = bkt.selectInitialAssessmentQuestions(allQuestions);
+    const allQuestions = questionRows
+      .map((question) => {
+        const normalizedSkillTag = normalizeSkillTagValue(question.SkillTag);
+        const lookupKey = `${question.ModuleID}::${normalizeQuestionLookupText(question.QuestionText)}::${normalizedSkillTag}::${normalizeQuestionTypeValue(question.QuestionType)}`;
+        const options = optionsLookup.get(lookupKey) || [];
+
+        return {
+          ...question,
+          SkillTag: normalizedSkillTag,
+          OptionA: options[0] || '',
+          OptionB: options[1] || '',
+          OptionC: options[2] || '',
+          OptionD: options[3] || ''
+        };
+      })
+      .filter((question) => {
+        const optionCount = [question.OptionA, question.OptionB, question.OptionC, question.OptionD]
+          .map((option) => String(option || '').trim())
+          .filter(Boolean)
+          .length;
+
+        return optionCount >= 2;
+      });
+
+    // Select 5 per lesson with skill diversity priority.
+    // Prefer the question table source when available, but fall back to module finalQuestions.
+    let selectedQuestions = bkt.selectInitialAssessmentQuestions(allQuestions);
+
+    if (selectedQuestions.length < bkt.CONSTANTS.INITIAL_TOTAL_QUESTIONS) {
+      selectedQuestions = bkt.selectInitialAssessmentQuestions(moduleFinalQuestionPool);
+    }
+
+    if (selectedQuestions.length < bkt.CONSTANTS.INITIAL_TOTAL_QUESTIONS) {
+      await connection.rollback();
+      connection.release();
+      return res.status(400).json({
+        error: 'Insufficient Questions',
+        message: `Initial assessment requires ${bkt.CONSTANTS.INITIAL_TOTAL_QUESTIONS} situational questions (5 per lesson across ${bkt.CONSTANTS.TOTAL_LESSONS} lessons).`
+      });
+    }
 
     // Get current skill states
     const [skillStates] = await connection.execute(
@@ -351,10 +522,13 @@ const startInitialAssessment = async (req, res) => {
       sessionId: sessionResult.insertId,
       assessmentId,
       totalQuestions: selectedQuestions.length,
-      questionsPerSkill: bkt.CONSTANTS.INITIAL_QUESTIONS_PER_SKILL,
+      questionsPerLesson: bkt.CONSTANTS.INITIAL_QUESTIONS_PER_LESSON,
       questions: selectedQuestions.map(q => ({
         questionId: q.QuestionID,
+        moduleId: q.ModuleID,
+        lessonOrder: q.LessonOrder,
         questionText: q.QuestionText,
+        options: [q.OptionA, q.OptionB, q.OptionC, q.OptionD].filter((option) => String(option || '').trim() !== ''),
         skillTag: q.SkillTag,
         questionType: q.QuestionType
       }))
@@ -589,10 +763,13 @@ const completeInitialAssessment = async (req, res) => {
       // Update overall mastery record
       await connection.execute(
         `INSERT INTO bkt_overall_mastery (UserID, SkillName, InitialL, WMInitial, RemainingL, TMLesson, OverallMastery, IsMastered)
-         VALUES (?, ?, ?, ?, ?, 0.000000, ?, FALSE)
-         ON DUPLICATE KEY UPDATE InitialL = ?, WMInitial = ?, RemainingL = ?, OverallMastery = ?`,
-        [userId, skillName, initialL, wmInitial, remainingL, wmInitial,
-         initialL, wmInitial, remainingL, wmInitial]
+         VALUES (?, ?, ?, ?, ?, 0.000000, 0.000000, FALSE)
+         ON DUPLICATE KEY UPDATE
+           InitialL = VALUES(InitialL),
+           WMInitial = VALUES(WMInitial),
+           RemainingL = VALUES(RemainingL),
+           updated_at = CURRENT_TIMESTAMP`,
+        [userId, skillName, initialL, wmInitial, remainingL]
       );
 
       // Store assessment mastery
@@ -1090,7 +1267,7 @@ const completeLessonAssessment = async (req, res) => {
 
         await connection.execute(
           `UPDATE assessment SET TotalScore = ?, ResultStatus = ? WHERE AssessmentID = ?`,
-          [score.toFixed(2), score >= 60 ? 'Pass' : 'Fail', session.AssessmentID]
+          [score.toFixed(2), score >= ASSESSMENT_PASSING_SCORE ? 'Pass' : 'Fail', session.AssessmentID]
         );
       }
 
@@ -1188,7 +1365,7 @@ const completeLessonAssessment = async (req, res) => {
 
       await connection.execute(
         `UPDATE assessment SET TotalScore = ?, ResultStatus = ? WHERE AssessmentID = ?`,
-        [score.toFixed(2), score >= 60 ? 'Pass' : 'Fail', session.AssessmentID]
+        [score.toFixed(2), score >= ASSESSMENT_PASSING_SCORE ? 'Pass' : 'Fail', session.AssessmentID]
       );
     }
 
@@ -1620,6 +1797,16 @@ const batchUpdateKnowledge = async (req, res) => {
     const timeRuleResults = [];
     let persistedAssessment = null;
 
+    const [historyStats] = await connection.execute(
+      `SELECT COUNT(*) as completedCount
+       FROM assessment
+       WHERE UserID = ?
+         AND LOWER(COALESCE(AssessmentType, '')) <> 'initial'
+         AND ResultStatus <> 'In Progress'`,
+      [userId]
+    );
+    const priorNonInitialAssessments = parseInt(historyStats[0]?.completedCount || 0, 10);
+
     if (!skipBktUpdates) {
       for (const [skillName, answerList] of Object.entries(skillAnswers)) {
         const params = bkt.getSkillParams(skillName);
@@ -1631,18 +1818,23 @@ const batchUpdateKnowledge = async (req, res) => {
         );
 
         let currentL;
+        let previousPKnown;
         if (existing.length === 0) {
           currentL = params.pInit;
+          previousPKnown = params.pInit;
           await connection.execute(
             `INSERT INTO bkt_model (UserID, SkillName, PKnown, PLearn, PSlip, PGuess, BaseL, CurrentL, PostTestL)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0.000000)`,
             [userId, skillName, params.pInit, params.pLearn, params.pSlip, params.pGuess, params.pInit, params.pInit]
           );
         } else {
-          currentL = parseFloat(existing[0].CurrentL || existing[0].PKnown);
+          currentL = parseFloat(existing[0].CurrentL ?? existing[0].PKnown ?? params.pInit);
+          previousPKnown = parseFloat(existing[0].PKnown ?? existing[0].CurrentL ?? params.pInit);
         }
 
-        const previousPKnown = currentL;
+        const questionsAnswered = answerList.length;
+        const correctCount = answerList.filter((answer) => Boolean(answer.isCorrect)).length;
+        const accuracy = questionsAnswered > 0 ? (correctCount / questionsAnswered) : 0;
 
         // Step 1-3: Process each answer through item interaction iteratively
         // Each answer's Post-Test L becomes the Current L for the next answer (Step 3)
@@ -1664,22 +1856,91 @@ const batchUpdateKnowledge = async (req, res) => {
           }
         }
 
-        // Step 4: Final Post-Test L assigned to CurrentL and PKnown
-        // Update bkt_model with the last Post-Test L value
-        await connection.execute(
-          'UPDATE bkt_model SET CurrentL = ?, PKnown = ?, updated_at = CURRENT_TIMESTAMP WHERE UserID = ? AND SkillName = ?',
-          [currentL, currentL, userId, skillName]
-        );
+        if (normalizedAssessmentType === 'Initial') {
+          const initialL = currentL;
+          const wmInitial = bkt.computeWMInitial(initialL);
+          const remainingL = bkt.computeRemainingL(wmInitial);
 
-        results.push({
-          skillName,
-          previousPKnown,
-          newPKnown: currentL,
-          isMastered: currentL >= bkt.CONSTANTS.MASTERY_THRESHOLD,
-          questionsAnswered: answerList.length,
-          correctCount: answerList.filter(a => a.isCorrect).length,
-          proficiencyLevel: bkt.getProficiencyLevel(currentL)
-        });
+          await connection.execute(
+            `INSERT INTO bkt_overall_mastery (UserID, SkillName, InitialL, WMInitial, RemainingL, TMLesson, OverallMastery, IsMastered)
+             VALUES (?, ?, ?, ?, ?, 0.000000, 0.000000, FALSE)
+             ON DUPLICATE KEY UPDATE
+               InitialL = VALUES(InitialL),
+               WMInitial = VALUES(WMInitial),
+               RemainingL = VALUES(RemainingL),
+               updated_at = CURRENT_TIMESTAMP`,
+            [userId, skillName, initialL, wmInitial, remainingL]
+          );
+
+          await connection.execute(
+            `INSERT INTO bkt_assessment_mastery (UserID, ModuleID, SkillName, AssessmentType, MasteryValue)
+             VALUES (?, NULL, ?, 'Initial', ?)
+             ON DUPLICATE KEY UPDATE MasteryValue = VALUES(MasteryValue)`,
+            [userId, skillName, initialL]
+          );
+
+          // Initial assessment should not change current mastery status/progress.
+          await connection.execute(
+            'UPDATE bkt_model SET PostTestL = 0.000000, updated_at = CURRENT_TIMESTAMP WHERE UserID = ? AND SkillName = ?',
+            [userId, skillName]
+          );
+
+          results.push({
+            skillName,
+            previousPKnown,
+            newPKnown: previousPKnown,
+            isMastered: previousPKnown >= bkt.CONSTANTS.MASTERY_THRESHOLD,
+            questionsAnswered,
+            correctCount,
+            initialL,
+            wmInitial,
+            remainingL,
+            proficiencyLevel: bkt.getProficiencyLevel(previousPKnown)
+          });
+        } else {
+          const gainCapByType = {
+            Diagnostic: 0.08,
+            Review: 0.12,
+            Simulation: 0.16,
+            Final: 0.20
+          };
+
+          const dropCapByType = {
+            Diagnostic: 0.06,
+            Review: 0.10,
+            Simulation: 0.14,
+            Final: 0.18
+          };
+
+          const baseGainCap = gainCapByType[normalizedAssessmentType] || 0.12;
+          const baseDropCap = dropCapByType[normalizedAssessmentType] || 0.10;
+          const questionWeight = Math.min(1, questionsAnswered / 20);
+          const historyWeight = Math.min(1, (priorNonInitialAssessments + 1) / 10);
+          const adaptiveConfidence = 0.35 + (0.65 * ((questionWeight + historyWeight) / 2));
+          const maxGain = baseGainCap * adaptiveConfidence;
+          const maxDrop = baseDropCap * adaptiveConfidence;
+          const assessmentSignal = (0.65 * currentL) + (0.35 * accuracy);
+          const rawDelta = assessmentSignal - previousPKnown;
+          const boundedDelta = rawDelta >= 0
+            ? Math.min(rawDelta, maxGain)
+            : Math.max(rawDelta, -maxDrop);
+          const newPKnown = Math.max(0, Math.min(1, previousPKnown + boundedDelta));
+
+          await connection.execute(
+            'UPDATE bkt_model SET CurrentL = ?, PKnown = ?, PostTestL = 0.000000, updated_at = CURRENT_TIMESTAMP WHERE UserID = ? AND SkillName = ?',
+            [newPKnown, newPKnown, userId, skillName]
+          );
+
+          results.push({
+            skillName,
+            previousPKnown,
+            newPKnown,
+            isMastered: newPKnown >= bkt.CONSTANTS.MASTERY_THRESHOLD,
+            questionsAnswered,
+            correctCount,
+            proficiencyLevel: bkt.getProficiencyLevel(newPKnown)
+          });
+        }
       }
     }
 
@@ -1690,7 +1951,7 @@ const batchUpdateKnowledge = async (req, res) => {
       0
     );
     const score = totalAnswered > 0 ? (totalCorrect / totalAnswered) * 100 : 0;
-    const resultStatus = score >= 60 ? 'Pass' : 'Fail';
+    const resultStatus = score >= ASSESSMENT_PASSING_SCORE ? 'Pass' : 'Fail';
 
     // Persist assessment summary so review/final attempts are reflected in mastery stats and token logic.
     try {
@@ -1733,7 +1994,9 @@ const batchUpdateKnowledge = async (req, res) => {
     res.json({
       message: skipBktUpdates
         ? 'Supplementary lesson assessment recorded. BKT update skipped.'
-        : 'Knowledge states updated',
+        : normalizedAssessmentType === 'Initial'
+          ? 'Initial assessment recorded. Baseline mastery values were computed while mastery status remains unchanged until lesson assessments.'
+          : 'Knowledge states updated',
       bktSkipped: skipBktUpdates,
       masteryThreshold: bkt.CONSTANTS.MASTERY_THRESHOLD,
       skills: results,

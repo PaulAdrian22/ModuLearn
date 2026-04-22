@@ -440,6 +440,12 @@ const FinalAssessment = () => {
     setExamStarted(true);
   };
 
+  const notifyAchievementRefresh = () => {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('achievementMetricsUpdated'));
+    }
+  };
+
   const handleNext = () => {
     const updatedQuestionTimes = updateCurrentQuestionTime();
     setQuestionTimes(updatedQuestionTimes);
@@ -517,7 +523,8 @@ const FinalAssessment = () => {
     }
 
     // Update module completion
-    updateModuleProgress(100);
+    await updateModuleProgress(100);
+    notifyAchievementRefresh();
   };
 
   const updateModuleProgress = async (completionRate) => {
@@ -538,7 +545,7 @@ const FinalAssessment = () => {
 
   if (loading) {
     return (
-      <div className="fixed inset-0 bg-[#F5F7FA] flex items-center justify-center">
+      <div className="fixed inset-0 bg-background flex items-center justify-center">
         <div className="spinner"></div>
       </div>
     );
@@ -546,16 +553,25 @@ const FinalAssessment = () => {
 
   if (showResults) {
     return (
-      <div className="fixed inset-0 bg-[#F5F7FA] z-50 overflow-hidden">
-        <div className="bg-[#1e3a5f] text-white py-4 px-6">
-          <h1 className="text-xl font-semibold">Final Assessment Score</h1>
+      <div className="fixed inset-0 bg-background z-50 overflow-y-auto">
+        <div className="bg-[#284C71] text-white py-4 px-6 sticky top-0 z-10">
+          <div className="flex items-center justify-between gap-3">
+            <button
+              onClick={() => navigate(`/module/${moduleId}`)}
+              className="px-3 py-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-sm font-semibold transition-all"
+            >
+              Back
+            </button>
+            <h1 className="text-xl font-semibold">Final Assessment Score</h1>
+            <div className="w-14" />
+          </div>
         </div>
 
-        <div className="min-h-[calc(100vh-64px)] py-8 px-8 overflow-y-auto">
-          <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full mx-auto p-8 text-center my-auto">
+        <div className="min-h-[calc(100vh-64px)] py-6 px-4 sm:px-8">
+          <div className="bg-white rounded-xl shadow-lg max-w-3xl w-full mx-auto p-6 sm:p-8 text-center">
             <div className="mb-8">
               <div className={`w-28 h-28 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg ${
-                score >= 75 ? 'bg-[#2BC4B3]' : 'bg-[#EF5350]'
+                score >= 75 ? 'bg-highlight' : 'bg-[#EF5350]'
               }`}>
                 {score >= 75 ? (
                   <svg className="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -571,7 +587,7 @@ const FinalAssessment = () => {
               <h2 className="text-3xl font-bold text-gray-800 mb-4">
                 {score >= 75 ? 'Congratulations!' : 'Keep Learning!'}
               </h2>
-              <p className="text-5xl font-bold text-[#2BC4B3] mb-4">{score.toFixed(0)}%</p>
+              <p className="text-5xl font-bold text-highlight-dark mb-4">{score.toFixed(0)}%</p>
               <div className="flex items-center justify-center gap-2 mb-4 text-gray-500">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -596,10 +612,16 @@ const FinalAssessment = () => {
               />
             )}
 
-            <div className="flex gap-4 justify-center">
+            <div className="flex flex-wrap gap-3 justify-center">
+              <button
+                onClick={() => navigate(`/module/${moduleId}`)}
+                className="px-8 py-3 bg-[#284C71] text-white rounded-full text-base font-semibold shadow-lg"
+              >
+                Back to Lesson
+              </button>
               <button
                 onClick={() => navigate('/dashboard')}
-                className="px-10 py-3 bg-[#2BC4B3] text-white rounded-full text-lg font-semibold shadow-lg"
+                className="px-10 py-3 bg-highlight text-white rounded-full text-lg font-semibold shadow-lg"
               >
                 Back to Dashboard
               </button>
@@ -619,9 +641,9 @@ const FinalAssessment = () => {
   }
 
   return (
-    <div className="fixed inset-0 bg-[#F5F7FA] z-50 overflow-hidden">
+    <div className="fixed inset-0 bg-background z-50 overflow-y-auto">
       {/* Header */}
-      <div className="bg-[#1e3a5f] text-white py-4 px-6">
+      <div className="bg-[#284C71] text-white py-4 px-6">
         <h1 className="text-xl font-semibold">
           Final Assessment for Lesson {module?.LessonOrder} : {toPlainText(module?.ModuleTitle)}
         </h1>
@@ -633,19 +655,19 @@ const FinalAssessment = () => {
           <div className="bg-white rounded-xl shadow-lg max-w-2xl w-full p-10">
             {/* Icon */}
             <div className="flex justify-center mb-6">
-              <div className="w-20 h-20 bg-[#1e3a5f] rounded-full flex items-center justify-center shadow-lg">
+              <div className="w-20 h-20 bg-[#284C71] rounded-full flex items-center justify-center shadow-lg">
                 <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
             </div>
 
-            <h2 className="text-2xl font-bold text-[#1e3a5f] text-center mb-2">Final Assessment</h2>
+            <h2 className="text-2xl font-bold text-primary text-center mb-2">Final Assessment</h2>
             <p className="text-gray-500 text-center mb-6">Lesson {module?.LessonOrder}: {toPlainText(module?.ModuleTitle)}</p>
 
             {/* Instruction */}
-            <div className="bg-[#F5F7FA] border-l-4 border-[#1e3a5f] rounded-lg p-5 mb-6">
-              <p className="text-sm font-bold text-[#1e3a5f] mb-1">Instructions</p>
+            <div className="bg-background border-l-4 border-[#284C71] rounded-lg p-5 mb-6">
+              <p className="text-sm font-bold text-primary mb-1">Instructions</p>
               <p className="text-gray-700 leading-relaxed">
                 {module?.finalInstruction || 'This final assessment affects your learning path progression. Read and answer each question carefully. Good luck!'}
               </p>
@@ -654,23 +676,23 @@ const FinalAssessment = () => {
             {/* Exam Info */}
             <div className="flex justify-center gap-6 mb-6">
               <div className="text-center">
-                <p className="text-2xl font-bold text-[#1e3a5f]">{questions.length}</p>
+                <p className="text-2xl font-bold text-primary">{questions.length}</p>
                 <p className="text-xs text-gray-500">Questions</p>
               </div>
               <div className="border-l border-gray-200"></div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-[#1e3a5f]">Timing</p>
+                <p className="text-2xl font-bold text-primary">Timing</p>
                 <p className="text-xs text-gray-500">Tracked Passively</p>
               </div>
               <div className="border-l border-gray-200"></div>
               <div className="text-center">
-                <p className="text-2xl font-bold text-[#1e3a5f]">75%</p>
+                <p className="text-2xl font-bold text-primary">75%</p>
                 <p className="text-xs text-gray-500">Passing Score</p>
               </div>
             </div>
 
             <div className="mb-6 rounded-lg border border-[#BFE7E2] bg-[#F3FCFA] p-4">
-              <p className="text-sm font-bold text-[#1e3a5f] mb-1">
+              <p className="text-sm font-bold text-primary mb-1">
                 Mode: {assessmentMode === 'retake' ? 'Retake Final Assessment' : 'First Take Final Assessment'}
               </p>
               {assessmentMode === 'retake' ? (
@@ -714,7 +736,7 @@ const FinalAssessment = () => {
                         </div>
                         <div className="flex items-center gap-4">
                           <span className={`text-lg font-bold ${
-                            attempt.score >= 75 ? 'text-[#2BC4B3]' : 'text-red-500'
+                            attempt.score >= 75 ? 'text-highlight-dark' : 'text-red-500'
                           }`}>
                             {attempt.score.toFixed(0)}%
                           </span>
@@ -732,7 +754,7 @@ const FinalAssessment = () => {
             {/* Proceed Button */}
             <button
               onClick={handleStartExam}
-              className="w-full py-4 bg-[#2BC4B3] hover:bg-[#1e5a8e] text-white rounded-xl text-lg font-bold transition-all shadow-lg flex items-center justify-center gap-2"
+              className="w-full py-4 bg-highlight hover:bg-[#346C9A] text-white rounded-xl text-lg font-bold transition-all shadow-lg flex items-center justify-center gap-2"
             >
               Proceed to the Exam
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -743,7 +765,7 @@ const FinalAssessment = () => {
             {/* Back Button */}
             <button
               onClick={() => navigate(`/module/${moduleId}`)}
-              className="w-full mt-3 py-3 text-gray-500 hover:text-[#1e3a5f] text-sm font-medium transition-all"
+              className="w-full mt-3 py-3 text-gray-500 hover:text-primary text-sm font-medium transition-all"
             >
               Go Back to Lesson
             </button>
@@ -755,14 +777,14 @@ const FinalAssessment = () => {
         <div className="bg-white rounded-xl shadow-lg max-w-4xl w-full p-10">
 
           <div className="flex justify-end items-center mb-6">
-            <span className="text-xl text-[#1e3a5f]">
+            <span className="text-xl text-primary">
               <span className="font-bold">{currentQuestion + 1}</span> / {questions.length}
             </span>
           </div>
 
           {/* Question */}
           <div className="mb-6">
-            <div className="bg-[#1e3a5f] text-white px-6 py-4 rounded-lg mb-5 text-center">
+            <div className="bg-[#284C71] text-white px-6 py-4 rounded-lg mb-5 text-center">
               <h3 className="text-xl font-bold">
                 {currentQuestion + 1}.  {currentQ?.question}
               </h3>
@@ -781,7 +803,7 @@ const FinalAssessment = () => {
                     onClick={() => handleAnswerSelect(option)}
                     className={`w-full text-left px-5 py-3.5 border-l-4 text-base ${
                       isSelected 
-                        ? 'border-l-[#2BC4B3] bg-[#2BC4B3]/20 font-medium' 
+                        ? 'border-l-[#42C5B6] bg-highlight/20 font-medium' 
                         : 'border-l-gray-200 bg-gray-50'
                     }`}
                   >
@@ -797,7 +819,7 @@ const FinalAssessment = () => {
             <button
               onClick={handleNext}
               disabled={!selectedAnswers[currentQuestion]}
-              className="w-14 h-14 bg-[#2BC4B3] disabled:bg-gray-300 disabled:cursor-not-allowed rounded-full shadow-lg flex items-center justify-center"
+              className="w-14 h-14 bg-highlight disabled:bg-gray-300 disabled:cursor-not-allowed rounded-full shadow-lg flex items-center justify-center"
             >
               <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M9 5l7 7-7 7" />

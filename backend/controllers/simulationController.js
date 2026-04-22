@@ -1,6 +1,18 @@
 const { pool } = require('../config/database');
+const { getCached, setCached, clearNamespace } = require('../utils/responseCache');
+const { getSimulationConfig } = require('../utils/simulationConfig');
 
 let simulationColumnCache = null;
+
+const getRequestCacheKey = (req) => {
+  return String(req?.originalUrl || req?.url || '').trim() || String(req?.path || '');
+};
+
+const clearSimulationCaches = () => {
+  clearNamespace('simulations:list');
+  clearNamespace('simulations:item');
+  clearNamespace('simulations:progress');
+};
 
 const getSimulationColumnSet = async () => {
   if (simulationColumnCache) return simulationColumnCache;
@@ -13,6 +25,12 @@ const getSimulationColumnSet = async () => {
 // Get all simulations
 const getAllSimulations = async (req, res) => {
   try {
+    const requestCacheKey = getRequestCacheKey(req);
+    const cached = getCached('simulations:list', requestCacheKey);
+    if (cached) {
+      return res.json(cached);
+    }
+
     const userId = req.query.userId;
     
     let query = `
@@ -33,6 +51,7 @@ const getAllSimulations = async (req, res) => {
       ? await pool.query(query, [userId])
       : await pool.query(query.replace('AND sp.UserID = ?', ''));
     
+    setCached('simulations:list', requestCacheKey, simulations);
     res.json(simulations);
   } catch (error) {
     console.error('Error fetching simulations:', error);
@@ -43,6 +62,12 @@ const getAllSimulations = async (req, res) => {
 // Get simulations by module
 const getSimulationsByModule = async (req, res) => {
   try {
+    const requestCacheKey = getRequestCacheKey(req);
+    const cached = getCached('simulations:list', requestCacheKey);
+    if (cached) {
+      return res.json(cached);
+    }
+
     const { moduleId } = req.params;
     const userId = req.query.userId;
     const columns = await getSimulationColumnSet();
@@ -74,6 +99,7 @@ const getSimulationsByModule = async (req, res) => {
       : `Lesson ${moduleId} Simulation %`;
 
     const [simulations] = await pool.query(query, [userId || 0, moduleFilter]);
+    setCached('simulations:list', requestCacheKey, simulations);
     res.json(simulations);
   } catch (error) {
     console.error('Error fetching simulations:', error);
@@ -84,6 +110,12 @@ const getSimulationsByModule = async (req, res) => {
 // Get single simulation
 const getSimulation = async (req, res) => {
   try {
+    const requestCacheKey = getRequestCacheKey(req);
+    const cached = getCached('simulations:item', requestCacheKey);
+    if (cached) {
+      return res.json(cached);
+    }
+
     const { id } = req.params;
     const userId = req.query.userId;
     
@@ -106,6 +138,7 @@ const getSimulation = async (req, res) => {
       return res.status(404).json({ message: 'Simulation not found' });
     }
     
+    setCached('simulations:item', requestCacheKey, simulations[0]);
     res.json(simulations[0]);
   } catch (error) {
     console.error('Error fetching simulation:', error);
@@ -164,6 +197,7 @@ const createSimulation = async (req, res) => {
     `;
 
     const [result] = await pool.query(query, insertValues);
+    clearSimulationCaches();
     
     res.status(201).json({
       message: 'Simulation created successfully',
@@ -232,6 +266,8 @@ const updateSimulation = async (req, res) => {
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: 'Simulation not found' });
     }
+
+    clearSimulationCaches();
     
     res.json({ message: 'Simulation updated successfully' });
   } catch (error) {
@@ -253,10 +289,35 @@ const deleteSimulation = async (req, res) => {
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: 'Simulation not found' });
     }
+
+    clearSimulationCaches();
     
     res.json({ message: 'Simulation deleted successfully' });
   } catch (error) {
     console.error('Error deleting simulation:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// Get the runtime config (meta + timeline) for a simulation.
+// Falls back to the on-disk manifest when no admin override is saved.
+const getSimulationRuntimeConfig = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [rows] = await pool.query(
+      'SELECT SimulationID, SimulationTitle, SimulationOrder, ZoneData FROM simulation WHERE SimulationID = ?',
+      [id]
+    );
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Simulation not found' });
+    }
+
+    const simulation = rows[0];
+    const { activityOrder, source, config } = getSimulationConfig(simulation);
+
+    res.json({ activityOrder, source, config });
+  } catch (error) {
+    console.error('Error fetching simulation config:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
@@ -289,6 +350,8 @@ const startSimulation = async (req, res) => {
         [userId, simulationId]
       );
     }
+
+    clearSimulationCaches();
     
     res.json({ message: 'Simulation started successfully' });
   } catch (error) {
@@ -330,6 +393,8 @@ const completeSimulation = async (req, res) => {
         [score, safeTimeSpent, userId, simulationId]
       );
     }
+
+    clearSimulationCaches();
     
     res.json({ message: 'Simulation completed successfully' });
   } catch (error) {
@@ -341,6 +406,12 @@ const completeSimulation = async (req, res) => {
 // Get user's simulation progress
 const getUserProgress = async (req, res) => {
   try {
+    const requestCacheKey = getRequestCacheKey(req);
+    const cached = getCached('simulations:progress', requestCacheKey);
+    if (cached) {
+      return res.json(cached);
+    }
+
     const { userId } = req.params;
     
     const query = `
@@ -355,6 +426,7 @@ const getUserProgress = async (req, res) => {
     `;
     
     const [progress] = await pool.query(query, [userId]);
+    setCached('simulations:progress', requestCacheKey, progress);
     res.json(progress);
   } catch (error) {
     console.error('Error fetching user progress:', error);
@@ -366,6 +438,7 @@ module.exports = {
   getAllSimulations,
   getSimulationsByModule,
   getSimulation,
+  getSimulationRuntimeConfig,
   createSimulation,
   updateSimulation,
   deleteSimulation,

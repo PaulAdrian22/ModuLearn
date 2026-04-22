@@ -1,13 +1,13 @@
 [
   {
-    "ModuleID": 1,
+    "ModuleID": 6,
     "ModuleTitle": "Introduction to Computer Hardware Servicing",
     "LessonOrder": 1,
     "LessonLanguage": "English",
     "Description": "<div>The foundation of Computer Hardware Servicing and its importance to the modern professional operations and general uses of computers.</div><p><br></p><p><strong>Learning Objectives:</strong></p><p>This lesson aims to:</p><ol style=\"list-style-type: decimal;\"><li>define Computer Hardware Servicing (CHS);</li><li>establish the importance of CHS; and</li><li>discuss components of CHS and recent trends.</li></ol>",
     "sections": [
       {
-        "id": 1775983898577,
+        "id": 1776121484117,
         "file": null,
         "type": "topic",
         "order": 1,
@@ -17,7 +17,7 @@
         "fileName": null
       },
       {
-        "id": 1775983898578,
+        "id": 1776121484118,
         "file": null,
         "type": "paragraph",
         "order": 2,
@@ -29,7 +29,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1775983898580,
+        "id": 1776121484120,
         "file": null,
         "type": "review-multiple-choice",
         "order": 3,
@@ -39,7 +39,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1775983898579,
+            "id": 1776121484119,
             "skill": "Critical Thinking",
             "options": [
               "Repairing",
@@ -54,7 +54,7 @@
         ]
       },
       {
-        "id": 1775983898581,
+        "id": 1776121484121,
         "file": null,
         "type": "topic",
         "order": 4,
@@ -64,7 +64,7 @@
         "fileName": null
       },
       {
-        "id": 1775983898582,
+        "id": 1776121484122,
         "file": null,
         "type": "paragraph",
         "order": 5,
@@ -76,7 +76,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1775983898586,
+        "id": 1776121484126,
         "file": null,
         "type": "review-multiple-choice",
         "order": 6,
@@ -86,7 +86,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1775983898583,
+            "id": 1776121484123,
             "skill": "Analytical Thinking",
             "options": [
               "Its performance improves",
@@ -99,7 +99,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1775983898584,
+            "id": 1776121484124,
             "skill": "Memorization",
             "options": [
               "Cost Efficiency",
@@ -112,7 +112,7 @@
             "correctAnswer": 0
           },
           {
-            "id": 1775983898585,
+            "id": 1776121484125,
             "skill": "Technical Comprehension",
             "options": [
               "Performance",
@@ -127,7 +127,7 @@
         ]
       },
       {
-        "id": 1775983898587,
+        "id": 1776121484127,
         "file": null,
         "type": "topic",
         "order": 7,
@@ -137,10 +137,20 @@
         "fileName": null
       },
       {
-        "id": 1775983898588,
+        "id": 1776121484142,
+        "file": null,
+        "type": "video",
+        "order": 8,
+        "title": "",
+        "caption": "Lesson 1 Topic 3 Video",
+        "content": "https://www.dropbox.com/scl/fi/3udi818zpelteunz5sdd3/Lesson-1-Topic-3.mp4?rlkey=3i0o5vb25iu1kk0hhgkie8qr8&st=bsbqs7th&dl=0",
+        "fileName": null
+      },
+      {
+        "id": 1776121484128,
         "file": null,
         "type": "paragraph",
-        "order": 8,
+        "order": 9,
         "title": "",
         "caption": "",
         "content": "<p>Everyday, devices are getting designed to be more complex. To not be left behind, developing skills related to these advancements in technologies is necessary. It is important to recognize several trends that are influencing the field of computer hardware servicing so that knowledge about sustaining further advancements of technology can keep up.</p><ol style=\"list-style-type: decimal;\"><li><strong>Artificial Intelligence (AI) </strong>- Computer systems are now being made for automation using various technologies under the umbrella of AI.<strong><sup>[5]</sup></strong> Not only does CHS help with AI from the perspective of maintaining efficient hardware performance, the technology itself also offers aid in CHS-related tasks, such as automating diagnostic checks or predictive maintenance, alerting technicians to potential issues before they become critical, and general digital tools that make tasks easier and faster.<strong><sup>[3]</sup></strong> Alongside these progress in technology, the need for skilled technicians to maintain AI-driven systems is much more prevalent. </li><li><strong>The Internet of Things (IoT)</strong> - More often than not, most devices of this age have capability of interconnection through a network, such as smart home devices, mobile devices, and wearables.<strong><sup>[3]</sup></strong> To put it simply, physical objects, typically found within our homes, are now functional due to being embedded with sensors, software, and other technologies, with the intent of interconnection and data exchange to other devices connected to the internet. CHS may expand to cater to these devices, and further understanding of computer networks will be needed. </li><li><strong>Remote Servicing</strong> - A tangent to CHS trends involving networking and internet would be the ability for remote servicing. Online platforms allow the conveyance of support, maintenance, and consulting services, allowing technicians to troubleshoot while not present on-site.<strong><sup>[3][7]</sup></strong> This is particularly useful for businesses that depend on minimizing downtime. </li><li><strong>Virtual Reality (VR) and Augmented Reality (AR) </strong>- CHS may encounter new and intricate systems with the rise of technologies that utilize VR and AR. VR devices use technology to create a simulated environment to perceive as reality while AR devices involve the use of technology that enhances an experience by overlaying digital information on the real world<strong><sup>[8]</sup></strong>, both of which often integrate hardware components and software configurations.<strong><sup>[3]</sup></strong></li><li><strong>Sustainability Concerns - </strong>Environmental awareness is not a new topic anymore, and certain workflows adapt to responsible consumption and sustainable practices. In CHS, several implementations, such as recycling old components, utilizing energy-efficient hardware, and minimizing e-waste, are observed as an integral part of the work and training.<strong><sup>[3][4]</sup></strong> Further lessons, specially tackling assembly, repair, and maintenance of computer and its components incorporates sustainable practices that one must observe while training.</li></ol>",
@@ -149,17 +159,17 @@
         "contentLayout": "text"
       },
       {
-        "id": 1775983898591,
+        "id": 1776121484131,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 9,
+        "order": 10,
         "title": "",
         "caption": "",
         "content": "",
         "fileName": null,
         "questions": [
           {
-            "id": 1775983898589,
+            "id": 1776121484129,
             "skill": "Memorization",
             "options": [
               "Remote Servicing",
@@ -172,7 +182,7 @@
             "correctAnswer": 0
           },
           {
-            "id": 1775983898590,
+            "id": 1776121484130,
             "skill": "Technical Comprehension",
             "options": [
               "Sustainability Concerns",
@@ -187,20 +197,20 @@
         ]
       },
       {
-        "id": 1775983898592,
+        "id": 1776121484132,
         "file": null,
         "type": "topic",
-        "order": 10,
+        "order": 11,
         "title": "Topic 4: Components of Computer Hardware Servicing",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1775983898593,
+        "id": 1776121484133,
         "file": null,
         "type": "paragraph",
-        "order": 11,
+        "order": 12,
         "title": "",
         "caption": "",
         "content": "<p>\tYou are just about another step to start with your Computer Hardware Servicing Training! While you are breaking down and absorbing what you’ve learned so far about CHS, we will also give you an overview of the components of your training in ModuLearn. We will tackle <strong>basic Computer Hardware Operations</strong>, <strong>assembly and disassembly</strong>, <strong>troubleshooting and maintenance of </strong>computer hardware.</p><p><strong>Computer hardware </strong>the physical parts of a computer that you can see and touch are referred to as computer hardware. These components work together to process input and deliver output based on user instructions.</p><p>Computer hardware has <strong>four main basic operations</strong> namely: input, processing, storage and output.</p><ul style=\"list-style-type: disc;\"><li><strong>Inputting Data - </strong>Inputting data is a computer's first basic operation. The process of giving data or information to a computer is known as input operations. A keyboard, mouse, microphone, camera, and other input devices can all be used to enter data into a computer. The process of feeding information into a computer, where it is processed and transformed into a format that it can understand, is known as data input.</li><li><strong>Processing Data </strong>- After the data is inputted, the computer processes the data. In order to get the outcome you want, data processing involves adjusting and converting the incoming data. The manipulation of input data by a computer to generate meaningful information is referred to as processing operations. The central processing unit (CPU), the computer's brain and will be discussed later, is responsible for carrying out these functions.</li><li><strong>Storing Data </strong>- Storing data is the process of storing processed data on a hard drive, solid-state drive, or flash drive. Even when the computer is shut down, the data is kept on the storage device so it can be used later. Storing information and data in memory or on secondary storage devices such as cloud storage (saving files and data on the internet instead of a hard drive.), hard disks, flash drives, CDs, and DVDs is also possible.</li><li><strong>Output/Outputting Data</strong> - Output operations refer to the presentation of processed data in a useful form. Outputting data is the process of presenting the processed data to the user in a readable form. Output devices such as a monitor, printer, or speaker are used to display or play the processed data. </li></ul><p><strong>Computer assembly</strong> is the process of fitting all the internal parts needed for the computer system to enable it to work. There is a proper sequence of attachment of each and every component into the computer system. To provide you with an insight, assembling a computer typically follows the following sequence:</p><ol style=\"list-style-type: decimal;\"><li>Open the case.</li><li>Install the power supply.</li><li>Attach the components to the motherboard.</li><li>Install the motherboard.</li><li>Install internal drives.</li><li>Connect all internal cables.</li><li>Install motherboard power connections</li><li>Connect external cables to the computer.</li><li>Boot the computer for the first time.  </li></ol>",
@@ -209,10 +219,10 @@
         "contentLayout": "text"
       },
       {
-        "id": 1775983898594,
+        "id": 1776121484134,
         "file": null,
         "type": "paragraph",
-        "order": 12,
+        "order": 13,
         "title": "",
         "caption": "",
         "content": "<p><strong>Computer disassembly</strong>, on the other hand, is the process of breaking down a device into separate parts. Disassembly of any device is required to determine a problem, to replace a part, or take the parts and use them in another device. Just like in computer assembly, there is a standard process of computer disassembly like listed in the following:</p><ol style=\"list-style-type: decimal;\"><li>Unplugging.</li><li>Open the case.</li><li>Disconnect all the connectors.</li><li>Remove the fan.</li><li>Remove the power supply.</li><li>Removing HDD and optical drive.</li><li>Removing RAM (random access memory) modules.</li><li>Remove expansion cards.</li><li>Remove the motherboard.</li><li>Reassembling of components.</li></ol>",
@@ -221,10 +231,10 @@
         "contentLayout": "text"
       },
       {
-        "id": 1775983898595,
+        "id": 1776121484135,
         "file": null,
         "type": "paragraph",
-        "order": 13,
+        "order": 14,
         "title": "",
         "caption": "",
         "content": "<p><strong>Troubleshooting </strong>involves identifying, diagnosing, and fixing issues related to the physical components of a computer. Knowing how to troubleshoot these components can save you time, money, and a lot of frustration.</p><p>In this training, we will follow the following troubleshooting steps as a foundation to developing proper troubleshooting and diagnosis:</p><ol style=\"list-style-type: decimal;\"><li><strong>Identify the problem</strong> - Begin by understanding the symptoms. Is the computer completely dead, or is it just a specific component that’s malfunctioning?</li><li><strong>Gather information </strong>- Research the symptoms. Use forums, manufacturer websites, and tech support resources. Sometimes, a quick search can lead you to a solution.</li><li><strong>Test hypothesis</strong> - Based on your research, start testing potential solutions. For example, if the computer won’t turn on, test the power supply first.</li><li><strong>Implement solutions</strong> - Once you identify the probable cause, implement the solution. Like replacing faulty components, updating drivers, or cleaning out dust.</li><li><strong>Verify fix</strong> - After implementing a fix, verify that the problem is resolved. For example, restart the computer and check if it operates normally.</li></ol>",
@@ -233,10 +243,10 @@
         "contentLayout": "text"
       },
       {
-        "id": 1775983898596,
+        "id": 1776121484136,
         "file": null,
         "type": "paragraph",
-        "order": 14,
+        "order": 15,
         "title": "",
         "caption": "",
         "content": "<p>All of the tasks necessary to keep your computer operating effectively and consistently are included in computer maintenance. It covers both software and hardware maintenance procedures that help protect your device from potential threats, enhance performance, and prevent system problems. Your computer's lifespan can be increased by many years and its best performance can be maintained with routine maintenance.</p><p>Preventing problems before they exist is just as important as correcting them when they do occur. Consider it similar to car maintenance: routine tune-ups and oil changes avoid serious malfunctions and expensive repairs. Computer maintenance helps it to have the following:</p><ol style=\"list-style-type: decimal;\"><li><strong>Extended device lifespan</strong> - proper maintenance can add years to your computer’s life</li><li><strong>Improved system performance -</strong> regular cleanup keeps your PC running faster</li><li><strong>Enhanced data security</strong> - updated software protects against threats</li><li><strong>Reduced repair costs </strong>- preventing problems is cheaper than fixing them</li><li><strong>Better user experience</strong> - a well-maintained computer is more reliable and responsive</li></ol>",
@@ -245,10 +255,10 @@
         "contentLayout": "text"
       },
       {
-        "id": 1775983898597,
+        "id": 1776121484137,
         "file": null,
         "type": "paragraph",
-        "order": 15,
+        "order": 16,
         "title": "",
         "caption": "",
         "content": "<p><strong>You are now at the end of lesson 1. Good job on finishing the first lesson. Next step is the final assessment for the whole lesson. You can take it any time. If you wish to review or re-read the lesson, feel free to do so! Just remember, you cannot retake the final assessment, and you cannot pause while answering. An honest take is our priority, and we discourage you to take any kinds of cheating.</strong></p>",
@@ -257,17 +267,17 @@
         "contentLayout": "text"
       },
       {
-        "id": 1775983898601,
+        "id": 1776121484141,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 16,
+        "order": 17,
         "title": "",
         "caption": "",
         "content": "",
         "fileName": null,
         "questions": [
           {
-            "id": 1775983898598,
+            "id": 1776121484138,
             "skill": "Analytical Thinking",
             "options": [
               "Inputting Data",
@@ -280,7 +290,7 @@
             "correctAnswer": 3
           },
           {
-            "id": 1775983898599,
+            "id": 1776121484139,
             "skill": "Problem Solving",
             "options": [
               "time and expensive costs",
@@ -293,7 +303,7 @@
             "correctAnswer": 0
           },
           {
-            "id": 1775983898600,
+            "id": 1776121484140,
             "skill": "Critical Thinking",
             "options": [
               "slow download speed",
@@ -308,10 +318,10 @@
         ]
       },
       {
-        "id": 1775983898602,
+        "id": 1776121484143,
         "file": null,
         "type": "references",
-        "order": 17,
+        "order": 18,
         "title": "",
         "caption": "",
         "content": "https://medium.com/@zargull/the-importance-of-computers-in-the-modern-world-cf80eb3ecf0c\nhttps://ticktocktech.com/blog/2022/08/28/what-is-computer-hardware-servicing-and-how-is-it-done-in-2022/\nhttps://umatechnology.org/what-is-computer-hardware-servicing/\nhttps://mefmobile.org/what-is-computer-hardware-servicing/\nhttps://www.coursera.org/articles/what-is-artificial-intelligence?msockid=133d0c738b796b820b6e1a398a6d6a23\nhttps://www.oracle.com/asean/internet-of-things/\nhttps://www.teamviewer.com/apac/insights/remote-servicing-in-modern-business-operations/\nhttps://www.geeksforgeeks.org/python/virtual-reality-vs-augmented-reality-whats-the-difference/\nhttps://ticktocktech.com/blog/2022/08/28/what-is-computer-hardware-servicing-and-how-is-it-done-in-2022/#google_vignette\nhttps://www.geeksforgeeks.org/computer-science-fundamentals/computer-hardware/\nhttps://rpatoolstutorial.com/basic-operations-of-computer/\nhttps://ncert.nic.in/vocational/pdf/keit104.pdf\nhttps://www.techallabout.com/computer-hardware-troubleshooting-a-comprehensive-guide/\nhttps://www.hp.com/us-en/shop/tech-takes/pc-maintenance-and-repair-tips?pStoreID=techsoup%27%5B0%5D&msockid=377c7f12845d6e621d65697d85d56f25",
@@ -320,7 +330,7 @@
     ],
     "diagnosticQuestions": [
       {
-        "id": 1775983898676,
+        "id": 1776121484218,
         "skill": "Critical Thinking",
         "options": [
           "Repairing",
@@ -333,7 +343,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1775983898677,
+        "id": 1776121484219,
         "skill": "Analytical Thinking",
         "options": [
           "Its performance improves",
@@ -346,7 +356,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1775983898678,
+        "id": 1776121484220,
         "skill": "Memorization",
         "options": [
           "Cost Efficiency",
@@ -359,7 +369,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898679,
+        "id": 1776121484221,
         "skill": "Technical Comprehension",
         "options": [
           "Performance",
@@ -372,7 +382,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898680,
+        "id": 1776121484222,
         "skill": "Memorization",
         "options": [
           "Remote Servicing",
@@ -387,7 +397,7 @@
     ],
     "reviewQuestions": [
       {
-        "id": 1775983898626,
+        "id": 1776121484168,
         "skill": "Critical Thinking",
         "options": [
           "Repairing",
@@ -400,7 +410,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1775983898627,
+        "id": 1776121484169,
         "skill": "Analytical Thinking",
         "options": [
           "Its performance improves",
@@ -413,7 +423,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1775983898628,
+        "id": 1776121484170,
         "skill": "Memorization",
         "options": [
           "Cost Efficiency",
@@ -426,7 +436,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898629,
+        "id": 1776121484171,
         "skill": "Technical Comprehension",
         "options": [
           "Performance",
@@ -439,7 +449,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898630,
+        "id": 1776121484172,
         "skill": "Memorization",
         "options": [
           "Remote Servicing",
@@ -452,7 +462,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898631,
+        "id": 1776121484173,
         "skill": "Technical Comprehension",
         "options": [
           "Sustainability Concerns",
@@ -465,7 +475,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1775983898632,
+        "id": 1776121484174,
         "skill": "Analytical Thinking",
         "options": [
           "Inputting Data",
@@ -478,7 +488,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1775983898633,
+        "id": 1776121484175,
         "skill": "Problem Solving",
         "options": [
           "time and expensive costs",
@@ -491,7 +501,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898634,
+        "id": 1776121484176,
         "skill": "Critical Thinking",
         "options": [
           "slow download speed",
@@ -504,7 +514,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1775983898635,
+        "id": 1776121484177,
         "skill": "Problem Solving",
         "options": [
           "Unplugging",
@@ -519,7 +529,7 @@
     ],
     "finalQuestions": [
       {
-        "id": 1775983898636,
+        "id": 1776121484178,
         "skill": "Analytical Thinking",
         "options": [
           "The process of creating software for computers",
@@ -532,7 +542,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898637,
+        "id": 1776121484179,
         "skill": "Memorization",
         "options": [
           "Routine diagnosis and maintenance",
@@ -545,7 +555,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898638,
+        "id": 1776121484180,
         "skill": "Problem Solving",
         "options": [
           "Attempt the repair anyway without tools",
@@ -558,7 +568,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898639,
+        "id": 1776121484181,
         "skill": "Technical Comprehension",
         "options": [
           "Performance",
@@ -571,7 +581,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1775983898640,
+        "id": 1776121484182,
         "skill": "Problem Solving",
         "options": [
           "Safety and Performance",
@@ -584,7 +594,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898641,
+        "id": 1776121484183,
         "skill": "Technical Comprehension",
         "options": [
           "Artificial Intelligence – because devices make automated decisions",
@@ -597,7 +607,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898642,
+        "id": 1776121484184,
         "skill": "Memorization",
         "options": [
           "Artificial Intelligence",
@@ -610,7 +620,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898643,
+        "id": 1776121484185,
         "skill": "Technical Comprehension",
         "options": [
           "Inputting Data",
@@ -623,7 +633,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898644,
+        "id": 1776121484186,
         "skill": "Problem Solving",
         "options": [
           "Implement solutions",
@@ -636,7 +646,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1775983898645,
+        "id": 1776121484187,
         "skill": "Analytical Thinking",
         "options": [
           "Clicking a mouse to open a folder",
@@ -649,7 +659,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898646,
+        "id": 1776121484188,
         "skill": "Critical Thinking",
         "options": [
           "Motherboard",
@@ -662,7 +672,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898647,
+        "id": 1776121484189,
         "skill": "Critical Thinking",
         "options": [
           "Regular maintenance, upgrading components when needed, and recycling old parts",
@@ -675,7 +685,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898648,
+        "id": 1776121484190,
         "skill": "Critical Thinking",
         "options": [
           "Continue with the assembly and install the power supply last",
@@ -688,7 +698,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1775983898649,
+        "id": 1776121484191,
         "skill": "Memorization",
         "options": [
           "Artificial Intelligence (AI)",
@@ -696,12 +706,12 @@
           "Sustainability Concerns",
           "Internet of Things (IoT)"
         ],
-        "question": "Question: A technician was asked to fix a device that seems to have a sensor, which the customer uses to connect other devices within their home through the internet. Which trend of CHS is being shown?",
+        "question": "Question: A technician was asked to fix a device that seems to have a sensor, which the customer uses to connect other devices within their home through the internet. Which trend of CHS is being shown? Artificial Intelligence (AI) Remote Servicing Sustainability Concerns Internet of Things (IoT)",
         "questionType": "Situational",
         "correctAnswer": 3
       },
       {
-        "id": 1775983898650,
+        "id": 1776121484192,
         "skill": "Analytical Thinking",
         "options": [
           "maintaining computer hardware and performing routine diagnosis",
@@ -709,12 +719,12 @@
           "creating a code to make a game character to jump through a development software",
           "creating schematics for network architecture of a company"
         ],
-        "question": "Question: Claire found out that cleaning her friend’s computer system unit monthly helps lessen the frequency of which her friend would need to bring their computer to a technician to be fixed. Which procedure of CHS is being shown?",
+        "question": "Question: Claire found out that cleaning her friend’s computer system unit monthly helps lessen the frequency of which her friend would need to bring their computer to a technician to be fixed. Which procedure of CHS is being shown? maintaining computer hardware and performing routine diagnosis using tools to solder resistors to an electric circuit board of an appliance creating a code to make a game character to jump through a development software creating schematics for network architecture of a company",
         "questionType": "Situational",
-        "correctAnswer": 0
+        "correctAnswer": 2
       },
       {
-        "id": 1775983898666,
+        "id": 1776121484208,
         "skill": "Critical Thinking",
         "options": [
           "Repairing",
@@ -727,7 +737,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1775983898667,
+        "id": 1776121484209,
         "skill": "Analytical Thinking",
         "options": [
           "Its performance improves",
@@ -740,7 +750,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1775983898668,
+        "id": 1776121484210,
         "skill": "Memorization",
         "options": [
           "Cost Efficiency",
@@ -753,7 +763,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898669,
+        "id": 1776121484211,
         "skill": "Technical Comprehension",
         "options": [
           "Performance",
@@ -766,7 +776,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898670,
+        "id": 1776121484212,
         "skill": "Memorization",
         "options": [
           "Remote Servicing",
@@ -779,7 +789,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898671,
+        "id": 1776121484213,
         "skill": "Technical Comprehension",
         "options": [
           "Sustainability Concerns",
@@ -792,7 +802,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1775983898672,
+        "id": 1776121484214,
         "skill": "Analytical Thinking",
         "options": [
           "Inputting Data",
@@ -805,7 +815,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1775983898673,
+        "id": 1776121484215,
         "skill": "Problem Solving",
         "options": [
           "time and expensive costs",
@@ -818,7 +828,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898674,
+        "id": 1776121484216,
         "skill": "Critical Thinking",
         "options": [
           "slow download speed",
@@ -831,7 +841,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1775983898675,
+        "id": 1776121484217,
         "skill": "Problem Solving",
         "options": [
           "Unplugging",
@@ -844,7 +854,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1775983898651,
+        "id": 1776121484193,
         "skill": "Analytical Thinking",
         "options": [
           "The process of creating software for computers",
@@ -857,7 +867,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898652,
+        "id": 1776121484194,
         "skill": "Memorization",
         "options": [
           "Routine diagnosis and maintenance",
@@ -870,7 +880,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898653,
+        "id": 1776121484195,
         "skill": "Problem Solving",
         "options": [
           "Attempt the repair anyway without tools",
@@ -883,7 +893,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898654,
+        "id": 1776121484196,
         "skill": "Technical Comprehension",
         "options": [
           "Performance",
@@ -896,7 +906,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1775983898655,
+        "id": 1776121484197,
         "skill": "Problem Solving",
         "options": [
           "Safety and Performance",
@@ -909,7 +919,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898656,
+        "id": 1776121484198,
         "skill": "Technical Comprehension",
         "options": [
           "Artificial Intelligence – because devices make automated decisions",
@@ -922,7 +932,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898657,
+        "id": 1776121484199,
         "skill": "Memorization",
         "options": [
           "Artificial Intelligence",
@@ -935,7 +945,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898658,
+        "id": 1776121484200,
         "skill": "Technical Comprehension",
         "options": [
           "Inputting Data",
@@ -948,7 +958,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898659,
+        "id": 1776121484201,
         "skill": "Problem Solving",
         "options": [
           "Implement solutions",
@@ -961,7 +971,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1775983898660,
+        "id": 1776121484202,
         "skill": "Analytical Thinking",
         "options": [
           "Clicking a mouse to open a folder",
@@ -974,7 +984,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898661,
+        "id": 1776121484203,
         "skill": "Critical Thinking",
         "options": [
           "Motherboard",
@@ -987,7 +997,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898662,
+        "id": 1776121484204,
         "skill": "Critical Thinking",
         "options": [
           "Regular maintenance, upgrading components when needed, and recycling old parts",
@@ -1000,7 +1010,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898663,
+        "id": 1776121484205,
         "skill": "Critical Thinking",
         "options": [
           "Continue with the assembly and install the power supply last",
@@ -1013,7 +1023,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1775983898664,
+        "id": 1776121484206,
         "skill": "Memorization",
         "options": [
           "Artificial Intelligence (AI)",
@@ -1026,7 +1036,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1775983898665,
+        "id": 1776121484207,
         "skill": "Analytical Thinking",
         "options": [
           "maintaining computer hardware and performing routine diagnosis",
@@ -1036,19 +1046,19 @@
         ],
         "question": "Among the situations below, which is the appropriate description about what CHS is all about?",
         "questionType": "Easy",
-        "correctAnswer": 0
+        "correctAnswer": 2
       }
     ]
   },
   {
-    "ModuleID": 5,
+    "ModuleID": 21,
     "ModuleTitle": "Introduksyon sa Computer Hardware Servicing",
     "LessonOrder": 1,
     "LessonLanguage": "Taglish",
     "Description": "<div>Ang saligan ng Computer Hardware Servicing at ang kahalagahan nito sa makabagong propesyonal na operasyon at pangkalahatang gamit ng mga kompyuter.</div><p><br></p><p><strong>Mga Layunin:</strong></p><p>Layunin ng araling ito na:</p><ol style=\"list-style-type: decimal;\"><li>I-define ang Computer Hardware Servicing (CHS);</li><li>I-establish ang importansya ng CHS; and</li><li>I-discuss ang components ng CHS at recent trends.</li></ol>",
     "sections": [
       {
-        "id": 1775983898603,
+        "id": 1776121484144,
         "file": null,
         "type": "topic",
         "order": 1,
@@ -1058,7 +1068,7 @@
         "fileName": null
       },
       {
-        "id": 1775983898604,
+        "id": 1776121484145,
         "file": null,
         "type": "paragraph",
         "order": 2,
@@ -1070,7 +1080,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1775983898608,
+        "id": 1776121484149,
         "file": null,
         "type": "review-multiple-choice",
         "order": 3,
@@ -1080,7 +1090,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1775983898605,
+            "id": 1776121484146,
             "skill": "Critical Thinking",
             "options": [
               "Pag-aayos (Repairing)",
@@ -1093,7 +1103,7 @@
             "correctAnswer": 1
           },
           {
-            "id": 1775983898606,
+            "id": 1776121484147,
             "skill": "Analytical Thinking",
             "options": [
               "Mas bumubuti ang performance nito",
@@ -1106,7 +1116,7 @@
             "correctAnswer": 0
           },
           {
-            "id": 1775983898607,
+            "id": 1776121484148,
             "skill": "Memorization",
             "options": [
               "Pagiging Matipid sa Gastos (Cost Efficiency)",
@@ -1121,7 +1131,7 @@
         ]
       },
       {
-        "id": 1775983898609,
+        "id": 1776121484150,
         "file": null,
         "type": "topic",
         "order": 4,
@@ -1131,7 +1141,7 @@
         "fileName": null
       },
       {
-        "id": 1775983898610,
+        "id": 1776121484151,
         "file": null,
         "type": "paragraph",
         "order": 5,
@@ -1143,7 +1153,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1775983898614,
+        "id": 1776121484155,
         "file": null,
         "type": "review-multiple-choice",
         "order": 6,
@@ -1153,7 +1163,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1775983898611,
+            "id": 1776121484152,
             "skill": "Technical Comprehension",
             "options": [
               "Performance",
@@ -1166,7 +1176,7 @@
             "correctAnswer": 1
           },
           {
-            "id": 1775983898612,
+            "id": 1776121484153,
             "skill": "Memorization",
             "options": [
               "Remote Servicing (Serbisyong Malayo)",
@@ -1179,7 +1189,7 @@
             "correctAnswer": 0
           },
           {
-            "id": 1775983898613,
+            "id": 1776121484154,
             "skill": "Technical Comprehension",
             "options": [
               "Sustainability Concerns",
@@ -1194,7 +1204,7 @@
         ]
       },
       {
-        "id": 1775983898615,
+        "id": 1776121484156,
         "file": null,
         "type": "topic",
         "order": 7,
@@ -1204,10 +1214,20 @@
         "fileName": null
       },
       {
-        "id": 1775983898616,
+        "id": 1776121484166,
+        "file": null,
+        "type": "video",
+        "order": 8,
+        "title": "",
+        "caption": "Lesson 1 Topic 3 Video",
+        "content": "https://www.dropbox.com/scl/fi/3udi818zpelteunz5sdd3/Lesson-1-Topic-3.mp4?rlkey=3i0o5vb25iu1kk0hhgkie8qr8&st=bsbqs7th&dl=0",
+        "fileName": null
+      },
+      {
+        "id": 1776121484157,
         "file": null,
         "type": "paragraph",
-        "order": 8,
+        "order": 9,
         "title": "",
         "caption": "",
         "content": "<p>Araw-araw, ang mga device ay dinisenyo upang maging mas kumplikado. Upang hindi mapag-iwanan, kinakailangan ang pag-develop ng mga skills na may kaugnayan sa mga pag-unlad ng teknolohiya. Mahalagang kilalanin ang ilang mga uso na nakakaimpluwensya sa larangan ng computer hardware servicing upang ang kaalaman tungkol sa pagpapanatili ng karagdagang pag-unlad ng teknolohiya ay makasabay.</p><ol style=\"list-style-type: decimal;\"><li><strong>Artificial Intelligence (AI) - </strong>Ang mga sistema ng computer ay ginagawa na ngayon para sa awtomasyon gamit ang iba't ibang teknolohiya sa ilalim ng AI.<sup>[5] </sup>Ang CHS ay hindi lamang tumutulong sa AI mula sa perspektibo ng pagpapanatili ng mahusay na performance ng hardware, kundi pati na rin ang teknolohiya mismo ay nag-aalok ng tulong sa mga gawain na may kaugnayan sa CHS, tulad ng pag-automate ng mga diagnostic check o predictive maintenance, pag-alerto sa mga technicians sa mga potensyal na isyu bago pa ito maging kritikal, at mga pangkalahatang digital tool na nagpapadali at nagpapabilis ng mga gawain.<sup>[3]</sup> Kasabay ng mga pag-unlad ng teknolohiya, ang pangangailangan para sa mga bihasang technicians upang mapanatili ang mga sistemang pinapatakbo ng AI ay mas laganap.</li><li><strong>The Internet of Things (IoT) - </strong>Kadalasan, karamihan sa mga devices sa panahong ito ay may kakayahang makipag-ugnayan sa pamamagitan ng isang network, tulad ng mga smart home device, mobile device, at wearables.<sup>[3]</sup> Sa madaling salita, ang mga pisikal na bagay, karaniwang matatagpuan sa loob ng ating mga tahanan, ay ngayon ay gumagana dahil sa pagkakaroon ng mga sensor, software, at iba pang teknolohiya, na may layuning makipag-ugnayan at magpalitan ng datos sa iba pang mga aparatong nakakonekta sa internet. Maaaring palawakin ng CHS ang kanilang serbisyo para sa mga aparatong ito, at kinakailangan ang mas malalim na pag-unawa sa mga computer network. </li><li><strong>Remote Servicing - </strong>Isang kaugnay na aspeto ng mga trend sa CHS na may kinalaman sa networking at internet ay ang kakayahang magbigay ng remote servicing. Pinapayagan ng mga online platform ang paghahatid ng suporta, pagpapanatili, at mga serbisyong konsultasyon, na nagpapahintulot sa mga technician na mag-troubleshoot kahit wala sa mismong lugar.<sup>[3][7]</sup> Ito ay partikular na kapaki-pakinabang para sa mga negosyo na umaasa sa pagpapababa ng downtime. </li><li><strong>Virtual Reality (VR) and Augmented Reality (AR) - </strong>Maaaring makatagpo ang CHS ng mga bagong at magulong sistema sa pag-usbong ng mga teknolohiya na gumagamit ng VR at AR. Ang mga VR device ay gumagamit ng teknolohiya upang lumikha ng isang simulated na kapaligiran na tila totoong buhay, habang ang mga AR device ay gumagamit ng teknolohiya na nagpapahusay ng karanasan sa pamamagitan ng pag-overlay ng digital na impormasyon sa totoong mundo<sup>[8]</sup>, na parehong kadalasang nag-iintegrate ng mga hardware component at software configurations.<sup>[3]</sup></li><li><strong>Sustainability Concerns - </strong>Ang kamalayan sa kapaligiran ay hindi na isang bagong paksa, at ang ilang mga daloy ng trabaho ay umaangkop sa responsableng pagkonsumo at mga napapanatiling gawain. Sa CHS, ilang mga implementasyon, tulad ng pag-recycle ng mga lumang components, paggamit ng energy-efficient na hardware, at pagbabawas ng e-waste, ay nakikita bilang isang mahalagang bahagi ng trabaho at pagsasanay.<sup>[3][4</sup>] Ang karagdagang mga aralin, lalo na ang pagtutok sa pagbuo, pag-aayos, at pagpapanatili ng computer at mga bahagi nito, ay nagsasama ng mga napapanatiling praktis na dapat sundin habang nag-aaral.</li></ol>",
@@ -1216,17 +1236,17 @@
         "contentLayout": "text"
       },
       {
-        "id": 1775983898620,
+        "id": 1776121484161,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 9,
+        "order": 10,
         "title": "",
         "caption": "",
         "content": "",
         "fileName": null,
         "questions": [
           {
-            "id": 1775983898617,
+            "id": 1776121484158,
             "skill": "Analytical Thinking",
             "options": [
               "Inputting Data (Paglalagay ng Datos)",
@@ -1239,7 +1259,7 @@
             "correctAnswer": 3
           },
           {
-            "id": 1775983898618,
+            "id": 1776121484159,
             "skill": "Problem Solving",
             "options": [
               "Pag-unplug (Unplugging)",
@@ -1252,7 +1272,7 @@
             "correctAnswer": 3
           },
           {
-            "id": 1775983898619,
+            "id": 1776121484160,
             "skill": "Problem Solving",
             "options": [
               "oras at mahal na gastos (time and expensive costs)",
@@ -1267,20 +1287,20 @@
         ]
       },
       {
-        "id": 1775983898621,
+        "id": 1776121484162,
         "file": null,
         "type": "topic",
-        "order": 10,
+        "order": 11,
         "title": "Paksa 4: Mga Components ng Computer Hardware Servicing",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1775983898622,
+        "id": 1776121484163,
         "file": null,
         "type": "paragraph",
-        "order": 11,
+        "order": 12,
         "title": "",
         "caption": "",
         "content": "<p>Malapit ka na sa susunod na hakbang para simulan ang iyong Pagsasanay sa Computer Hardware Servicing! Habang pinoproseso at tinatanggap mo ang mga natutunan mo tungkol sa CHS, bibigyan ka rin namin ng pangkalahatang-ideya ng mga bahagi ng iyong pagsasanay sa ModuLearn. Tatalakayin natin ang mga pangunahing Operasyon ng Computer Hardware, pagbuo at pag-disassemble, pag-troubleshoot at pagpapanatili ng computer hardware.</p><p>Ang computer hardware, ang mga pisikal na bahagi ng isang computer na maaari mong makita at mahawakan, ay tinatawag na computer hardware. Ang mga komponent na ito ay nagtutulungan upang iproseso ang input at magbigay ng output batay sa mga instruksyon ng gumagamit.</p><p>Ang hardware ng computer ay may apat na pangunahing operasyon: input, processing, storage, at output.</p><ul style=\"list-style-type: disc;\"><li><strong>Inputting Data - </strong>Ang pag-input ng data (inputting data) ay ang unang pangunahing operasyon ng isang kompyuter. Ang proseso ng pagbibigay ng data o impormasyon sa isang computer ay kilala bilang input operations. Ang keyboard, mouse, mikropono, kamera, at iba pang mga input device ay maaaring gamitin upang maglagay ng data sa isang computer. Ang proseso ng pagpasok ng impormasyon sa isang kompyuter, kung saan ito ay pinoproseso at binabago sa ibang format na maaari nitong maunawaan, ay kilala bilang pag-input ng datos (inputting data).</li><li><strong>Processing Data - </strong>Pagkatapos mailagay ang data, ito ay pinoproseso ng computer (processing data). Upang makuha ang nais mong resulta, ang pagproseso ng data ay kinapapalooban ng pag-aayos at pag-convert ng papasok na data. Ang pagmamanipula ng input data ng isang computer upang makabuo ng makabuluhang impormasyon ay tinatawag na mga operasyon ng pagproseso o processing operations. Ang central processing unit (CPU), ang utak ng computer na tatalakayin mamaya, ang responsable sa pagsasagawa ng mga gawaing ito.</li><li><strong>Storing Data - </strong>Ang pag-iimbak ng data (storing data) ay ang proseso ng pag-iimbak ng na-prosesong data sa isang hard drive, solid-state drive, o flash drive. Kahit na naka-shutdown ang computer, ang data ay nananatili sa storage device upang magamit ito sa hinaharap. Posible rin ang pag-iimbak ng impormasyon at data sa memorya o sa mga pangalawang imbakan (secondary storage) tulad ng cloud storage, hard disks, flash drives, CDs, at DVDs.</li><li><strong>Output/Outputting Data - </strong>Ang mga operasyon ng output ay tumutukoy sa pagpapakita ng na-prosesong datos sa isang kapaki-pakinabang na anyo o pormat. Ang pag-output ng data ay ang proseso ng pagpapakita ng na-prosesong data sa gumagamit sa isang nababasang anyo. Ang mga output device tulad ng monitor, printer, o speaker ay ginagamit upang ipakita ang na-prosesong data. </li></ul><p>Ang pagbuo ng computer ay ang proseso ng paglalagay ng lahat ng panloob na bahagi o parte ng computer na kinakailangan para sa sistema ng computer upang ito ay gumana. May tamang pagkakasunod-sunod ng paglalagay ng bawat bahagi sa sistema ng computer. Upang bigyan ka ng ideya, ang pagbuo ng isang computer ay karaniwang sinusundan ng mga sumusunod na hakbang:</p><ol style=\"list-style-type: decimal;\"><li>Buksan ang pinaka takip. </li><li>I-install ang power supply. </li><li>Ikabit ang mga bahagi sa motherboard. </li><li>I-install ang motherboard.</li><li>Mag-install ng internal drives. </li><li>I-konekta ang mga internal cables. </li><li>I-install ang power connections sa motherboard.</li><li>I-konekta ang mga external cables sa computer. </li><li>I-boot ang computer sa unang pagkakataon.</li></ol><p>Ang pag-disassemble ng computer, sa kabilang banda, ay ang proseso ng paghihiwa-hiwalay ng isang device sa mga bahagi. Ang pag-disassemble ng anumang device ay kinakailangan upang matukoy ang isang problema, palitan ang isang bahagi, o kunin ang mga bahagi at gamitin ang mga ito sa ibang device. Tulad ng sa pagbuo ng computer, mayroong isang pamantayang proseso ng pag-disassemble ng computer tulad ng nakalista sa mga sumusunod:</p><ol style=\"list-style-type: decimal;\"><li>Pag-unplug.</li><li>Buksan ang pinaka takip.</li><li>Idiskonekta ang lahat ng mga konektor.</li><li>Alisin ang bentilador.</li><li>Alisin ang power supply.</li><li>Pag-alis ng HDD at optical drive.</li><li>Pag-alis ng mga RAM (random access memory) module.</li><li>Alisin ang mga expansion cards.</li><li>Alisin ang motherboard.</li><li>Pagbabalik ng mga components.</li></ol><p>Ang pag-troubleshoot ay kinapapalooban ng pagtukoy, pag-diagnose, at pag-aayos ng mga isyu na may kaugnayan sa mga pisikal na bahagi ng isang computer. Ang kaalaman kung paano ayusin ang mga komponent na ito ay makakatipid sa iyo ng oras, pera, at pakiramdam ng pagkainis o pagkabigo.</p><p>Sa pagsasanay na ito, susundan natin ang mga sumusunod na hakbang sa pag-troubleshoot bilang pundasyon sa pagbuo ng tamang pag-troubleshoot at diagnosis:</p><ol style=\"list-style-type: decimal;\"><li><strong>Identify the problem</strong> (Tukuyin ang Problema) - Simulan sa pag-unawa sa mga sintomas. Ang computer ba ay tuluyang patay, o may partikular na bahagi lamang na hindi gumagana?</li><li><strong>Gather information </strong>(Kumuha ng Impormasyon) - Mag-research tungkol sa mga sintomas. Gumamit ng mga forum, manufacturer websites, at mga mapagkukunan ng suporta sa teknolohiya. Minsan, ang mabilis na paghahanap ay maaaring magdala sa iyo ng solusyon.</li><li><strong>Test hypothesis</strong> (Subukan ang hypothesis) - Batay sa iyong pananaliksik, simulan ang pagsubok sa mga potensyal na solusyon. Halimbawa, kung hindi mag-on ang computer, subukan muna ang power supply.</li><li><strong>Implement solutions</strong> (Isagawa ang mga solusyon) - Kapag natukoy mo na ang posibleng sanhi, maaari mo ng igawa ang (mga) solusyon. Tulad ng pagpapalit ng mga sira na bahagi, pag-update ng mga driver, o paglilinis ng alikabok.</li><li><strong>Verify fix</strong> (Beripikahin ang solusyon) - Pagkatapos isagawa ang solusyon, beripikahin na ang problema ay nalutas. Halimbawa, i-restart ang computer at tingnan kung ito ay gumagana nang maayos.</li></ol><p>Lahat ng mga gawain na kinakailangan upang mapanatiling epektibo at tuloy-tuloy ang operasyon ng iyong computer ay kasama sa computer maintenance. Sinasaklaw nito ang mga pamamaraan ng pagpapanatili ng software at hardware na tumutulong protektahan ang iyong device mula sa mga potensyal na banta, pagbutihin ang perpormans, at maiwasan ang mga problema sa sistema. Ang buhay ng iyong computer ay maaaring mapahaba ng maraming taon at ang pinakamahusay na perpormans nito ay maaaring mapanatili sa pamamagitan ng regular na maintenance.</p><p>Ang pag-iwas sa mga problema bago pa man ito mangyari ay kasinghalaga ng pagwawasto sa mga ito kapag nangyari na. Isipin mo ito na katulad ng pag-aalaga sa sasakyan: ang regular na pag-tune-up at pagpapalit ng langis ay nakakaiwas sa malubhang sira at mahal na pagkukumpuni. Ang pagpapanatili ng computer ay tumutulong dito na magkaroon ng mga sumusunod:</p><ol style=\"list-style-type: decimal;\"><li><strong>Extended device lifespan </strong>(Pinalawig na buhay ng aparato) - ang tamang pagpapanatili ay maaaring magdagdag ng mga taon sa buhay ng iyong computer</li><li><strong>Improved system performance</strong> (Pinahusay na pagganap ng sistema) - ang regular na paglilinis ay nagpapanatili ng mas mabilis na takbo ng iyong PC</li><li><strong>Enhanced data security </strong>(Pinahusay na seguridad ng datos) - ang na-update na software ay nagpoprotekta laban sa mga banta tulad ng malware</li><li><strong>Reduced repair costs</strong> (Nabawasan ang mga gastos sa pagkukumpuni) - mas mura ang magagastos kapag naiwasan ang mga problema kaysa sa paulit-ulit na g-aayos ng mga ito</li><li><strong>Better user experience </strong>(Mas magandang karanasan ng gumagamit) - ang pagpapanatiling maayos na computer ay mas maaasahan at tumutugon nang mas mabilis.</li></ol><table><thead><tr><th><p>Medyo nalilito ka ba tungkol sa mga Komponent ng Computer Hardware Servicing? Huwag nang mag-alala! Ang paksang ito ay isang paunang kaalaman lamang upang magkaroon ka ng ideya sa mga susunod na aralin upang hindi ka malito sa mga susunod na aralin.</p></th></tr></thead></table><p>Nasa dulo ka na ng unang aralin. Mahusay sa pagtatapos ng unang aralin. Susunod na hakbang ay ang pangwakas na pagsusuri para sa buong aralin. Maaari mo itong gawin anumang oras. Kung nais mong suriin o muling basahin ang aralin, huwag mag-atubiling gawin ito! Tandaan mo lang, hindi mo maaring ulitin ang huling pagsusuri, at hindi ka pwedeng huminto habang sumasagot. Ang tapat na sagot ang aming prayoridad, at hinihimok namin kayong umiwas sa anumang uri ng pandaraya.</p>",
@@ -1289,17 +1309,17 @@
         "contentLayout": "text"
       },
       {
-        "id": 1775983898624,
+        "id": 1776121484165,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 12,
+        "order": 13,
         "title": "",
         "caption": "",
         "content": "",
         "fileName": null,
         "questions": [
           {
-            "id": 1775983898623,
+            "id": 1776121484164,
             "skill": "Critical Thinking",
             "options": [
               "Mabagal na takbo ng pag-download (slow download spee",
@@ -1314,10 +1334,10 @@
         ]
       },
       {
-        "id": 1775983898625,
+        "id": 1776121484167,
         "file": null,
         "type": "references",
-        "order": 13,
+        "order": 14,
         "title": "",
         "caption": "",
         "content": "https://medium.com/@zargull/the-importance-of-computers-in-the-modern-world-cf80eb3ecf0c\nhttps://ticktocktech.com/blog/2022/08/28/what-is-computer-hardware-servicing-and-how-is-it-done-in-2022/\nhttps://umatechnology.org/what-is-computer-hardware-servicing/\nhttps://mefmobile.org/what-is-computer-hardware-servicing/\nhttps://www.coursera.org/articles/what-is-artificial-intelligence?msockid=133d0c738b796b820b6e1a398a6d6a23\nhttps://www.oracle.com/asean/internet-of-things/\nhttps://www.teamviewer.com/apac/insights/remote-servicing-in-modern-business-operations/\nhttps://www.geeksforgeeks.org/python/virtual-reality-vs-augmented-reality-whats-the-difference/\nhttps://ticktocktech.com/blog/2022/08/28/what-is-computer-hardware-servicing-and-how-is-it-done-in-2022/#google_vignette\nhttps://www.geeksforgeeks.org/computer-science-fundamentals/computer-hardware/\nhttps://rpatoolstutorial.com/basic-operations-of-computer/\nhttps://ncert.nic.in/vocational/pdf/keit104.pdf\nhttps://www.techallabout.com/computer-hardware-troubleshooting-a-comprehensive-guide/\nhttps://www.hp.com/us-en/shop/tech-takes/pc-maintenance-and-repair-tips?pStoreID=techsoup%27%5B0%5D&msockid=377c7f12845d6e621d65697d85d56f25",
@@ -1326,7 +1346,7 @@
     ],
     "diagnosticQuestions": [
       {
-        "id": 1775983898731,
+        "id": 1776121484273,
         "skill": "Critical Thinking",
         "options": [
           "Pag-aayos (Repairing)",
@@ -1339,7 +1359,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898732,
+        "id": 1776121484274,
         "skill": "Analytical Thinking",
         "options": [
           "Mas bumubuti ang performance nito",
@@ -1352,7 +1372,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898733,
+        "id": 1776121484275,
         "skill": "Memorization",
         "options": [
           "Pagiging Matipid sa Gastos (Cost Efficiency)",
@@ -1365,7 +1385,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898734,
+        "id": 1776121484276,
         "skill": "Technical Comprehension",
         "options": [
           "Performance",
@@ -1378,7 +1398,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898735,
+        "id": 1776121484277,
         "skill": "Memorization",
         "options": [
           "Remote Servicing (Serbisyong Malayo)",
@@ -1393,7 +1413,7 @@
     ],
     "reviewQuestions": [
       {
-        "id": 1775983898681,
+        "id": 1776121484223,
         "skill": "Critical Thinking",
         "options": [
           "Pag-aayos (Repairing)",
@@ -1406,7 +1426,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898682,
+        "id": 1776121484224,
         "skill": "Analytical Thinking",
         "options": [
           "Mas bumubuti ang performance nito",
@@ -1419,7 +1439,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898683,
+        "id": 1776121484225,
         "skill": "Memorization",
         "options": [
           "Pagiging Matipid sa Gastos (Cost Efficiency)",
@@ -1432,7 +1452,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898684,
+        "id": 1776121484226,
         "skill": "Technical Comprehension",
         "options": [
           "Performance",
@@ -1445,7 +1465,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898685,
+        "id": 1776121484227,
         "skill": "Memorization",
         "options": [
           "Remote Servicing (Serbisyong Malayo)",
@@ -1458,7 +1478,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898686,
+        "id": 1776121484228,
         "skill": "Technical Comprehension",
         "options": [
           "Sustainability Concerns",
@@ -1471,7 +1491,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1775983898687,
+        "id": 1776121484229,
         "skill": "Analytical Thinking",
         "options": [
           "Inputting Data (Paglalagay ng Datos)",
@@ -1484,7 +1504,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1775983898688,
+        "id": 1776121484230,
         "skill": "Problem Solving",
         "options": [
           "Pag-unplug (Unplugging)",
@@ -1497,7 +1517,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1775983898689,
+        "id": 1776121484231,
         "skill": "Problem Solving",
         "options": [
           "oras at mahal na gastos (time and expensive costs)",
@@ -1510,7 +1530,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898690,
+        "id": 1776121484232,
         "skill": "Critical Thinking",
         "options": [
           "Mabagal na takbo ng pag-download (slow download spee",
@@ -1525,7 +1545,7 @@
     ],
     "finalQuestions": [
       {
-        "id": 1775983898691,
+        "id": 1776121484233,
         "skill": "Analytical Thinking",
         "options": [
           "Ang proseso ng paggawa ng software para sa mga computer",
@@ -1538,7 +1558,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898692,
+        "id": 1776121484234,
         "skill": "Memorization",
         "options": [
           "Regular na diagnosis at maintenance",
@@ -1551,7 +1571,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898693,
+        "id": 1776121484235,
         "skill": "Problem Solving",
         "options": [
           "Subukang ayusin pa rin kahit walang kagamitan",
@@ -1564,7 +1584,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898694,
+        "id": 1776121484236,
         "skill": "Technical Comprehension",
         "options": [
           "Pagganap (Performance)",
@@ -1577,7 +1597,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1775983898695,
+        "id": 1776121484237,
         "skill": "Problem Solving",
         "options": [
           "Kaligtasan at Pagganap (Safety and Performance)",
@@ -1590,7 +1610,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898696,
+        "id": 1776121484238,
         "skill": "Technical Comprehension",
         "options": [
           "Artificial Intelligence – dahil gumagawa ng awtomatikong desisyon ang mga device",
@@ -1603,7 +1623,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898697,
+        "id": 1776121484239,
         "skill": "Memorization",
         "options": [
           "Artificial Intelligence",
@@ -1616,7 +1636,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898698,
+        "id": 1776121484240,
         "skill": "Technical Comprehension",
         "options": [
           "Inputting Data",
@@ -1629,7 +1649,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898699,
+        "id": 1776121484241,
         "skill": "Problem Solving",
         "options": [
           "Implement solutions",
@@ -1642,7 +1662,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1775983898700,
+        "id": 1776121484242,
         "skill": "Analytical Thinking",
         "options": [
           "Pag-click ng mouse upang magbukas ng folder",
@@ -1655,7 +1675,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898701,
+        "id": 1776121484243,
         "skill": "Critical Thinking",
         "options": [
           "Motherboard",
@@ -1668,7 +1688,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898702,
+        "id": 1776121484244,
         "skill": "Critical Thinking",
         "options": [
           "Regular na maintenance, pag-upgrade ng mga bahagi kung kinakailangan, at pagrerecycle ng mga lumang pyesa",
@@ -1681,7 +1701,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898703,
+        "id": 1776121484245,
         "skill": "Critical Thinking",
         "options": [
           "Ipagpatuloy ang assembly at i-install ang power supply sa huli",
@@ -1694,7 +1714,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1775983898704,
+        "id": 1776121484246,
         "skill": "Memorization",
         "options": [
           "Artificial Intelligence (AI)",
@@ -1702,12 +1722,12 @@
           "Sustainability Concerns",
           "Internet of Things (IoT)"
         ],
-        "question": "Isang teknisyan ang inatasang ayusin ang isang device na tila may sensor, na ginagamit ng consumer upang ikonekta ang iba pang device sa kanilang bahay sa pamamagitan ng internet. Aling trend ng CHS ang ipinapakita rito?",
+        "question": "Isang teknisyan ang inatasang ayusin ang isang device na tila may sensor, na ginagamit ng consumer upang ikonekta ang iba pang device sa kanilang bahay sa pamamagitan ng internet. Aling trend ng CHS ang ipinapakita rito? Artificial Intelligence (AI) Remote Servicing Sustainability Concerns Internet of Things (IoT)",
         "questionType": "Situational",
-        "correctAnswer": 1
+        "correctAnswer": 3
       },
       {
-        "id": 1775983898705,
+        "id": 1776121484247,
         "skill": "Analytical Thinking",
         "options": [
           "Pagpapanatili ng computer hardware at pagsasagawa ng regular na diagnosis",
@@ -1715,12 +1735,12 @@
           "Paglikha ng code upang magawa ang isang karakter sa laro na tumalon gamit ang development software",
           "Pagbuo ng mga schematics para sa arkitektura ng network ng isang kompanya"
         ],
-        "question": "Natuklasan ni Claire na ang paglilinis ng system unit ng computer ng kanyang kaibigan kada buwan ay nakatutulong upang mabawasan ang dalas ng pagdadala ng computer sa teknisyan para ipagawa. Aling pamamaraan ng CHS ang ipinapakita rito?",
+        "question": "Natuklasan ni Claire na ang paglilinis ng system unit ng computer ng kanyang kaibigan kada buwan ay nakatutulong upang mabawasan ang dalas ng pagdadala ng computer sa teknisyan para ipagawa. Aling pamamaraan ng CHS ang ipinapakita rito? Pagpapanatili ng computer hardware at pagsasagawa ng regular na diagnosis Paggamit ng mga kagamitan upang mag-solder ng mga resistor sa electric circuit board ng isang appliance Paglikha ng code upang magawa ang isang karakter sa laro na tumalon gamit ang development software Pagbuo ng mga schematics para sa arkitektura ng network ng isang kompanya",
         "questionType": "Situational",
         "correctAnswer": 1
       },
       {
-        "id": 1775983898721,
+        "id": 1776121484263,
         "skill": "Critical Thinking",
         "options": [
           "Pag-aayos (Repairing)",
@@ -1733,7 +1753,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898722,
+        "id": 1776121484264,
         "skill": "Analytical Thinking",
         "options": [
           "Mas bumubuti ang performance nito",
@@ -1746,7 +1766,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898723,
+        "id": 1776121484265,
         "skill": "Memorization",
         "options": [
           "Pagiging Matipid sa Gastos (Cost Efficiency)",
@@ -1759,7 +1779,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898724,
+        "id": 1776121484266,
         "skill": "Technical Comprehension",
         "options": [
           "Performance",
@@ -1772,7 +1792,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898725,
+        "id": 1776121484267,
         "skill": "Memorization",
         "options": [
           "Remote Servicing (Serbisyong Malayo)",
@@ -1785,7 +1805,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898726,
+        "id": 1776121484268,
         "skill": "Technical Comprehension",
         "options": [
           "Sustainability Concerns",
@@ -1798,7 +1818,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1775983898727,
+        "id": 1776121484269,
         "skill": "Analytical Thinking",
         "options": [
           "Inputting Data (Paglalagay ng Datos)",
@@ -1811,7 +1831,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1775983898728,
+        "id": 1776121484270,
         "skill": "Problem Solving",
         "options": [
           "oras at mahal na gastos (time and expensive costs)",
@@ -1824,7 +1844,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898729,
+        "id": 1776121484271,
         "skill": "Critical Thinking",
         "options": [
           "Mabagal na takbo ng pag-download (slow download spee",
@@ -1837,7 +1857,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1775983898730,
+        "id": 1776121484272,
         "skill": "Problem Solving",
         "options": [
           "Pag-unplug (Unplugging)",
@@ -1850,7 +1870,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1775983898706,
+        "id": 1776121484248,
         "skill": "Analytical Thinking",
         "options": [
           "Ang proseso ng paggawa ng software para sa mga computer",
@@ -1863,7 +1883,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898707,
+        "id": 1776121484249,
         "skill": "Memorization",
         "options": [
           "Regular na diagnosis at maintenance",
@@ -1876,7 +1896,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898708,
+        "id": 1776121484250,
         "skill": "Problem Solving",
         "options": [
           "Subukang ayusin pa rin kahit walang kagamitan",
@@ -1889,7 +1909,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898709,
+        "id": 1776121484251,
         "skill": "Technical Comprehension",
         "options": [
           "Pagganap (Performance)",
@@ -1902,7 +1922,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1775983898710,
+        "id": 1776121484252,
         "skill": "Problem Solving",
         "options": [
           "Kaligtasan at Pagganap (Safety and Performance)",
@@ -1915,7 +1935,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898711,
+        "id": 1776121484253,
         "skill": "Technical Comprehension",
         "options": [
           "Artificial Intelligence – dahil gumagawa ng awtomatikong desisyon ang mga device",
@@ -1928,7 +1948,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898712,
+        "id": 1776121484254,
         "skill": "Memorization",
         "options": [
           "Artificial Intelligence",
@@ -1941,7 +1961,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898713,
+        "id": 1776121484255,
         "skill": "Technical Comprehension",
         "options": [
           "Inputting Data",
@@ -1954,7 +1974,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898714,
+        "id": 1776121484256,
         "skill": "Problem Solving",
         "options": [
           "Implement solutions",
@@ -1967,7 +1987,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1775983898715,
+        "id": 1776121484257,
         "skill": "Analytical Thinking",
         "options": [
           "Pag-click ng mouse upang magbukas ng folder",
@@ -1980,7 +2000,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898716,
+        "id": 1776121484258,
         "skill": "Critical Thinking",
         "options": [
           "Motherboard",
@@ -1993,7 +2013,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1775983898717,
+        "id": 1776121484259,
         "skill": "Critical Thinking",
         "options": [
           "Regular na maintenance, pag-upgrade ng mga bahagi kung kinakailangan, at pagrerecycle ng mga lumang pyesa",
@@ -2006,7 +2026,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1775983898718,
+        "id": 1776121484260,
         "skill": "Critical Thinking",
         "options": [
           "Ipagpatuloy ang assembly at i-install ang power supply sa huli",
@@ -2019,7 +2039,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1775983898719,
+        "id": 1776121484261,
         "skill": "Memorization",
         "options": [
           "Artificial Intelligence (AI)",
@@ -2029,10 +2049,10 @@
         ],
         "question": "Isa itong trend sa Computer Hardware Servicing (CHS) kung saan ang mga device na karaniwang matatagpuan sa loob ng bahay ay nagiging functional dahil nilagyan ng mga sensor, software, at iba pang teknolohiya, na may layuning makipag-ugnayan at magpalitan ng datos sa iba pang device na konektado sa internet.",
         "questionType": "Easy",
-        "correctAnswer": 1
+        "correctAnswer": 3
       },
       {
-        "id": 1775983898720,
+        "id": 1776121484262,
         "skill": "Analytical Thinking",
         "options": [
           "Pagpapanatili ng computer hardware at pagsasagawa ng regular na diagnosis",

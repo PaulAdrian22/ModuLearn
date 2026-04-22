@@ -78,7 +78,7 @@ const CONSTANTS = {
   TOTAL_SKILLS: 5,                        // 5 skills total
 
   // Question counts per assessment type
-  INITIAL_QUESTIONS_PER_SKILL: 7,         // 7 questions per skill = 35 total
+  INITIAL_QUESTIONS_PER_LESSON: 5,        // 5 situational questions per lesson = 35 total
   INITIAL_TOTAL_QUESTIONS: 35,
   DIAGNOSTIC_QUESTIONS_MIN: 5,            // 5 or 10 questions
   DIAGNOSTIC_QUESTIONS_MAX: 10,
@@ -405,17 +405,20 @@ const computeLessonMastery = (reviewL, simulationL, finalL) => {
 // ==============================================
 
 /**
- * Compute Overall Mastery for a skill
- * 
- * M_k^{overall} = M_k^{IA} + M_k^{lessons}
- * Where M_k^{lessons} = TMLesson (sum of all WMLesson)
+ * Compute Overall Mastery for a skill.
+ *
+ * Initial assessment is kept for calibration and analytics only.
+ * Mastery status/progress is based on lesson mastery accumulation.
+ *
+ * M_k^{overall} = M_k^{lessons} = TMLesson
  * 
  * @param {number} wmInitial - WMInitial value for the skill
  * @param {number} tmLesson - TMLesson value (sum of all WMLesson for this skill)
  * @returns {object} { overallMastery, isMastered }
  */
 const computeOverallMastery = (wmInitial, tmLesson) => {
-  const overallMastery = round6(wmInitial + tmLesson);
+  void wmInitial;
+  const overallMastery = round6(tmLesson || 0);
   const isMastered = overallMastery >= CONSTANTS.MASTERY_THRESHOLD;
 
   return {
@@ -593,25 +596,85 @@ const prepareRetakeQuestions = (previousResponses) => {
 
 /**
  * Select questions for Initial Assessment.
- * 35 questions total (7 per skill), all Situational, from overall question list.
+ * 35 questions total (5 per lesson across 7 lessons), all Situational.
+ * Each lesson selection prioritizes unique skill coverage.
  * 
  * @param {Array<object>} allQuestions - All available questions
  * @returns {Array<object>} Selected questions
  */
 const selectInitialAssessmentQuestions = (allQuestions) => {
   const selected = [];
+  const usedQuestionIds = new Set();
+  const questionsByLesson = new Map();
 
-  for (const skillName of SKILL_NAMES) {
-    const skillQuestions = allQuestions.filter(
-      q => q.SkillTag === skillName && q.QuestionType === 'Situational'
-    );
+  const questionList = Array.isArray(allQuestions) ? allQuestions : [];
 
-    // Select 7 per skill (no randomization for initial - knowledge is being assessed)
-    const count = Math.min(CONSTANTS.INITIAL_QUESTIONS_PER_SKILL, skillQuestions.length);
-    selected.push(...skillQuestions.slice(0, count));
+  for (const question of questionList) {
+    const lessonOrder = Number.parseInt(question?.LessonOrder, 10);
+    const questionType = String(question?.QuestionType || '').trim().toLowerCase();
+    const skillName = String(question?.SkillTag || '').trim();
+
+    if (!Number.isFinite(lessonOrder)) continue;
+    if (lessonOrder < 1 || lessonOrder > CONSTANTS.TOTAL_LESSONS) continue;
+    if (questionType !== 'situational') continue;
+    if (!SKILL_NAMES.includes(skillName)) continue;
+
+    if (!questionsByLesson.has(lessonOrder)) {
+      const skillBuckets = new Map();
+      SKILL_NAMES.forEach((name) => skillBuckets.set(name, []));
+      questionsByLesson.set(lessonOrder, skillBuckets);
+    }
+
+    questionsByLesson.get(lessonOrder).get(skillName).push(question);
   }
 
-  return selected;
+  for (let lessonOrder = 1; lessonOrder <= CONSTANTS.TOTAL_LESSONS; lessonOrder += 1) {
+    const lessonSkillBuckets = questionsByLesson.get(lessonOrder);
+    if (!lessonSkillBuckets) continue;
+
+    const lessonSelected = [];
+
+    // Prioritize one unique skill per pick to guarantee coverage.
+    for (const skillName of SKILL_NAMES) {
+      const skillQuestions = lessonSkillBuckets.get(skillName) || [];
+      const candidate = skillQuestions.find((question) => !usedQuestionIds.has(question.QuestionID));
+
+      if (!candidate) continue;
+
+      lessonSelected.push(candidate);
+      usedQuestionIds.add(candidate.QuestionID);
+
+      if (lessonSelected.length >= CONSTANTS.INITIAL_QUESTIONS_PER_LESSON) {
+        break;
+      }
+    }
+
+    if (lessonSelected.length < CONSTANTS.INITIAL_QUESTIONS_PER_LESSON) {
+      const fallbackPool = [];
+      lessonSkillBuckets.forEach((skillQuestions) => {
+        skillQuestions.forEach((question) => {
+          if (!usedQuestionIds.has(question.QuestionID)) {
+            fallbackPool.push(question);
+          }
+        });
+      });
+
+      fallbackPool.sort((a, b) => Number(a.QuestionID || 0) - Number(b.QuestionID || 0));
+
+      for (const candidate of fallbackPool) {
+        lessonSelected.push(candidate);
+        usedQuestionIds.add(candidate.QuestionID);
+
+        if (lessonSelected.length >= CONSTANTS.INITIAL_QUESTIONS_PER_LESSON) {
+          break;
+        }
+      }
+    }
+
+    selected.push(...lessonSelected.slice(0, CONSTANTS.INITIAL_QUESTIONS_PER_LESSON));
+  }
+
+  return selected.slice(0, CONSTANTS.INITIAL_TOTAL_QUESTIONS);
 };
 
 /**

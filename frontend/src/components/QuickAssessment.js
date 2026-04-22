@@ -141,6 +141,12 @@ const QuickAssessment = ({ questions, onComplete, onCancel, topicTitle, moduleId
     }
   };
 
+  const notifyAchievementRefresh = () => {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('achievementMetricsUpdated'));
+    }
+  };
+
   const handleSubmit = async () => {
     const updatedQuestionTimes = updateCurrentQuestionTime();
     setQuestionTimes(updatedQuestionTimes);
@@ -197,6 +203,8 @@ const QuickAssessment = ({ questions, onComplete, onCancel, topicTitle, moduleId
     } catch (err) {
       console.error('Error updating BKT:', err);
     }
+
+    notifyAchievementRefresh();
   };
 
   const handleRetry = () => {

@@ -7,7 +7,7 @@
     "Description": "<div>This lesson focuses on the basic concepts of computer networks and how devices such as computers, phones, and printers connect to communicate and share resources like files, internet access, and printers. Basic networking emphasizes simple configurations without advanced security or performance optimization, helping build foundational skills, with tasks that include how devices connect, how data is transmitted safely, and how common network issues are identified and resolved.<sup>[1][2]</sup></div><p><br></p><p><strong>Learning Objectives:</strong></p><p>This lesson aims to:</p><ol style=\"list-style-type: decimal;\"><li>identify and describe basic network types such as PAN, LAN, MAN, and WAN, and recognize real-world examples of each;</li><li>explain common network topologies including star, bus, and ring, and describe the functions of key networking devices such as hubs, switches, and routers; and</li><li>outline the basic layers of the OSI model and explain TCP/IP fundamentals to understand how data flows across networks and support simple hands-on network setup.</li></ol>",
     "sections": [
       {
-        "id": 1776093625714,
+        "id": 1776123300092,
         "file": null,
         "type": "topic",
         "order": 1,
@@ -17,7 +17,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625715,
+        "id": 1776123300093,
         "file": null,
         "type": "paragraph",
         "order": 2,
@@ -29,7 +29,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625716,
+        "id": 1776123300094,
         "file": null,
         "type": "subtopic",
         "order": 3,
@@ -39,7 +39,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625717,
+        "id": 1776123300095,
         "file": null,
         "type": "paragraph",
         "order": 4,
@@ -51,7 +51,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625720,
+        "id": 1776123300098,
         "file": null,
         "type": "review-multiple-choice",
         "order": 5,
@@ -61,7 +61,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093625718,
+            "id": 1776123300096,
             "skill": "Memorization",
             "options": [
               "Operating system",
@@ -74,7 +74,7 @@
             "correctAnswer": 1
           },
           {
-            "id": 1776093625719,
+            "id": 1776123300097,
             "skill": "Technical Comprehension",
             "options": [
               "To increase storage",
@@ -89,7 +89,7 @@
         ]
       },
       {
-        "id": 1776093625721,
+        "id": 1776123300099,
         "file": null,
         "type": "topic",
         "order": 6,
@@ -99,7 +99,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625722,
+        "id": 1776123300100,
         "file": null,
         "type": "paragraph",
         "order": 7,
@@ -111,7 +111,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625725,
+        "id": 1776123300103,
         "file": null,
         "type": "review-multiple-choice",
         "order": 8,
@@ -121,7 +121,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093625723,
+            "id": 1776123300101,
             "skill": "Memorization",
             "options": [
               "Network security",
@@ -134,7 +134,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093625724,
+            "id": 1776123300102,
             "skill": "Technical Comprehension",
             "options": [
               "Removes storage devices",
@@ -149,7 +149,7 @@
         ]
       },
       {
-        "id": 1776093625726,
+        "id": 1776123300104,
         "file": null,
         "type": "topic",
         "order": 9,
@@ -159,7 +159,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625727,
+        "id": 1776123300105,
         "file": null,
         "type": "paragraph",
         "order": 10,
@@ -171,25 +171,25 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625728,
+        "id": 1776123300106,
         "file": null,
         "type": "image",
         "order": 11,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093625893-1.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300283-1.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093625893-1.png"
+            "fileName": "docx-lesson-7-1776123300283-1.png"
           }
         ],
         "layout": "single",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093625893-1.png",
-        "fileName": "docx-lesson-7-1776093625893-1.png"
+        "content": "/uploads/lessons/docx-lesson-7-1776123300283-1.png",
+        "fileName": "docx-lesson-7-1776123300283-1.png"
       },
       {
-        "id": 1776093625729,
+        "id": 1776123300107,
         "file": null,
         "type": "paragraph",
         "order": 12,
@@ -201,7 +201,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625730,
+        "id": 1776123300108,
         "file": null,
         "type": "subtopic",
         "order": 13,
@@ -211,7 +211,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625731,
+        "id": 1776123300109,
         "file": null,
         "type": "paragraph",
         "order": 14,
@@ -223,7 +223,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625732,
+        "id": 1776123300110,
         "file": null,
         "type": "subtopic",
         "order": 15,
@@ -233,7 +233,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625733,
+        "id": 1776123300111,
         "file": null,
         "type": "paragraph",
         "order": 16,
@@ -245,7 +245,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625734,
+        "id": 1776123300112,
         "file": null,
         "type": "subtopic",
         "order": 17,
@@ -255,7 +255,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625735,
+        "id": 1776123300113,
         "file": null,
         "type": "paragraph",
         "order": 18,
@@ -267,37 +267,37 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625736,
+        "id": 1776123300114,
         "file": null,
         "type": "image",
         "order": 19,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093625973-2.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300378-2.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093625973-2.png"
+            "fileName": "docx-lesson-7-1776123300378-2.png"
           }
         ],
         "layout": "text-right",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093625973-2.png",
-        "fileName": "docx-lesson-7-1776093625973-2.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300378-2.png",
+        "fileName": "docx-lesson-7-1776123300378-2.png",
         "sideTexts": [
           "<ol style=\"list-style-type: decimal;\"><li><strong>Local Area Network (LAN)</strong></li></ol>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093625973-2.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300378-2.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093625973-2.png"
+              "fileName": "docx-lesson-7-1776123300378-2.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625737,
+        "id": 1776123300115,
         "file": null,
         "type": "paragraph",
         "order": 20,
@@ -309,7 +309,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625738,
+        "id": 1776123300116,
         "file": null,
         "type": "subtopic",
         "order": 21,
@@ -319,7 +319,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625739,
+        "id": 1776123300117,
         "file": null,
         "type": "paragraph",
         "order": 22,
@@ -331,7 +331,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625740,
+        "id": 1776123300118,
         "file": null,
         "type": "subtopic",
         "order": 23,
@@ -341,7 +341,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625741,
+        "id": 1776123300119,
         "file": null,
         "type": "paragraph",
         "order": 24,
@@ -353,7 +353,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625742,
+        "id": 1776123300120,
         "file": null,
         "type": "subtopic",
         "order": 25,
@@ -363,7 +363,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625743,
+        "id": 1776123300121,
         "file": null,
         "type": "paragraph",
         "order": 26,
@@ -375,7 +375,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625744,
+        "id": 1776123300122,
         "file": null,
         "type": "subtopic",
         "order": 27,
@@ -385,7 +385,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625745,
+        "id": 1776123300123,
         "file": null,
         "type": "paragraph",
         "order": 28,
@@ -397,37 +397,37 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625746,
+        "id": 1776123300124,
         "file": null,
         "type": "image",
         "order": 29,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626133-3.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300572-3.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626133-3.png"
+            "fileName": "docx-lesson-7-1776123300572-3.png"
           }
         ],
         "layout": "text-right",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626133-3.png",
-        "fileName": "docx-lesson-7-1776093626133-3.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300572-3.png",
+        "fileName": "docx-lesson-7-1776123300572-3.png",
         "sideTexts": [
           "<ol style=\"list-style-type: decimal;\"><li><strong>Metropolitan Area Network (MAN)</strong></li></ol>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626133-3.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300572-3.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626133-3.png"
+              "fileName": "docx-lesson-7-1776123300572-3.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625747,
+        "id": 1776123300125,
         "file": null,
         "type": "paragraph",
         "order": 30,
@@ -439,7 +439,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625748,
+        "id": 1776123300126,
         "file": null,
         "type": "subtopic",
         "order": 31,
@@ -449,7 +449,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625749,
+        "id": 1776123300127,
         "file": null,
         "type": "paragraph",
         "order": 32,
@@ -461,7 +461,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625750,
+        "id": 1776123300128,
         "file": null,
         "type": "subtopic",
         "order": 33,
@@ -471,7 +471,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625751,
+        "id": 1776123300129,
         "file": null,
         "type": "paragraph",
         "order": 34,
@@ -483,7 +483,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625752,
+        "id": 1776123300130,
         "file": null,
         "type": "subtopic",
         "order": 35,
@@ -493,7 +493,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625753,
+        "id": 1776123300131,
         "file": null,
         "type": "paragraph",
         "order": 36,
@@ -505,7 +505,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625754,
+        "id": 1776123300132,
         "file": null,
         "type": "subtopic",
         "order": 37,
@@ -515,7 +515,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625755,
+        "id": 1776123300133,
         "file": null,
         "type": "paragraph",
         "order": 38,
@@ -527,37 +527,37 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625756,
+        "id": 1776123300134,
         "file": null,
         "type": "image",
         "order": 39,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626277-4.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300701-4.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626277-4.png"
+            "fileName": "docx-lesson-7-1776123300701-4.png"
           }
         ],
         "layout": "text-right",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626277-4.png",
-        "fileName": "docx-lesson-7-1776093626277-4.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300701-4.png",
+        "fileName": "docx-lesson-7-1776123300701-4.png",
         "sideTexts": [
           "<ol style=\"list-style-type: decimal;\"><li><strong>Wide Area Network (WAN)</strong></li></ol>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626277-4.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300701-4.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626277-4.png"
+              "fileName": "docx-lesson-7-1776123300701-4.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625757,
+        "id": 1776123300135,
         "file": null,
         "type": "paragraph",
         "order": 40,
@@ -569,7 +569,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625758,
+        "id": 1776123300136,
         "file": null,
         "type": "subtopic",
         "order": 41,
@@ -579,7 +579,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625759,
+        "id": 1776123300137,
         "file": null,
         "type": "paragraph",
         "order": 42,
@@ -591,7 +591,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625760,
+        "id": 1776123300138,
         "file": null,
         "type": "subtopic",
         "order": 43,
@@ -601,7 +601,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625761,
+        "id": 1776123300139,
         "file": null,
         "type": "paragraph",
         "order": 44,
@@ -613,7 +613,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625762,
+        "id": 1776123300140,
         "file": null,
         "type": "subtopic",
         "order": 45,
@@ -623,7 +623,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625763,
+        "id": 1776123300141,
         "file": null,
         "type": "paragraph",
         "order": 46,
@@ -635,7 +635,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625764,
+        "id": 1776123300142,
         "file": null,
         "type": "subtopic",
         "order": 47,
@@ -645,7 +645,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625765,
+        "id": 1776123300143,
         "file": null,
         "type": "paragraph",
         "order": 48,
@@ -657,7 +657,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625766,
+        "id": 1776123300144,
         "file": null,
         "type": "subtopic",
         "order": 49,
@@ -667,7 +667,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625767,
+        "id": 1776123300145,
         "file": null,
         "type": "paragraph",
         "order": 50,
@@ -679,37 +679,37 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625768,
+        "id": 1776123300146,
         "file": null,
         "type": "image",
         "order": 51,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626506-5.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300923-5.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626506-5.png"
+            "fileName": "docx-lesson-7-1776123300923-5.png"
           }
         ],
         "layout": "text-right",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626506-5.png",
-        "fileName": "docx-lesson-7-1776093626506-5.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300923-5.png",
+        "fileName": "docx-lesson-7-1776123300923-5.png",
         "sideTexts": [
           "<ol style=\"list-style-type: decimal;\"><li><strong>Campus Area Network (CAN)</strong></li></ol>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626506-5.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300923-5.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626506-5.png"
+              "fileName": "docx-lesson-7-1776123300923-5.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625769,
+        "id": 1776123300147,
         "file": null,
         "type": "paragraph",
         "order": 52,
@@ -721,7 +721,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625770,
+        "id": 1776123300148,
         "file": null,
         "type": "subtopic",
         "order": 53,
@@ -731,7 +731,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625771,
+        "id": 1776123300149,
         "file": null,
         "type": "paragraph",
         "order": 54,
@@ -743,7 +743,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625772,
+        "id": 1776123300150,
         "file": null,
         "type": "subtopic",
         "order": 55,
@@ -753,7 +753,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625773,
+        "id": 1776123300151,
         "file": null,
         "type": "paragraph",
         "order": 56,
@@ -765,7 +765,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625774,
+        "id": 1776123300152,
         "file": null,
         "type": "subtopic",
         "order": 57,
@@ -775,7 +775,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625775,
+        "id": 1776123300153,
         "file": null,
         "type": "paragraph",
         "order": 58,
@@ -787,7 +787,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625776,
+        "id": 1776123300154,
         "file": null,
         "type": "subtopic",
         "order": 59,
@@ -797,7 +797,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625777,
+        "id": 1776123300155,
         "file": null,
         "type": "paragraph",
         "order": 60,
@@ -809,7 +809,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625782,
+        "id": 1776123300160,
         "file": null,
         "type": "review-multiple-choice",
         "order": 61,
@@ -819,7 +819,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093625778,
+            "id": 1776123300156,
             "skill": "Memorization",
             "options": [
               "LAN",
@@ -832,7 +832,7 @@
             "correctAnswer": 3
           },
           {
-            "id": 1776093625779,
+            "id": 1776123300157,
             "skill": "Memorization",
             "options": [
               "PAN",
@@ -845,7 +845,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093625780,
+            "id": 1776123300158,
             "skill": "Memorization",
             "options": [
               "LAN",
@@ -858,7 +858,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093625781,
+            "id": 1776123300159,
             "skill": "Memorization",
             "options": [
               "LAN",
@@ -873,7 +873,7 @@
         ]
       },
       {
-        "id": 1776093625783,
+        "id": 1776123300161,
         "file": null,
         "type": "topic",
         "order": 62,
@@ -883,7 +883,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625784,
+        "id": 1776123300162,
         "file": null,
         "type": "paragraph",
         "order": 63,
@@ -895,7 +895,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625785,
+        "id": 1776123300163,
         "file": null,
         "type": "subtopic",
         "order": 64,
@@ -905,37 +905,37 @@
         "fileName": null
       },
       {
-        "id": 1776093625786,
+        "id": 1776123300164,
         "file": null,
         "type": "image",
         "order": 65,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626529-6.png"
+            "fileName": "docx-lesson-7-1776123300955-6.png"
           }
         ],
         "layout": "text-right",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
-        "fileName": "docx-lesson-7-1776093626529-6.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
+        "fileName": "docx-lesson-7-1776123300955-6.png",
         "sideTexts": [
           "<ol style=\"list-style-type: decimal;\"><li><strong>Hubs</strong></li></ol>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626529-6.png"
+              "fileName": "docx-lesson-7-1776123300955-6.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625787,
+        "id": 1776123300165,
         "file": null,
         "type": "paragraph",
         "order": 66,
@@ -947,37 +947,37 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625788,
+        "id": 1776123300166,
         "file": null,
         "type": "image",
         "order": 67,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626532-7.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300959-7.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626532-7.png"
+            "fileName": "docx-lesson-7-1776123300959-7.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626532-7.png",
-        "fileName": "docx-lesson-7-1776093626532-7.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300959-7.png",
+        "fileName": "docx-lesson-7-1776123300959-7.png",
         "sideTexts": [
           "<p>The main function of a hub is to receive data from one device and transmit it to all other connected devices. It acts as a signal repeater, regenerating and strengthening signals before forwarding them to ensure data reaches all nodes within the network.</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626532-7.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300959-7.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626532-7.png"
+              "fileName": "docx-lesson-7-1776123300959-7.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625789,
+        "id": 1776123300167,
         "file": null,
         "type": "paragraph",
         "order": 68,
@@ -989,7 +989,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625790,
+        "id": 1776123300168,
         "file": null,
         "type": "paragraph",
         "order": 69,
@@ -1001,37 +1001,37 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625791,
+        "id": 1776123300169,
         "file": null,
         "type": "image",
         "order": 70,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626551-8.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123301021-8.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626551-8.png"
+            "fileName": "docx-lesson-7-1776123301021-8.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626551-8.png",
-        "fileName": "docx-lesson-7-1776093626551-8.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123301021-8.png",
+        "fileName": "docx-lesson-7-1776123301021-8.png",
         "sideTexts": [
           "<p>A switch is a networking device that connects multiple devices within a LAN and forwards data only to the intended recipient. It operates primarily at the data link layer of the OSI model and uses MAC addresses to direct traffic efficiently.</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626551-8.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123301021-8.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626551-8.png"
+              "fileName": "docx-lesson-7-1776123301021-8.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625792,
+        "id": 1776123300170,
         "file": null,
         "type": "subtopic",
         "order": 71,
@@ -1041,7 +1041,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625793,
+        "id": 1776123300171,
         "file": null,
         "type": "paragraph",
         "order": 72,
@@ -1053,37 +1053,37 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625794,
+        "id": 1776123300172,
         "file": null,
         "type": "image",
         "order": 73,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626593-9.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123301038-9.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626593-9.png"
+            "fileName": "docx-lesson-7-1776123301038-9.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626593-9.png",
-        "fileName": "docx-lesson-7-1776093626593-9.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123301038-9.png",
+        "fileName": "docx-lesson-7-1776123301038-9.png",
         "sideTexts": [
           "<p>A switch receives incoming data and examines the <strong>MAC address</strong> of the destination device. It then looks up this address in its internal forwarding table and sends the data <strong>only to the correct port</strong>. This targeted forwarding minimizes unnecessary traffic, reduces collisions, and significantly improves network efficiency and speed.</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626593-9.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123301038-9.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626593-9.png"
+              "fileName": "docx-lesson-7-1776123301038-9.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625795,
+        "id": 1776123300173,
         "file": null,
         "type": "paragraph",
         "order": 74,
@@ -1095,7 +1095,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625796,
+        "id": 1776123300174,
         "file": null,
         "type": "subtopic",
         "order": 75,
@@ -1105,7 +1105,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625797,
+        "id": 1776123300175,
         "file": null,
         "type": "paragraph",
         "order": 76,
@@ -1117,7 +1117,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625798,
+        "id": 1776123300176,
         "file": null,
         "type": "subtopic",
         "order": 77,
@@ -1127,7 +1127,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625799,
+        "id": 1776123300177,
         "file": null,
         "type": "paragraph",
         "order": 78,
@@ -1139,7 +1139,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625800,
+        "id": 1776123300178,
         "file": null,
         "type": "subtopic",
         "order": 79,
@@ -1149,7 +1149,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625801,
+        "id": 1776123300179,
         "file": null,
         "type": "paragraph",
         "order": 80,
@@ -1161,7 +1161,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625802,
+        "id": 1776123300180,
         "file": null,
         "type": "subtopic",
         "order": 81,
@@ -1171,7 +1171,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625803,
+        "id": 1776123300181,
         "file": null,
         "type": "paragraph",
         "order": 82,
@@ -1183,7 +1183,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625804,
+        "id": 1776123300182,
         "file": null,
         "type": "subtopic",
         "order": 83,
@@ -1193,7 +1193,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625805,
+        "id": 1776123300183,
         "file": null,
         "type": "paragraph",
         "order": 84,
@@ -1205,7 +1205,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625806,
+        "id": 1776123300184,
         "file": null,
         "type": "subtopic",
         "order": 85,
@@ -1215,7 +1215,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625807,
+        "id": 1776123300185,
         "file": null,
         "type": "paragraph",
         "order": 86,
@@ -1227,37 +1227,37 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625808,
+        "id": 1776123300186,
         "file": null,
         "type": "image",
         "order": 87,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626629-10.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123301106-10.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626629-10.png"
+            "fileName": "docx-lesson-7-1776123301106-10.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626629-10.png",
-        "fileName": "docx-lesson-7-1776093626629-10.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123301106-10.png",
+        "fileName": "docx-lesson-7-1776123301106-10.png",
         "sideTexts": [
           "<p>Bridges analyze incoming frames, filter traffic, and forward data selectively. They manage traffic flow and isolate collision domains, improving overall network efficiency.</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626629-10.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123301106-10.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626629-10.png"
+              "fileName": "docx-lesson-7-1776123301106-10.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625809,
+        "id": 1776123300187,
         "file": null,
         "type": "paragraph",
         "order": 88,
@@ -1269,7 +1269,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625810,
+        "id": 1776123300188,
         "file": null,
         "type": "subtopic",
         "order": 89,
@@ -1279,7 +1279,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625811,
+        "id": 1776123300189,
         "file": null,
         "type": "paragraph",
         "order": 90,
@@ -1291,7 +1291,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625812,
+        "id": 1776123300190,
         "file": null,
         "type": "subtopic",
         "order": 91,
@@ -1301,7 +1301,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625813,
+        "id": 1776123300191,
         "file": null,
         "type": "paragraph",
         "order": 92,
@@ -1313,7 +1313,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625814,
+        "id": 1776123300192,
         "file": null,
         "type": "subtopic",
         "order": 93,
@@ -1323,7 +1323,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625815,
+        "id": 1776123300193,
         "file": null,
         "type": "paragraph",
         "order": 94,
@@ -1335,7 +1335,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625816,
+        "id": 1776123300194,
         "file": null,
         "type": "subtopic",
         "order": 95,
@@ -1345,7 +1345,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625817,
+        "id": 1776123300195,
         "file": null,
         "type": "paragraph",
         "order": 96,
@@ -1357,7 +1357,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625818,
+        "id": 1776123300196,
         "file": null,
         "type": "subtopic",
         "order": 97,
@@ -1367,7 +1367,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625819,
+        "id": 1776123300197,
         "file": null,
         "type": "paragraph",
         "order": 98,
@@ -1379,7 +1379,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625820,
+        "id": 1776123300198,
         "file": null,
         "type": "subtopic",
         "order": 99,
@@ -1389,7 +1389,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625821,
+        "id": 1776123300199,
         "file": null,
         "type": "paragraph",
         "order": 100,
@@ -1401,7 +1401,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625822,
+        "id": 1776123300200,
         "file": null,
         "type": "paragraph",
         "order": 101,
@@ -1413,25 +1413,25 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625823,
+        "id": 1776123300201,
         "file": null,
         "type": "image",
         "order": 102,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626529-6.png"
+            "fileName": "docx-lesson-7-1776123300955-6.png"
           }
         ],
         "layout": "single",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
-        "fileName": "docx-lesson-7-1776093626529-6.png"
+        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
+        "fileName": "docx-lesson-7-1776123300955-6.png"
       },
       {
-        "id": 1776093625824,
+        "id": 1776123300202,
         "file": null,
         "type": "paragraph",
         "order": 103,
@@ -1443,37 +1443,37 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625825,
+        "id": 1776123300203,
         "file": null,
         "type": "image",
         "order": 104,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626529-6.png"
+            "fileName": "docx-lesson-7-1776123300955-6.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
-        "fileName": "docx-lesson-7-1776093626529-6.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
+        "fileName": "docx-lesson-7-1776123300955-6.png",
         "sideTexts": [
           "<p>A CSU/DSU connects a router to a digital telecommunication line. It <strong>converts digital data from the router into a format suitable for transmission over wide-area network circuits</strong>. When data is received, the CSU/DSU converts it back into a format the router can understand, ensuring proper synchronization and signal integrity.<sup>[13]</sup></p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626529-6.png"
+              "fileName": "docx-lesson-7-1776123300955-6.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625826,
+        "id": 1776123300204,
         "file": null,
         "type": "paragraph",
         "order": 105,
@@ -1485,43 +1485,43 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625827,
+        "id": 1776123300205,
         "file": null,
         "type": "image",
         "order": 106,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093627366-11.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123301822-11.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093627366-11.png"
+            "fileName": "docx-lesson-7-1776123301822-11.png"
           }
         ],
         "layout": "single",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093627366-11.png",
-        "fileName": "docx-lesson-7-1776093627366-11.png"
+        "content": "/uploads/lessons/docx-lesson-7-1776123301822-11.png",
+        "fileName": "docx-lesson-7-1776123301822-11.png"
       },
       {
-        "id": 1776093625828,
+        "id": 1776123300206,
         "file": null,
         "type": "image",
         "order": 107,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093627372-12.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123301826-12.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093627372-12.png"
+            "fileName": "docx-lesson-7-1776123301826-12.png"
           }
         ],
         "layout": "single",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093627372-12.png",
-        "fileName": "docx-lesson-7-1776093627372-12.png"
+        "content": "/uploads/lessons/docx-lesson-7-1776123301826-12.png",
+        "fileName": "docx-lesson-7-1776123301826-12.png"
       },
       {
-        "id": 1776093625829,
+        "id": 1776123300207,
         "file": null,
         "type": "paragraph",
         "order": 108,
@@ -1533,25 +1533,25 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625830,
+        "id": 1776123300208,
         "file": null,
         "type": "image",
         "order": 109,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093627380-13.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123301830-13.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093627380-13.png"
+            "fileName": "docx-lesson-7-1776123301830-13.png"
           }
         ],
         "layout": "single",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093627380-13.png",
-        "fileName": "docx-lesson-7-1776093627380-13.png"
+        "content": "/uploads/lessons/docx-lesson-7-1776123301830-13.png",
+        "fileName": "docx-lesson-7-1776123301830-13.png"
       },
       {
-        "id": 1776093625831,
+        "id": 1776123300209,
         "file": null,
         "type": "paragraph",
         "order": 110,
@@ -1563,7 +1563,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625832,
+        "id": 1776123300210,
         "file": null,
         "type": "subtopic",
         "order": 111,
@@ -1573,7 +1573,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625833,
+        "id": 1776123300211,
         "file": null,
         "type": "paragraph",
         "order": 112,
@@ -1585,7 +1585,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625834,
+        "id": 1776123300212,
         "file": null,
         "type": "subtopic",
         "order": 113,
@@ -1595,7 +1595,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625835,
+        "id": 1776123300213,
         "file": null,
         "type": "paragraph",
         "order": 114,
@@ -1607,7 +1607,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625836,
+        "id": 1776123300214,
         "file": null,
         "type": "subtopic",
         "order": 115,
@@ -1617,37 +1617,37 @@
         "fileName": null
       },
       {
-        "id": 1776093625837,
+        "id": 1776123300215,
         "file": null,
         "type": "image",
         "order": 116,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626529-6.png"
+            "fileName": "docx-lesson-7-1776123300955-6.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
-        "fileName": "docx-lesson-7-1776093626529-6.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
+        "fileName": "docx-lesson-7-1776123300955-6.png",
         "sideTexts": [
           "<ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Jumpers</strong> — small groups of pins on the card that you physically connect or disconnect to set configuration options.<sup>[13]</sup></li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>DIP switches</strong> — small plastic blocks of switches used similarly to jumpers.<sup>[13]</sup></li></ul>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626529-6.png"
+              "fileName": "docx-lesson-7-1776123300955-6.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625838,
+        "id": 1776123300216,
         "file": null,
         "type": "paragraph",
         "order": 117,
@@ -1659,7 +1659,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625839,
+        "id": 1776123300217,
         "file": null,
         "type": "paragraph",
         "order": 118,
@@ -1671,67 +1671,67 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625840,
+        "id": 1776123300218,
         "file": null,
         "type": "image",
         "order": 119,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626529-6.png"
+            "fileName": "docx-lesson-7-1776123300955-6.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
-        "fileName": "docx-lesson-7-1776093626529-6.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
+        "fileName": "docx-lesson-7-1776123300955-6.png",
         "sideTexts": [
           "<p><strong>External ISDN adapters<sup>[image-17]</sup></strong> are standalone devices that connect to a computer through a serial port, making them straightforward to install and easy to move between systems. Because they use the serial port's existing resources, no internal configuration is required. They are similar in concept to an external modem, but instead of converting between digital and analog signals like a modem does, an ISDN terminal adapter translates between two different <strong>digital</strong> formats.<sup>[13]</sup></p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626529-6.png"
+              "fileName": "docx-lesson-7-1776123300955-6.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625841,
+        "id": 1776123300219,
         "file": null,
         "type": "image",
         "order": 120,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626529-6.png"
+            "fileName": "docx-lesson-7-1776123300955-6.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
-        "fileName": "docx-lesson-7-1776093626529-6.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
+        "fileName": "docx-lesson-7-1776123300955-6.png",
         "sideTexts": [
           "<p><strong>Internal ISDN adapters<sup>[image-18]</sup></strong> are installed directly inside a computer as an expansion card, fitting into an available slot on the motherboard — much like a standard NIC in appearance. While they require a bit more effort to install, they are a cleaner and more permanent solution. When installing an internal adapter, you must ensure that both physical slot space and logical system resources (such as IRQ and memory addresses) are available. As with any adapter, downloading the latest drivers from the manufacturer's website before installation is strongly recommended.<sup>[13]</sup></p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626529-6.png"
+              "fileName": "docx-lesson-7-1776123300955-6.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625842,
+        "id": 1776123300220,
         "file": null,
         "type": "paragraph",
         "order": 121,
@@ -1743,37 +1743,37 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625843,
+        "id": 1776123300221,
         "file": null,
         "type": "image",
         "order": 122,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626529-6.png"
+            "fileName": "docx-lesson-7-1776123300955-6.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
-        "fileName": "docx-lesson-7-1776093626529-6.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
+        "fileName": "docx-lesson-7-1776123300955-6.png",
         "sideTexts": [
           "<p>A wireless access point receives data from a wired network and <strong>transmits it as radio signals. </strong>Wireless devices such as laptops and smartphones receive these signals and send responses back through the same radio channel. The WAP converts these wireless signals back into wired network data, enabling seamless wireless communication.<sup>[13]</sup></p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626529-6.png"
+              "fileName": "docx-lesson-7-1776123300955-6.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625844,
+        "id": 1776123300222,
         "file": null,
         "type": "paragraph",
         "order": 123,
@@ -1785,37 +1785,37 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625845,
+        "id": 1776123300223,
         "file": null,
         "type": "image",
         "order": 124,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626529-6.png"
+            "fileName": "docx-lesson-7-1776123300955-6.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
-        "fileName": "docx-lesson-7-1776093626529-6.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
+        "fileName": "docx-lesson-7-1776123300955-6.png",
         "sideTexts": [
           "<p>In practice, WAPs operate using an <strong>infrastructure mode<sup>[image-20]</sup></strong> wireless network design, as illustrated in figure below. In this setup, all wireless client devices communicate through the WAP rather than directly with each other. The WAP receives transmissions from wireless devices within its coverage range and forwards those signals onto the broader network — whether that is a private internal Ethernet network or the Internet. Depending on the size of the area to be covered, a deployment may use a <strong>single WAP</strong> for a small location such as a home or small office, or <strong>multiple WAPs</strong> for larger environments such as office buildings or campuses, where extended range and greater client capacity are required.<sup>[13]</sup></p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626529-6.png"
+              "fileName": "docx-lesson-7-1776123300955-6.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625846,
+        "id": 1776123300224,
         "file": null,
         "type": "paragraph",
         "order": 125,
@@ -1827,7 +1827,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625853,
+        "id": 1776123300231,
         "file": null,
         "type": "review-multiple-choice",
         "order": 126,
@@ -1837,7 +1837,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093625847,
+            "id": 1776123300225,
             "skill": "Memorization",
             "options": [
               "Router",
@@ -1850,7 +1850,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093625848,
+            "id": 1776123300226,
             "skill": "Technical Comprehension",
             "options": [
               "Hub",
@@ -1863,7 +1863,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093625849,
+            "id": 1776123300227,
             "skill": "Memorization",
             "options": [
               "Hub",
@@ -1876,7 +1876,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093625850,
+            "id": 1776123300228,
             "skill": "Memorization",
             "options": [
               "Router",
@@ -1889,7 +1889,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093625851,
+            "id": 1776123300229,
             "skill": "Memorization",
             "options": [
               "Router",
@@ -1902,7 +1902,7 @@
             "correctAnswer": 1
           },
           {
-            "id": 1776093625852,
+            "id": 1776123300230,
             "skill": "Memorization",
             "options": [
               "Router",
@@ -1917,7 +1917,7 @@
         ]
       },
       {
-        "id": 1776093625854,
+        "id": 1776123300232,
         "file": null,
         "type": "topic",
         "order": 127,
@@ -1927,7 +1927,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625855,
+        "id": 1776123300233,
         "file": null,
         "type": "paragraph",
         "order": 128,
@@ -1939,7 +1939,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625856,
+        "id": 1776123300234,
         "file": null,
         "type": "subtopic",
         "order": 129,
@@ -1949,7 +1949,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625857,
+        "id": 1776123300235,
         "file": null,
         "type": "paragraph",
         "order": 130,
@@ -1961,7 +1961,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625862,
+        "id": 1776123300240,
         "file": null,
         "type": "review-multiple-choice",
         "order": 131,
@@ -1971,7 +1971,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093625858,
+            "id": 1776123300236,
             "skill": "Memorization",
             "options": [
               "RJ-11 connector",
@@ -1984,7 +1984,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093625859,
+            "id": 1776123300237,
             "skill": "Memorization",
             "options": [
               "Telephone cable",
@@ -1997,7 +1997,7 @@
             "correctAnswer": 3
           },
           {
-            "id": 1776093625860,
+            "id": 1776123300238,
             "skill": "Technical Comprehension",
             "options": [
               "Because it uses the same wiring pattern on both ends",
@@ -2010,7 +2010,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093625861,
+            "id": 1776123300239,
             "skill": "Problem Solving",
             "options": [
               "To check if the cable is long enough",
@@ -2025,7 +2025,7 @@
         ]
       },
       {
-        "id": 1776093625863,
+        "id": 1776123300241,
         "file": null,
         "type": "topic",
         "order": 132,
@@ -2035,7 +2035,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625864,
+        "id": 1776123300242,
         "file": null,
         "type": "paragraph",
         "order": 133,
@@ -2047,7 +2047,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625865,
+        "id": 1776123300243,
         "file": null,
         "type": "subtopic",
         "order": 134,
@@ -2057,7 +2057,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625866,
+        "id": 1776123300244,
         "file": null,
         "type": "paragraph",
         "order": 135,
@@ -2069,7 +2069,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625867,
+        "id": 1776123300245,
         "file": null,
         "type": "subtopic",
         "order": 136,
@@ -2079,7 +2079,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625868,
+        "id": 1776123300246,
         "file": null,
         "type": "paragraph",
         "order": 137,
@@ -2091,7 +2091,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625869,
+        "id": 1776123300247,
         "file": null,
         "type": "subtopic",
         "order": 138,
@@ -2101,7 +2101,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625870,
+        "id": 1776123300248,
         "file": null,
         "type": "paragraph",
         "order": 139,
@@ -2113,7 +2113,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625871,
+        "id": 1776123300249,
         "file": null,
         "type": "subtopic",
         "order": 140,
@@ -2123,7 +2123,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625872,
+        "id": 1776123300250,
         "file": null,
         "type": "paragraph",
         "order": 141,
@@ -2135,7 +2135,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625873,
+        "id": 1776123300251,
         "file": null,
         "type": "subtopic",
         "order": 142,
@@ -2145,7 +2145,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625874,
+        "id": 1776123300252,
         "file": null,
         "type": "paragraph",
         "order": 143,
@@ -2157,7 +2157,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625875,
+        "id": 1776123300253,
         "file": null,
         "type": "subtopic",
         "order": 144,
@@ -2167,7 +2167,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625876,
+        "id": 1776123300254,
         "file": null,
         "type": "paragraph",
         "order": 145,
@@ -2179,7 +2179,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625877,
+        "id": 1776123300255,
         "file": null,
         "type": "subtopic",
         "order": 146,
@@ -2189,7 +2189,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625878,
+        "id": 1776123300256,
         "file": null,
         "type": "paragraph",
         "order": 147,
@@ -2201,7 +2201,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625879,
+        "id": 1776123300257,
         "file": null,
         "type": "subtopic",
         "order": 148,
@@ -2211,7 +2211,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625880,
+        "id": 1776123300258,
         "file": null,
         "type": "paragraph",
         "order": 149,
@@ -2223,7 +2223,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625881,
+        "id": 1776123300259,
         "file": null,
         "type": "subtopic",
         "order": 150,
@@ -2233,7 +2233,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625882,
+        "id": 1776123300260,
         "file": null,
         "type": "paragraph",
         "order": 151,
@@ -2245,7 +2245,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625883,
+        "id": 1776123300261,
         "file": null,
         "type": "subtopic",
         "order": 152,
@@ -2255,7 +2255,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625884,
+        "id": 1776123300262,
         "file": null,
         "type": "paragraph",
         "order": 153,
@@ -2267,7 +2267,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625885,
+        "id": 1776123300263,
         "file": null,
         "type": "subtopic",
         "order": 154,
@@ -2277,7 +2277,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625886,
+        "id": 1776123300264,
         "file": null,
         "type": "paragraph",
         "order": 155,
@@ -2289,7 +2289,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625887,
+        "id": 1776123300265,
         "file": null,
         "type": "subtopic",
         "order": 156,
@@ -2299,7 +2299,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625888,
+        "id": 1776123300266,
         "file": null,
         "type": "paragraph",
         "order": 157,
@@ -2311,7 +2311,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625890,
+        "id": 1776123300268,
         "file": null,
         "type": "review-multiple-choice",
         "order": 158,
@@ -2321,7 +2321,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093625889,
+            "id": 1776123300267,
             "skill": "Technical Comprehension",
             "options": [
               "Network topology",
@@ -2336,7 +2336,7 @@
         ]
       },
       {
-        "id": 1776093625891,
+        "id": 1776123300269,
         "file": null,
         "type": "references",
         "order": 159,
@@ -2348,7 +2348,7 @@
     ],
     "diagnosticQuestions": [
       {
-        "id": 1776093626134,
+        "id": 1776123300512,
         "skill": "Memorization",
         "options": [
           "Operating system",
@@ -2361,7 +2361,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626135,
+        "id": 1776123300513,
         "skill": "Technical Comprehension",
         "options": [
           "To increase storage",
@@ -2374,7 +2374,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626136,
+        "id": 1776123300514,
         "skill": "Memorization",
         "options": [
           "Network security",
@@ -2387,7 +2387,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626137,
+        "id": 1776123300515,
         "skill": "Technical Comprehension",
         "options": [
           "Removes storage devices",
@@ -2400,7 +2400,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626138,
+        "id": 1776123300516,
         "skill": "Memorization",
         "options": [
           "LAN",
@@ -2413,7 +2413,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093626139,
+        "id": 1776123300517,
         "skill": "Memorization",
         "options": [
           "PAN",
@@ -2426,7 +2426,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626140,
+        "id": 1776123300518,
         "skill": "Memorization",
         "options": [
           "LAN",
@@ -2439,7 +2439,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626141,
+        "id": 1776123300519,
         "skill": "Memorization",
         "options": [
           "LAN",
@@ -2452,7 +2452,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093626142,
+        "id": 1776123300520,
         "skill": "Memorization",
         "options": [
           "Router",
@@ -2465,7 +2465,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626143,
+        "id": 1776123300521,
         "skill": "Technical Comprehension",
         "options": [
           "Hub",
@@ -2480,7 +2480,7 @@
     ],
     "reviewQuestions": [
       {
-        "id": 1776093626069,
+        "id": 1776123300447,
         "skill": "Memorization",
         "options": [
           "Operating system",
@@ -2493,7 +2493,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626070,
+        "id": 1776123300448,
         "skill": "Technical Comprehension",
         "options": [
           "To increase storage",
@@ -2506,7 +2506,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626071,
+        "id": 1776123300449,
         "skill": "Memorization",
         "options": [
           "Network security",
@@ -2519,7 +2519,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626072,
+        "id": 1776123300450,
         "skill": "Technical Comprehension",
         "options": [
           "Removes storage devices",
@@ -2532,7 +2532,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626073,
+        "id": 1776123300451,
         "skill": "Memorization",
         "options": [
           "LAN",
@@ -2545,7 +2545,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093626074,
+        "id": 1776123300452,
         "skill": "Memorization",
         "options": [
           "PAN",
@@ -2558,7 +2558,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626075,
+        "id": 1776123300453,
         "skill": "Memorization",
         "options": [
           "LAN",
@@ -2571,7 +2571,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626076,
+        "id": 1776123300454,
         "skill": "Memorization",
         "options": [
           "LAN",
@@ -2584,7 +2584,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093626077,
+        "id": 1776123300455,
         "skill": "Memorization",
         "options": [
           "Router",
@@ -2597,7 +2597,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626078,
+        "id": 1776123300456,
         "skill": "Technical Comprehension",
         "options": [
           "Hub",
@@ -2610,7 +2610,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626079,
+        "id": 1776123300457,
         "skill": "Memorization",
         "options": [
           "Hub",
@@ -2623,7 +2623,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626080,
+        "id": 1776123300458,
         "skill": "Memorization",
         "options": [
           "Router",
@@ -2636,7 +2636,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626081,
+        "id": 1776123300459,
         "skill": "Memorization",
         "options": [
           "Router",
@@ -2649,7 +2649,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626082,
+        "id": 1776123300460,
         "skill": "Memorization",
         "options": [
           "Router",
@@ -2662,7 +2662,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626083,
+        "id": 1776123300461,
         "skill": "Memorization",
         "options": [
           "RJ-11 connector",
@@ -2675,7 +2675,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626084,
+        "id": 1776123300462,
         "skill": "Memorization",
         "options": [
           "Telephone cable",
@@ -2688,7 +2688,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093626085,
+        "id": 1776123300463,
         "skill": "Technical Comprehension",
         "options": [
           "Because it uses the same wiring pattern on both ends",
@@ -2701,7 +2701,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626086,
+        "id": 1776123300464,
         "skill": "Problem Solving",
         "options": [
           "To check if the cable is long enough",
@@ -2714,7 +2714,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626087,
+        "id": 1776123300465,
         "skill": "Technical Comprehension",
         "options": [
           "Network topology",
@@ -2727,7 +2727,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626088,
+        "id": 1776123300466,
         "skill": "Analytical Thinking",
         "options": [
           "Network speed increase",
@@ -2742,7 +2742,7 @@
     ],
     "finalQuestions": [
       {
-        "id": 1776093626089,
+        "id": 1776123300467,
         "skill": "Technical Comprehension",
         "options": [
           "Large geographic coverage",
@@ -2755,7 +2755,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626090,
+        "id": 1776123300468,
         "skill": "Analytical Thinking",
         "options": [
           "High bandwidth",
@@ -2768,7 +2768,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626091,
+        "id": 1776123300469,
         "skill": "Technical Comprehension",
         "options": [
           "Connect personal devices",
@@ -2781,7 +2781,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626092,
+        "id": 1776123300470,
         "skill": "Critical Thinking",
         "options": [
           "Uses fewer devices",
@@ -2794,7 +2794,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626093,
+        "id": 1776123300471,
         "skill": "Analytical Thinking",
         "options": [
           "Increased security",
@@ -2807,7 +2807,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626094,
+        "id": 1776123300472,
         "skill": "Technical Comprehension",
         "options": [
           "Switch increases cable length",
@@ -2820,7 +2820,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626095,
+        "id": 1776123300473,
         "skill": "Problem Solving",
         "options": [
           "IP address range",
@@ -2833,7 +2833,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626096,
+        "id": 1776123300474,
         "skill": "Critical Thinking",
         "options": [
           "To shorten cables",
@@ -2846,7 +2846,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626097,
+        "id": 1776123300475,
         "skill": "Memorization",
         "options": [
           "Cat5",
@@ -2859,7 +2859,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626098,
+        "id": 1776123300476,
         "skill": "Technical Comprehension",
         "options": [
           "Increase cable thickness",
@@ -2872,7 +2872,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626099,
+        "id": 1776123300477,
         "skill": "Analytical Thinking",
         "options": [
           "Increased speed",
@@ -2885,7 +2885,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626100,
+        "id": 1776123300478,
         "skill": "Problem Solving",
         "options": [
           "To shorten cable",
@@ -2898,7 +2898,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626101,
+        "id": 1776123300479,
         "skill": "Memorization",
         "options": [
           "Cable tester",
@@ -2911,7 +2911,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626102,
+        "id": 1776123300480,
         "skill": "Critical Thinking",
         "options": [
           "To reduce cable length",
@@ -2924,7 +2924,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626103,
+        "id": 1776123300481,
         "skill": "Problem Solving",
         "options": [
           "Correct wiring",
@@ -2937,7 +2937,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626119,
+        "id": 1776123300497,
         "skill": "Memorization",
         "options": [
           "Operating system",
@@ -2950,7 +2950,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626120,
+        "id": 1776123300498,
         "skill": "Technical Comprehension",
         "options": [
           "To increase storage",
@@ -2963,7 +2963,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626121,
+        "id": 1776123300499,
         "skill": "Memorization",
         "options": [
           "Network security",
@@ -2976,7 +2976,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626122,
+        "id": 1776123300500,
         "skill": "Technical Comprehension",
         "options": [
           "Removes storage devices",
@@ -2989,7 +2989,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626123,
+        "id": 1776123300501,
         "skill": "Memorization",
         "options": [
           "LAN",
@@ -3002,7 +3002,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093626124,
+        "id": 1776123300502,
         "skill": "Memorization",
         "options": [
           "PAN",
@@ -3015,7 +3015,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626125,
+        "id": 1776123300503,
         "skill": "Memorization",
         "options": [
           "LAN",
@@ -3028,7 +3028,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626126,
+        "id": 1776123300504,
         "skill": "Memorization",
         "options": [
           "LAN",
@@ -3041,7 +3041,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093626127,
+        "id": 1776123300505,
         "skill": "Memorization",
         "options": [
           "Router",
@@ -3054,7 +3054,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626128,
+        "id": 1776123300506,
         "skill": "Technical Comprehension",
         "options": [
           "Hub",
@@ -3067,7 +3067,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626129,
+        "id": 1776123300507,
         "skill": "Memorization",
         "options": [
           "Hub",
@@ -3080,7 +3080,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626130,
+        "id": 1776123300508,
         "skill": "Memorization",
         "options": [
           "Router",
@@ -3093,7 +3093,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626131,
+        "id": 1776123300509,
         "skill": "Memorization",
         "options": [
           "Router",
@@ -3106,7 +3106,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626132,
+        "id": 1776123300510,
         "skill": "Memorization",
         "options": [
           "Router",
@@ -3119,7 +3119,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626133,
+        "id": 1776123300511,
         "skill": "Memorization",
         "options": [
           "RJ-11 connector",
@@ -3132,7 +3132,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626104,
+        "id": 1776123300482,
         "skill": "Technical Comprehension",
         "options": [
           "Large geographic coverage",
@@ -3145,7 +3145,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626105,
+        "id": 1776123300483,
         "skill": "Analytical Thinking",
         "options": [
           "High bandwidth",
@@ -3158,7 +3158,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626106,
+        "id": 1776123300484,
         "skill": "Technical Comprehension",
         "options": [
           "Connect personal devices",
@@ -3171,7 +3171,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626107,
+        "id": 1776123300485,
         "skill": "Critical Thinking",
         "options": [
           "Uses fewer devices",
@@ -3184,7 +3184,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626108,
+        "id": 1776123300486,
         "skill": "Analytical Thinking",
         "options": [
           "Increased security",
@@ -3197,7 +3197,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626109,
+        "id": 1776123300487,
         "skill": "Technical Comprehension",
         "options": [
           "Switch increases cable length",
@@ -3210,7 +3210,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626110,
+        "id": 1776123300488,
         "skill": "Problem Solving",
         "options": [
           "IP address range",
@@ -3223,7 +3223,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626111,
+        "id": 1776123300489,
         "skill": "Critical Thinking",
         "options": [
           "To shorten cables",
@@ -3236,7 +3236,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626112,
+        "id": 1776123300490,
         "skill": "Memorization",
         "options": [
           "Cat5",
@@ -3249,7 +3249,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626113,
+        "id": 1776123300491,
         "skill": "Technical Comprehension",
         "options": [
           "Increase cable thickness",
@@ -3262,7 +3262,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626114,
+        "id": 1776123300492,
         "skill": "Analytical Thinking",
         "options": [
           "Increased speed",
@@ -3275,7 +3275,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626115,
+        "id": 1776123300493,
         "skill": "Problem Solving",
         "options": [
           "To shorten cable",
@@ -3288,7 +3288,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626116,
+        "id": 1776123300494,
         "skill": "Memorization",
         "options": [
           "Cable tester",
@@ -3301,7 +3301,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626117,
+        "id": 1776123300495,
         "skill": "Critical Thinking",
         "options": [
           "To reduce cable length",
@@ -3314,7 +3314,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626118,
+        "id": 1776123300496,
         "skill": "Problem Solving",
         "options": [
           "Correct wiring",
@@ -3336,7 +3336,7 @@
     "Description": "<div>Ang araling ito ay nakatuon sa mga pangunahing konsepto ng computer network at kung paano nagkakakonekta ang mga device tulad ng mga computer, telepono, at printer upang makipag-ugnayan at makapagbahagi ng mga resources gaya ng mga file, internet access, at printer. Ang basic networking ay nagbibigay-diin sa mga simpleng configuration nang walang komplikadong seguridad o pag-optimize ng performance, na tumutulong sa pagbuo ng pundamental na kasanayan. Kabilang sa mga gawain ang pag-unawa kung paano nagkakabit ang mga device, kung paano ligtas na naipapadala ang data, at kung paano natutukoy at naaayos ang mga karaniwang isyu sa network.</div><p><br></p><p><strong>Mga Layunin:</strong></p><p>Ang araling ito ay naglalayong:</p><ul style=\"list-style-type: disc;\"><li>tukuyin at ilarawan ang mga pangunahing uri ng network tulad ng PAN, LAN, MAN, at WAN, at makilala ang mga halimbawa nito sa totoong buhay;</li><li>ipaliwanag ang mga karaniwang network topology kabilang ang star, bus, at ring, at ilarawan ang mga tungkulin ng mahahalagang networking devices tulad ng hubs, switches, at routers; at</li><li>ilahad ang mga pangunahing layer ng OSI model at ipaliwanag ang batayan ng TCP/IP upang maunawaan kung paano dumadaloy ang data sa mga network at masuportahan ang simpleng hands-on na pag-setup ng network.</li></ul>",
     "sections": [
       {
-        "id": 1776093625892,
+        "id": 1776123300270,
         "file": null,
         "type": "topic",
         "order": 1,
@@ -3346,7 +3346,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625893,
+        "id": 1776123300271,
         "file": null,
         "type": "paragraph",
         "order": 2,
@@ -3358,7 +3358,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625894,
+        "id": 1776123300272,
         "file": null,
         "type": "subtopic",
         "order": 3,
@@ -3368,7 +3368,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625895,
+        "id": 1776123300273,
         "file": null,
         "type": "paragraph",
         "order": 4,
@@ -3380,7 +3380,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625900,
+        "id": 1776123300278,
         "file": null,
         "type": "review-multiple-choice",
         "order": 5,
@@ -3390,7 +3390,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093625896,
+            "id": 1776123300274,
             "skill": "Memorization",
             "options": [
               "Operating system",
@@ -3403,7 +3403,7 @@
             "correctAnswer": 1
           },
           {
-            "id": 1776093625897,
+            "id": 1776123300275,
             "skill": "Technical Comprehension",
             "options": [
               "Para madagdagan ang storage",
@@ -3416,7 +3416,7 @@
             "correctAnswer": 1
           },
           {
-            "id": 1776093625898,
+            "id": 1776123300276,
             "skill": "Memorization",
             "options": [
               "Network security",
@@ -3429,7 +3429,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093625899,
+            "id": 1776123300277,
             "skill": "Technical Comprehension",
             "options": [
               "Tinatanggal ang storage devices",
@@ -3444,7 +3444,7 @@
         ]
       },
       {
-        "id": 1776093625901,
+        "id": 1776123300279,
         "file": null,
         "type": "topic",
         "order": 6,
@@ -3454,7 +3454,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625902,
+        "id": 1776123300280,
         "file": null,
         "type": "paragraph",
         "order": 7,
@@ -3466,7 +3466,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625907,
+        "id": 1776123300285,
         "file": null,
         "type": "review-multiple-choice",
         "order": 8,
@@ -3476,7 +3476,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093625903,
+            "id": 1776123300281,
             "skill": "Memorization",
             "options": [
               "LAN",
@@ -3489,7 +3489,7 @@
             "correctAnswer": 3
           },
           {
-            "id": 1776093625904,
+            "id": 1776123300282,
             "skill": "Memorization",
             "options": [
               "PAN",
@@ -3502,7 +3502,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093625905,
+            "id": 1776123300283,
             "skill": "Memorization",
             "options": [
               "LAN",
@@ -3515,7 +3515,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093625906,
+            "id": 1776123300284,
             "skill": "Memorization",
             "options": [
               "LAN",
@@ -3530,7 +3530,7 @@
         ]
       },
       {
-        "id": 1776093625908,
+        "id": 1776123300286,
         "file": null,
         "type": "topic",
         "order": 9,
@@ -3540,7 +3540,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625909,
+        "id": 1776123300287,
         "file": null,
         "type": "paragraph",
         "order": 10,
@@ -3552,25 +3552,25 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625910,
+        "id": 1776123300288,
         "file": null,
         "type": "image",
         "order": 11,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093625893-1.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300283-1.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093625893-1.png"
+            "fileName": "docx-lesson-7-1776123300283-1.png"
           }
         ],
         "layout": "single",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093625893-1.png",
-        "fileName": "docx-lesson-7-1776093625893-1.png"
+        "content": "/uploads/lessons/docx-lesson-7-1776123300283-1.png",
+        "fileName": "docx-lesson-7-1776123300283-1.png"
       },
       {
-        "id": 1776093625911,
+        "id": 1776123300289,
         "file": null,
         "type": "paragraph",
         "order": 12,
@@ -3582,7 +3582,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625912,
+        "id": 1776123300290,
         "file": null,
         "type": "subtopic",
         "order": 13,
@@ -3592,7 +3592,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625913,
+        "id": 1776123300291,
         "file": null,
         "type": "paragraph",
         "order": 14,
@@ -3604,7 +3604,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625914,
+        "id": 1776123300292,
         "file": null,
         "type": "subtopic",
         "order": 15,
@@ -3614,7 +3614,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625915,
+        "id": 1776123300293,
         "file": null,
         "type": "paragraph",
         "order": 16,
@@ -3626,7 +3626,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625916,
+        "id": 1776123300294,
         "file": null,
         "type": "subtopic",
         "order": 17,
@@ -3636,7 +3636,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625917,
+        "id": 1776123300295,
         "file": null,
         "type": "paragraph",
         "order": 18,
@@ -3648,37 +3648,37 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625918,
+        "id": 1776123300296,
         "file": null,
         "type": "image",
         "order": 19,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093625973-2.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300378-2.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093625973-2.png"
+            "fileName": "docx-lesson-7-1776123300378-2.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093625973-2.png",
-        "fileName": "docx-lesson-7-1776093625973-2.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300378-2.png",
+        "fileName": "docx-lesson-7-1776123300378-2.png",
         "sideTexts": [
           "<p><strong>\t\tb. Local Area Network (LAN)</strong></p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093625973-2.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300378-2.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093625973-2.png"
+              "fileName": "docx-lesson-7-1776123300378-2.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625919,
+        "id": 1776123300297,
         "file": null,
         "type": "paragraph",
         "order": 20,
@@ -3690,7 +3690,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625920,
+        "id": 1776123300298,
         "file": null,
         "type": "subtopic",
         "order": 21,
@@ -3700,7 +3700,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625921,
+        "id": 1776123300299,
         "file": null,
         "type": "paragraph",
         "order": 22,
@@ -3712,7 +3712,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625922,
+        "id": 1776123300300,
         "file": null,
         "type": "subtopic",
         "order": 23,
@@ -3722,7 +3722,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625923,
+        "id": 1776123300301,
         "file": null,
         "type": "paragraph",
         "order": 24,
@@ -3734,7 +3734,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625924,
+        "id": 1776123300302,
         "file": null,
         "type": "subtopic",
         "order": 25,
@@ -3744,7 +3744,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625925,
+        "id": 1776123300303,
         "file": null,
         "type": "paragraph",
         "order": 26,
@@ -3756,7 +3756,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625926,
+        "id": 1776123300304,
         "file": null,
         "type": "subtopic",
         "order": 27,
@@ -3766,7 +3766,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625927,
+        "id": 1776123300305,
         "file": null,
         "type": "paragraph",
         "order": 28,
@@ -3778,37 +3778,37 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625928,
+        "id": 1776123300306,
         "file": null,
         "type": "image",
         "order": 29,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626133-3.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300572-3.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626133-3.png"
+            "fileName": "docx-lesson-7-1776123300572-3.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626133-3.png",
-        "fileName": "docx-lesson-7-1776093626133-3.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300572-3.png",
+        "fileName": "docx-lesson-7-1776123300572-3.png",
         "sideTexts": [
           "<p>Ang Metropolitan Area Network o MAN ay isang uri ng computer network na sumasaklaw sa isang lungsod o metropolitan na lugar. Ginagamit ito upang epektibong magpadala ng data, tunog, at video sa pagitan ng iba’t ibang lokasyon sa loob ng nasabing lugar, at nag-uugnay ng maraming Local Area Networks (LANs).</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626133-3.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300572-3.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626133-3.png"
+              "fileName": "docx-lesson-7-1776123300572-3.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625929,
+        "id": 1776123300307,
         "file": null,
         "type": "subtopic",
         "order": 30,
@@ -3818,7 +3818,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625930,
+        "id": 1776123300308,
         "file": null,
         "type": "paragraph",
         "order": 31,
@@ -3830,7 +3830,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625931,
+        "id": 1776123300309,
         "file": null,
         "type": "subtopic",
         "order": 32,
@@ -3840,7 +3840,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625932,
+        "id": 1776123300310,
         "file": null,
         "type": "paragraph",
         "order": 33,
@@ -3852,7 +3852,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625933,
+        "id": 1776123300311,
         "file": null,
         "type": "subtopic",
         "order": 34,
@@ -3862,7 +3862,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625934,
+        "id": 1776123300312,
         "file": null,
         "type": "paragraph",
         "order": 35,
@@ -3874,7 +3874,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625935,
+        "id": 1776123300313,
         "file": null,
         "type": "subtopic",
         "order": 36,
@@ -3884,7 +3884,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625936,
+        "id": 1776123300314,
         "file": null,
         "type": "paragraph",
         "order": 37,
@@ -3896,37 +3896,37 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625937,
+        "id": 1776123300315,
         "file": null,
         "type": "image",
         "order": 38,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626506-5.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300923-5.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626506-5.png"
+            "fileName": "docx-lesson-7-1776123300923-5.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626506-5.png",
-        "fileName": "docx-lesson-7-1776093626506-5.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300923-5.png",
+        "fileName": "docx-lesson-7-1776123300923-5.png",
         "sideTexts": [
           "<p>Ang Wide Area Network o WAN ay isang uri ng computer network na sumasaklaw sa malalawak na heograpikal na lugar tulad ng mga lungsod, bansa, o kontinente. Pinapahintulutan nito ang pagpapadala ng data, audio, at video sa malalayong distansya sa pamamagitan ng pagkonekta ng maraming Local Area Networks (LANs) o iba pang WAN. Maraming organisasyon ang gumagamit ng WAN upang iugnay ang kanilang mga opisina, sangay, o data center na nasa iba’t ibang lokasyon.</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626506-5.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300923-5.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626506-5.png"
+              "fileName": "docx-lesson-7-1776123300923-5.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625938,
+        "id": 1776123300316,
         "file": null,
         "type": "subtopic",
         "order": 39,
@@ -3936,7 +3936,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625939,
+        "id": 1776123300317,
         "file": null,
         "type": "paragraph",
         "order": 40,
@@ -3948,7 +3948,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625940,
+        "id": 1776123300318,
         "file": null,
         "type": "subtopic",
         "order": 41,
@@ -3958,7 +3958,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625941,
+        "id": 1776123300319,
         "file": null,
         "type": "paragraph",
         "order": 42,
@@ -3970,7 +3970,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625942,
+        "id": 1776123300320,
         "file": null,
         "type": "subtopic",
         "order": 43,
@@ -3980,7 +3980,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625943,
+        "id": 1776123300321,
         "file": null,
         "type": "paragraph",
         "order": 44,
@@ -3992,7 +3992,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625944,
+        "id": 1776123300322,
         "file": null,
         "type": "subtopic",
         "order": 45,
@@ -4002,7 +4002,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625945,
+        "id": 1776123300323,
         "file": null,
         "type": "paragraph",
         "order": 46,
@@ -4014,7 +4014,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625946,
+        "id": 1776123300324,
         "file": null,
         "type": "subtopic",
         "order": 47,
@@ -4024,7 +4024,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625947,
+        "id": 1776123300325,
         "file": null,
         "type": "paragraph",
         "order": 48,
@@ -4036,37 +4036,37 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625948,
+        "id": 1776123300326,
         "file": null,
         "type": "image",
         "order": 49,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626506-5.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300923-5.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626506-5.png"
+            "fileName": "docx-lesson-7-1776123300923-5.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626506-5.png",
-        "fileName": "docx-lesson-7-1776093626506-5.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300923-5.png",
+        "fileName": "docx-lesson-7-1776123300923-5.png",
         "sideTexts": [
           "<p><strong>\t\te. Campus Area Network (CAN)</strong></p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626506-5.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300923-5.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626506-5.png"
+              "fileName": "docx-lesson-7-1776123300923-5.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625949,
+        "id": 1776123300327,
         "file": null,
         "type": "paragraph",
         "order": 50,
@@ -4078,7 +4078,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625950,
+        "id": 1776123300328,
         "file": null,
         "type": "subtopic",
         "order": 51,
@@ -4088,7 +4088,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625951,
+        "id": 1776123300329,
         "file": null,
         "type": "paragraph",
         "order": 52,
@@ -4100,7 +4100,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625952,
+        "id": 1776123300330,
         "file": null,
         "type": "subtopic",
         "order": 53,
@@ -4110,7 +4110,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625953,
+        "id": 1776123300331,
         "file": null,
         "type": "paragraph",
         "order": 54,
@@ -4122,7 +4122,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625954,
+        "id": 1776123300332,
         "file": null,
         "type": "subtopic",
         "order": 55,
@@ -4132,7 +4132,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625955,
+        "id": 1776123300333,
         "file": null,
         "type": "paragraph",
         "order": 56,
@@ -4144,7 +4144,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625956,
+        "id": 1776123300334,
         "file": null,
         "type": "subtopic",
         "order": 57,
@@ -4154,7 +4154,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625957,
+        "id": 1776123300335,
         "file": null,
         "type": "paragraph",
         "order": 58,
@@ -4166,7 +4166,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625962,
+        "id": 1776123300340,
         "file": null,
         "type": "review-multiple-choice",
         "order": 59,
@@ -4176,7 +4176,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093625958,
+            "id": 1776123300336,
             "skill": "Memorization",
             "options": [
               "Router",
@@ -4189,7 +4189,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093625959,
+            "id": 1776123300337,
             "skill": "Technical Comprehension",
             "options": [
               "Hub",
@@ -4202,7 +4202,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093625960,
+            "id": 1776123300338,
             "skill": "Memorization",
             "options": [
               "Hub",
@@ -4215,7 +4215,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093625961,
+            "id": 1776123300339,
             "skill": "Memorization",
             "options": [
               "Router",
@@ -4230,7 +4230,7 @@
         ]
       },
       {
-        "id": 1776093625963,
+        "id": 1776123300341,
         "file": null,
         "type": "topic",
         "order": 60,
@@ -4240,7 +4240,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625964,
+        "id": 1776123300342,
         "file": null,
         "type": "paragraph",
         "order": 61,
@@ -4252,7 +4252,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625965,
+        "id": 1776123300343,
         "file": null,
         "type": "subtopic",
         "order": 62,
@@ -4262,7 +4262,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625966,
+        "id": 1776123300344,
         "file": null,
         "type": "paragraph",
         "order": 63,
@@ -4274,37 +4274,37 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625967,
+        "id": 1776123300345,
         "file": null,
         "type": "image",
         "order": 64,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626529-6.png"
+            "fileName": "docx-lesson-7-1776123300955-6.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
-        "fileName": "docx-lesson-7-1776093626529-6.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
+        "fileName": "docx-lesson-7-1776123300955-6.png",
         "sideTexts": [
           "<p>Ang hub ay isang pangunahing networking device na ginagamit upang ikonekta ang maraming computer o device sa loob ng isang Local Area Network (LAN). Gumagana ito sa physical layer ng OSI model at simpleng ipinapadala (broadcast) ang data sa lahat ng nakakonektang device nang walang pag-filter o matalinong pagdidirekta ng traffic.</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626529-6.png"
+              "fileName": "docx-lesson-7-1776123300955-6.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625968,
+        "id": 1776123300346,
         "file": null,
         "type": "paragraph",
         "order": 65,
@@ -4316,25 +4316,25 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625969,
+        "id": 1776123300347,
         "file": null,
         "type": "image",
         "order": 66,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626532-7.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300959-7.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626532-7.png"
+            "fileName": "docx-lesson-7-1776123300959-7.png"
           }
         ],
         "layout": "single",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626532-7.png",
-        "fileName": "docx-lesson-7-1776093626532-7.png"
+        "content": "/uploads/lessons/docx-lesson-7-1776123300959-7.png",
+        "fileName": "docx-lesson-7-1776123300959-7.png"
       },
       {
-        "id": 1776093625970,
+        "id": 1776123300348,
         "file": null,
         "type": "paragraph",
         "order": 67,
@@ -4346,25 +4346,25 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625971,
+        "id": 1776123300349,
         "file": null,
         "type": "image",
         "order": 68,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626551-8.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123301021-8.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626551-8.png"
+            "fileName": "docx-lesson-7-1776123301021-8.png"
           }
         ],
         "layout": "single",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626551-8.png",
-        "fileName": "docx-lesson-7-1776093626551-8.png"
+        "content": "/uploads/lessons/docx-lesson-7-1776123301021-8.png",
+        "fileName": "docx-lesson-7-1776123301021-8.png"
       },
       {
-        "id": 1776093625972,
+        "id": 1776123300350,
         "file": null,
         "type": "subtopic",
         "order": 69,
@@ -4374,7 +4374,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625973,
+        "id": 1776123300351,
         "file": null,
         "type": "paragraph",
         "order": 70,
@@ -4386,37 +4386,37 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625974,
+        "id": 1776123300352,
         "file": null,
         "type": "image",
         "order": 71,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626593-9.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123301038-9.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626593-9.png"
+            "fileName": "docx-lesson-7-1776123301038-9.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626593-9.png",
-        "fileName": "docx-lesson-7-1776093626593-9.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123301038-9.png",
+        "fileName": "docx-lesson-7-1776123301038-9.png",
         "sideTexts": [
           "<p>Ang mga switch ay gumagana sa data link layer at gumagamit ng MAC address table upang matukoy kung saan ipapadala ang data. Sinusuportahan din nila ang full-duplex communication, ibig sabihin maaaring sabay na magpadala at tumanggap ng data. Bukod dito, may mga advanced na feature ang switches tulad ng VLAN configuration, port security, Quality of Service (QoS), at traffic prioritization. Ang mga managed switch ay maaari ring i-configure, i-monitor, at i-tune para sa mas magandang performance.</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626593-9.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123301038-9.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626593-9.png"
+              "fileName": "docx-lesson-7-1776123301038-9.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625975,
+        "id": 1776123300353,
         "file": null,
         "type": "paragraph",
         "order": 72,
@@ -4428,7 +4428,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625976,
+        "id": 1776123300354,
         "file": null,
         "type": "subtopic",
         "order": 73,
@@ -4438,7 +4438,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625977,
+        "id": 1776123300355,
         "file": null,
         "type": "paragraph",
         "order": 74,
@@ -4450,7 +4450,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625978,
+        "id": 1776123300356,
         "file": null,
         "type": "subtopic",
         "order": 75,
@@ -4460,7 +4460,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625979,
+        "id": 1776123300357,
         "file": null,
         "type": "paragraph",
         "order": 76,
@@ -4472,7 +4472,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625980,
+        "id": 1776123300358,
         "file": null,
         "type": "subtopic",
         "order": 77,
@@ -4482,7 +4482,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625981,
+        "id": 1776123300359,
         "file": null,
         "type": "paragraph",
         "order": 78,
@@ -4494,37 +4494,37 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625982,
+        "id": 1776123300360,
         "file": null,
         "type": "image",
         "order": 79,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626629-10.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123301106-10.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626629-10.png"
+            "fileName": "docx-lesson-7-1776123301106-10.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626629-10.png",
-        "fileName": "docx-lesson-7-1776093626629-10.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123301106-10.png",
+        "fileName": "docx-lesson-7-1776123301106-10.png",
         "sideTexts": [
           "<p>Ang <strong>bridge</strong> ay isang networking device na ginagamit upang hatiin ang isang malaking network sa mas maliliit na bahagi (segments) upang mapabuti ang performance at mabawasan ang traffic congestion. Gumagana ito sa <strong>data link layer</strong> ng OSI model at gumagamit ng <strong>MAC address</strong> upang i-filter ang data.</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626629-10.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123301106-10.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626629-10.png"
+              "fileName": "docx-lesson-7-1776123301106-10.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625983,
+        "id": 1776123300361,
         "file": null,
         "type": "paragraph",
         "order": 80,
@@ -4536,7 +4536,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625984,
+        "id": 1776123300362,
         "file": null,
         "type": "subtopic",
         "order": 81,
@@ -4546,7 +4546,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625985,
+        "id": 1776123300363,
         "file": null,
         "type": "paragraph",
         "order": 82,
@@ -4558,7 +4558,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625986,
+        "id": 1776123300364,
         "file": null,
         "type": "subtopic",
         "order": 83,
@@ -4568,7 +4568,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625987,
+        "id": 1776123300365,
         "file": null,
         "type": "paragraph",
         "order": 84,
@@ -4580,7 +4580,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625988,
+        "id": 1776123300366,
         "file": null,
         "type": "subtopic",
         "order": 85,
@@ -4590,7 +4590,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625989,
+        "id": 1776123300367,
         "file": null,
         "type": "paragraph",
         "order": 86,
@@ -4602,7 +4602,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625990,
+        "id": 1776123300368,
         "file": null,
         "type": "subtopic",
         "order": 87,
@@ -4612,7 +4612,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625991,
+        "id": 1776123300369,
         "file": null,
         "type": "paragraph",
         "order": 88,
@@ -4624,7 +4624,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625992,
+        "id": 1776123300370,
         "file": null,
         "type": "subtopic",
         "order": 89,
@@ -4634,7 +4634,7 @@
         "fileName": null
       },
       {
-        "id": 1776093625993,
+        "id": 1776123300371,
         "file": null,
         "type": "paragraph",
         "order": 90,
@@ -4646,25 +4646,25 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625994,
+        "id": 1776123300372,
         "file": null,
         "type": "image",
         "order": 91,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626529-6.png"
+            "fileName": "docx-lesson-7-1776123300955-6.png"
           }
         ],
         "layout": "single",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
-        "fileName": "docx-lesson-7-1776093626529-6.png"
+        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
+        "fileName": "docx-lesson-7-1776123300955-6.png"
       },
       {
-        "id": 1776093625995,
+        "id": 1776123300373,
         "file": null,
         "type": "paragraph",
         "order": 92,
@@ -4676,25 +4676,25 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625996,
+        "id": 1776123300374,
         "file": null,
         "type": "image",
         "order": 93,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626529-6.png"
+            "fileName": "docx-lesson-7-1776123300955-6.png"
           }
         ],
         "layout": "single",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
-        "fileName": "docx-lesson-7-1776093626529-6.png"
+        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
+        "fileName": "docx-lesson-7-1776123300955-6.png"
       },
       {
-        "id": 1776093625997,
+        "id": 1776123300375,
         "file": null,
         "type": "paragraph",
         "order": 94,
@@ -4706,85 +4706,85 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093625998,
+        "id": 1776123300376,
         "file": null,
         "type": "image",
         "order": 95,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093627366-11.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123301822-11.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093627366-11.png"
+            "fileName": "docx-lesson-7-1776123301822-11.png"
           }
         ],
         "layout": "text-right",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093627366-11.png",
-        "fileName": "docx-lesson-7-1776093627366-11.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123301822-11.png",
+        "fileName": "docx-lesson-7-1776123301822-11.png",
         "sideTexts": [
           "<ol style=\"list-style-type: decimal;\"><li><strong>Add-in Expansion Cards (NICs)</strong> - Ito ang pinakakaraniwang anyo ng NIC — isang card na ini-install sa PCI expansion slot ng motherboard. Karaniwan itong ginagamit sa mga desktop computer at nagsisilbing pangunahing paraan upang makakonekta ang system sa isang network. </li></ol>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093627366-11.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123301822-11.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093627366-11.png"
+              "fileName": "docx-lesson-7-1776123301822-11.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093625999,
+        "id": 1776123300377,
         "file": null,
         "type": "image",
         "order": 96,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093627372-12.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123301826-12.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093627372-12.png"
+            "fileName": "docx-lesson-7-1776123301826-12.png"
           }
         ],
         "layout": "single",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093627372-12.png",
-        "fileName": "docx-lesson-7-1776093627372-12.png"
+        "content": "/uploads/lessons/docx-lesson-7-1776123301826-12.png",
+        "fileName": "docx-lesson-7-1776123301826-12.png"
       },
       {
-        "id": 1776093626000,
+        "id": 1776123300378,
         "file": null,
         "type": "image",
         "order": 97,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093627380-13.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123301830-13.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093627380-13.png"
+            "fileName": "docx-lesson-7-1776123301830-13.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093627380-13.png",
-        "fileName": "docx-lesson-7-1776093627380-13.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123301830-13.png",
+        "fileName": "docx-lesson-7-1776123301830-13.png",
         "sideTexts": [
           "<ol style=\"list-style-type: decimal;\"><li><strong>PCMCIA Network Cards</strong> - Ang PCMCIA cards (tinatawag ding PC Cards) ay espesyal na idinisenyo para sa mga laptop computer. Ipinapasok ang mga ito sa slot na matatagpuan sa gilid ng laptop. Manipis at portable ang mga ito, at kadalasang may kasamang maliit na media adapter dongle na ikinakabit sa card upang magbigay ng aktwal na network port (RJ-45). Ang mga indicator LEDs sa PCMCIA cards ay minsan wala o kaya ay naka-integrate sa media adapter mismo sa halip na sa card.</li><li><strong>Built-in (Embedded) Network Interface</strong> - Sa maraming modernong system—lalo na sa mga laptop—ang network interface ay naka-integrate na direkta sa motherboard, kaya hindi na kailangan ng hiwalay na card. Nakakatulong ito upang makatipid ng expansion slot at halos siguradong compatible ang hardware. Gayunpaman, ang kapalit nito ay hindi ito madaling ma-upgrade. Kung kinakailangang palitan o i-upgrade ang built-in interface, maaaring mag-install ng add-in NIC at i-disable ang onboard interface—karaniwang ginagawa ito sa pamamagitan ng BIOS setup screen o system configuration utility.</li></ol>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093627380-13.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123301830-13.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093627380-13.png"
+              "fileName": "docx-lesson-7-1776123301830-13.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093626001,
+        "id": 1776123300379,
         "file": null,
         "type": "paragraph",
         "order": 98,
@@ -4796,7 +4796,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626002,
+        "id": 1776123300380,
         "file": null,
         "type": "subtopic",
         "order": 99,
@@ -4806,7 +4806,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626003,
+        "id": 1776123300381,
         "file": null,
         "type": "paragraph",
         "order": 100,
@@ -4818,7 +4818,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626004,
+        "id": 1776123300382,
         "file": null,
         "type": "subtopic",
         "order": 101,
@@ -4828,7 +4828,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626005,
+        "id": 1776123300383,
         "file": null,
         "type": "subtopic",
         "order": 102,
@@ -4838,37 +4838,37 @@
         "fileName": null
       },
       {
-        "id": 1776093626006,
+        "id": 1776123300384,
         "file": null,
         "type": "image",
         "order": 103,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626529-6.png"
+            "fileName": "docx-lesson-7-1776123300955-6.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
-        "fileName": "docx-lesson-7-1776093626529-6.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
+        "fileName": "docx-lesson-7-1776123300955-6.png",
         "sideTexts": [
           "<ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Jumpers</strong> — maliliit na grupo ng pins sa card na mano-manong kinokonekta o inaalis upang maitakda ang configuration options.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>DIP switches </strong>— maliliit na plastic switches na ginagamit katulad ng jumpers para sa pag-set ng configuration ng NIC.</li></ul>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626529-6.png"
+              "fileName": "docx-lesson-7-1776123300955-6.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093626007,
+        "id": 1776123300385,
         "file": null,
         "type": "paragraph",
         "order": 104,
@@ -4880,7 +4880,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626008,
+        "id": 1776123300386,
         "file": null,
         "type": "subtopic",
         "order": 105,
@@ -4890,7 +4890,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626009,
+        "id": 1776123300387,
         "file": null,
         "type": "paragraph",
         "order": 106,
@@ -4902,67 +4902,67 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626010,
+        "id": 1776123300388,
         "file": null,
         "type": "image",
         "order": 107,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626529-6.png"
+            "fileName": "docx-lesson-7-1776123300955-6.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
-        "fileName": "docx-lesson-7-1776093626529-6.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
+        "fileName": "docx-lesson-7-1776123300955-6.png",
         "sideTexts": [
           "<p>May dalawang pangunahing physical form ang ISDN adapters — external at internal — na angkop sa iba’t ibang installation needs at environment.</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626529-6.png"
+              "fileName": "docx-lesson-7-1776123300955-6.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093626011,
+        "id": 1776123300389,
         "file": null,
         "type": "image",
         "order": 108,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626529-6.png"
+            "fileName": "docx-lesson-7-1776123300955-6.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
-        "fileName": "docx-lesson-7-1776093626529-6.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
+        "fileName": "docx-lesson-7-1776123300955-6.png",
         "sideTexts": [
           "<p>Ang <strong>external ISDN</strong> adapters ay mga standalone device na kumokonekta sa computer gamit ang serial port, kaya madali itong i-install at ilipat sa ibang system. Dahil ginagamit nito ang existing resources ng serial port, hindi na kailangan ng internal configuration. Katulad ito ng external modem, ngunit sa halip na mag-convert sa pagitan ng digital at analog signals tulad ng modem, ang ISDN terminal adapter ay nagta-translate sa pagitan ng dalawang magkaibang digital formats.</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626529-6.png"
+              "fileName": "docx-lesson-7-1776123300955-6.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093626012,
+        "id": 1776123300390,
         "file": null,
         "type": "paragraph",
         "order": 109,
@@ -4974,7 +4974,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626013,
+        "id": 1776123300391,
         "file": null,
         "type": "subtopic",
         "order": 110,
@@ -4984,7 +4984,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626014,
+        "id": 1776123300392,
         "file": null,
         "type": "paragraph",
         "order": 111,
@@ -4996,67 +4996,67 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626015,
+        "id": 1776123300393,
         "file": null,
         "type": "image",
         "order": 112,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626529-6.png"
+            "fileName": "docx-lesson-7-1776123300955-6.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
-        "fileName": "docx-lesson-7-1776093626529-6.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
+        "fileName": "docx-lesson-7-1776123300955-6.png",
         "sideTexts": [
           "<p>Tumatanggap ang isang wireless access point ng data mula sa wired network at ipinapadala ito bilang radio signals. Ang mga wireless device tulad ng laptops at smartphones ay tumatanggap ng signals na ito at nagpapadala ng tugon pabalik sa parehong radio channel. Kino-convert ng WAP ang mga wireless signals pabalik sa wired network data, na nagpapahintulot ng seamless wireless communication.</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626529-6.png"
+              "fileName": "docx-lesson-7-1776123300955-6.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093626016,
+        "id": 1776123300394,
         "file": null,
         "type": "image",
         "order": 113,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
             "caption": "",
-            "fileName": "docx-lesson-7-1776093626529-6.png"
+            "fileName": "docx-lesson-7-1776123300955-6.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
-        "fileName": "docx-lesson-7-1776093626529-6.png",
+        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
+        "fileName": "docx-lesson-7-1776123300955-6.png",
         "sideTexts": [
           "<p>Ang WAP ay nagsisilbing kritikal na bridge sa pagitan ng wireless at wired portions ng network. Karaniwang direktang nakakonekta ang WAP sa wired Ethernet LAN, na nagsisilbing entry at exit point para sa lahat ng wireless traffic. Pinapayagan nito ang mga wireless client device — tulad ng laptops, smartphones, at tablets — na ma-access ang parehong network resources tulad ng mga device na konektado sa physical cables, nang walang sariling wired connection.</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776093626529-6.png",
+              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
               "caption": "",
-              "fileName": "docx-lesson-7-1776093626529-6.png"
+              "fileName": "docx-lesson-7-1776123300955-6.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093626017,
+        "id": 1776123300395,
         "file": null,
         "type": "paragraph",
         "order": 114,
@@ -5068,7 +5068,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626018,
+        "id": 1776123300396,
         "file": null,
         "type": "subtopic",
         "order": 115,
@@ -5078,7 +5078,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626019,
+        "id": 1776123300397,
         "file": null,
         "type": "paragraph",
         "order": 116,
@@ -5090,7 +5090,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626020,
+        "id": 1776123300398,
         "file": null,
         "type": "subtopic",
         "order": 117,
@@ -5100,7 +5100,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626021,
+        "id": 1776123300399,
         "file": null,
         "type": "paragraph",
         "order": 118,
@@ -5112,7 +5112,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626022,
+        "id": 1776123300400,
         "file": null,
         "type": "subtopic",
         "order": 119,
@@ -5122,7 +5122,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626023,
+        "id": 1776123300401,
         "file": null,
         "type": "paragraph",
         "order": 120,
@@ -5134,7 +5134,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626028,
+        "id": 1776123300406,
         "file": null,
         "type": "review-multiple-choice",
         "order": 121,
@@ -5144,7 +5144,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093626024,
+            "id": 1776123300402,
             "skill": "Memorization",
             "options": [
               "Router",
@@ -5157,7 +5157,7 @@
             "correctAnswer": 1
           },
           {
-            "id": 1776093626025,
+            "id": 1776123300403,
             "skill": "Memorization",
             "options": [
               "Router",
@@ -5170,7 +5170,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093626026,
+            "id": 1776123300404,
             "skill": "Memorization",
             "options": [
               "RJ-11 connector",
@@ -5183,7 +5183,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093626027,
+            "id": 1776123300405,
             "skill": "Memorization",
             "options": [
               "Telephone cable",
@@ -5198,7 +5198,7 @@
         ]
       },
       {
-        "id": 1776093626029,
+        "id": 1776123300407,
         "file": null,
         "type": "topic",
         "order": 122,
@@ -5208,7 +5208,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626030,
+        "id": 1776123300408,
         "file": null,
         "type": "paragraph",
         "order": 123,
@@ -5220,7 +5220,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626031,
+        "id": 1776123300409,
         "file": null,
         "type": "subtopic",
         "order": 124,
@@ -5230,7 +5230,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626032,
+        "id": 1776123300410,
         "file": null,
         "type": "paragraph",
         "order": 125,
@@ -5242,7 +5242,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626033,
+        "id": 1776123300411,
         "file": null,
         "type": "subtopic",
         "order": 126,
@@ -5252,7 +5252,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626034,
+        "id": 1776123300412,
         "file": null,
         "type": "paragraph",
         "order": 127,
@@ -5264,7 +5264,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626035,
+        "id": 1776123300413,
         "file": null,
         "type": "subtopic",
         "order": 128,
@@ -5274,7 +5274,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626036,
+        "id": 1776123300414,
         "file": null,
         "type": "paragraph",
         "order": 129,
@@ -5286,7 +5286,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626041,
+        "id": 1776123300419,
         "file": null,
         "type": "review-multiple-choice",
         "order": 130,
@@ -5296,7 +5296,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093626037,
+            "id": 1776123300415,
             "skill": "Technical Comprehension",
             "options": [
               "Pareho ang wiring pattern sa magkabilang dulo",
@@ -5309,7 +5309,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093626038,
+            "id": 1776123300416,
             "skill": "Problem Solving",
             "options": [
               "Para malaman kung sapat ang haba ng cable",
@@ -5322,7 +5322,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093626039,
+            "id": 1776123300417,
             "skill": "Technical Comprehension",
             "options": [
               "Network topology",
@@ -5335,7 +5335,7 @@
             "correctAnswer": 1
           },
           {
-            "id": 1776093626040,
+            "id": 1776123300418,
             "skill": "Analytical Thinking",
             "options": [
               "Pagtaas ng network speed",
@@ -5350,7 +5350,7 @@
         ]
       },
       {
-        "id": 1776093626042,
+        "id": 1776123300420,
         "file": null,
         "type": "topic",
         "order": 131,
@@ -5360,7 +5360,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626043,
+        "id": 1776123300421,
         "file": null,
         "type": "paragraph",
         "order": 132,
@@ -5372,7 +5372,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626044,
+        "id": 1776123300422,
         "file": null,
         "type": "subtopic",
         "order": 133,
@@ -5382,7 +5382,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626045,
+        "id": 1776123300423,
         "file": null,
         "type": "paragraph",
         "order": 134,
@@ -5394,7 +5394,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626046,
+        "id": 1776123300424,
         "file": null,
         "type": "subtopic",
         "order": 135,
@@ -5404,7 +5404,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626047,
+        "id": 1776123300425,
         "file": null,
         "type": "paragraph",
         "order": 136,
@@ -5416,7 +5416,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626048,
+        "id": 1776123300426,
         "file": null,
         "type": "subtopic",
         "order": 137,
@@ -5426,7 +5426,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626049,
+        "id": 1776123300427,
         "file": null,
         "type": "paragraph",
         "order": 138,
@@ -5438,7 +5438,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626050,
+        "id": 1776123300428,
         "file": null,
         "type": "subtopic",
         "order": 139,
@@ -5448,7 +5448,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626051,
+        "id": 1776123300429,
         "file": null,
         "type": "paragraph",
         "order": 140,
@@ -5460,7 +5460,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626052,
+        "id": 1776123300430,
         "file": null,
         "type": "subtopic",
         "order": 141,
@@ -5470,7 +5470,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626053,
+        "id": 1776123300431,
         "file": null,
         "type": "paragraph",
         "order": 142,
@@ -5482,7 +5482,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626054,
+        "id": 1776123300432,
         "file": null,
         "type": "subtopic",
         "order": 143,
@@ -5492,7 +5492,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626055,
+        "id": 1776123300433,
         "file": null,
         "type": "paragraph",
         "order": 144,
@@ -5504,7 +5504,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626056,
+        "id": 1776123300434,
         "file": null,
         "type": "subtopic",
         "order": 145,
@@ -5514,7 +5514,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626057,
+        "id": 1776123300435,
         "file": null,
         "type": "paragraph",
         "order": 146,
@@ -5526,7 +5526,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626058,
+        "id": 1776123300436,
         "file": null,
         "type": "subtopic",
         "order": 147,
@@ -5536,7 +5536,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626059,
+        "id": 1776123300437,
         "file": null,
         "type": "paragraph",
         "order": 148,
@@ -5548,7 +5548,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626060,
+        "id": 1776123300438,
         "file": null,
         "type": "subtopic",
         "order": 149,
@@ -5558,7 +5558,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626061,
+        "id": 1776123300439,
         "file": null,
         "type": "paragraph",
         "order": 150,
@@ -5570,7 +5570,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626062,
+        "id": 1776123300440,
         "file": null,
         "type": "subtopic",
         "order": 151,
@@ -5580,7 +5580,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626063,
+        "id": 1776123300441,
         "file": null,
         "type": "paragraph",
         "order": 152,
@@ -5592,7 +5592,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626064,
+        "id": 1776123300442,
         "file": null,
         "type": "subtopic",
         "order": 153,
@@ -5602,7 +5602,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626065,
+        "id": 1776123300443,
         "file": null,
         "type": "paragraph",
         "order": 154,
@@ -5614,7 +5614,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626066,
+        "id": 1776123300444,
         "file": null,
         "type": "subtopic",
         "order": 155,
@@ -5624,7 +5624,7 @@
         "fileName": null
       },
       {
-        "id": 1776093626067,
+        "id": 1776123300445,
         "file": null,
         "type": "paragraph",
         "order": 156,
@@ -5636,7 +5636,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093626068,
+        "id": 1776123300446,
         "file": null,
         "type": "references",
         "order": 157,
@@ -5644,11 +5644,36 @@
         "caption": "",
         "content": "https://www.geeksforgeeks.org/computer-networks/computer-network-tutorials/\nhttps://networklessons.com/network-fundamentals\nhttps://www.networkacademy.io/ccna/network-fundamentals\nhttps://www.alexomegapy.com/post/osi-model-tcp-ip-framework-and-network-topologies-overview\nhttps://www.ibm.com/think/topics/networking\nhttps://www.nwkings.com/advantages-of-computer-networking\nhttps://www.geeksforgeeks.org/computer-networks/importance-of-computer-networking/\nhttps://www.uninets.com/blog/advantages-of-computer-networks\nhttps://www.geeksforgeeks.org/computer-networks/advantages-and-disadvantages-of-computer-networking/\nhttps://www.netsync.com/2025/07/02/the-key-benefits-of-computer-networking-for-modern-teams/\nhttps://www.guru99.com/types-of-computer-network.html\nhttps://www.educba.com/types-of-computer-network/#Different%20Types%20of%20Network\nhttps://3.bp.blogspot.com/-Fpmu4-L14lI/VXKms78BCnI/AAAAAAAACVs/r0iWhBkfRp0/s1600/DCP_3429.JPG\nhttps://www.astrosnap.com/adapters/USBG-LPT-PCM.jpeg\nhttps://tse3.mm.bing.net/th/id/OIP.YFHa5c7NVhe1NuD8hvWb-AHaFj?rs=1&pid=ImgDetMain&o=7&rm=3\nhttps://cdn.cs.1worldsync.com/70/23/7023c43d-ff87-4629-bce3-36bc21180334.jpg\nhttps://www.vce-download.net/design/wikipic/268.jpg\nhttps://www.conceptdraw.com/How-To-Guide/picture/Ad-Hoc-wireless-network-diagram.png\nhttps://thenetworkinstallers.com/blog/network-installation-steps/\nhttps://www.meter.com/resources/network-installation\nhttps://bestructured.com/the-ultimate-network-installation-guide-installing-a-network-in-10-steps/\nhttps://clrnet.net/a-step-by-step-guide-to-the-network-installation-process/\nhttps://yestechie.com/articles/office-network-installation-guide\nhttps://www.homenethowto.com/basics/giving-the-computer-an-ip-address/\nhttps://www.geeksforgeeks.org/computer-networks/dynamic-host-configuration-protocol-dhcp/\nhttps://www.msp360.com/resources/blog/sysadmins-guide-to-network-services/\nhttps://study-ccna.com/dhcp-dns/\nhttps://ncs.support/security-measures-for-business-data-protection/%5C\nhttps://nordlayer.com/learn/firewall/firewall-best-practices/\nhttps://www.eccouncil.org/cybersecurity-exchange/network-security/six-network-firewall-configuration-best-practices/\nhttps://backbox.com/blog/7-firewall-best-practices-to-secure-your-network/\nhttps://www.darktrace.com/cyber-ai-glossary/firewalls-and-network-security-how-to-protect-your-business\nhttps://www.checkpoint.com/cyber-hub/network-security/what-is-firewall/8-firewall-best-practices-for-securing-the-network/\nhttps://www.meter.com/resources/network-configuration\nhttps://www.itech2.com/network-installation-configuration-the-ultimate-guide/",
         "fileName": null
+      },
+      {
+        "id": 1776123300447,
+        "file": null,
+        "type": "review-multiple-choice",
+        "title": "",
+        "caption": "",
+        "content": "",
+        "fileName": null,
+        "questions": [
+          {
+            "id": 1776123300542,
+            "question": "Ano ang computer network?",
+            "options": [
+              "Operating system",
+              "Computer network",
+              "Peripheral system",
+              "Software package"
+            ],
+            "correctAnswer": 1,
+            "skill": "Memorization",
+            "questionType": "Easy"
+          }
+        ],
+        "order": 158
       }
     ],
     "diagnosticQuestions": [
       {
-        "id": 1776093626209,
+        "id": 1776123300587,
         "skill": "Memorization",
         "options": [
           "Operating system",
@@ -5661,7 +5686,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626210,
+        "id": 1776123300588,
         "skill": "Technical Comprehension",
         "options": [
           "Para madagdagan ang storage",
@@ -5674,7 +5699,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626211,
+        "id": 1776123300589,
         "skill": "Memorization",
         "options": [
           "Network security",
@@ -5687,7 +5712,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626212,
+        "id": 1776123300590,
         "skill": "Technical Comprehension",
         "options": [
           "Tinatanggal ang storage devices",
@@ -5700,7 +5725,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626213,
+        "id": 1776123300591,
         "skill": "Memorization",
         "options": [
           "LAN",
@@ -5713,7 +5738,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093626214,
+        "id": 1776123300592,
         "skill": "Memorization",
         "options": [
           "PAN",
@@ -5726,7 +5751,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626215,
+        "id": 1776123300593,
         "skill": "Memorization",
         "options": [
           "LAN",
@@ -5739,7 +5764,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626216,
+        "id": 1776123300594,
         "skill": "Memorization",
         "options": [
           "LAN",
@@ -5752,7 +5777,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093626217,
+        "id": 1776123300595,
         "skill": "Memorization",
         "options": [
           "Router",
@@ -5765,7 +5790,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626218,
+        "id": 1776123300596,
         "skill": "Technical Comprehension",
         "options": [
           "Hub",
@@ -5780,7 +5805,7 @@
     ],
     "reviewQuestions": [
       {
-        "id": 1776093626144,
+        "id": 1776123300522,
         "skill": "Memorization",
         "options": [
           "Operating system",
@@ -5793,7 +5818,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626145,
+        "id": 1776123300523,
         "skill": "Technical Comprehension",
         "options": [
           "Para madagdagan ang storage",
@@ -5806,7 +5831,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626146,
+        "id": 1776123300524,
         "skill": "Memorization",
         "options": [
           "Network security",
@@ -5819,7 +5844,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626147,
+        "id": 1776123300525,
         "skill": "Technical Comprehension",
         "options": [
           "Tinatanggal ang storage devices",
@@ -5832,7 +5857,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626148,
+        "id": 1776123300526,
         "skill": "Memorization",
         "options": [
           "LAN",
@@ -5845,7 +5870,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093626149,
+        "id": 1776123300527,
         "skill": "Memorization",
         "options": [
           "PAN",
@@ -5858,7 +5883,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626150,
+        "id": 1776123300528,
         "skill": "Memorization",
         "options": [
           "LAN",
@@ -5871,7 +5896,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626151,
+        "id": 1776123300529,
         "skill": "Memorization",
         "options": [
           "LAN",
@@ -5884,7 +5909,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093626152,
+        "id": 1776123300530,
         "skill": "Memorization",
         "options": [
           "Router",
@@ -5897,7 +5922,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626153,
+        "id": 1776123300531,
         "skill": "Technical Comprehension",
         "options": [
           "Hub",
@@ -5910,7 +5935,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626154,
+        "id": 1776123300532,
         "skill": "Memorization",
         "options": [
           "Hub",
@@ -5923,7 +5948,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626155,
+        "id": 1776123300533,
         "skill": "Memorization",
         "options": [
           "Router",
@@ -5936,7 +5961,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626156,
+        "id": 1776123300534,
         "skill": "Memorization",
         "options": [
           "Router",
@@ -5949,7 +5974,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626157,
+        "id": 1776123300535,
         "skill": "Memorization",
         "options": [
           "Router",
@@ -5962,7 +5987,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626158,
+        "id": 1776123300536,
         "skill": "Memorization",
         "options": [
           "RJ-11 connector",
@@ -5975,7 +6000,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626159,
+        "id": 1776123300537,
         "skill": "Memorization",
         "options": [
           "Telephone cable",
@@ -5988,7 +6013,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093626160,
+        "id": 1776123300538,
         "skill": "Technical Comprehension",
         "options": [
           "Pareho ang wiring pattern sa magkabilang dulo",
@@ -6001,7 +6026,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626161,
+        "id": 1776123300539,
         "skill": "Problem Solving",
         "options": [
           "Para malaman kung sapat ang haba ng cable",
@@ -6014,7 +6039,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626162,
+        "id": 1776123300540,
         "skill": "Technical Comprehension",
         "options": [
           "Network topology",
@@ -6027,7 +6052,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626163,
+        "id": 1776123300541,
         "skill": "Analytical Thinking",
         "options": [
           "Pagtaas ng network speed",
@@ -6042,7 +6067,7 @@
     ],
     "finalQuestions": [
       {
-        "id": 1776093626164,
+        "id": 1776123300542,
         "skill": "Technical Comprehension",
         "options": [
           "Malawak na saklaw ng lugar",
@@ -6055,7 +6080,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626165,
+        "id": 1776123300543,
         "skill": "Analytical Thinking",
         "options": [
           "Mataas na bandwidth",
@@ -6068,7 +6093,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626166,
+        "id": 1776123300544,
         "skill": "Technical Comprehension",
         "options": [
           "Ikonek ang personal na devices",
@@ -6081,7 +6106,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626167,
+        "id": 1776123300545,
         "skill": "Critical Thinking",
         "options": [
           "Mas kaunti ang devices",
@@ -6094,7 +6119,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626168,
+        "id": 1776123300546,
         "skill": "Analytical Thinking",
         "options": [
           "Mas mataas na seguridad",
@@ -6107,7 +6132,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626169,
+        "id": 1776123300547,
         "skill": "Technical Comprehension",
         "options": [
           "Pinapahaba ang cable",
@@ -6120,7 +6145,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626170,
+        "id": 1776123300548,
         "skill": "Problem Solving",
         "options": [
           "IP address range",
@@ -6133,7 +6158,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626171,
+        "id": 1776123300549,
         "skill": "Critical Thinking",
         "options": [
           "Para paikliin ang cable",
@@ -6146,7 +6171,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626172,
+        "id": 1776123300550,
         "skill": "Memorization",
         "options": [
           "Cat5",
@@ -6159,7 +6184,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093626173,
+        "id": 1776123300551,
         "skill": "Technical Comprehension",
         "options": [
           "Para lumaki ang cable",
@@ -6172,7 +6197,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626174,
+        "id": 1776123300552,
         "skill": "Analytical Thinking",
         "options": [
           "Mas mabilis ang connection",
@@ -6185,7 +6210,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626175,
+        "id": 1776123300553,
         "skill": "Problem Solving",
         "options": [
           "Para paikliin ang cable",
@@ -6198,7 +6223,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626176,
+        "id": 1776123300554,
         "skill": "Memorization",
         "options": [
           "Cable tester",
@@ -6211,7 +6236,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626177,
+        "id": 1776123300555,
         "skill": "Critical Thinking",
         "options": [
           "Para paikliin ang cable",
@@ -6224,7 +6249,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626178,
+        "id": 1776123300556,
         "skill": "Problem Solving",
         "options": [
           "Tamang wiring",
@@ -6237,7 +6262,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626194,
+        "id": 1776123300572,
         "skill": "Memorization",
         "options": [
           "Operating system",
@@ -6250,7 +6275,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626195,
+        "id": 1776123300573,
         "skill": "Technical Comprehension",
         "options": [
           "Para madagdagan ang storage",
@@ -6263,7 +6288,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626196,
+        "id": 1776123300574,
         "skill": "Memorization",
         "options": [
           "Network security",
@@ -6276,7 +6301,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626197,
+        "id": 1776123300575,
         "skill": "Technical Comprehension",
         "options": [
           "Tinatanggal ang storage devices",
@@ -6289,7 +6314,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626198,
+        "id": 1776123300576,
         "skill": "Memorization",
         "options": [
           "LAN",
@@ -6302,7 +6327,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093626199,
+        "id": 1776123300577,
         "skill": "Memorization",
         "options": [
           "PAN",
@@ -6315,7 +6340,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626200,
+        "id": 1776123300578,
         "skill": "Memorization",
         "options": [
           "LAN",
@@ -6328,7 +6353,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626201,
+        "id": 1776123300579,
         "skill": "Memorization",
         "options": [
           "LAN",
@@ -6341,7 +6366,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093626202,
+        "id": 1776123300580,
         "skill": "Memorization",
         "options": [
           "Router",
@@ -6354,7 +6379,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626203,
+        "id": 1776123300581,
         "skill": "Technical Comprehension",
         "options": [
           "Hub",
@@ -6367,7 +6392,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626204,
+        "id": 1776123300582,
         "skill": "Memorization",
         "options": [
           "Hub",
@@ -6380,7 +6405,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626205,
+        "id": 1776123300583,
         "skill": "Memorization",
         "options": [
           "Router",
@@ -6393,7 +6418,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626206,
+        "id": 1776123300584,
         "skill": "Memorization",
         "options": [
           "Router",
@@ -6406,7 +6431,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626207,
+        "id": 1776123300585,
         "skill": "Memorization",
         "options": [
           "Router",
@@ -6419,7 +6444,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626208,
+        "id": 1776123300586,
         "skill": "Memorization",
         "options": [
           "RJ-11 connector",
@@ -6432,7 +6457,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626179,
+        "id": 1776123300557,
         "skill": "Technical Comprehension",
         "options": [
           "Malawak na saklaw ng lugar",
@@ -6445,7 +6470,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626180,
+        "id": 1776123300558,
         "skill": "Analytical Thinking",
         "options": [
           "Mataas na bandwidth",
@@ -6458,7 +6483,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626181,
+        "id": 1776123300559,
         "skill": "Technical Comprehension",
         "options": [
           "Ikonek ang personal na devices",
@@ -6471,7 +6496,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626182,
+        "id": 1776123300560,
         "skill": "Critical Thinking",
         "options": [
           "Mas kaunti ang devices",
@@ -6484,7 +6509,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626183,
+        "id": 1776123300561,
         "skill": "Analytical Thinking",
         "options": [
           "Mas mataas na seguridad",
@@ -6497,7 +6522,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626184,
+        "id": 1776123300562,
         "skill": "Technical Comprehension",
         "options": [
           "Pinapahaba ang cable",
@@ -6510,7 +6535,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626185,
+        "id": 1776123300563,
         "skill": "Problem Solving",
         "options": [
           "IP address range",
@@ -6523,7 +6548,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626186,
+        "id": 1776123300564,
         "skill": "Critical Thinking",
         "options": [
           "Para paikliin ang cable",
@@ -6536,7 +6561,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626187,
+        "id": 1776123300565,
         "skill": "Memorization",
         "options": [
           "Cat5",
@@ -6549,7 +6574,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093626188,
+        "id": 1776123300566,
         "skill": "Technical Comprehension",
         "options": [
           "Para lumaki ang cable",
@@ -6562,7 +6587,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626189,
+        "id": 1776123300567,
         "skill": "Analytical Thinking",
         "options": [
           "Mas mabilis ang connection",
@@ -6575,7 +6600,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626190,
+        "id": 1776123300568,
         "skill": "Problem Solving",
         "options": [
           "Para paikliin ang cable",
@@ -6588,7 +6613,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626191,
+        "id": 1776123300569,
         "skill": "Memorization",
         "options": [
           "Cable tester",
@@ -6601,7 +6626,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093626192,
+        "id": 1776123300570,
         "skill": "Critical Thinking",
         "options": [
           "Para paikliin ang cable",
@@ -6614,7 +6639,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093626193,
+        "id": 1776123300571,
         "skill": "Problem Solving",
         "options": [
           "Tamang wiring",

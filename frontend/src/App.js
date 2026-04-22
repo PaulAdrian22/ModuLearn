@@ -16,6 +16,7 @@ import Lessons from './pages/Lessons';
 import ModuleView from './pages/ModuleView';
 import Assessment from './pages/Assessment';
 import FinalAssessment from './pages/FinalAssessment';
+import InitialAssessment from './pages/InitialAssessment';
 import Profile from './pages/Profile';
 import Progress from './pages/Progress';
 import Simulations from './pages/Simulations';
@@ -25,6 +26,8 @@ import AddLesson from './pages/AddLesson';
 import AdminLearners from './pages/AdminLearners';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminSettings from './pages/AdminSettings';
+import AdminSimulations from './pages/AdminSimulations';
+import AdminSimulationEditor from './pages/AdminSimulationEditor';
 
 // Context
 export const AuthContext = createContext();
@@ -198,7 +201,7 @@ const TOKEN_UNLOCK_RULES = [
     subtitle: 'Pass 1 final assessment',
     bgColor: '#FF9800',
     icon: 'FLAME',
-    isUnlocked: (metrics) => metrics.finalTaken >= 1
+    isUnlocked: (metrics) => metrics.finalPassed >= 1
   },
   {
     key: 'safety',
@@ -228,7 +231,7 @@ const TOKEN_UNLOCK_RULES = [
     key: 'mastery',
     name: 'Mastery Token',
     subtitle: 'Get 2 skills above 95%',
-    bgColor: '#FFB74D',
+    bgColor: '#E9B766',
     icon: 'TROPHY',
     isUnlocked: (metrics) => metrics.masteredSkillCount >= 2
   },
@@ -236,7 +239,7 @@ const TOKEN_UNLOCK_RULES = [
     key: 'consistency',
     name: 'Consistency Token',
     subtitle: 'Reach 70% path progress',
-    bgColor: '#4DD0E1',
+    bgColor: '#64D0E0',
     icon: 'CHART',
     isUnlocked: (metrics) => metrics.pathPercent >= 70
   },
@@ -288,6 +291,7 @@ const GlobalTokenUnlockTracker = () => {
           masteryPercent: summary?.lessonPerformance?.masteryLevelPercent || 0,
           reviewTaken: summary?.assessment?.totalReviewAssessmentsTaken || 0,
           finalTaken: summary?.assessment?.totalFinalAssessmentsTaken || 0,
+          finalPassed: summary?.assessment?.totalFinalAssessmentsPassed || 0,
           highSkillCount: skillPercents.filter((percent) => percent >= 70).length,
           masteredSkillCount: skillPercents.filter((percent) => percent >= 95).length,
           avgOverallScore: Math.round((avgReview + avgFinal) / 2)
@@ -315,10 +319,13 @@ const GlobalTokenUnlockTracker = () => {
 
     runUnlockCheck();
     const intervalId = setInterval(runUnlockCheck, 30000);
+    const handleAchievementRefresh = () => runUnlockCheck();
+    window.addEventListener('achievementMetricsUpdated', handleAchievementRefresh);
 
     return () => {
       mounted = false;
       clearInterval(intervalId);
+      window.removeEventListener('achievementMetricsUpdated', handleAchievementRefresh);
     };
   }, [user?.userId, user?.role, location.pathname]);
 
@@ -346,7 +353,7 @@ const GlobalTokenUnlockTracker = () => {
           const left = (index * 13) % 100;
           const delay = (index % 8) * 0.1;
           const duration = 1.8 + (index % 5) * 0.18;
-          const colors = ['#2BC4B3', '#4DD0E1', '#FFB74D', '#9B59B6', '#4A90E2'];
+          const colors = ['#42C5B6', '#64D0E0', '#E9B766', '#8D6EB1', '#589AD7'];
           return (
             <span
               key={index}
@@ -369,12 +376,12 @@ const GlobalTokenUnlockTracker = () => {
         >
           {activeUnlockToken.icon}
         </div>
-        <p className="text-sm font-semibold uppercase tracking-wide text-[#2BC4B3]">Token Unlocked</p>
-        <h3 className="text-3xl font-bold text-[#0B2B4C] mt-1 mb-2">{activeUnlockToken.name}</h3>
+        <p className="text-sm font-semibold uppercase tracking-wide text-highlight-dark">Token Unlocked</p>
+        <h3 className="text-3xl font-bold text-text-primary mt-1 mb-2">{activeUnlockToken.name}</h3>
         <p className="text-gray-600 mb-5">{activeUnlockToken.subtitle}</p>
         <button
           onClick={() => setActiveUnlockToken(null)}
-          className="px-6 py-2 rounded-lg bg-[#2BC4B3] text-white font-semibold hover:bg-[#1a9d8f] transition-colors"
+          className="px-6 py-2 rounded-lg bg-highlight text-white font-semibold hover:bg-highlight-dark transition-colors"
         >
           Awesome
         </button>
@@ -425,6 +432,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/initial-assessment"
+              element={
+                <ProtectedRoute>
+                  <InitialAssessment />
                 </ProtectedRoute>
               }
             />
@@ -539,6 +554,22 @@ function App() {
               element={
                 <AdminRoute>
                   <AdminSettings />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/simulations"
+              element={
+                <AdminRoute>
+                  <AdminSimulations />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/simulations/:id"
+              element={
+                <AdminRoute>
+                  <AdminSimulationEditor />
                 </AdminRoute>
               }
             />

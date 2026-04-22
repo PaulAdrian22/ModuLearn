@@ -8,7 +8,7 @@ const Landing = () => {
     <div
       className="fixed inset-0 overflow-hidden flex items-center justify-center"
       style={{
-        backgroundImage: 'url(/images/background.svg)',
+        backgroundImage: 'url(/images/background.webp)',
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}
@@ -54,39 +54,39 @@ const Landing = () => {
         <section className="mt-8 sm:mt-9 grid grid-cols-12 gap-0 h-[24%] min-h-[150px] rounded-lg overflow-hidden border border-[#c9c9c9]">
           <div className="col-span-4">
             <img
-              src="/images/landing-card-1.jpg"
+              src="/images/landing-card-1.webp"
               alt="Hardware visual 1"
               className="h-full w-full object-cover"
               style={{ objectPosition: 'left bottom' }}
               onError={(e) => {
                 e.currentTarget.onerror = null;
-                e.currentTarget.src = '/images/1-landing-page.svg';
+                e.currentTarget.src = '/images/1-landing-page.webp';
               }}
               draggable={false}
             />
           </div>
           <div className="col-span-4">
             <img
-              src="/images/landing-card-2.jpg"
+              src="/images/landing-card-2.webp"
               alt="Hardware visual 2"
               className="h-full w-full object-cover"
               style={{ objectPosition: 'center bottom' }}
               onError={(e) => {
                 e.currentTarget.onerror = null;
-                e.currentTarget.src = '/images/1-landing-page.svg';
+                e.currentTarget.src = '/images/1-landing-page.webp';
               }}
               draggable={false}
             />
           </div>
           <div className="col-span-4">
             <img
-              src="/images/landing-card-3.jpg"
+              src="/images/landing-card-3.webp"
               alt="Hardware visual 3"
               className="h-full w-full object-cover"
               style={{ objectPosition: 'right bottom' }}
               onError={(e) => {
                 e.currentTarget.onerror = null;
-                e.currentTarget.src = '/images/1-landing-page.svg';
+                e.currentTarget.src = '/images/1-landing-page.webp';
               }}
               draggable={false}
             />

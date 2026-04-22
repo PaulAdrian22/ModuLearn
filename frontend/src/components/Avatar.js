@@ -81,7 +81,7 @@ const Avatar = ({ user, size = 'md', className = '' }) => {
             // Fallback to initials if image fails to load
             e.target.style.display = 'none';
             e.target.parentElement.innerHTML = `
-              <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#2BC4B3] to-[#1e5a8e] text-white font-bold">
+              <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#42C5B6] to-[#346C9A] text-white font-bold">
                 ${getInitials(user?.Name || user?.name)}
               </div>
             `;
@@ -93,7 +93,7 @@ const Avatar = ({ user, size = 'md', className = '' }) => {
 
   // Fallback to initials
   return (
-    <div className={`${sizeClass} rounded-full bg-gradient-to-br from-[#2BC4B3] to-[#1e5a8e] flex items-center justify-center text-white font-bold border border-black ${className}`}>
+    <div className={`${sizeClass} rounded-full bg-gradient-to-br from-[#42C5B6] to-[#346C9A] flex items-center justify-center text-white font-bold border border-black ${className}`}>
       {getInitials(user?.Name || user?.name)}
     </div>
   );

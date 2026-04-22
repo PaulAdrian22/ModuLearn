@@ -20,6 +20,85 @@ const LESSON_STAGE_DEFAULTS = [
   { id: 'final', type: 'final', label: 'Final Assessment' },
 ];
 
+const LESSON_VIDEO_PLACEMENTS = {
+  1: [
+    {
+      placementType: 'topicIndex',
+      topicIndex: 3,
+      caption: 'Lesson 1 Topic 3 Video',
+      url: 'https://www.dropbox.com/scl/fi/3udi818zpelteunz5sdd3/Lesson-1-Topic-3.mp4?rlkey=3i0o5vb25iu1kk0hhgkie8qr8&st=bsbqs7th&dl=0',
+    },
+  ],
+  2: [
+    {
+      placementType: 'topicIndex',
+      topicIndex: 1,
+      caption: 'Lesson 2 Topic 1 Video',
+      url: 'https://www.dropbox.com/scl/fi/k6xe1dbu0spvw6uv54d9k/Lesson-2-Topic-1.mp4?rlkey=otk72a7ujsb19blh4i59xu9zw&st=520yiyvs&dl=0',
+    },
+  ],
+  3: [
+    {
+      placementType: 'titleContains',
+      titleContains: 'storage',
+      caption: 'Lesson 3 Storage Video',
+      url: 'https://www.dropbox.com/scl/fi/4fcxtt2ddpw8oc5k5mgcb/Lesson-3-Topic-1-Storage.mp4?rlkey=hewjpgu1k8etnnfvfnrzx3plu&st=21rtv163&dl=0',
+    },
+    {
+      placementType: 'titleContains',
+      titleContains: 'ram',
+      caption: 'Lesson 3 RAM Video',
+      url: 'https://www.dropbox.com/scl/fi/xi1pkxtei70e1m3groiqw/Lesson-3-Topic-1-RAM.mp4?rlkey=628yw9mbwzr23yxcx4irdrb2c&st=et28s5h0&dl=0',
+    },
+    {
+      placementType: 'titleContains',
+      titleContains: 'power supply',
+      caption: 'Lesson 3 PSU Video',
+      url: 'https://www.dropbox.com/scl/fi/79gttebuedkew38twuj72/Lesson-3-Topic-1-PSU.mp4?rlkey=66t6wqdjuhx8h5eq13s2bbj28&st=kkd5neqf&dl=0',
+    },
+    {
+      placementType: 'titleContains',
+      titleContains: 'motherboard',
+      caption: 'Lesson 3 Motherboard Video',
+      url: 'https://www.dropbox.com/scl/fi/8199jhk8dcan8c460jxcv/Lesson-3-Topic-1-Motherboard.mp4?rlkey=osshw5z07qcpykhtt40cayohg&st=4vgafh3c&dl=0',
+    },
+    {
+      placementType: 'titleContains',
+      titleContains: 'gpu',
+      caption: 'Lesson 3 GPU Video',
+      url: 'https://www.dropbox.com/scl/fi/wey9a8q3bx12llq5gcvn4/Lesson-3-Topic-1-GPU.mp4?rlkey=o4tfq4j89bs4u42ol6y85vhg2&st=59hbppsb&dl=0',
+    },
+    {
+      placementType: 'titleContains',
+      titleContains: 'cpu',
+      caption: 'Lesson 3 CPU Video',
+      url: 'https://www.dropbox.com/scl/fi/8rmvptztbdqs9g6a689we/Lesson-3-Topic-1-CPU.mp4?rlkey=ujw4423z4xfgh6lv7zwfbpmd1&st=m45e58vs&dl=0',
+    },
+    {
+      placementType: 'titleContains',
+      titleContains: 'cooling',
+      caption: 'Lesson 3 Cooling Video',
+      url: 'https://www.dropbox.com/scl/fi/imcz9hagea0aokee9nctx/Lesson-3-Topic-1-Cooling.mp4?rlkey=nddqtbc0e1d7rp2pydt00s9zs&st=vlyyhq0c&dl=0',
+    },
+  ],
+  4: [
+    {
+      placementType: 'topicIndex',
+      topicIndex: 3,
+      caption: 'Lesson 4 Topic 3 Video',
+      url: 'https://www.dropbox.com/scl/fi/q4svlqak2yu7zbzesfkry/Lesson-4-Topic-3.mp4?rlkey=u93nfxhvf0zjq38j0qfpkp16i&st=xtmw84m1&dl=0',
+    },
+  ],
+  5: [
+    {
+      placementType: 'topicIndex',
+      topicIndex: 1,
+      caption: 'Lesson 5 Topic 1 Video',
+      url: 'https://www.dropbox.com/scl/fi/sxgs0i2zficmcqeah3951/Lesson-5-Topic-1.mp4?rlkey=dpaqqy1kfpjmemlx38nldnugs&st=b2cqmdog&dl=0',
+    },
+  ],
+};
+
 const REVIEW_ANSWER_KEY = {
   1: 1,
   2: 1,
@@ -552,7 +631,7 @@ const parseReferencesFromNodes = (dom, nodes = []) => {
 };
 
 const URL_TEXT_REGEX = /(https?:\/\/[^\s<>"']+|www\.[^\s<>"']+)/gi;
-const VIDEO_HOST_HINTS = ['youtube.com', 'youtu.be', 'vimeo.com', 'dailymotion.com', 'loom.com', 'wistia.com'];
+const VIDEO_HOST_HINTS = ['youtube.com', 'youtu.be', 'vimeo.com', 'dailymotion.com', 'loom.com', 'wistia.com', 'dropbox.com', 'dropboxusercontent.com'];
 
 const normalizeUrlForParsing = (rawValue = '') => {
   const trimmed = String(rawValue || '').trim().replace(/[),.;]+$/, '');
@@ -627,6 +706,15 @@ const splitHeadingAndVideoUrls = (rawText = '') => ({
   videoUrls: extractVideoUrlsFromText(rawText),
 });
 
+const normalizeSectionType = (value = '') =>
+  String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/[\s_]+/g, '-');
+
+const plainTextFromHtml = (value = '') =>
+  normalizeWhitespace(String(value || '').replace(/<[^>]+>/g, ' '));
+
 const isAssessmentContent = (text = '') => /^(?:Quick\s+Assessment|Final\s+Assessment|Review\s+Assessments|Note\s*:\s*Highlight)/i.test(text);
 
 const shouldUseSubtopicType = (headingText = '') => {
@@ -637,7 +725,7 @@ const shouldUseSubtopicType = (headingText = '') => {
   if (!candidateText) return false;
   if (/^https?:\/\//i.test(candidateText)) return false;
   if (isAssessmentContent(candidateText)) return false;
-  if (/^(?:Topic|Paksa)\s+\d+\s*:/i.test(candidateText)) return false;
+  if (/^(?:Topic|Paksa)\s+\d+\s*(?:[:.-]|$)/i.test(candidateText)) return false;
   if (/^[a-z]\s*[.)]/i.test(candidateText)) return false;
 
   const words = candidateText.split(' ').filter(Boolean);
@@ -929,7 +1017,7 @@ const isLikelySubtopic = (line = '') => {
   const text = normalizeWhitespace(line);
   if (!text) return false;
   if (/^https?:\/\//i.test(text)) return false;
-  if (/^(?:Topic|Paksa)\s+\d+:/i.test(text)) return false;
+  if (/^(?:Topic|Paksa)\s+\d+\s*(?:[:.-]|$)/i.test(text)) return false;
   if (/^(?:Quick Assessment|Final Assessment|References|Review Assessments|Mga Paksa|Topics)/i.test(text)) return false;
   if (/^(?:a|b|c|d)\s*[.)]\s+/i.test(text)) return false;
   if (text.length > 110) return false;
@@ -1555,7 +1643,7 @@ const parseLessonLanguageBlock = ({
   const objectiveHtmlParts = [];
   if (objectivesIndex >= 0) {
     const firstTopicIndex = lessonNodes.findIndex((node, index) =>
-      index > objectivesIndex && /^(?:Topic|Paksa)\s+\d+\s*:/i.test(textForNode(node))
+      index > objectivesIndex && /^(?:Topic|Paksa)\s+\d+\s*(?:[:.-]|$)/i.test(textForNode(node))
     );
 
     const objectiveEndIndex = [firstTopicIndex, topicsIndex, referencesIndex, finalAssessmentIndex]
@@ -1597,7 +1685,9 @@ const parseLessonLanguageBlock = ({
 
   const sectionRows = [];
 
-  const topicRegex = isTaglish ? /^Paksa\s+\d+\s*:/i : /^Topic\s+\d+\s*:/i;
+  const topicRegex = isTaglish
+    ? /^(?:Paksa|Topic)\s+\d+\s*(?:[:.-]|$)/i
+    : /^Topic\s+\d+\s*(?:[:.-]|$)/i;
 
   const topicIndexes = [];
   for (let i = contentStart; i < contentEnd; i += 1) {
@@ -2107,7 +2197,40 @@ const parseLessonLanguageBlock = ({
     const mappedFromFallback = mappedItemsFromMap
       .filter((itemNumber) => Number.isInteger(itemNumber) && reviewEasyByNumber.has(itemNumber) && !usedReviewItemNumbers.has(itemNumber));
 
-    const mappedItems = mappedFromLesson.length > 0 ? mappedFromLesson : mappedFromFallback;
+    let mappedItems = mappedFromLesson.length > 0 ? mappedFromLesson : mappedFromFallback;
+
+    if (mappedItems.length === 0) {
+      const firstUnusedItem = reviewItemNumbersInOrder.find(
+        (itemNumber) => Number.isInteger(itemNumber)
+          && reviewEasyByNumber.has(itemNumber)
+          && !usedReviewItemNumbers.has(itemNumber)
+      );
+
+      if (Number.isInteger(firstUnusedItem)) {
+        mappedItems = [firstUnusedItem];
+      }
+    }
+
+    if (mappedItems.length === 0) {
+      const firstMappedItem = mappedItemsFromMap.find(
+        (itemNumber) => Number.isInteger(itemNumber) && reviewEasyByNumber.has(itemNumber)
+      );
+
+      if (Number.isInteger(firstMappedItem)) {
+        mappedItems = [firstMappedItem];
+      }
+    }
+
+    if (mappedItems.length === 0) {
+      const firstAvailableItem = reviewItemNumbersInOrder.find(
+        (itemNumber) => Number.isInteger(itemNumber) && reviewEasyByNumber.has(itemNumber)
+      );
+
+      if (Number.isInteger(firstAvailableItem)) {
+        mappedItems = [firstAvailableItem];
+      }
+    }
+
     mappedItems.forEach((itemNumber) => {
       if (!orderedReviewItemNumbers.includes(itemNumber)) {
         orderedReviewItemNumbers.push(itemNumber);
@@ -2142,6 +2265,201 @@ const parseLessonLanguageBlock = ({
       });
     }
   });
+
+  const ensureEachTopicHasInlineReview = () => {
+    if (!(reviewEasyByNumber instanceof Map) || reviewEasyByNumber.size === 0) {
+      return;
+    }
+
+    const isReviewMultipleChoiceType = (value = '') =>
+      /^review-+multiple-choice$/.test(normalizeSectionType(value));
+
+    const orderedItemNumbers = (reviewItemNumbersInOrder.length > 0
+      ? reviewItemNumbersInOrder
+      : [...reviewEasyByNumber.keys()].sort((a, b) => a - b)
+    ).filter((itemNumber) => Number.isInteger(itemNumber) && reviewEasyByNumber.has(itemNumber));
+
+    const consumedFallbackNumbers = new Set();
+    const topicSectionIndexes = [];
+
+    for (let i = 0; i < sectionRows.length; i += 1) {
+      if (normalizeSectionType(sectionRows[i]?.type) === 'topic') {
+        topicSectionIndexes.push(i);
+      }
+    }
+
+    const buildQuestionFromItemNumber = (itemNumber) => {
+      const item = reviewEasyByNumber.get(itemNumber);
+      if (!item) return null;
+
+      return buildQuestionObject({
+        questionSeed,
+        questionText: item.easyQuestion,
+        options: item.options,
+        correctAnswer: item.reviewCorrect,
+        skill: item.skill,
+        questionType: item.easyQuestionType || 'Easy',
+      });
+    };
+
+    const buildQuestionFromExistingTemplate = (question = {}) => {
+      const parsedCorrectAnswer = Number(question?.correctAnswer);
+
+      return buildQuestionObject({
+        questionSeed,
+        questionText: question?.question,
+        options: Array.isArray(question?.options) ? question.options.slice(0, 4) : ['', '', '', ''],
+        correctAnswer: Number.isInteger(parsedCorrectAnswer)
+          ? Math.max(0, Math.min(3, parsedCorrectAnswer))
+          : 0,
+        skill: question?.skill || 'Memorization',
+        questionType: question?.questionType || question?.type || 'Easy',
+      });
+    };
+
+    const borrowedQuestionTemplate = sectionRows.reduce((foundQuestion, section) => {
+      if (foundQuestion) return foundQuestion;
+      if (!isReviewMultipleChoiceType(section?.type)) return null;
+
+      const sectionQuestions = Array.isArray(section?.questions) ? section.questions : [];
+      return sectionQuestions[0] || null;
+    }, null);
+
+    if (orderedItemNumbers.length === 0 && !borrowedQuestionTemplate) {
+      return;
+    }
+
+    for (let topicPos = topicSectionIndexes.length - 1; topicPos >= 0; topicPos -= 1) {
+      const currentTopicIndex = topicSectionIndexes[topicPos];
+      const nextTopicIndex = topicPos + 1 < topicSectionIndexes.length
+        ? topicSectionIndexes[topicPos + 1]
+        : sectionRows.length;
+
+      let hasInlineReview = false;
+      for (let i = currentTopicIndex + 1; i < nextTopicIndex; i += 1) {
+        if (isReviewMultipleChoiceType(sectionRows[i]?.type)) {
+          hasInlineReview = true;
+          break;
+        }
+      }
+
+      if (hasInlineReview) {
+        continue;
+      }
+
+      let selectedItemNumber = orderedItemNumbers.find(
+        (itemNumber) => !consumedFallbackNumbers.has(itemNumber)
+      );
+
+      if (!Number.isInteger(selectedItemNumber)) {
+        selectedItemNumber = orderedItemNumbers[0];
+      }
+
+      let fallbackQuestion = Number.isInteger(selectedItemNumber)
+        ? buildQuestionFromItemNumber(selectedItemNumber)
+        : null;
+      if (!fallbackQuestion && borrowedQuestionTemplate) {
+        fallbackQuestion = buildQuestionFromExistingTemplate(borrowedQuestionTemplate);
+      }
+
+      if (!fallbackQuestion) {
+        continue;
+      }
+
+      if (Number.isInteger(selectedItemNumber)) {
+        consumedFallbackNumbers.add(selectedItemNumber);
+      }
+
+      sectionRows.splice(nextTopicIndex, 0, {
+        id: sectionSeed(),
+        file: null,
+        type: 'review-multiple-choice',
+        title: '',
+        caption: '',
+        content: '',
+        fileName: null,
+        questions: [fallbackQuestion],
+      });
+    }
+  };
+
+  ensureEachTopicHasInlineReview();
+
+  const injectLessonVideoPlacements = () => {
+    const placements = LESSON_VIDEO_PLACEMENTS[TARGET_LESSON_ORDER];
+    if (!Array.isArray(placements) || placements.length === 0) return;
+
+    const normalizeUrlKey = (rawValue = '') => {
+      const normalized = normalizeUrlForParsing(rawValue) || String(rawValue || '').trim();
+      return normalized.toLowerCase();
+    };
+
+    const existingVideoKeys = new Set(
+      sectionRows
+        .filter((section) => normalizeSectionType(section?.type) === 'video')
+        .map((section) => normalizeUrlKey(section?.content))
+        .filter(Boolean)
+    );
+
+    const findTopicAnchorIndex = (topicIndex = 0) => {
+      if (!Number.isInteger(topicIndex) || topicIndex <= 0) return -1;
+      let topicCounter = 0;
+
+      for (let i = 0; i < sectionRows.length; i += 1) {
+        if (normalizeSectionType(sectionRows[i]?.type) !== 'topic') continue;
+        topicCounter += 1;
+        if (topicCounter === topicIndex) return i;
+      }
+
+      return -1;
+    };
+
+    const findTitleAnchorIndex = (needle = '') => {
+      const keyword = normalizeWhitespace(String(needle || '').toLowerCase());
+      if (!keyword) return -1;
+
+      for (let i = 0; i < sectionRows.length; i += 1) {
+        const section = sectionRows[i];
+        const type = normalizeSectionType(section?.type);
+        if (type !== 'topic' && type !== 'subtopic') continue;
+
+        const title = normalizeWhitespace(String(section?.title || '').toLowerCase());
+        const titleText = plainTextFromHtml(title).toLowerCase();
+        if (titleText.includes(keyword)) return i;
+      }
+
+      return -1;
+    };
+
+    placements.forEach((placement) => {
+      const placementUrl = normalizeUrlForParsing(placement?.url) || '';
+      if (!placementUrl) return;
+
+      const dedupeKey = normalizeUrlKey(placementUrl);
+      if (!dedupeKey || existingVideoKeys.has(dedupeKey)) return;
+
+      let anchorIndex = -1;
+      if (placement?.placementType === 'topicIndex') {
+        anchorIndex = findTopicAnchorIndex(Number(placement?.topicIndex));
+      } else if (placement?.placementType === 'titleContains') {
+        anchorIndex = findTitleAnchorIndex(placement?.titleContains);
+      }
+
+      if (anchorIndex < 0) return;
+
+      sectionRows.splice(
+        anchorIndex + 1,
+        0,
+        buildVideoSection({
+          url: placementUrl,
+          caption: String(placement?.caption || ''),
+        })
+      );
+      existingVideoKeys.add(dedupeKey);
+    });
+  };
+
+  injectLessonVideoPlacements();
 
   let referencesText = '';
   if (referencesIndex >= 0) {

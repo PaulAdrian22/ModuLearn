@@ -67,6 +67,33 @@ const DOCX_SIMULATION_SKILL_MAP = {
   }
 };
 
+const ACTIVITY_TYPE_THEME = {
+  Disassembling: {
+    label: 'Disassembling',
+    tag: 'Drag components out',
+    solid: '#E57373',
+    soft: '#FDECEA',
+    text: '#7A2E2E'
+  },
+  Assembling: {
+    label: 'Assembling',
+    tag: 'Drag components in',
+    solid: '#66BB6A',
+    soft: '#E8F5E9',
+    text: '#1F5E29'
+  }
+};
+
+const getActivityType = (simulation = {}) => {
+  const moduleId = Number(simulation?.ModuleID || 0);
+  if (moduleId === 3) return 'Disassembling';
+  if (moduleId === 4) return 'Assembling';
+
+  const title = String(simulation?.SimulationTitle || '').toLowerCase();
+  if (/^\s*installing\b/.test(title) || /\bassembl/.test(title)) return 'Assembling';
+  return 'Disassembling';
+};
+
 const getDocxSkillForSimulation = (simulation = {}) => {
   const moduleId = Number(simulation?.ModuleID || 0);
   const simulationOrder = Number(simulation?.SimulationOrder || 0);
@@ -140,12 +167,11 @@ const Simulations = () => {
 
   const sortedSimulations = useMemo(() => {
     return [...simulations].sort((a, b) => {
-      const titleA = String(a.SimulationTitle || '').toLowerCase();
-      const titleB = String(b.SimulationTitle || '').toLowerCase();
+      const moduleDelta = Number(a.ModuleID || 0) - Number(b.ModuleID || 0);
+      if (moduleDelta !== 0) return moduleDelta;
 
-      if (titleA && titleB && titleA !== titleB) {
-        return titleA.localeCompare(titleB);
-      }
+      const orderDelta = Number(a.SimulationOrder || 0) - Number(b.SimulationOrder || 0);
+      if (orderDelta !== 0) return orderDelta;
 
       return Number(a.SimulationID || 0) - Number(b.SimulationID || 0);
     });
@@ -209,6 +235,8 @@ const Simulations = () => {
               const scorePercent = getCompletionPercent(simulation);
               const resolvedSkillType = getSkillTypeAssignedPerSimulation(simulation);
               const { skillType, solid, soft, text } = getSkillTheme(resolvedSkillType);
+              const activityType = getActivityType(simulation);
+              const activityTheme = ACTIVITY_TYPE_THEME[activityType];
 
               return (
                 <div
@@ -249,11 +277,26 @@ const Simulations = () => {
                     {simulation.SimulationTitle}
                   </h3>
 
-                  <p className="simulation-text text-sm text-gray-600 mb-5 min-h-[3.8rem]">
+                  <p className="simulation-text text-[18px] leading-[1.45] text-gray-600 mb-5 min-h-[3.8rem]">
                     {simulation.Description || 'Drag and drop component layers into masked targets, then submit your run.'}
                   </p>
 
-                  <div className="mb-4">
+                  <div className="mb-4 flex flex-wrap gap-2">
+                    <span
+                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold"
+                      style={{
+                        backgroundColor: activityTheme.soft,
+                        color: activityTheme.text,
+                        border: `1px solid ${activityTheme.solid}66`
+                      }}
+                      title={activityTheme.tag}
+                    >
+                      <span
+                        className="inline-block w-1.5 h-1.5 rounded-full"
+                        style={{ backgroundColor: activityTheme.solid }}
+                      />
+                      {activityTheme.label}
+                    </span>
                     <span
                       className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold"
                       style={{ backgroundColor: soft, color: text, border: `1px solid ${solid}40` }}

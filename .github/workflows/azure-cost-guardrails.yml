@@ -1,0 +1,144 @@
+name: Azure Cost Guardrails
+
+on:
+  workflow_dispatch:
+    inputs:
+      applyAppSettings:
+        description: Apply production cost-oriented app settings
+        required: true
+        type: boolean
+        default: true
+      rightSizeCompute:
+        description: Right-size App Service and MySQL to low-cost SKUs
+        required: true
+        type: boolean
+        default: true
+      configureAppInsights:
+        description: Configure Application Insights cap and retention
+        required: true
+        type: boolean
+        default: true
+      appServiceSku:
+        description: App Service plan SKU
+        required: true
+        type: string
+        default: B1
+      mysqlSkuName:
+        description: MySQL Flexible Server SKU name
+        required: true
+        type: string
+        default: Standard_B1ms
+      mysqlTier:
+        description: MySQL tier
+        required: true
+        type: choice
+        options:
+          - Burstable
+          - GeneralPurpose
+          - MemoryOptimized
+        default: Burstable
+      insightsDailyCapGb:
+        description: App Insights daily cap (GB)
+        required: true
+        type: string
+        default: '0.5'
+      insightsRetentionDays:
+        description: App Insights retention days
+        required: true
+        type: string
+        default: '30'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: azure-cost-guardrails
+  cancel-in-progress: true
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    env:
+      AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+      AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+      AZURE_WEBAPP_NAME: ${{ vars.AZURE_WEBAPP_NAME || 'modulearn-api-260412162638' }}
+      AZURE_APP_SERVICE_PLAN: ${{ vars.AZURE_APP_SERVICE_PLAN }}
+      AZURE_MYSQL_SERVER_NAME: ${{ vars.AZURE_MYSQL_SERVER_NAME }}
+      AZURE_APP_INSIGHTS_NAME: ${{ vars.AZURE_APP_INSIGHTS_NAME }}
+    steps:
+      - name: Validate required credentials
+        run: |
+          if [ -z "${AZURE_CREDENTIALS}" ]; then
+            echo "Missing AZURE_CREDENTIALS secret."
+            exit 1
+          fi
+
+          if [ -z "${AZURE_RESOURCE_GROUP}" ]; then
+            echo "Missing AZURE_RESOURCE_GROUP repository variable."
+            exit 1
+          fi
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ env.AZURE_CREDENTIALS }}
+
+      - name: Apply backend app settings
+        if: ${{ inputs.applyAppSettings }}
+        run: |
+          az webapp config appsettings set \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --name "$AZURE_WEBAPP_NAME" \
+            --settings \
+              NODE_ENV=production \
+              REQUEST_LOG_MODE=errors-only \
+              UPLOAD_CACHE_MAX_AGE_SECONDS=86400 \
+              DB_CONNECTION_LIMIT=5 \
+              API_CACHE_TTL_SECONDS=120 \
+              API_CACHE_MAX_ENTRIES=500
+
+      - name: Right-size App Service plan
+        if: ${{ inputs.rightSizeCompute }}
+        run: |
+          if [ -z "${AZURE_APP_SERVICE_PLAN}" ]; then
+            echo "AZURE_APP_SERVICE_PLAN is not set. Skipping App Service right-sizing."
+            exit 0
+          fi
+
+          az appservice plan update \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --name "$AZURE_APP_SERVICE_PLAN" \
+            --sku "${{ inputs.appServiceSku }}"
+
+      - name: Right-size MySQL flexible server
+        if: ${{ inputs.rightSizeCompute }}
+        run: |
+          if [ -z "${AZURE_MYSQL_SERVER_NAME}" ]; then
+            echo "AZURE_MYSQL_SERVER_NAME is not set. Skipping MySQL right-sizing."
+            exit 0
+          fi
+
+          az mysql flexible-server update \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --name "$AZURE_MYSQL_SERVER_NAME" \
+            --sku-name "${{ inputs.mysqlSkuName }}" \
+            --tier "${{ inputs.mysqlTier }}"
+
+      - name: Configure Application Insights retention and cap
+        if: ${{ inputs.configureAppInsights }}
+        run: |
+          if [ -z "${AZURE_APP_INSIGHTS_NAME}" ]; then
+            echo "AZURE_APP_INSIGHTS_NAME is not set. Skipping Application Insights tuning."
+            exit 0
+          fi
+
+          az monitor app-insights component update \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --app "$AZURE_APP_INSIGHTS_NAME" \
+            --retention-time "${{ inputs.insightsRetentionDays }}"
+
+          az monitor app-insights component billing update \
+            --resource-group "$AZURE_RESOURCE_GROUP" \
+            --app "$AZURE_APP_INSIGHTS_NAME" \
+            --cap "${{ inputs.insightsDailyCapGb }}" \
+          || echo "Warning: unable to set Application Insights daily cap via current az CLI profile."

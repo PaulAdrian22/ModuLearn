@@ -6,7 +6,7 @@ const About = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden" style={{
-      backgroundImage: 'url(/images/login-bg.svg)',
+      backgroundImage: 'url(/images/login-bg.webp)',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundColor: '#2BC4B3'

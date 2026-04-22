@@ -299,7 +299,7 @@ const getUserStats = async (req, res) => {
         `SELECT
             COUNT(*) as started,
             SUM(CASE WHEN lessonProgress.CompletionRate >= 100 THEN 1 ELSE 0 END) as completed,
-            AVG(lessonProgress.CompletionRate) as avgProgress
+            COALESCE(SUM(lessonProgress.CompletionRate), 0) as totalCompletionRate
          FROM (
            SELECT
              m.LessonOrder,
@@ -361,12 +361,13 @@ const getUserStats = async (req, res) => {
     const simulationSeconds = Math.max(0, Number(simulationTimeStats[0]?.simulationSeconds || 0));
     const totalTimeSpentMinutes = Math.floor((lessonSeconds + assessmentSeconds + simulationSeconds) / 60);
     
-    const started = moduleProgress[0].started || 0;
-    const avgProgress = started > 0 ? parseFloat(moduleProgress[0].avgProgress || 0) : 0;
-    
+    const totalLessonsCount = parseInt(totalModules[0].total || 0, 10);
+    const totalCompletionRate = parseFloat(moduleProgress[0].totalCompletionRate || 0);
+    const avgProgress = totalLessonsCount > 0 ? totalCompletionRate / totalLessonsCount : 0;
+
     res.json({
       modules: {
-        total: totalModules[0].total || 0,
+        total: totalLessonsCount,
         completed: parseInt(moduleProgress[0].completed) || 0
       },
       assessments: {
@@ -403,6 +404,7 @@ const getLearningProgressSummary = async (req, res) => {
       assessmentByType,
       moduleAssessmentStats,
       masteryStats,
+      masteryAssessmentVolume,
       assessmentTimeTotals,
       simulationTimeTotals
     ] = await Promise.all([
@@ -430,9 +432,13 @@ const getLearningProgressSummary = async (req, res) => {
         [userId]
       ),
       query(
-        `SELECT LOWER(a.AssessmentType) as assessmentType, COUNT(*) as totalTaken, AVG(a.TotalScore) as averageScore
+        `SELECT LOWER(a.AssessmentType) as assessmentType,
+                COUNT(*) as totalTaken,
+                AVG(a.TotalScore) as averageScore,
+                SUM(CASE WHEN a.ResultStatus = 'Pass' THEN 1 ELSE 0 END) as passed
          FROM assessment a
          WHERE a.UserID = ?
+           AND COALESCE(a.ResultStatus, '') <> 'In Progress'
          GROUP BY LOWER(a.AssessmentType)`,
         [userId]
       ),
@@ -446,6 +452,14 @@ const getLearningProgressSummary = async (req, res) => {
       ),
       query(
         'SELECT AVG(PKnown) as avgKnown FROM bkt_model WHERE UserID = ?',
+        [userId]
+      ),
+      query(
+        `SELECT COUNT(*) as completedAssessments
+           FROM assessment
+          WHERE UserID = ?
+            AND LOWER(COALESCE(AssessmentType, '')) <> 'initial'
+            AND ResultStatus <> 'In Progress'`,
         [userId]
       ),
       query(
@@ -487,29 +501,41 @@ const getLearningProgressSummary = async (req, res) => {
     const totalLearningMinutes = Math.floor((lessonActiveSeconds + assessmentSeconds + simulationSeconds) / 60);
     const averageTimePerLessonMinutes = startedLessons > 0 ? Math.round(lessonActiveMinutes / startedLessons) : 0;
     const progressPercent = totalLessons > 0 ? Math.round(totalCompletionRate / totalLessons) : 0;
-    const masteryLevelPercent = Math.round((parseFloat(masteryStats[0]?.avgKnown || 0) || 0) * 100);
+    const avgKnown = Math.max(0, Math.min(1, parseFloat(masteryStats[0]?.avgKnown || 0) || 0));
+    const completedAssessmentsForMastery = parseInt(
+      masteryAssessmentVolume[0]?.completedAssessments || 0,
+      10
+    );
+    const masteryConfidence = Math.min(1, completedAssessmentsForMastery / 8);
+    const adaptiveMasteryLevel = avgKnown * (0.3 + (0.7 * masteryConfidence));
+    const masteryLevelPercent = Math.round(adaptiveMasteryLevel * 100);
 
     const reviewTypeSet = new Set(['review', 'quiz']);
     const finalTypeSet = new Set(['final', 'post-test']);
 
     let totalReviewAssessmentsTaken = 0;
     let reviewWeightedScoreTotal = 0;
+    let totalReviewAssessmentsPassed = 0;
     let totalFinalAssessmentsTaken = 0;
     let finalWeightedScoreTotal = 0;
+    let totalFinalAssessmentsPassed = 0;
 
     assessmentByType.forEach((row) => {
       const type = String(row.assessmentType || '').toLowerCase();
       const totalTaken = parseInt(row.totalTaken || 0, 10);
       const averageScore = parseFloat(row.averageScore || 0);
+      const passed = parseInt(row.passed || 0, 10);
 
       if (reviewTypeSet.has(type)) {
         totalReviewAssessmentsTaken += totalTaken;
         reviewWeightedScoreTotal += averageScore * totalTaken;
+        totalReviewAssessmentsPassed += passed;
       }
 
       if (finalTypeSet.has(type)) {
         totalFinalAssessmentsTaken += totalTaken;
         finalWeightedScoreTotal += averageScore * totalTaken;
+        totalFinalAssessmentsPassed += passed;
       }
     });
 
@@ -571,7 +597,9 @@ const getLearningProgressSummary = async (req, res) => {
         totalReviewAssessmentsTaken,
         averageReviewAssessmentScore,
         totalFinalAssessmentsTaken,
-        averageFinalAssessmentScore
+        averageFinalAssessmentScore,
+        totalReviewAssessmentsPassed,
+        totalFinalAssessmentsPassed
       }
     });
   } catch (error) {

@@ -3,6 +3,8 @@
 
 const { query, getConnection } = require('../config/database');
 
+const ASSESSMENT_PASSING_SCORE = 75;
+
 // Create new assessment
 const createAssessment = async (req, res) => {
   try {
@@ -136,7 +138,7 @@ const completeAssessment = async (req, res) => {
     const totalQuestions = answers[0].total;
     const correctAnswers = answers[0].correct || 0;
     const score = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
-    const resultStatus = score >= 60 ? 'Pass' : 'Fail'; // 60% passing rate
+    const resultStatus = score >= ASSESSMENT_PASSING_SCORE ? 'Pass' : 'Fail';
     
     // Update assessment
     await connection.execute(

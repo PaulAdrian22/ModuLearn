@@ -251,7 +251,7 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F5F7FA]">
+      <div className="min-h-screen bg-background">
         <AdminNavbar />
         <div className="flex items-center justify-center h-96">
           <div className="spinner"></div>
@@ -282,13 +282,13 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA]">
+    <div className="min-h-screen bg-background">
       <AdminNavbar />
       
       <div className="w-full px-8 py-8 min-h-[calc(100vh-80px)] custom-scrollbar">
         <div className="w-full">
           <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
-              <h2 className="text-2xl font-bold text-[#1e5a8e] mb-6">Summary</h2>
+              <h2 className="text-2xl font-bold text-secondary mb-6">Summary</h2>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                 {/* Lesson Deployed */}
@@ -300,20 +300,20 @@ const AdminDashboard = () => {
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 font-medium">Lesson Deployed</p>
-                    <p className="text-4xl font-bold text-[#0B2B4C]">{stats.lessonsDeployed}</p>
+                    <p className="text-4xl font-bold text-text-primary">{stats.lessonsDeployed}</p>
                   </div>
                 </div>
 
                 {/* Learner Count */}
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-[#FFB74D] rounded-xl flex items-center justify-center flex-shrink-0">
+                  <div className="w-16 h-16 bg-[#E9B766] rounded-xl flex items-center justify-center flex-shrink-0">
                     <svg className="w-9 h-9 text-white" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 12C14.21 12 16 10.21 16 8S14.21 4 12 4 8 5.79 8 8 9.79 12 12 12M12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z"/>
                     </svg>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 font-medium">Learner Count</p>
-                    <p className="text-4xl font-bold text-[#0B2B4C]">{stats.learnerCount}</p>
+                    <p className="text-4xl font-bold text-text-primary">{stats.learnerCount}</p>
                   </div>
                 </div>
 
@@ -326,7 +326,7 @@ const AdminDashboard = () => {
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 font-medium">Certified Learners</p>
-                    <p className="text-4xl font-bold text-[#0B2B4C]">{stats.certifiedLearners}</p>
+                    <p className="text-4xl font-bold text-text-primary">{stats.certifiedLearners}</p>
                   </div>
                 </div>
 
@@ -342,7 +342,7 @@ const AdminDashboard = () => {
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 font-medium">Reported Issues</p>
-                    <p className="text-4xl font-bold text-[#0B2B4C]">{stats.reportedIssues}</p>
+                    <p className="text-4xl font-bold text-text-primary">{stats.reportedIssues}</p>
                   </div>
                 </div>
 
@@ -351,7 +351,7 @@ const AdminDashboard = () => {
                   className="flex items-center gap-4 cursor-pointer hover:bg-gray-50 rounded-lg p-2 -m-2 transition-colors duration-200"
                   onClick={handleOpenNotificationsModal}
                 >
-                  <div className="w-16 h-16 bg-[#2BC4B3] rounded-xl flex items-center justify-center flex-shrink-0 relative">
+                  <div className="w-16 h-16 bg-highlight rounded-xl flex items-center justify-center flex-shrink-0 relative">
                     <svg className="w-9 h-9 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                     </svg>
@@ -363,7 +363,7 @@ const AdminDashboard = () => {
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 font-medium">Notifications</p>
-                    <p className="text-4xl font-bold text-[#0B2B4C]">{notifications.length}</p>
+                    <p className="text-4xl font-bold text-text-primary">{notifications.length}</p>
                   </div>
                 </div>
               </div>
@@ -371,7 +371,7 @@ const AdminDashboard = () => {
 
           {/* Activity Report */}
           <div className="bg-white rounded-2xl shadow-sm p-6">
-              <h2 className="text-2xl font-bold text-[#1e5a8e] mb-6">Activity Report</h2>
+              <h2 className="text-2xl font-bold text-secondary mb-6">Activity Report</h2>
               
               {/* Legend - Single Row */}
               <div className="flex flex-wrap gap-x-5 gap-y-2 mb-6">
@@ -449,7 +449,7 @@ const AdminDashboard = () => {
 
               {/* Toggles + Export */}
               <div className="mt-8 pt-6 border-t border-gray-100">
-                <h3 className="text-3xl md:text-4xl font-bold text-[#2BC4B3] mb-4">Toggles</h3>
+                <h3 className="text-3xl md:text-4xl font-bold text-highlight-dark mb-4">Toggles</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-10 gap-y-2">
                   {TOGGLE_OPTIONS.map((option) => (
                     <label key={option.key} className="flex items-center gap-3 md:gap-4 text-[#4B4B4B] cursor-pointer">
@@ -468,7 +468,7 @@ const AdminDashboard = () => {
                 <div className="flex justify-end mt-6">
                   <button
                     onClick={() => setShowExportModal(true)}
-                    className="px-6 py-2.5 bg-[#0F4A8A] hover:bg-[#164570] text-white rounded-xl font-semibold text-base leading-tight"
+                    className="px-6 py-2.5 bg-[#3A70A1] hover:bg-[#2A5D84] text-white rounded-xl font-semibold text-base leading-tight"
                   >
                     Export Data
                   </button>
@@ -482,7 +482,7 @@ const AdminDashboard = () => {
       {showNotificationsModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[80vh] overflow-hidden">
-            <div className="bg-[#2BC4B3] px-6 py-4 flex items-center justify-between">
+            <div className="bg-highlight px-6 py-4 flex items-center justify-between">
               <h2 className="text-2xl font-bold text-white">Notifications</h2>
               <button
                 onClick={() => setShowNotificationsModal(false)}
@@ -501,12 +501,12 @@ const AdminDashboard = () => {
                 <div className="space-y-4">
                   {notifications.map((notification, index) => {
                     const typeColors = {
-                      new_user: '#2BC4B3',
-                      enrollment: '#4A90E2',
+                      new_user: '#42C5B6',
+                      enrollment: '#589AD7',
                       completion: '#66BB6A',
                       issue: '#EF5350'
                     };
-                    const barColor = typeColors[notification.type] || '#2BC4B3';
+                    const barColor = typeColors[notification.type] || '#42C5B6';
                     return (
                       <div key={index} className="border-b border-gray-100 pb-4 last:border-b-0">
                         <div className="flex gap-3">
@@ -550,7 +550,7 @@ const AdminDashboard = () => {
             <div className="p-6 overflow-y-auto max-h-[calc(80vh-80px)]">
               {issuesLoading ? (
                 <div className="flex items-center justify-center h-48">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2BC4B3]"></div>
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-highlight"></div>
                 </div>
               ) : selectedReport ? (
                 /* Detail View */
@@ -576,7 +576,7 @@ const AdminDashboard = () => {
                       <span className="font-bold text-gray-800">Email : </span>
                       <a 
                         href={`mailto:${selectedReport.Email}`}
-                        className="text-[#1e5a8e] hover:underline"
+                        className="text-secondary hover:underline"
                       >
                         {selectedReport.Email}
                       </a>
@@ -594,14 +594,14 @@ const AdminDashboard = () => {
                   <div className="flex justify-end gap-4">
                     <button
                       onClick={handleReturnToList}
-                      className="px-6 py-2 bg-[#1e5a8e] text-white font-medium rounded-lg hover:bg-[#164570] transition-colors"
+                      className="px-6 py-2 bg-[#346C9A] text-white font-medium rounded-lg hover:bg-[#2A5D84] transition-colors"
                     >
                       Return to List
                     </button>
                     {selectedReport.Status !== 'resolved' && (
                       <button
                         onClick={() => handleTagAsResolved(selectedReport.ReportID)}
-                        className="px-6 py-2 bg-[#2BC4B3] text-white font-medium rounded-lg hover:bg-[#1a9d8f] transition-colors"
+                        className="px-6 py-2 bg-highlight text-white font-medium rounded-lg hover:bg-highlight-dark transition-colors"
                       >
                         Tag as Resolved
                       </button>
@@ -641,7 +641,7 @@ const AdminDashboard = () => {
                             <td className="py-3 px-4">
                               <a 
                                 href={`mailto:${report.Email}`}
-                                className="text-[#4A90E2] hover:underline"
+                                className="text-[#589AD7] hover:underline"
                               >
                                 {report.Email}
                               </a>
@@ -650,7 +650,7 @@ const AdminDashboard = () => {
                             <td className="py-3 px-4">
                               <button
                                 onClick={() => handleViewReportDetails(report)}
-                                className="px-5 py-2 bg-[#2BC4B3] text-white text-sm font-medium rounded-md hover:bg-[#1a9d8f] transition-colors shadow-sm"
+                                className="px-5 py-2 bg-highlight text-white text-sm font-medium rounded-md hover:bg-highlight-dark transition-colors shadow-sm"
                               >
                                 Details
                               </button>
@@ -671,7 +671,7 @@ const AdminDashboard = () => {
       {showExportModal && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
           <div className="w-full max-w-6xl bg-white rounded-sm shadow-2xl overflow-hidden">
-            <div className="bg-[#2BC4B3] px-8 py-4 flex items-center justify-between">
+            <div className="bg-highlight px-8 py-4 flex items-center justify-between">
               <h2 className="text-5xl font-bold text-white">Download Report</h2>
               <button onClick={() => setShowExportModal(false)} className="text-white hover:text-gray-100">
                 <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -681,7 +681,7 @@ const AdminDashboard = () => {
             </div>
 
             <div className="p-8">
-              <p className="text-2xl md:text-3xl font-bold text-[#0F4A8A] mb-5">Select the report you want to download</p>
+              <p className="text-2xl md:text-3xl font-bold text-[#3A70A1] mb-5">Select the report you want to download</p>
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-2">
                 {TOGGLE_OPTIONS.map((option) => (
                   <label key={option.key} className="flex items-center gap-3 md:gap-4 text-[#4A4A4A] cursor-pointer">
@@ -700,14 +700,14 @@ const AdminDashboard = () => {
                 <button
                   onClick={handleDownloadPDF}
                   disabled={!selectedExportMetrics.length || !activityData.length}
-                  className="px-8 py-2 rounded-xl bg-[#2BC4B3] hover:bg-[#1a9d8f] text-white font-semibold text-[30px] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-8 py-2 rounded-xl bg-highlight hover:bg-highlight-dark text-white font-semibold text-[30px] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Download as PDF File
                 </button>
                 <button
                   onClick={handleDownloadExcel}
                   disabled={!selectedExportMetrics.length || !activityData.length}
-                  className="px-8 py-2 rounded-xl bg-[#2BC4B3] hover:bg-[#1a9d8f] text-white font-semibold text-[30px] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-8 py-2 rounded-xl bg-highlight hover:bg-highlight-dark text-white font-semibold text-[30px] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Download as Excel File
                 </button>
@@ -726,11 +726,11 @@ const AdminDashboard = () => {
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #2BC4B3;
+          background: #42C5B6;
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #1a9d8f;
+          background: #37A89C;
         }
       `}</style>
     </div>

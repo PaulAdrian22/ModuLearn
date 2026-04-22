@@ -4,6 +4,15 @@
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
+const parseNonNegativeInt = (value, fallback) => {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return fallback;
+  return Math.max(0, Math.floor(parsed));
+};
+
+const isProduction = process.env.NODE_ENV === 'production';
+const defaultConnectionLimit = isProduction ? 5 : 10;
+
 // Database configuration
 const dbConfig = {
   host: process.env.DB_HOST || 'localhost',
@@ -12,8 +21,8 @@ const dbConfig = {
   database: process.env.DB_NAME || 'modulearn_db',
   port: process.env.DB_PORT || 3306,
   waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
+  connectionLimit: Math.max(1, parseNonNegativeInt(process.env.DB_CONNECTION_LIMIT, defaultConnectionLimit)),
+  queueLimit: parseNonNegativeInt(process.env.DB_QUEUE_LIMIT, 0),
   enableKeepAlive: true,
   keepAliveInitialDelay: 0
 };

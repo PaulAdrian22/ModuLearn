@@ -268,17 +268,17 @@ const AdminLessons = () => {
 
   const getDifficultyColor = (difficulty) => {
     const colors = {
-      'Easy': '#4A90E2',
-      'Challenging': '#F1C40F',
-      'Advanced': '#E67E22',
-      'Supplementary': '#9B59B6'
+      'Easy': '#589AD7',
+      'Challenging': '#C8B35E',
+      'Advanced': '#B98A54',
+      'Supplementary': '#8D6EB1'
     };
     return colors[difficulty] || colors['Easy'];
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F5F7FA]">
+      <div className="min-h-screen bg-background">
         <AdminNavbar />
         <div className="flex items-center justify-center h-64">
           <div className="spinner"></div>
@@ -306,7 +306,7 @@ const AdminLessons = () => {
   });
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA]">
+    <div className="min-h-screen bg-background">
       <AdminNavbar />
       
       <div className="w-full px-8 py-8 min-h-[calc(100vh-80px)] custom-scrollbar">
@@ -317,46 +317,46 @@ const AdminLessons = () => {
               onClick={() => setActiveTab('english')}
               className={`pb-3 px-2 font-bold text-lg relative ${
                 activeTab === 'english'
-                  ? 'text-[#1e5a8e]'
+                  ? 'text-secondary'
                   : 'text-gray-500'
               }`}
             >
               English Lessons ({englishLessonsCount})
               {activeTab === 'english' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#2BC4B3]"></div>
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-highlight"></div>
               )}
             </button>
             <button
               onClick={() => setActiveTab('taglish')}
               className={`pb-3 px-2 font-bold text-lg relative ${
                 activeTab === 'taglish'
-                  ? 'text-[#1e5a8e]'
+                  ? 'text-secondary'
                   : 'text-gray-500'
               }`}
             >
               Taglish Lessons ({taglishLessonsCount})
               {activeTab === 'taglish' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#2BC4B3]"></div>
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-highlight"></div>
               )}
             </button>
             <button
               onClick={() => setActiveTab('deleted')}
               className={`pb-3 px-2 font-bold text-lg relative ${
                 activeTab === 'deleted'
-                  ? 'text-[#1e5a8e]'
+                  ? 'text-secondary'
                   : 'text-gray-500'
               }`}
             >
               Deleted Lessons ({deletedLessonsCount})
               {activeTab === 'deleted' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#2BC4B3]"></div>
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-highlight"></div>
               )}
             </button>
           </div>
 
           <button
             onClick={handleAddLesson}
-            className="px-6 py-3 bg-[#FFB74D] hover:bg-[#FFA726] text-white rounded-lg font-bold shadow-md transition-all"
+            className="px-6 py-3 bg-[#E9B766] hover:bg-[#FFA726] text-white rounded-lg font-bold shadow-md transition-all"
           >
             Add Supplementary Lesson
           </button>
@@ -377,7 +377,7 @@ const AdminLessons = () => {
               {activeTab !== 'deleted' && (
                 <button 
                   onClick={handleAddLesson} 
-                  className="px-6 py-3 bg-[#FFB74D] hover:bg-[#FFA726] text-white rounded-lg font-bold transition-colors duration-200"
+                  className="px-6 py-3 bg-[#E9B766] hover:bg-[#FFA726] text-white rounded-lg font-bold transition-colors duration-200"
                 >
                   Create Supplementary Lesson
                 </button>
@@ -414,11 +414,11 @@ const AdminLessons = () => {
                     </div>
                     <div className="sm:text-right sm:ml-4 flex-shrink-0">
                       <div>
-                        <p className="text-xs sm:text-sm font-semibold text-[#1e5a8e]">Last Update</p>
+                        <p className="text-xs sm:text-sm font-semibold text-secondary">Last Update</p>
                         <p className="text-xs sm:text-sm text-gray-600">{formatDate(lesson.updated_at || lesson.created_at)}</p>
                       </div>
                       {isDeleteProtected && (
-                        <div className="mt-2 inline-flex items-center rounded-full bg-[#E8F4FF] px-3 py-1 text-xs font-semibold text-[#1E5A8E]">
+                        <div className="mt-2 inline-flex items-center rounded-full bg-[#E8F4FF] px-3 py-1 text-xs font-semibold text-secondary">
                           Protected (Lesson 1-7)
                         </div>
                       )}
@@ -435,12 +435,12 @@ const AdminLessons = () => {
                   <div className="grid grid-cols-1 2xl:grid-cols-[minmax(0,1fr)_auto] gap-4 items-start">
                     <div className="flex flex-wrap items-center gap-x-6 gap-y-3 min-w-0">
                       <p className="text-sm">
-                        <span className="font-semibold text-[#2BC4B3]">Difficulty : </span>
+                        <span className="font-semibold text-highlight-dark">Difficulty : </span>
                         <span className="text-gray-700">{lesson.Difficulty || 'Easy'}</span>
                       </p>
 
                       <p className="text-sm">
-                        <span className="font-semibold text-[#2BC4B3]">Language : </span>
+                        <span className="font-semibold text-highlight-dark">Language : </span>
                         <span className="text-gray-700">{normalizeLessonLanguage(lesson.LessonLanguage)}</span>
                       </p>
 
@@ -457,7 +457,7 @@ const AdminLessons = () => {
                       <span
                         className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
                           toBooleanFlag(lesson.Is_Unlocked)
-                            ? 'bg-[#E8F4FF] text-[#1E5A8E]'
+                            ? 'bg-[#E8F4FF] text-secondary'
                             : 'bg-[#FDECEC] text-[#C0392B]'
                         }`}
                       >
@@ -466,21 +466,21 @@ const AdminLessons = () => {
                       
                       <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
                         <span className="flex items-center gap-1">
-                          <svg className="w-5 h-5 text-[#1e5a8e]" fill="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-5 h-5 text-secondary" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3M14 17H7V15H14V17M17 13H7V11H17V13M17 9H7V7H17V9Z"/>
                           </svg>
                           <span className="font-semibold">{lesson.topicCount || 0}</span> Topics
                         </span>
                         
                         <span className="flex items-center gap-1">
-                          <svg className="w-5 h-5 text-[#1e5a8e]" fill="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-5 h-5 text-secondary" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12,3C10.73,3 9.6,3.8 9.18,5H3V7H4.95L2,14C1.53,16 3,17 5.5,17C8,17 9.56,16 9,14L6.05,7H9.17C9.5,7.85 10.15,8.5 11,8.83V20H2V22H22V20H13V8.82C13.85,8.5 14.5,7.85 14.82,7H17.95L15,14C14.53,16 16,17 18.5,17C21,17 22.56,16 22,14L19.05,7H21V5H14.83C14.4,3.8 13.27,3 12,3M12,5A1,1 0 0,1 13,6A1,1 0 0,1 12,7A1,1 0 0,1 11,6A1,1 0 0,1 12,5M5.5,10.25L7,14H4L5.5,10.25M18.5,10.25L20,14H17L18.5,10.25Z"/>
                           </svg>
                           <span className="font-semibold">{lesson.assessmentCount || 0}</span> Assessments
                         </span>
 
                         <span className="flex items-center gap-1">
-                          <svg className="w-5 h-5 text-[#1e5a8e]" fill="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-5 h-5 text-secondary" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z"/>
                           </svg>
                           <span className="font-semibold">{lesson.duration || 30}</span> Minutes
@@ -516,7 +516,7 @@ const AdminLessons = () => {
                             className={`min-w-[160px] px-5 py-2 text-center rounded-lg font-semibold transition-all shadow-sm ${
                               toBooleanFlag(lesson.Is_Completed)
                                 ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                                : 'bg-[#4DD0E1] hover:bg-[#2BC4B3] text-white'
+                                : 'bg-[#64D0E0] hover:bg-highlight text-white'
                             }`}
                           >
                             {toBooleanFlag(lesson.Is_Completed) ? 'Editing Locked' : 'Edit Lesson'}
@@ -537,7 +537,7 @@ const AdminLessons = () => {
                             disabled={Boolean(lessonActionLoading[lesson.ModuleID]) || Number(lesson.LessonOrder) === 1}
                             className={`min-w-[160px] px-5 py-2 text-center text-white rounded-lg font-semibold transition-all shadow-sm ${
                               toBooleanFlag(lesson.Is_Unlocked)
-                                ? 'bg-[#FFB74D] hover:bg-[#FFA726]'
+                                ? 'bg-[#E9B766] hover:bg-[#FFA726]'
                                 : 'bg-[#7986CB] hover:bg-[#5C6BC0]'
                             } disabled:opacity-60 disabled:cursor-not-allowed`}
                             title={Number(lesson.LessonOrder) === 1 ? 'Lesson 1 must stay unlocked' : undefined}

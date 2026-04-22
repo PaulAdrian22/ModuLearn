@@ -26,6 +26,19 @@ const simulationRoutes = require('./routes/simulationRoutes');
 // Initialize Express app
 const app = express();
 
+const isProduction = process.env.NODE_ENV === 'production';
+const allowedRequestLogModes = new Set(['off', 'dev', 'tiny', 'errors-only']);
+const configuredRequestLogMode = String(process.env.REQUEST_LOG_MODE || '').trim().toLowerCase();
+const requestLogMode = allowedRequestLogModes.has(configuredRequestLogMode)
+  ? configuredRequestLogMode
+  : (isProduction ? 'errors-only' : 'dev');
+
+const configuredUploadCacheMaxAgeSeconds = Number(process.env.UPLOAD_CACHE_MAX_AGE_SECONDS);
+const uploadCacheMaxAgeSeconds = Number.isFinite(configuredUploadCacheMaxAgeSeconds)
+  ? Math.max(0, Math.floor(configuredUploadCacheMaxAgeSeconds))
+  : (isProduction ? 86400 : 0);
+const shouldUseUploadCaching = uploadCacheMaxAgeSeconds > 0;
+
 // Middleware
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" },
@@ -71,13 +84,41 @@ app.use(cors({
   credentials: true
 }));
 app.use(compression()); // Compress responses
-app.use(morgan('dev')); // HTTP request logger
+if (requestLogMode !== 'off') {
+  const morganFormat = requestLogMode === 'tiny' || requestLogMode === 'errors-only' ? 'tiny' : 'dev';
+  const morganOptions = requestLogMode === 'errors-only'
+    ? { skip: (_, res) => res.statusCode < 400 }
+    : undefined;
+
+  app.use(morgan(morganFormat, morganOptions));
+}
 // Large lesson payloads (rich sections + assessments) can exceed default 100kb.
 app.use(express.json({ limit: '10mb' })); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true, limit: '10mb' })); // Parse URL-encoded bodies
 
 // Serve static files for uploads
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
+  etag: true,
+  lastModified: true,
+  maxAge: shouldUseUploadCaching ? uploadCacheMaxAgeSeconds * 1000 : 0,
+  setHeaders: (res, filePath) => {
+    if (!shouldUseUploadCaching) return;
+
+    if (/\.(?:png|jpe?g|gif|webp|svg|mp4|webm)$/i.test(filePath)) {
+      res.setHeader(
+        'Cache-Control',
+        `public, max-age=${uploadCacheMaxAgeSeconds}, stale-while-revalidate=3600`
+      );
+    }
+  }
+}));
+
+// Serve simulation webp assets (grouped by perspective) for the rebuilt Simulation page
+app.use('/sim-assets', express.static(path.join(__dirname, '..', 'Simulations', 'simulation webp grouped by perspective'), {
+  etag: true,
+  lastModified: true,
+  maxAge: shouldUseUploadCaching ? uploadCacheMaxAgeSeconds * 1000 : 0
+}));
 
 // API Routes
 app.use('/api/auth', authRoutes);

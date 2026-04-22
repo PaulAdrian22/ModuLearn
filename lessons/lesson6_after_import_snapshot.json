@@ -7,7 +7,7 @@
     "Description": "<div>This lesson focuses on the essential practices of maintaining computer systems, software, and hardware, as well as the proper documentation required to ensure efficient and safe operations. Maintenance involves routine checks, troubleshooting, updates, and preventive measures that prolong the lifespan and performance of devices. Documentation, on the other hand, provides a structured record of maintenance activities, system configurations, procedures, and user instructions.</div><p><br></p><p><strong>Learning Objectives:</strong></p><p>This lesson aims to:</p><ol style=\"list-style-type: decimal;\"><li>explain the importance of regular maintenance for computer hardware and software;</li><li>identify common maintenance tasks, such as cleaning, updates, backups, and troubleshooting procedures; and</li><li>demonstrate preventive maintenance techniques to ensure optimal system performance.</li></ol>",
     "sections": [
       {
-        "id": 1776093618818,
+        "id": 1776122969344,
         "file": null,
         "type": "topic",
         "order": 1,
@@ -17,7 +17,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618819,
+        "id": 1776122969345,
         "file": null,
         "type": "paragraph",
         "order": 2,
@@ -29,7 +29,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618820,
+        "id": 1776122969346,
         "file": null,
         "type": "subtopic",
         "order": 3,
@@ -39,7 +39,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618821,
+        "id": 1776122969347,
         "file": null,
         "type": "paragraph",
         "order": 4,
@@ -51,7 +51,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618822,
+        "id": 1776122969348,
         "file": null,
         "type": "subtopic",
         "order": 5,
@@ -61,7 +61,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618823,
+        "id": 1776122969349,
         "file": null,
         "type": "paragraph",
         "order": 6,
@@ -73,7 +73,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618825,
+        "id": 1776122969351,
         "file": null,
         "type": "review-multiple-choice",
         "order": 7,
@@ -83,7 +83,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093618824,
+            "id": 1776122969350,
             "skill": "Memorization",
             "options": [
               "Corrective Maintenance",
@@ -98,7 +98,7 @@
         ]
       },
       {
-        "id": 1776093618826,
+        "id": 1776122969352,
         "file": null,
         "type": "topic",
         "order": 8,
@@ -108,7 +108,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618827,
+        "id": 1776122969353,
         "file": null,
         "type": "paragraph",
         "order": 9,
@@ -120,7 +120,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618828,
+        "id": 1776122969354,
         "file": null,
         "type": "subtopic",
         "order": 10,
@@ -130,7 +130,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618829,
+        "id": 1776122969355,
         "file": null,
         "type": "paragraph",
         "order": 11,
@@ -142,7 +142,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618832,
+        "id": 1776122969358,
         "file": null,
         "type": "review-multiple-choice",
         "order": 12,
@@ -152,7 +152,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093618830,
+            "id": 1776122969356,
             "skill": "Technical Comprehension",
             "options": [
               "To increase internet speed",
@@ -165,7 +165,7 @@
             "correctAnswer": 1
           },
           {
-            "id": 1776093618831,
+            "id": 1776122969357,
             "skill": "Analytical Thinking",
             "options": [
               "Reduced hardware lifespan",
@@ -180,7 +180,7 @@
         ]
       },
       {
-        "id": 1776093618833,
+        "id": 1776122969359,
         "file": null,
         "type": "topic",
         "order": 13,
@@ -190,7 +190,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618834,
+        "id": 1776122969360,
         "file": null,
         "type": "paragraph",
         "order": 14,
@@ -202,7 +202,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618837,
+        "id": 1776122969363,
         "file": null,
         "type": "review-multiple-choice",
         "order": 15,
@@ -212,7 +212,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093618835,
+            "id": 1776122969361,
             "skill": "Analytical Thinking",
             "options": [
               "Software updates",
@@ -225,7 +225,7 @@
             "correctAnswer": 1
           },
           {
-            "id": 1776093618836,
+            "id": 1776122969362,
             "skill": "Problem Solving",
             "options": [
               "Antivirus software",
@@ -240,7 +240,7 @@
         ]
       },
       {
-        "id": 1776093618838,
+        "id": 1776122969364,
         "file": null,
         "type": "topic",
         "order": 16,
@@ -250,7 +250,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618839,
+        "id": 1776122969365,
         "file": null,
         "type": "paragraph",
         "order": 17,
@@ -262,7 +262,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618840,
+        "id": 1776122969366,
         "file": null,
         "type": "subtopic",
         "order": 18,
@@ -272,7 +272,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618841,
+        "id": 1776122969367,
         "file": null,
         "type": "paragraph",
         "order": 19,
@@ -284,7 +284,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618842,
+        "id": 1776122969368,
         "file": null,
         "type": "subtopic",
         "order": 20,
@@ -294,7 +294,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618843,
+        "id": 1776122969369,
         "file": null,
         "type": "paragraph",
         "order": 21,
@@ -306,7 +306,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618844,
+        "id": 1776122969370,
         "file": null,
         "type": "paragraph",
         "order": 22,
@@ -329,7 +329,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618845,
+        "id": 1776122969371,
         "file": null,
         "type": "paragraph",
         "order": 23,
@@ -341,7 +341,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618846,
+        "id": 1776122969372,
         "file": null,
         "type": "paragraph",
         "order": 24,
@@ -364,7 +364,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618847,
+        "id": 1776122969373,
         "file": null,
         "type": "paragraph",
         "order": 25,
@@ -376,7 +376,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618848,
+        "id": 1776122969374,
         "file": null,
         "type": "paragraph",
         "order": 26,
@@ -399,7 +399,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618849,
+        "id": 1776122969375,
         "file": null,
         "type": "paragraph",
         "order": 27,
@@ -411,7 +411,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618850,
+        "id": 1776122969376,
         "file": null,
         "type": "subtopic",
         "order": 28,
@@ -421,7 +421,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618851,
+        "id": 1776122969377,
         "file": null,
         "type": "paragraph",
         "order": 29,
@@ -433,7 +433,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618852,
+        "id": 1776122969378,
         "file": null,
         "type": "subtopic",
         "order": 30,
@@ -443,7 +443,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618853,
+        "id": 1776122969379,
         "file": null,
         "type": "paragraph",
         "order": 31,
@@ -474,7 +474,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618854,
+        "id": 1776122969380,
         "file": null,
         "type": "subtopic",
         "order": 32,
@@ -484,7 +484,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618855,
+        "id": 1776122969381,
         "file": null,
         "type": "paragraph",
         "order": 33,
@@ -496,7 +496,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618856,
+        "id": 1776122969382,
         "file": null,
         "type": "subtopic",
         "order": 34,
@@ -506,7 +506,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618857,
+        "id": 1776122969383,
         "file": null,
         "type": "subtopic",
         "order": 35,
@@ -516,7 +516,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618858,
+        "id": 1776122969384,
         "file": null,
         "type": "paragraph",
         "order": 36,
@@ -528,7 +528,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618859,
+        "id": 1776122969385,
         "file": null,
         "type": "subtopic",
         "order": 37,
@@ -538,7 +538,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618860,
+        "id": 1776122969386,
         "file": null,
         "type": "paragraph",
         "order": 38,
@@ -573,7 +573,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618861,
+        "id": 1776122969387,
         "file": null,
         "type": "paragraph",
         "order": 39,
@@ -585,7 +585,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618862,
+        "id": 1776122969388,
         "file": null,
         "type": "subtopic",
         "order": 40,
@@ -595,7 +595,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618863,
+        "id": 1776122969389,
         "file": null,
         "type": "paragraph",
         "order": 41,
@@ -626,7 +626,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618864,
+        "id": 1776122969390,
         "file": null,
         "type": "paragraph",
         "order": 42,
@@ -638,7 +638,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618865,
+        "id": 1776122969391,
         "file": null,
         "type": "subtopic",
         "order": 43,
@@ -648,7 +648,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618866,
+        "id": 1776122969392,
         "file": null,
         "type": "subtopic",
         "order": 44,
@@ -658,7 +658,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618867,
+        "id": 1776122969393,
         "file": null,
         "type": "paragraph",
         "order": 45,
@@ -693,7 +693,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618868,
+        "id": 1776122969394,
         "file": null,
         "type": "paragraph",
         "order": 46,
@@ -705,7 +705,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618871,
+        "id": 1776122969397,
         "file": null,
         "type": "review-multiple-choice",
         "order": 47,
@@ -715,7 +715,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093618869,
+            "id": 1776122969395,
             "skill": "Memorization",
             "options": [
               "Repair, Access, Safety",
@@ -728,7 +728,7 @@
             "correctAnswer": 1
           },
           {
-            "id": 1776093618870,
+            "id": 1776122969396,
             "skill": "Analytical Thinking",
             "options": [
               "Maintenance",
@@ -743,7 +743,7 @@
         ]
       },
       {
-        "id": 1776093618872,
+        "id": 1776122969398,
         "file": null,
         "type": "topic",
         "order": 48,
@@ -753,7 +753,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618873,
+        "id": 1776122969399,
         "file": null,
         "type": "paragraph",
         "order": 49,
@@ -765,7 +765,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618874,
+        "id": 1776122969400,
         "file": null,
         "type": "subtopic",
         "order": 50,
@@ -775,7 +775,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618875,
+        "id": 1776122969401,
         "file": null,
         "type": "paragraph",
         "order": 51,
@@ -787,7 +787,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618876,
+        "id": 1776122969402,
         "file": null,
         "type": "subtopic",
         "order": 52,
@@ -797,37 +797,37 @@
         "fileName": null
       },
       {
-        "id": 1776093618877,
+        "id": 1776122969403,
         "file": null,
         "type": "image",
         "order": 53,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093619685-1.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970028-1.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093619685-1.png"
+            "fileName": "docx-lesson-6-1776122970028-1.png"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093619691-2.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970032-2.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093619691-2.png"
+            "fileName": "docx-lesson-6-1776122970032-2.png"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093619694-3.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970033-3.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093619694-3.png"
+            "fileName": "docx-lesson-6-1776122970033-3.png"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093619697-4.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970047-4.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093619697-4.png"
+            "fileName": "docx-lesson-6-1776122970047-4.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-6-1776093619685-1.png",
-        "fileName": "docx-lesson-6-1776093619685-1.png",
+        "content": "/uploads/lessons/docx-lesson-6-1776122970028-1.png",
+        "fileName": "docx-lesson-6-1776122970028-1.png",
         "sideTexts": [
           "<ul style=\"list-style-type: disc;\"><li>Cleaning dust from internal components<sup>[23]</sup></li></ul>",
           "<ul style=\"list-style-type: disc;\"><li>Inspecting cables and connections<sup>[24]</sup></li></ul>",
@@ -837,36 +837,36 @@
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093619685-1.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970028-1.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093619685-1.png"
+              "fileName": "docx-lesson-6-1776122970028-1.png"
             }
           ],
           [
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093619691-2.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970032-2.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093619691-2.png"
+              "fileName": "docx-lesson-6-1776122970032-2.png"
             }
           ],
           [
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093619694-3.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970033-3.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093619694-3.png"
+              "fileName": "docx-lesson-6-1776122970033-3.png"
             }
           ],
           [
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093619697-4.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970047-4.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093619697-4.png"
+              "fileName": "docx-lesson-6-1776122970047-4.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093618880,
+        "id": 1776122969406,
         "file": null,
         "type": "review-multiple-choice",
         "order": 54,
@@ -876,7 +876,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093618878,
+            "id": 1776122969404,
             "skill": "Critical Thinking",
             "options": [
               "Corrective maintenance",
@@ -889,7 +889,7 @@
             "correctAnswer": 1
           },
           {
-            "id": 1776093618879,
+            "id": 1776122969405,
             "skill": "Analytical Thinking",
             "options": [
               "Installing games",
@@ -904,7 +904,7 @@
         ]
       },
       {
-        "id": 1776093618881,
+        "id": 1776122969407,
         "file": null,
         "type": "topic",
         "order": 55,
@@ -914,7 +914,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618882,
+        "id": 1776122969408,
         "file": null,
         "type": "paragraph",
         "order": 56,
@@ -926,7 +926,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618883,
+        "id": 1776122969409,
         "file": null,
         "type": "subtopic",
         "order": 57,
@@ -936,7 +936,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618884,
+        "id": 1776122969410,
         "file": null,
         "type": "paragraph",
         "order": 58,
@@ -948,52 +948,52 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618885,
+        "id": 1776122969411,
         "file": null,
         "type": "image",
         "order": 59,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093620823-5.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970625-5.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093620823-5.png"
+            "fileName": "docx-lesson-6-1776122970625-5.png"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093620828-6.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970628-6.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093620828-6.png"
+            "fileName": "docx-lesson-6-1776122970628-6.png"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093620840-7.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970629-7.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093620840-7.png"
+            "fileName": "docx-lesson-6-1776122970629-7.png"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093620846-8.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970635-8.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093620846-8.png"
+            "fileName": "docx-lesson-6-1776122970635-8.png"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093620851-9.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970640-9.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093620851-9.png"
+            "fileName": "docx-lesson-6-1776122970640-9.png"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093620854-10.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970642-10.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093620854-10.png"
+            "fileName": "docx-lesson-6-1776122970642-10.png"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093620856-11.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970643-11.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093620856-11.png"
+            "fileName": "docx-lesson-6-1776122970643-11.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-6-1776093620823-5.png",
-        "fileName": "docx-lesson-6-1776093620823-5.png",
+        "content": "/uploads/lessons/docx-lesson-6-1776122970625-5.png",
+        "fileName": "docx-lesson-6-1776122970625-5.png",
         "sideTexts": [
           "<ul style=\"list-style-type: disc;\"><li><strong>Internal Cleaning</strong></li></ul><p>Videos to watch:</p><ul style=\"list-style-type: disc;\"><li><a href=\"https://www.youtube.com/watch?v=OhRgBE6qgaU&amp;t=66\">How To PROPERLY Deep-Clean PC Fans</a></li><li><a href=\"https://www.youtube.com/watch?v=o0I7Porz7EQ\">PC Cleaning (Fans, Heat-Sinks, Thermal Paste, PSU, Case) - Smoker</a></li><li><a href=\"https://www.youtube.com/watch?v=1kdURHUHztw\">How to clean computer power supply unit - Cleaning the PSU</a></li></ul><ul style=\"list-style-type: disc;\"><li>Fans<sup>[29]</sup></li></ul><p></p><ul style=\"list-style-type: disc;\"><li>Motherboard<sup>[30]</sup></li></ul><p></p><ul style=\"list-style-type: disc;\"><li>Power Supply Vents<sup>[31]</sup></li></ul><p></p>",
           "<ul style=\"list-style-type: disc;\"><li><strong>External Cleaning</strong></li></ul><p>Videos to watch:</p><ul style=\"list-style-type: disc;\"><li><a href=\"https://www.youtube.com/watch?v=gJCNAD9Ga-8\">How to Clean a Keyboard Properly (Remove the Keycaps)</a></li><li><a href=\"https://www.youtube.com/shorts/XRoksluU4Bk\">https://www.youtube.com/shorts/XRoksluU4Bk</a></li><li><a href=\"https://www.youtube.com/watch?v=a1gvxsSGl-k\">How To Clean a Computer's USB Ports</a></li><li><a href=\"https://www.youtube.com/watch?v=own1U0sTQZ0\">How To Deep-Clean Your PC Case</a></li></ul><ul style=\"list-style-type: disc;\"><li>Keyboards<sup>[32]</sup></li></ul><p></p><ul style=\"list-style-type: disc;\"><li>Monitors<sup>[33]</sup></li></ul><p></p><ul style=\"list-style-type: disc;\"><li>Ports<sup>[34]</sup></li></ul><p></p><ul style=\"list-style-type: disc;\"><li>System unit casing</li></ul><p></p>"
@@ -1001,47 +1001,47 @@
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093620823-5.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970625-5.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093620823-5.png"
+              "fileName": "docx-lesson-6-1776122970625-5.png"
             },
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093620828-6.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970628-6.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093620828-6.png"
+              "fileName": "docx-lesson-6-1776122970628-6.png"
             },
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093620840-7.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970629-7.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093620840-7.png"
+              "fileName": "docx-lesson-6-1776122970629-7.png"
             }
           ],
           [
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093620846-8.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970635-8.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093620846-8.png"
+              "fileName": "docx-lesson-6-1776122970635-8.png"
             },
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093620851-9.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970640-9.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093620851-9.png"
+              "fileName": "docx-lesson-6-1776122970640-9.png"
             },
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093620854-10.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970642-10.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093620854-10.png"
+              "fileName": "docx-lesson-6-1776122970642-10.png"
             },
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093620856-11.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970643-11.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093620856-11.png"
+              "fileName": "docx-lesson-6-1776122970643-11.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093618886,
+        "id": 1776122969412,
         "file": null,
         "type": "paragraph",
         "order": 60,
@@ -1053,7 +1053,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618887,
+        "id": 1776122969413,
         "file": null,
         "type": "paragraph",
         "order": 61,
@@ -1084,7 +1084,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618888,
+        "id": 1776122969414,
         "file": null,
         "type": "paragraph",
         "order": 62,
@@ -1096,7 +1096,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618889,
+        "id": 1776122969415,
         "file": null,
         "type": "subtopic",
         "order": 63,
@@ -1106,7 +1106,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618890,
+        "id": 1776122969416,
         "file": null,
         "type": "paragraph",
         "order": 64,
@@ -1118,7 +1118,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618893,
+        "id": 1776122969419,
         "file": null,
         "type": "review-multiple-choice",
         "order": 65,
@@ -1128,7 +1128,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093618891,
+            "id": 1776122969417,
             "skill": "Problem Solving",
             "options": [
               "Turn on the system",
@@ -1141,7 +1141,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093618892,
+            "id": 1776122969418,
             "skill": "Problem Solving",
             "options": [
               "Install more apps",
@@ -1156,7 +1156,7 @@
         ]
       },
       {
-        "id": 1776093618894,
+        "id": 1776122969420,
         "file": null,
         "type": "topic",
         "order": 66,
@@ -1166,7 +1166,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618895,
+        "id": 1776122969421,
         "file": null,
         "type": "paragraph",
         "order": 67,
@@ -1178,7 +1178,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618896,
+        "id": 1776122969422,
         "file": null,
         "type": "subtopic",
         "order": 68,
@@ -1188,7 +1188,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618897,
+        "id": 1776122969423,
         "file": null,
         "type": "paragraph",
         "order": 69,
@@ -1200,7 +1200,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618898,
+        "id": 1776122969424,
         "file": null,
         "type": "paragraph",
         "order": 70,
@@ -1231,7 +1231,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618899,
+        "id": 1776122969425,
         "file": null,
         "type": "paragraph",
         "order": 71,
@@ -1243,7 +1243,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618900,
+        "id": 1776122969426,
         "file": null,
         "type": "paragraph",
         "order": 72,
@@ -1274,7 +1274,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618901,
+        "id": 1776122969427,
         "file": null,
         "type": "paragraph",
         "order": 73,
@@ -1286,7 +1286,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618902,
+        "id": 1776122969428,
         "file": null,
         "type": "subtopic",
         "order": 74,
@@ -1296,7 +1296,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618903,
+        "id": 1776122969429,
         "file": null,
         "type": "paragraph",
         "order": 75,
@@ -1323,7 +1323,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618904,
+        "id": 1776122969430,
         "file": null,
         "type": "subtopic",
         "order": 76,
@@ -1333,7 +1333,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618905,
+        "id": 1776122969431,
         "file": null,
         "type": "paragraph",
         "order": 77,
@@ -1345,7 +1345,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618908,
+        "id": 1776122969434,
         "file": null,
         "type": "review-multiple-choice",
         "order": 78,
@@ -1355,7 +1355,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093618906,
+            "id": 1776122969432,
             "skill": "Technical Comprehension",
             "options": [
               "To increase RAM",
@@ -1368,7 +1368,7 @@
             "correctAnswer": 1
           },
           {
-            "id": 1776093618907,
+            "id": 1776122969433,
             "skill": "Problem Solving",
             "options": [
               "Increase brightness",
@@ -1383,7 +1383,7 @@
         ]
       },
       {
-        "id": 1776093618909,
+        "id": 1776122969435,
         "file": null,
         "type": "topic",
         "order": 79,
@@ -1393,7 +1393,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618910,
+        "id": 1776122969436,
         "file": null,
         "type": "paragraph",
         "order": 80,
@@ -1405,7 +1405,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618911,
+        "id": 1776122969437,
         "file": null,
         "type": "paragraph",
         "order": 81,
@@ -1452,7 +1452,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618912,
+        "id": 1776122969438,
         "file": null,
         "type": "paragraph",
         "order": 82,
@@ -1464,7 +1464,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618913,
+        "id": 1776122969439,
         "file": null,
         "type": "paragraph",
         "order": 83,
@@ -1511,7 +1511,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618914,
+        "id": 1776122969440,
         "file": null,
         "type": "paragraph",
         "order": 84,
@@ -1523,7 +1523,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618915,
+        "id": 1776122969441,
         "file": null,
         "type": "subtopic",
         "order": 85,
@@ -1533,7 +1533,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618916,
+        "id": 1776122969442,
         "file": null,
         "type": "paragraph",
         "order": 86,
@@ -1545,7 +1545,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618917,
+        "id": 1776122969443,
         "file": null,
         "type": "subtopic",
         "order": 87,
@@ -1555,7 +1555,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618918,
+        "id": 1776122969444,
         "file": null,
         "type": "paragraph",
         "order": 88,
@@ -1567,7 +1567,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618919,
+        "id": 1776122969445,
         "file": null,
         "type": "subtopic",
         "order": 89,
@@ -1577,7 +1577,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618920,
+        "id": 1776122969446,
         "file": null,
         "type": "paragraph",
         "order": 90,
@@ -1589,7 +1589,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618921,
+        "id": 1776122969447,
         "file": null,
         "type": "subtopic",
         "order": 91,
@@ -1599,7 +1599,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618922,
+        "id": 1776122969448,
         "file": null,
         "type": "paragraph",
         "order": 92,
@@ -1611,7 +1611,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618923,
+        "id": 1776122969449,
         "file": null,
         "type": "subtopic",
         "order": 93,
@@ -1621,7 +1621,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618924,
+        "id": 1776122969450,
         "file": null,
         "type": "paragraph",
         "order": 94,
@@ -1633,7 +1633,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618925,
+        "id": 1776122969451,
         "file": null,
         "type": "subtopic",
         "order": 95,
@@ -1643,7 +1643,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618926,
+        "id": 1776122969452,
         "file": null,
         "type": "paragraph",
         "order": 96,
@@ -1655,7 +1655,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618927,
+        "id": 1776122969453,
         "file": null,
         "type": "subtopic",
         "order": 97,
@@ -1665,7 +1665,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618928,
+        "id": 1776122969454,
         "file": null,
         "type": "paragraph",
         "order": 98,
@@ -1677,7 +1677,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618931,
+        "id": 1776122969457,
         "file": null,
         "type": "review-multiple-choice",
         "order": 99,
@@ -1687,7 +1687,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093618929,
+            "id": 1776122969455,
             "skill": "Technical Comprehension",
             "options": [
               "Job Order",
@@ -1700,7 +1700,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093618930,
+            "id": 1776122969456,
             "skill": "Critical Thinking",
             "options": [
               "Ignoring records",
@@ -1715,7 +1715,7 @@
         ]
       },
       {
-        "id": 1776093618932,
+        "id": 1776122969458,
         "file": null,
         "type": "references",
         "order": 100,
@@ -1727,7 +1727,7 @@
     ],
     "diagnosticQuestions": [
       {
-        "id": 1776093619101,
+        "id": 1776122969627,
         "skill": "Memorization",
         "options": [
           "Corrective Maintenance",
@@ -1740,7 +1740,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619102,
+        "id": 1776122969628,
         "skill": "Technical Comprehension",
         "options": [
           "To increase internet speed",
@@ -1753,7 +1753,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619103,
+        "id": 1776122969629,
         "skill": "Analytical Thinking",
         "options": [
           "Reduced hardware lifespan",
@@ -1766,7 +1766,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619104,
+        "id": 1776122969630,
         "skill": "Analytical Thinking",
         "options": [
           "Software updates",
@@ -1779,7 +1779,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619105,
+        "id": 1776122969631,
         "skill": "Problem Solving",
         "options": [
           "Antivirus software",
@@ -1792,7 +1792,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619106,
+        "id": 1776122969632,
         "skill": "Memorization",
         "options": [
           "Repair, Access, Safety",
@@ -1805,7 +1805,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619107,
+        "id": 1776122969633,
         "skill": "Analytical Thinking",
         "options": [
           "Maintenance",
@@ -1818,7 +1818,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619108,
+        "id": 1776122969634,
         "skill": "Critical Thinking",
         "options": [
           "Corrective maintenance",
@@ -1831,7 +1831,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619109,
+        "id": 1776122969635,
         "skill": "Analytical Thinking",
         "options": [
           "Installing games",
@@ -1844,7 +1844,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619110,
+        "id": 1776122969636,
         "skill": "Problem Solving",
         "options": [
           "Turn on the system",
@@ -1859,7 +1859,7 @@
     ],
     "reviewQuestions": [
       {
-        "id": 1776093619036,
+        "id": 1776122969562,
         "skill": "Memorization",
         "options": [
           "Corrective Maintenance",
@@ -1872,7 +1872,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619037,
+        "id": 1776122969563,
         "skill": "Technical Comprehension",
         "options": [
           "To increase internet speed",
@@ -1885,7 +1885,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619038,
+        "id": 1776122969564,
         "skill": "Analytical Thinking",
         "options": [
           "Reduced hardware lifespan",
@@ -1898,7 +1898,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619039,
+        "id": 1776122969565,
         "skill": "Analytical Thinking",
         "options": [
           "Software updates",
@@ -1911,7 +1911,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619040,
+        "id": 1776122969566,
         "skill": "Problem Solving",
         "options": [
           "Antivirus software",
@@ -1924,7 +1924,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619041,
+        "id": 1776122969567,
         "skill": "Memorization",
         "options": [
           "Repair, Access, Safety",
@@ -1937,7 +1937,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619042,
+        "id": 1776122969568,
         "skill": "Analytical Thinking",
         "options": [
           "Maintenance",
@@ -1950,7 +1950,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619043,
+        "id": 1776122969569,
         "skill": "Critical Thinking",
         "options": [
           "Corrective maintenance",
@@ -1963,7 +1963,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619044,
+        "id": 1776122969570,
         "skill": "Analytical Thinking",
         "options": [
           "Installing games",
@@ -1976,7 +1976,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619045,
+        "id": 1776122969571,
         "skill": "Problem Solving",
         "options": [
           "Turn on the system",
@@ -1989,7 +1989,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619046,
+        "id": 1776122969572,
         "skill": "Problem Solving",
         "options": [
           "Install more apps",
@@ -2002,7 +2002,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619047,
+        "id": 1776122969573,
         "skill": "Technical Comprehension",
         "options": [
           "To increase RAM",
@@ -2015,7 +2015,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619048,
+        "id": 1776122969574,
         "skill": "Problem Solving",
         "options": [
           "Increase brightness",
@@ -2028,7 +2028,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093619049,
+        "id": 1776122969575,
         "skill": "Technical Comprehension",
         "options": [
           "Job Order",
@@ -2041,7 +2041,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619050,
+        "id": 1776122969576,
         "skill": "Critical Thinking",
         "options": [
           "Ignoring records",
@@ -2054,7 +2054,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619051,
+        "id": 1776122969577,
         "skill": "Memorization",
         "options": [
           "Replacing a broken motherboard",
@@ -2067,7 +2067,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619052,
+        "id": 1776122969578,
         "skill": "Critical Thinking",
         "options": [
           "Job Order",
@@ -2080,7 +2080,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619053,
+        "id": 1776122969579,
         "skill": "Critical Thinking",
         "options": [
           "Using surge protectors",
@@ -2093,7 +2093,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619054,
+        "id": 1776122969580,
         "skill": "Memorization",
         "options": [
           "Service Report",
@@ -2106,7 +2106,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619055,
+        "id": 1776122969581,
         "skill": "Technical Comprehension",
         "options": [
           "Maintenance",
@@ -2121,7 +2121,7 @@
     ],
     "finalQuestions": [
       {
-        "id": 1776093619056,
+        "id": 1776122969582,
         "skill": "Memorization",
         "options": [
           "To increase hardware speed",
@@ -2134,7 +2134,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619057,
+        "id": 1776122969583,
         "skill": "Memorization",
         "options": [
           "Cleaning maintenance",
@@ -2147,7 +2147,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619058,
+        "id": 1776122969584,
         "skill": "Technical Comprehension",
         "options": [
           "To stabilize voltage and prevent damage",
@@ -2160,7 +2160,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619059,
+        "id": 1776122969585,
         "skill": "Technical Comprehension",
         "options": [
           "It increases monitor brightness",
@@ -2173,7 +2173,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619060,
+        "id": 1776122969586,
         "skill": "Analytical Thinking",
         "options": [
           "Improved performance",
@@ -2186,7 +2186,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093619061,
+        "id": 1776122969587,
         "skill": "Analytical Thinking",
         "options": [
           "Slow repair time",
@@ -2199,7 +2199,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619062,
+        "id": 1776122969588,
         "skill": "Problem Solving",
         "options": [
           "Use water for cleaning",
@@ -2212,7 +2212,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619063,
+        "id": 1776122969589,
         "skill": "Problem Solving",
         "options": [
           "Ignore the issue",
@@ -2225,7 +2225,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619064,
+        "id": 1776122969590,
         "skill": "Critical Thinking",
         "options": [
           "Maintenance Log",
@@ -2238,7 +2238,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619065,
+        "id": 1776122969591,
         "skill": "Critical Thinking",
         "options": [
           "Reactive maintenance",
@@ -2251,7 +2251,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619066,
+        "id": 1776122969592,
         "skill": "Memorization",
         "options": [
           "Perfective",
@@ -2264,7 +2264,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619067,
+        "id": 1776122969593,
         "skill": "Technical Comprehension",
         "options": [
           "Screen damage",
@@ -2277,7 +2277,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619068,
+        "id": 1776122969594,
         "skill": "Analytical Thinking",
         "options": [
           "Overheating and reduced efficiency",
@@ -2290,7 +2290,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619069,
+        "id": 1776122969595,
         "skill": "Problem Solving",
         "options": [
           "Replace hardware immediately",
@@ -2303,7 +2303,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619070,
+        "id": 1776122969596,
         "skill": "Critical Thinking",
         "options": [
           "Avoid updates",
@@ -2316,7 +2316,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619086,
+        "id": 1776122969612,
         "skill": "Memorization",
         "options": [
           "Corrective Maintenance",
@@ -2329,7 +2329,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619087,
+        "id": 1776122969613,
         "skill": "Technical Comprehension",
         "options": [
           "To increase internet speed",
@@ -2342,7 +2342,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619088,
+        "id": 1776122969614,
         "skill": "Analytical Thinking",
         "options": [
           "Reduced hardware lifespan",
@@ -2355,7 +2355,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619089,
+        "id": 1776122969615,
         "skill": "Analytical Thinking",
         "options": [
           "Software updates",
@@ -2368,7 +2368,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619090,
+        "id": 1776122969616,
         "skill": "Problem Solving",
         "options": [
           "Antivirus software",
@@ -2381,7 +2381,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619091,
+        "id": 1776122969617,
         "skill": "Memorization",
         "options": [
           "Repair, Access, Safety",
@@ -2394,7 +2394,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619092,
+        "id": 1776122969618,
         "skill": "Analytical Thinking",
         "options": [
           "Maintenance",
@@ -2407,7 +2407,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619093,
+        "id": 1776122969619,
         "skill": "Critical Thinking",
         "options": [
           "Corrective maintenance",
@@ -2420,7 +2420,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619094,
+        "id": 1776122969620,
         "skill": "Analytical Thinking",
         "options": [
           "Installing games",
@@ -2433,7 +2433,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619095,
+        "id": 1776122969621,
         "skill": "Problem Solving",
         "options": [
           "Turn on the system",
@@ -2446,7 +2446,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619096,
+        "id": 1776122969622,
         "skill": "Problem Solving",
         "options": [
           "Install more apps",
@@ -2459,7 +2459,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619097,
+        "id": 1776122969623,
         "skill": "Technical Comprehension",
         "options": [
           "To increase RAM",
@@ -2472,7 +2472,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619098,
+        "id": 1776122969624,
         "skill": "Problem Solving",
         "options": [
           "Increase brightness",
@@ -2485,7 +2485,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093619099,
+        "id": 1776122969625,
         "skill": "Technical Comprehension",
         "options": [
           "Job Order",
@@ -2498,7 +2498,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619100,
+        "id": 1776122969626,
         "skill": "Critical Thinking",
         "options": [
           "Ignoring records",
@@ -2511,7 +2511,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619071,
+        "id": 1776122969597,
         "skill": "Memorization",
         "options": [
           "To increase hardware speed",
@@ -2524,7 +2524,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619072,
+        "id": 1776122969598,
         "skill": "Memorization",
         "options": [
           "Cleaning maintenance",
@@ -2537,7 +2537,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619073,
+        "id": 1776122969599,
         "skill": "Technical Comprehension",
         "options": [
           "To stabilize voltage and prevent damage",
@@ -2550,7 +2550,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619074,
+        "id": 1776122969600,
         "skill": "Technical Comprehension",
         "options": [
           "It increases monitor brightness",
@@ -2563,7 +2563,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619075,
+        "id": 1776122969601,
         "skill": "Analytical Thinking",
         "options": [
           "Improved performance",
@@ -2576,7 +2576,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093619076,
+        "id": 1776122969602,
         "skill": "Analytical Thinking",
         "options": [
           "Slow repair time",
@@ -2589,7 +2589,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619077,
+        "id": 1776122969603,
         "skill": "Problem Solving",
         "options": [
           "Use water for cleaning",
@@ -2602,7 +2602,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619078,
+        "id": 1776122969604,
         "skill": "Problem Solving",
         "options": [
           "Ignore the issue",
@@ -2615,7 +2615,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619079,
+        "id": 1776122969605,
         "skill": "Critical Thinking",
         "options": [
           "Maintenance Log",
@@ -2628,7 +2628,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619080,
+        "id": 1776122969606,
         "skill": "Critical Thinking",
         "options": [
           "Reactive maintenance",
@@ -2641,7 +2641,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619081,
+        "id": 1776122969607,
         "skill": "Memorization",
         "options": [
           "Perfective",
@@ -2654,7 +2654,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619082,
+        "id": 1776122969608,
         "skill": "Technical Comprehension",
         "options": [
           "Screen damage",
@@ -2667,7 +2667,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619083,
+        "id": 1776122969609,
         "skill": "Analytical Thinking",
         "options": [
           "Overheating and reduced efficiency",
@@ -2680,7 +2680,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619084,
+        "id": 1776122969610,
         "skill": "Problem Solving",
         "options": [
           "Replace hardware immediately",
@@ -2693,7 +2693,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619085,
+        "id": 1776122969611,
         "skill": "Critical Thinking",
         "options": [
           "Avoid updates",
@@ -2715,7 +2715,7 @@
     "Description": "<div>Ang araling ito ay nakatuon sa mahahalagang gawain sa pagpapanatili ng mga computer system, software, at hardware, pati na rin ang tamang dokumentasyon na kinakailangan upang masiguro ang maayos at ligtas na operasyon. Ang pagpapanatili ay kinabibilangan ng mga rutin na pagsusuri, pag-aayos ng problema (troubleshooting), pag-update, at mga hakbang na pang-iwas na nagpapahaba sa buhay at nagpapahusay sa performance ng mga device. Samantala, ang dokumentasyon ay nagbibigay ng organisadong talaan ng mga gawain sa maintenance, configuration ng system, mga proseso, at mga tagubilin para sa mga gumagamit.</div><p><br></p><p><strong>Mga Layunin:</strong></p><p>Layunin ng araling ito na:</p><ol style=\"list-style-type: decimal;\"><li>Ipaliwanag ang kahalagahan ng regular na pagpapanatili ng computer hardware at software;</li><li>tukuyin ang mga karaniwang gawain sa maintenance tulad ng paglilinis, pag-update, pagba-backup, at mga proseso ng troubleshooting; at</li><li>ipakita ang mga teknik sa preventive maintenance upang masiguro ang pinakamainam na performance ng system.</li></ol>",
     "sections": [
       {
-        "id": 1776093618933,
+        "id": 1776122969459,
         "file": null,
         "type": "topic",
         "order": 1,
@@ -2725,7 +2725,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618934,
+        "id": 1776122969460,
         "file": null,
         "type": "paragraph",
         "order": 2,
@@ -2737,7 +2737,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618935,
+        "id": 1776122969461,
         "file": null,
         "type": "subtopic",
         "order": 3,
@@ -2747,7 +2747,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618936,
+        "id": 1776122969462,
         "file": null,
         "type": "paragraph",
         "order": 4,
@@ -2759,7 +2759,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618937,
+        "id": 1776122969463,
         "file": null,
         "type": "subtopic",
         "order": 5,
@@ -2769,7 +2769,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618938,
+        "id": 1776122969464,
         "file": null,
         "type": "paragraph",
         "order": 6,
@@ -2781,7 +2781,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618941,
+        "id": 1776122969467,
         "file": null,
         "type": "review-multiple-choice",
         "order": 7,
@@ -2791,7 +2791,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093618939,
+            "id": 1776122969465,
             "skill": "Memorization",
             "options": [
               "Corrective Maintenance",
@@ -2804,7 +2804,7 @@
             "correctAnswer": 1
           },
           {
-            "id": 1776093618940,
+            "id": 1776122969466,
             "skill": "Memorization",
             "options": [
               "Pagpapalit ng sirang motherboard",
@@ -2819,7 +2819,7 @@
         ]
       },
       {
-        "id": 1776093618942,
+        "id": 1776122969468,
         "file": null,
         "type": "topic",
         "order": 8,
@@ -2829,7 +2829,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618943,
+        "id": 1776122969469,
         "file": null,
         "type": "paragraph",
         "order": 9,
@@ -2841,7 +2841,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618944,
+        "id": 1776122969470,
         "file": null,
         "type": "subtopic",
         "order": 10,
@@ -2851,7 +2851,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618945,
+        "id": 1776122969471,
         "file": null,
         "type": "paragraph",
         "order": 11,
@@ -2863,7 +2863,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618948,
+        "id": 1776122969474,
         "file": null,
         "type": "review-multiple-choice",
         "order": 12,
@@ -2873,7 +2873,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093618946,
+            "id": 1776122969472,
             "skill": "Technical Comprehension",
             "options": [
               "Para mapabilis ang internet",
@@ -2886,7 +2886,7 @@
             "correctAnswer": 1
           },
           {
-            "id": 1776093618947,
+            "id": 1776122969473,
             "skill": "Analytical Thinking",
             "options": [
               "Pagbaba ng haba ng buhay ng hardware",
@@ -2901,7 +2901,7 @@
         ]
       },
       {
-        "id": 1776093618949,
+        "id": 1776122969475,
         "file": null,
         "type": "topic",
         "order": 13,
@@ -2911,7 +2911,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618950,
+        "id": 1776122969476,
         "file": null,
         "type": "paragraph",
         "order": 14,
@@ -2923,7 +2923,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618953,
+        "id": 1776122969479,
         "file": null,
         "type": "review-multiple-choice",
         "order": 15,
@@ -2933,7 +2933,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093618951,
+            "id": 1776122969477,
             "skill": "Analytical Thinking",
             "options": [
               "Software updates",
@@ -2946,7 +2946,7 @@
             "correctAnswer": 1
           },
           {
-            "id": 1776093618952,
+            "id": 1776122969478,
             "skill": "Problem Solving",
             "options": [
               "Antivirus software",
@@ -2961,7 +2961,7 @@
         ]
       },
       {
-        "id": 1776093618954,
+        "id": 1776122969480,
         "file": null,
         "type": "topic",
         "order": 16,
@@ -2971,7 +2971,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618955,
+        "id": 1776122969481,
         "file": null,
         "type": "paragraph",
         "order": 17,
@@ -2983,7 +2983,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618956,
+        "id": 1776122969482,
         "file": null,
         "type": "subtopic",
         "order": 18,
@@ -2993,7 +2993,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618957,
+        "id": 1776122969483,
         "file": null,
         "type": "paragraph",
         "order": 19,
@@ -3005,7 +3005,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618958,
+        "id": 1776122969484,
         "file": null,
         "type": "subtopic",
         "order": 20,
@@ -3015,7 +3015,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618959,
+        "id": 1776122969485,
         "file": null,
         "type": "paragraph",
         "order": 21,
@@ -3027,7 +3027,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618960,
+        "id": 1776122969486,
         "file": null,
         "type": "paragraph",
         "order": 22,
@@ -3050,7 +3050,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618961,
+        "id": 1776122969487,
         "file": null,
         "type": "paragraph",
         "order": 23,
@@ -3062,7 +3062,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618962,
+        "id": 1776122969488,
         "file": null,
         "type": "paragraph",
         "order": 24,
@@ -3085,7 +3085,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618963,
+        "id": 1776122969489,
         "file": null,
         "type": "paragraph",
         "order": 25,
@@ -3097,7 +3097,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618964,
+        "id": 1776122969490,
         "file": null,
         "type": "paragraph",
         "order": 26,
@@ -3120,7 +3120,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618965,
+        "id": 1776122969491,
         "file": null,
         "type": "paragraph",
         "order": 27,
@@ -3132,7 +3132,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618966,
+        "id": 1776122969492,
         "file": null,
         "type": "subtopic",
         "order": 28,
@@ -3142,7 +3142,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618967,
+        "id": 1776122969493,
         "file": null,
         "type": "paragraph",
         "order": 29,
@@ -3154,7 +3154,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618968,
+        "id": 1776122969494,
         "file": null,
         "type": "subtopic",
         "order": 30,
@@ -3164,7 +3164,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618969,
+        "id": 1776122969495,
         "file": null,
         "type": "paragraph",
         "order": 31,
@@ -3176,7 +3176,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618970,
+        "id": 1776122969496,
         "file": null,
         "type": "subtopic",
         "order": 32,
@@ -3186,7 +3186,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618971,
+        "id": 1776122969497,
         "file": null,
         "type": "paragraph",
         "order": 33,
@@ -3217,7 +3217,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618972,
+        "id": 1776122969498,
         "file": null,
         "type": "subtopic",
         "order": 34,
@@ -3227,7 +3227,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618973,
+        "id": 1776122969499,
         "file": null,
         "type": "paragraph",
         "order": 35,
@@ -3239,7 +3239,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618974,
+        "id": 1776122969500,
         "file": null,
         "type": "subtopic",
         "order": 36,
@@ -3249,7 +3249,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618975,
+        "id": 1776122969501,
         "file": null,
         "type": "paragraph",
         "order": 37,
@@ -3261,7 +3261,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618976,
+        "id": 1776122969502,
         "file": null,
         "type": "subtopic",
         "order": 38,
@@ -3271,7 +3271,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618977,
+        "id": 1776122969503,
         "file": null,
         "type": "subtopic",
         "order": 39,
@@ -3281,7 +3281,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618978,
+        "id": 1776122969504,
         "file": null,
         "type": "paragraph",
         "order": 40,
@@ -3293,7 +3293,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618979,
+        "id": 1776122969505,
         "file": null,
         "type": "subtopic",
         "order": 41,
@@ -3303,7 +3303,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618980,
+        "id": 1776122969506,
         "file": null,
         "type": "paragraph",
         "order": 42,
@@ -3338,7 +3338,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618981,
+        "id": 1776122969507,
         "file": null,
         "type": "paragraph",
         "order": 43,
@@ -3350,7 +3350,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618982,
+        "id": 1776122969508,
         "file": null,
         "type": "paragraph",
         "order": 44,
@@ -3381,7 +3381,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618983,
+        "id": 1776122969509,
         "file": null,
         "type": "paragraph",
         "order": 45,
@@ -3393,7 +3393,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618984,
+        "id": 1776122969510,
         "file": null,
         "type": "subtopic",
         "order": 46,
@@ -3403,7 +3403,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618985,
+        "id": 1776122969511,
         "file": null,
         "type": "subtopic",
         "order": 47,
@@ -3413,7 +3413,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618986,
+        "id": 1776122969512,
         "file": null,
         "type": "paragraph",
         "order": 48,
@@ -3448,7 +3448,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093618987,
+        "id": 1776122969513,
         "file": null,
         "type": "paragraph",
         "order": 49,
@@ -3460,7 +3460,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618990,
+        "id": 1776122969516,
         "file": null,
         "type": "review-multiple-choice",
         "order": 50,
@@ -3470,7 +3470,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093618988,
+            "id": 1776122969514,
             "skill": "Memorization",
             "options": [
               "Repair, Access, Safety",
@@ -3483,7 +3483,7 @@
             "correctAnswer": 1
           },
           {
-            "id": 1776093618989,
+            "id": 1776122969515,
             "skill": "Analytical Thinking",
             "options": [
               "Maintenance",
@@ -3498,7 +3498,7 @@
         ]
       },
       {
-        "id": 1776093618991,
+        "id": 1776122969517,
         "file": null,
         "type": "topic",
         "order": 51,
@@ -3508,7 +3508,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618992,
+        "id": 1776122969518,
         "file": null,
         "type": "paragraph",
         "order": 52,
@@ -3520,37 +3520,37 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618993,
+        "id": 1776122969519,
         "file": null,
         "type": "image",
         "order": 53,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093619685-1.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970028-1.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093619685-1.png"
+            "fileName": "docx-lesson-6-1776122970028-1.png"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093619691-2.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970032-2.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093619691-2.png"
+            "fileName": "docx-lesson-6-1776122970032-2.png"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093619694-3.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970033-3.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093619694-3.png"
+            "fileName": "docx-lesson-6-1776122970033-3.png"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093619697-4.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970047-4.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093619697-4.png"
+            "fileName": "docx-lesson-6-1776122970047-4.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-6-1776093619685-1.png",
-        "fileName": "docx-lesson-6-1776093619685-1.png",
+        "content": "/uploads/lessons/docx-lesson-6-1776122970028-1.png",
+        "fileName": "docx-lesson-6-1776122970028-1.png",
         "sideTexts": [
           "<ul style=\"list-style-type: disc;\"><li>Paglilinis ng alikabok mula sa mga internal na bahagi</li></ul>",
           "<ul style=\"list-style-type: disc;\"><li>Pagsusuri ng mga cables at koneksyon</li></ul>",
@@ -3560,36 +3560,36 @@
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093619685-1.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970028-1.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093619685-1.png"
+              "fileName": "docx-lesson-6-1776122970028-1.png"
             }
           ],
           [
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093619691-2.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970032-2.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093619691-2.png"
+              "fileName": "docx-lesson-6-1776122970032-2.png"
             }
           ],
           [
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093619694-3.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970033-3.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093619694-3.png"
+              "fileName": "docx-lesson-6-1776122970033-3.png"
             }
           ],
           [
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093619697-4.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970047-4.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093619697-4.png"
+              "fileName": "docx-lesson-6-1776122970047-4.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093618996,
+        "id": 1776122969522,
         "file": null,
         "type": "review-multiple-choice",
         "order": 54,
@@ -3599,7 +3599,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093618994,
+            "id": 1776122969520,
             "skill": "Critical Thinking",
             "options": [
               "Corrective maintenance",
@@ -3612,7 +3612,7 @@
             "correctAnswer": 1
           },
           {
-            "id": 1776093618995,
+            "id": 1776122969521,
             "skill": "Analytical Thinking",
             "options": [
               "Pag-install ng mga laro",
@@ -3627,7 +3627,7 @@
         ]
       },
       {
-        "id": 1776093618997,
+        "id": 1776122969523,
         "file": null,
         "type": "topic",
         "order": 55,
@@ -3637,7 +3637,7 @@
         "fileName": null
       },
       {
-        "id": 1776093618998,
+        "id": 1776122969524,
         "file": null,
         "type": "paragraph",
         "order": 56,
@@ -3649,7 +3649,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093618999,
+        "id": 1776122969525,
         "file": null,
         "type": "subtopic",
         "order": 57,
@@ -3659,7 +3659,7 @@
         "fileName": null
       },
       {
-        "id": 1776093619000,
+        "id": 1776122969526,
         "file": null,
         "type": "paragraph",
         "order": 58,
@@ -3671,52 +3671,52 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093619001,
+        "id": 1776122969527,
         "file": null,
         "type": "image",
         "order": 59,
         "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093620823-5.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970625-5.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093620823-5.png"
+            "fileName": "docx-lesson-6-1776122970625-5.png"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093620828-6.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970628-6.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093620828-6.png"
+            "fileName": "docx-lesson-6-1776122970628-6.png"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093620840-7.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970629-7.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093620840-7.png"
+            "fileName": "docx-lesson-6-1776122970629-7.png"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093620846-8.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970635-8.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093620846-8.png"
+            "fileName": "docx-lesson-6-1776122970635-8.png"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093620851-9.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970640-9.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093620851-9.png"
+            "fileName": "docx-lesson-6-1776122970640-9.png"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093620854-10.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970642-10.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093620854-10.png"
+            "fileName": "docx-lesson-6-1776122970642-10.png"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776093620856-11.png",
+            "url": "/uploads/lessons/docx-lesson-6-1776122970643-11.png",
             "caption": "",
-            "fileName": "docx-lesson-6-1776093620856-11.png"
+            "fileName": "docx-lesson-6-1776122970643-11.png"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-6-1776093620823-5.png",
-        "fileName": "docx-lesson-6-1776093620823-5.png",
+        "content": "/uploads/lessons/docx-lesson-6-1776122970625-5.png",
+        "fileName": "docx-lesson-6-1776122970625-5.png",
         "sideTexts": [
           "<ul style=\"list-style-type: disc;\"><li><strong>Internal Cleaning (Panloob na Paglilinis)</strong></li></ul><p>Mga Video na Panoorin:</p><ul style=\"list-style-type: disc;\"><li><a href=\"https://www.youtube.com/watch?v=OhRgBE6qgaU&amp;t=66\">https://www.youtube.com/watch?v=OhRgBE6qgaU&amp;t=66</a></li><li><a href=\"https://www.youtube.com/watch?v=o0I7Porz7EQ\">https://www.youtube.com/watch?v=o0I7Porz7EQ</a></li><li><a href=\"https://www.youtube.com/watch?v=1kdURHUHztw\">https://www.youtube.com/watch?v=1kdURHUHztw</a></li></ul><ul style=\"list-style-type: disc;\"><li>Fans</li></ul><p></p><ul style=\"list-style-type: disc;\"><li>Motherboard</li></ul><p></p><ul style=\"list-style-type: disc;\"><li>Power Supply Vents</li></ul><p></p>",
           "<ul style=\"list-style-type: disc;\"><li><strong>External Cleaning (Panlabas na Paglilinis)</strong></li></ul><p>Mga Video na Panoorin:</p><ul style=\"list-style-type: disc;\"><li><a href=\"https://www.youtube.com/watch?v=gJCNAD9Ga-8\">https://www.youtube.com/watch?v=gJCNAD9Ga-8</a></li><li><a href=\"https://www.youtube.com/shorts/XRoksluU4Bk\">https://www.youtube.com/shorts/XRoksluU4Bk</a></li><li><a href=\"https://www.youtube.com/watch?v=a1gvxsSGl-k\">https://www.youtube.com/watch?v=a1gvxsSGl-k</a></li><li>https://www.youtube.com/watch?v=own1U0sTQZ0</li></ul><ul style=\"list-style-type: disc;\"><li>Keyboards</li></ul><p></p><ul style=\"list-style-type: disc;\"><li>Monitors</li></ul><p></p><ul style=\"list-style-type: disc;\"><li>Ports</li></ul><p></p><ul style=\"list-style-type: disc;\"><li>System unit casing</li></ul><p></p>"
@@ -3724,47 +3724,47 @@
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093620823-5.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970625-5.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093620823-5.png"
+              "fileName": "docx-lesson-6-1776122970625-5.png"
             },
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093620828-6.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970628-6.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093620828-6.png"
+              "fileName": "docx-lesson-6-1776122970628-6.png"
             },
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093620840-7.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970629-7.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093620840-7.png"
+              "fileName": "docx-lesson-6-1776122970629-7.png"
             }
           ],
           [
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093620846-8.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970635-8.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093620846-8.png"
+              "fileName": "docx-lesson-6-1776122970635-8.png"
             },
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093620851-9.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970640-9.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093620851-9.png"
+              "fileName": "docx-lesson-6-1776122970640-9.png"
             },
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093620854-10.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970642-10.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093620854-10.png"
+              "fileName": "docx-lesson-6-1776122970642-10.png"
             },
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776093620856-11.png",
+              "url": "/uploads/lessons/docx-lesson-6-1776122970643-11.png",
               "caption": "",
-              "fileName": "docx-lesson-6-1776093620856-11.png"
+              "fileName": "docx-lesson-6-1776122970643-11.png"
             }
           ]
         ]
       },
       {
-        "id": 1776093619002,
+        "id": 1776122969528,
         "file": null,
         "type": "paragraph",
         "order": 60,
@@ -3776,7 +3776,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093619003,
+        "id": 1776122969529,
         "file": null,
         "type": "paragraph",
         "order": 61,
@@ -3807,7 +3807,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093619004,
+        "id": 1776122969530,
         "file": null,
         "type": "paragraph",
         "order": 62,
@@ -3819,7 +3819,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093619005,
+        "id": 1776122969531,
         "file": null,
         "type": "subtopic",
         "order": 63,
@@ -3829,7 +3829,7 @@
         "fileName": null
       },
       {
-        "id": 1776093619006,
+        "id": 1776122969532,
         "file": null,
         "type": "paragraph",
         "order": 64,
@@ -3841,7 +3841,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093619009,
+        "id": 1776122969535,
         "file": null,
         "type": "review-multiple-choice",
         "order": 65,
@@ -3851,7 +3851,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093619007,
+            "id": 1776122969533,
             "skill": "Problem Solving",
             "options": [
               "I-on ang system",
@@ -3864,7 +3864,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093619008,
+            "id": 1776122969534,
             "skill": "Problem Solving",
             "options": [
               "Mag-install ng mas maraming apps",
@@ -3879,7 +3879,7 @@
         ]
       },
       {
-        "id": 1776093619010,
+        "id": 1776122969536,
         "file": null,
         "type": "topic",
         "order": 66,
@@ -3889,7 +3889,7 @@
         "fileName": null
       },
       {
-        "id": 1776093619011,
+        "id": 1776122969537,
         "file": null,
         "type": "paragraph",
         "order": 67,
@@ -3901,7 +3901,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093619012,
+        "id": 1776122969538,
         "file": null,
         "type": "subtopic",
         "order": 68,
@@ -3911,7 +3911,7 @@
         "fileName": null
       },
       {
-        "id": 1776093619013,
+        "id": 1776122969539,
         "file": null,
         "type": "paragraph",
         "order": 69,
@@ -3923,7 +3923,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093619014,
+        "id": 1776122969540,
         "file": null,
         "type": "paragraph",
         "order": 70,
@@ -3954,7 +3954,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093619015,
+        "id": 1776122969541,
         "file": null,
         "type": "paragraph",
         "order": 71,
@@ -3966,7 +3966,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093619016,
+        "id": 1776122969542,
         "file": null,
         "type": "paragraph",
         "order": 72,
@@ -3997,7 +3997,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093619017,
+        "id": 1776122969543,
         "file": null,
         "type": "paragraph",
         "order": 73,
@@ -4009,7 +4009,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093619018,
+        "id": 1776122969544,
         "file": null,
         "type": "paragraph",
         "order": 74,
@@ -4036,7 +4036,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093619019,
+        "id": 1776122969545,
         "file": null,
         "type": "subtopic",
         "order": 75,
@@ -4046,7 +4046,7 @@
         "fileName": null
       },
       {
-        "id": 1776093619020,
+        "id": 1776122969546,
         "file": null,
         "type": "paragraph",
         "order": 76,
@@ -4058,7 +4058,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093619023,
+        "id": 1776122969549,
         "file": null,
         "type": "review-multiple-choice",
         "order": 77,
@@ -4068,7 +4068,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093619021,
+            "id": 1776122969547,
             "skill": "Technical Comprehension",
             "options": [
               "Para madagdagan ang RAM",
@@ -4081,7 +4081,7 @@
             "correctAnswer": 1
           },
           {
-            "id": 1776093619022,
+            "id": 1776122969548,
             "skill": "Problem Solving",
             "options": [
               "Taasan ang brightness",
@@ -4096,7 +4096,7 @@
         ]
       },
       {
-        "id": 1776093619024,
+        "id": 1776122969550,
         "file": null,
         "type": "topic",
         "order": 78,
@@ -4106,7 +4106,7 @@
         "fileName": null
       },
       {
-        "id": 1776093619025,
+        "id": 1776122969551,
         "file": null,
         "type": "paragraph",
         "order": 79,
@@ -4118,7 +4118,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093619026,
+        "id": 1776122969552,
         "file": null,
         "type": "paragraph",
         "order": 80,
@@ -4165,7 +4165,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093619027,
+        "id": 1776122969553,
         "file": null,
         "type": "paragraph",
         "order": 81,
@@ -4177,7 +4177,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093619028,
+        "id": 1776122969554,
         "file": null,
         "type": "paragraph",
         "order": 82,
@@ -4224,7 +4224,7 @@
         "contentLayout": "table"
       },
       {
-        "id": 1776093619029,
+        "id": 1776122969555,
         "file": null,
         "type": "paragraph",
         "order": 83,
@@ -4236,7 +4236,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093619030,
+        "id": 1776122969556,
         "file": null,
         "type": "subtopic",
         "order": 84,
@@ -4246,7 +4246,7 @@
         "fileName": null
       },
       {
-        "id": 1776093619031,
+        "id": 1776122969557,
         "file": null,
         "type": "paragraph",
         "order": 85,
@@ -4258,7 +4258,7 @@
         "contentLayout": "text"
       },
       {
-        "id": 1776093619034,
+        "id": 1776122969560,
         "file": null,
         "type": "review-multiple-choice",
         "order": 86,
@@ -4268,7 +4268,7 @@
         "fileName": null,
         "questions": [
           {
-            "id": 1776093619032,
+            "id": 1776122969558,
             "skill": "Technical Comprehension",
             "options": [
               "Job Order",
@@ -4281,7 +4281,7 @@
             "correctAnswer": 2
           },
           {
-            "id": 1776093619033,
+            "id": 1776122969559,
             "skill": "Critical Thinking",
             "options": [
               "Hindi pagtatala",
@@ -4296,7 +4296,7 @@
         ]
       },
       {
-        "id": 1776093619035,
+        "id": 1776122969561,
         "file": null,
         "type": "references",
         "order": 87,
@@ -4308,7 +4308,7 @@
     ],
     "diagnosticQuestions": [
       {
-        "id": 1776093619176,
+        "id": 1776122969702,
         "skill": "Memorization",
         "options": [
           "Corrective Maintenance",
@@ -4321,7 +4321,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619177,
+        "id": 1776122969703,
         "skill": "Memorization",
         "options": [
           "Pagpapalit ng sirang motherboard",
@@ -4334,7 +4334,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619178,
+        "id": 1776122969704,
         "skill": "Technical Comprehension",
         "options": [
           "Para mapabilis ang internet",
@@ -4347,7 +4347,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619179,
+        "id": 1776122969705,
         "skill": "Analytical Thinking",
         "options": [
           "Pagbaba ng haba ng buhay ng hardware",
@@ -4360,7 +4360,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619180,
+        "id": 1776122969706,
         "skill": "Analytical Thinking",
         "options": [
           "Software updates",
@@ -4373,7 +4373,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619181,
+        "id": 1776122969707,
         "skill": "Problem Solving",
         "options": [
           "Antivirus software",
@@ -4386,7 +4386,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619182,
+        "id": 1776122969708,
         "skill": "Memorization",
         "options": [
           "Repair, Access, Safety",
@@ -4399,7 +4399,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619183,
+        "id": 1776122969709,
         "skill": "Analytical Thinking",
         "options": [
           "Maintenance",
@@ -4412,7 +4412,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619184,
+        "id": 1776122969710,
         "skill": "Critical Thinking",
         "options": [
           "Corrective maintenance",
@@ -4425,7 +4425,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619185,
+        "id": 1776122969711,
         "skill": "Analytical Thinking",
         "options": [
           "Pag-install ng mga laro",
@@ -4440,7 +4440,7 @@
     ],
     "reviewQuestions": [
       {
-        "id": 1776093619111,
+        "id": 1776122969637,
         "skill": "Memorization",
         "options": [
           "Corrective Maintenance",
@@ -4453,7 +4453,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619112,
+        "id": 1776122969638,
         "skill": "Memorization",
         "options": [
           "Pagpapalit ng sirang motherboard",
@@ -4466,7 +4466,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619113,
+        "id": 1776122969639,
         "skill": "Technical Comprehension",
         "options": [
           "Para mapabilis ang internet",
@@ -4479,7 +4479,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619114,
+        "id": 1776122969640,
         "skill": "Analytical Thinking",
         "options": [
           "Pagbaba ng haba ng buhay ng hardware",
@@ -4492,7 +4492,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619115,
+        "id": 1776122969641,
         "skill": "Analytical Thinking",
         "options": [
           "Software updates",
@@ -4505,7 +4505,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619116,
+        "id": 1776122969642,
         "skill": "Problem Solving",
         "options": [
           "Antivirus software",
@@ -4518,7 +4518,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619117,
+        "id": 1776122969643,
         "skill": "Memorization",
         "options": [
           "Repair, Access, Safety",
@@ -4531,7 +4531,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619118,
+        "id": 1776122969644,
         "skill": "Analytical Thinking",
         "options": [
           "Maintenance",
@@ -4544,7 +4544,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619119,
+        "id": 1776122969645,
         "skill": "Critical Thinking",
         "options": [
           "Corrective maintenance",
@@ -4557,7 +4557,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619120,
+        "id": 1776122969646,
         "skill": "Analytical Thinking",
         "options": [
           "Pag-install ng mga laro",
@@ -4570,7 +4570,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619121,
+        "id": 1776122969647,
         "skill": "Problem Solving",
         "options": [
           "I-on ang system",
@@ -4583,7 +4583,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619122,
+        "id": 1776122969648,
         "skill": "Problem Solving",
         "options": [
           "Mag-install ng mas maraming apps",
@@ -4596,7 +4596,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619123,
+        "id": 1776122969649,
         "skill": "Technical Comprehension",
         "options": [
           "Para madagdagan ang RAM",
@@ -4609,7 +4609,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619124,
+        "id": 1776122969650,
         "skill": "Problem Solving",
         "options": [
           "Taasan ang brightness",
@@ -4622,7 +4622,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093619125,
+        "id": 1776122969651,
         "skill": "Technical Comprehension",
         "options": [
           "Job Order",
@@ -4635,7 +4635,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619126,
+        "id": 1776122969652,
         "skill": "Critical Thinking",
         "options": [
           "Hindi pagtatala",
@@ -4648,7 +4648,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619127,
+        "id": 1776122969653,
         "skill": "Critical Thinking",
         "options": [
           "Job Order",
@@ -4661,7 +4661,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619128,
+        "id": 1776122969654,
         "skill": "Critical Thinking",
         "options": [
           "Paggamit ng surge protectors",
@@ -4674,7 +4674,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619129,
+        "id": 1776122969655,
         "skill": "Memorization",
         "options": [
           "Service Report",
@@ -4687,7 +4687,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619130,
+        "id": 1776122969656,
         "skill": "Technical Comprehension",
         "options": [
           "Maintenance",
@@ -4702,7 +4702,7 @@
     ],
     "finalQuestions": [
       {
-        "id": 1776093619131,
+        "id": 1776122969657,
         "skill": "Memorization",
         "options": [
           "Para mapabilis ang hardware",
@@ -4715,7 +4715,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619132,
+        "id": 1776122969658,
         "skill": "Memorization",
         "options": [
           "Cleaning maintenance",
@@ -4728,7 +4728,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619133,
+        "id": 1776122969659,
         "skill": "Technical Comprehension",
         "options": [
           "Para patatagin ang boltahe at maiwasan ang pinsala",
@@ -4741,7 +4741,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619134,
+        "id": 1776122969660,
         "skill": "Technical Comprehension",
         "options": [
           "Pinapataas nito ang liwanag ng monitor",
@@ -4754,7 +4754,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619135,
+        "id": 1776122969661,
         "skill": "Analytical Thinking",
         "options": [
           "Mas magandang performance",
@@ -4767,7 +4767,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093619136,
+        "id": 1776122969662,
         "skill": "Analytical Thinking",
         "options": [
           "Mabagal na oras ng pag-aayos",
@@ -4780,7 +4780,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619137,
+        "id": 1776122969663,
         "skill": "Problem Solving",
         "options": [
           "Gumamit ng tubig sa paglilinis",
@@ -4793,7 +4793,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619138,
+        "id": 1776122969664,
         "skill": "Problem Solving",
         "options": [
           "Balewalain ang problema",
@@ -4806,7 +4806,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619139,
+        "id": 1776122969665,
         "skill": "Critical Thinking",
         "options": [
           "Maintenance Log",
@@ -4819,7 +4819,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619140,
+        "id": 1776122969666,
         "skill": "Critical Thinking",
         "options": [
           "Reactive maintenance",
@@ -4832,7 +4832,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619141,
+        "id": 1776122969667,
         "skill": "Memorization",
         "options": [
           "Perfective",
@@ -4845,7 +4845,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619142,
+        "id": 1776122969668,
         "skill": "Technical Comprehension",
         "options": [
           "Screen damage",
@@ -4858,7 +4858,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619143,
+        "id": 1776122969669,
         "skill": "Analytical Thinking",
         "options": [
           "Overheating at pagbawas ng efficiency",
@@ -4871,7 +4871,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619144,
+        "id": 1776122969670,
         "skill": "Problem Solving",
         "options": [
           "Agad palitan ang hardware",
@@ -4884,7 +4884,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619145,
+        "id": 1776122969671,
         "skill": "Critical Thinking",
         "options": [
           "Iwasan ang updates",
@@ -4897,7 +4897,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619161,
+        "id": 1776122969687,
         "skill": "Memorization",
         "options": [
           "Corrective Maintenance",
@@ -4910,7 +4910,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619162,
+        "id": 1776122969688,
         "skill": "Technical Comprehension",
         "options": [
           "Para mapabilis ang internet",
@@ -4923,7 +4923,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619163,
+        "id": 1776122969689,
         "skill": "Analytical Thinking",
         "options": [
           "Pagbaba ng haba ng buhay ng hardware",
@@ -4936,7 +4936,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619164,
+        "id": 1776122969690,
         "skill": "Analytical Thinking",
         "options": [
           "Software updates",
@@ -4949,7 +4949,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619165,
+        "id": 1776122969691,
         "skill": "Problem Solving",
         "options": [
           "Antivirus software",
@@ -4962,7 +4962,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619166,
+        "id": 1776122969692,
         "skill": "Memorization",
         "options": [
           "Repair, Access, Safety",
@@ -4975,7 +4975,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619167,
+        "id": 1776122969693,
         "skill": "Analytical Thinking",
         "options": [
           "Maintenance",
@@ -4988,7 +4988,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619168,
+        "id": 1776122969694,
         "skill": "Critical Thinking",
         "options": [
           "Corrective maintenance",
@@ -5001,7 +5001,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619169,
+        "id": 1776122969695,
         "skill": "Analytical Thinking",
         "options": [
           "Pag-install ng mga laro",
@@ -5014,7 +5014,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619170,
+        "id": 1776122969696,
         "skill": "Problem Solving",
         "options": [
           "I-on ang system",
@@ -5027,7 +5027,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619171,
+        "id": 1776122969697,
         "skill": "Problem Solving",
         "options": [
           "Mag-install ng mas maraming apps",
@@ -5040,7 +5040,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619172,
+        "id": 1776122969698,
         "skill": "Technical Comprehension",
         "options": [
           "Para madagdagan ang RAM",
@@ -5053,7 +5053,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619173,
+        "id": 1776122969699,
         "skill": "Problem Solving",
         "options": [
           "Taasan ang brightness",
@@ -5066,7 +5066,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093619174,
+        "id": 1776122969700,
         "skill": "Technical Comprehension",
         "options": [
           "Job Order",
@@ -5079,7 +5079,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619175,
+        "id": 1776122969701,
         "skill": "Critical Thinking",
         "options": [
           "Hindi pagtatala",
@@ -5092,7 +5092,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619146,
+        "id": 1776122969672,
         "skill": "Memorization",
         "options": [
           "Para mapabilis ang hardware",
@@ -5105,7 +5105,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619147,
+        "id": 1776122969673,
         "skill": "Memorization",
         "options": [
           "Cleaning maintenance",
@@ -5118,7 +5118,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619148,
+        "id": 1776122969674,
         "skill": "Technical Comprehension",
         "options": [
           "Para patatagin ang boltahe at maiwasan ang pinsala",
@@ -5131,7 +5131,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619149,
+        "id": 1776122969675,
         "skill": "Technical Comprehension",
         "options": [
           "Pinapataas nito ang liwanag ng monitor",
@@ -5144,7 +5144,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619150,
+        "id": 1776122969676,
         "skill": "Analytical Thinking",
         "options": [
           "Mas magandang performance",
@@ -5157,7 +5157,7 @@
         "correctAnswer": 3
       },
       {
-        "id": 1776093619151,
+        "id": 1776122969677,
         "skill": "Analytical Thinking",
         "options": [
           "Mabagal na oras ng pag-aayos",
@@ -5170,7 +5170,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619152,
+        "id": 1776122969678,
         "skill": "Problem Solving",
         "options": [
           "Gumamit ng tubig sa paglilinis",
@@ -5183,7 +5183,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619153,
+        "id": 1776122969679,
         "skill": "Problem Solving",
         "options": [
           "Balewalain ang problema",
@@ -5196,7 +5196,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619154,
+        "id": 1776122969680,
         "skill": "Critical Thinking",
         "options": [
           "Maintenance Log",
@@ -5209,7 +5209,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619155,
+        "id": 1776122969681,
         "skill": "Critical Thinking",
         "options": [
           "Reactive maintenance",
@@ -5222,7 +5222,7 @@
         "correctAnswer": 2
       },
       {
-        "id": 1776093619156,
+        "id": 1776122969682,
         "skill": "Memorization",
         "options": [
           "Perfective",
@@ -5235,7 +5235,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619157,
+        "id": 1776122969683,
         "skill": "Technical Comprehension",
         "options": [
           "Screen damage",
@@ -5248,7 +5248,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619158,
+        "id": 1776122969684,
         "skill": "Analytical Thinking",
         "options": [
           "Overheating at pagbawas ng efficiency",
@@ -5261,7 +5261,7 @@
         "correctAnswer": 0
       },
       {
-        "id": 1776093619159,
+        "id": 1776122969685,
         "skill": "Problem Solving",
         "options": [
           "Agad palitan ang hardware",
@@ -5274,7 +5274,7 @@
         "correctAnswer": 1
       },
       {
-        "id": 1776093619160,
+        "id": 1776122969686,
         "skill": "Critical Thinking",
         "options": [
           "Iwasan ang updates",

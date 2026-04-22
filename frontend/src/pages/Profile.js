@@ -27,6 +27,46 @@ const normalizePreferredLanguageValue = (value = '') => {
   return 'English';
 };
 
+const getThemeDisplayLabel = (value, isTaglish = false) => {
+  const normalized = String(value || '').trim();
+
+  if (!isTaglish) {
+    return normalized || 'Light Mode';
+  }
+
+  if (normalized === 'Light Mode') return 'Maliwanag';
+  if (normalized === 'Dark Mode') return 'Madilim';
+  if (normalized === 'Auto') return 'Awtomatiko';
+
+  return normalized || 'Maliwanag';
+};
+
+const getFontSizeDisplayLabel = (value, isTaglish = false) => {
+  const normalized = String(value || '').trim();
+
+  if (!isTaglish) {
+    return normalized || 'Default';
+  }
+
+  if (normalized === 'Small') return 'Maliit';
+  if (normalized === 'Large') return 'Malaki';
+
+  return normalized || 'Default';
+};
+
+const getUiSizeDisplayLabel = (value, isTaglish = false) => {
+  const normalized = String(value || '').trim();
+
+  if (!isTaglish) {
+    return normalized || 'Default';
+  }
+
+  if (normalized === 'Small') return 'Compact';
+  if (normalized === 'Large') return 'Komportable';
+
+  return normalized || 'Default';
+};
+
 const Profile = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
@@ -61,6 +101,43 @@ const Profile = () => {
   const [showLanguageModal, setShowLanguageModal] = useState(false);
   const [showCropper, setShowCropper] = useState(false);
   const [imageToCrop, setImageToCrop] = useState(null);
+  const isTaglish = preferredLanguage === 'Taglish';
+
+  const settingsCopy = isTaglish
+    ? {
+      appearanceTitle: 'Itsura',
+      themeLabel: 'Tema',
+      fontSizeLabel: 'Laki ng Font',
+      uiSizeLabel: 'Laki ng UI',
+      languageLabel: 'Wika',
+      accountTitle: 'Account',
+      usernameLabel: 'Username',
+      emailLabel: 'Email',
+      passwordLabel: 'Password',
+      changeAvatarLabel: 'Palitan ang Avatar',
+      changeAvatarHint: 'Pumili ng default avatar o mag-upload ng sarili mo',
+      notSet: 'Walang nakalagay',
+      saving: 'Nagse-save...',
+      saveChanges: 'I-save ang Changes',
+      discardChanges: 'I-discard ang Changes',
+    }
+    : {
+      appearanceTitle: 'Appearance',
+      themeLabel: 'Theme',
+      fontSizeLabel: 'Font Size',
+      uiSizeLabel: 'UI Size',
+      languageLabel: 'Language',
+      accountTitle: 'Account',
+      usernameLabel: 'Username',
+      emailLabel: 'Email',
+      passwordLabel: 'Password',
+      changeAvatarLabel: 'Change Avatar',
+      changeAvatarHint: 'Select a default avatar or upload your own',
+      notSet: 'Not set',
+      saving: 'Saving...',
+      saveChanges: 'Save Changes',
+      discardChanges: 'Discard Changes',
+    };
 
   useEffect(() => {
     // Sync form data when profile loads
@@ -82,11 +159,41 @@ const Profile = () => {
     applyAppearanceSettings({ theme: savedTheme, fontSize: savedFontSize, uiSize: savedUiSize });
 
     const resolvedLanguage = normalizePreferredLanguageValue(
-      profile?.preferredLanguage || localStorage.getItem('preferredLanguage') || 'English'
+      localStorage.getItem('preferredLanguage') || profile?.preferredLanguage || 'English'
     );
     setPreferredLanguage(resolvedLanguage);
     localStorage.setItem('preferredLanguage', resolvedLanguage);
   }, [profile]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return undefined;
+    }
+
+    const syncPreferredLanguage = (value) => {
+      const normalized = normalizePreferredLanguageValue(value || 'English');
+      setPreferredLanguage(normalized);
+      localStorage.setItem('preferredLanguage', normalized);
+    };
+
+    const handleStorage = (event) => {
+      if (event.key !== 'preferredLanguage') return;
+      syncPreferredLanguage(event.newValue);
+    };
+
+    const handlePreferredLanguageChanged = (event) => {
+      const eventLanguage = event?.detail?.language;
+      syncPreferredLanguage(eventLanguage || localStorage.getItem('preferredLanguage'));
+    };
+
+    window.addEventListener('storage', handleStorage);
+    window.addEventListener('preferredLanguageChanged', handlePreferredLanguageChanged);
+
+    return () => {
+      window.removeEventListener('storage', handleStorage);
+      window.removeEventListener('preferredLanguageChanged', handlePreferredLanguageChanged);
+    };
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -161,6 +268,13 @@ const Profile = () => {
       await axios.put('/users/profile', { preferredLanguage: normalizedLanguage });
       localStorage.setItem('preferredLanguage', normalizedLanguage);
       setPreferredLanguage(normalizedLanguage);
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(
+          new CustomEvent('preferredLanguageChanged', {
+            detail: { language: normalizedLanguage },
+          })
+        );
+      }
       setMessage({ type: 'success', text: 'Language updated successfully!', show: true });
       await refreshProfile();
       setShowLanguageModal(false);
@@ -333,7 +447,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F7FA]">
+    <div className="min-h-screen bg-background">
       <Navbar />
       
       <Notification 
@@ -346,11 +460,11 @@ const Profile = () => {
       <div className="w-full px-8 py-8 custom-scrollbar">
         {/* Appearance Section */}
         <div className="bg-white rounded-2xl shadow-sm p-8 mb-6">
-          <div className="flex items-center gap-3 mb-6 pb-6 border-b-4 border-[#2BC4B3]">
-            <svg className="w-8 h-8 text-[#1e5a8e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex items-center gap-3 mb-6 pb-6 border-b-4 border-highlight">
+            <svg className="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
             </svg>
-            <h2 className="text-3xl font-bold text-[#1e5a8e]">Appearance</h2>
+            <h2 className="text-3xl font-bold text-secondary">{settingsCopy.appearanceTitle}</h2>
           </div>
 
           <div className="space-y-4">
@@ -360,10 +474,10 @@ const Profile = () => {
               className="flex items-center justify-between py-3 px-4 rounded-lg cursor-pointer"
             >
               <div>
-                <h3 className="font-semibold text-gray-800">Theme</h3>
-                <p className="text-gray-500">{theme}</p>
+                <h3 className="font-semibold text-gray-800">{settingsCopy.themeLabel}</h3>
+                <p className="text-gray-500">{getThemeDisplayLabel(theme, isTaglish)}</p>
               </div>
-              <svg className="w-6 h-6 text-[#1e5a8e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </div>
@@ -374,10 +488,10 @@ const Profile = () => {
               className="flex items-center justify-between py-3 px-4 rounded-lg cursor-pointer"
             >
               <div>
-                <h3 className="font-semibold text-gray-800">Font Size</h3>
-                <p className="text-gray-500">{fontSize}</p>
+                <h3 className="font-semibold text-gray-800">{settingsCopy.fontSizeLabel}</h3>
+                <p className="text-gray-500">{getFontSizeDisplayLabel(fontSize, isTaglish)}</p>
               </div>
-              <svg className="w-6 h-6 text-[#1e5a8e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </div>
@@ -388,10 +502,10 @@ const Profile = () => {
               className="flex items-center justify-between py-3 px-4 rounded-lg cursor-pointer"
             >
               <div>
-                <h3 className="font-semibold text-gray-800">UI Size</h3>
-                <p className="text-gray-500">{uiSize}</p>
+                <h3 className="font-semibold text-gray-800">{settingsCopy.uiSizeLabel}</h3>
+                <p className="text-gray-500">{getUiSizeDisplayLabel(uiSize, isTaglish)}</p>
               </div>
-              <svg className="w-6 h-6 text-[#1e5a8e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </div>
@@ -402,10 +516,10 @@ const Profile = () => {
               className="flex items-center justify-between py-3 px-4 rounded-lg cursor-pointer"
             >
               <div>
-                <h3 className="font-semibold text-gray-800">Language</h3>
+                <h3 className="font-semibold text-gray-800">{settingsCopy.languageLabel}</h3>
                 <p className="text-gray-500">{preferredLanguage}</p>
               </div>
-              <svg className="w-6 h-6 text-[#1e5a8e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </div>
@@ -414,11 +528,11 @@ const Profile = () => {
 
         {/* Account Section */}
         <div className="bg-white rounded-2xl shadow-sm p-8 mb-6">
-          <div className="flex items-center gap-3 mb-6 pb-6 border-b-4 border-[#2BC4B3]">
-            <svg className="w-8 h-8 text-[#1e5a8e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex items-center gap-3 mb-6 pb-6 border-b-4 border-highlight">
+            <svg className="w-8 h-8 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
-            <h2 className="text-3xl font-bold text-[#1e5a8e]">Account</h2>
+            <h2 className="text-3xl font-bold text-secondary">{settingsCopy.accountTitle}</h2>
           </div>
 
           <div className="space-y-4">
@@ -428,10 +542,10 @@ const Profile = () => {
               className="flex items-center justify-between py-3 px-4 rounded-lg cursor-pointer"
             >
               <div>
-                <h3 className="font-semibold text-gray-800">Username</h3>
-                <p className="text-gray-500">{profile?.Name || 'Not set'}</p>
+                <h3 className="font-semibold text-gray-800">{settingsCopy.usernameLabel}</h3>
+                <p className="text-gray-500">{profile?.Name || settingsCopy.notSet}</p>
               </div>
-              <svg className="w-6 h-6 text-[#1e5a8e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </div>
@@ -442,10 +556,10 @@ const Profile = () => {
               className="flex items-center justify-between py-3 px-4 rounded-lg cursor-pointer"
             >
               <div>
-                <h3 className="font-semibold text-gray-800">Email</h3>
-                <p className="text-gray-500">{profile?.Email || user?.email || 'Not set'}</p>
+                <h3 className="font-semibold text-gray-800">{settingsCopy.emailLabel}</h3>
+                <p className="text-gray-500">{profile?.Email || user?.email || settingsCopy.notSet}</p>
               </div>
-              <svg className="w-6 h-6 text-[#1e5a8e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </div>
@@ -456,10 +570,10 @@ const Profile = () => {
               className="flex items-center justify-between py-3 px-4 rounded-lg cursor-pointer"
             >
               <div>
-                <h3 className="font-semibold text-gray-800">Password</h3>
+                <h3 className="font-semibold text-gray-800">{settingsCopy.passwordLabel}</h3>
                 <p className="text-gray-500">**********</p>
               </div>
-              <svg className="w-6 h-6 text-[#1e5a8e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </div>
@@ -472,11 +586,11 @@ const Profile = () => {
               <div className="flex items-center gap-4">
                 <Avatar user={profile} size="lg" />
                 <div>
-                  <h3 className="font-semibold text-gray-800">Change Avatar</h3>
-                  <p className="text-sm text-gray-500">Select a default avatar or upload your own</p>
+                  <h3 className="font-semibold text-gray-800">{settingsCopy.changeAvatarLabel}</h3>
+                  <p className="text-sm text-gray-500">{settingsCopy.changeAvatarHint}</p>
                 </div>
               </div>
-              <svg className="w-6 h-6 text-[#1e5a8e]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </div>
@@ -488,16 +602,16 @@ const Profile = () => {
           <button
             onClick={handleSaveChanges}
             disabled={!hasChanges || saving}
-            className="px-8 py-3 bg-[#2BC4B3] text-white rounded-lg font-semibold shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-8 py-3 bg-highlight text-white rounded-lg font-semibold shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {saving ? 'Saving...' : 'Save Changes'}
+            {saving ? settingsCopy.saving : settingsCopy.saveChanges}
           </button>
           <button
             onClick={handleDiscardChanges}
             disabled={!hasChanges}
             className="px-8 py-3 bg-error text-white rounded-lg font-semibold shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Discard Changes
+            {settingsCopy.discardChanges}
           </button>
         </div>
       </div>
@@ -506,6 +620,7 @@ const Profile = () => {
       {showThemeModal && (
         <ThemeModal
           currentTheme={theme}
+          isTaglish={isTaglish}
           onSave={(newTheme) => {
             setTheme(newTheme);
             saveAppearanceSettings({ isAdmin: false, theme: newTheme });
@@ -521,6 +636,7 @@ const Profile = () => {
       {showFontSizeModal && (
         <FontSizeModal
           currentSize={fontSize}
+          isTaglish={isTaglish}
           onSave={(newSize) => {
             setFontSize(newSize);
             saveAppearanceSettings({ isAdmin: false, fontSize: newSize });
@@ -536,6 +652,7 @@ const Profile = () => {
       {showUiSizeModal && (
         <UiSizeModal
           currentSize={uiSize}
+          isTaglish={isTaglish}
           onSave={(newSize) => {
             setUiSize(newSize);
             saveAppearanceSettings({ isAdmin: false, uiSize: newSize });
@@ -551,6 +668,7 @@ const Profile = () => {
       {showLanguageModal && (
         <LanguageModal
           currentLanguage={preferredLanguage}
+          isTaglish={isTaglish}
           onSave={handleUpdateLanguage}
           onClose={() => setShowLanguageModal(false)}
         />
@@ -617,13 +735,13 @@ const UsernameModal = ({ currentName, onSave, onClose }) => {
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none mb-4"
+          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none mb-4"
           placeholder="Enter new username"
         />
         <div className="flex gap-3">
           <button
             onClick={() => onSave(name)}
-            className="flex-1 px-4 py-2 bg-[#2BC4B3] text-white rounded-lg font-semibold hover:bg-[#2BC4B3]"
+            className="flex-1 px-4 py-2 bg-highlight text-white rounded-lg font-semibold hover:bg-highlight"
           >
             Save
           </button>
@@ -651,13 +769,13 @@ const EmailModal = ({ currentEmail, onSave, onClose }) => {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none mb-4"
+          className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none mb-4"
           placeholder="Enter new email"
         />
         <div className="flex gap-3">
           <button
             onClick={() => onSave(email)}
-            className="flex-1 px-4 py-2 bg-[#2BC4B3] text-white rounded-lg font-semibold hover:bg-[#2BC4B3]"
+            className="flex-1 px-4 py-2 bg-highlight text-white rounded-lg font-semibold hover:bg-highlight"
           >
             Save
           </button>
@@ -716,7 +834,7 @@ const PasswordModal = ({ onSave, onClose }) => {
               type={showPasswords.current ? "text" : "password"}
               value={passwords.currentPassword}
               onChange={(e) => setPasswords({ ...passwords, currentPassword: e.target.value })}
-              className="w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none"
+              className="w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none"
               placeholder="Current password"
             />
             <button
@@ -741,7 +859,7 @@ const PasswordModal = ({ onSave, onClose }) => {
               type={showPasswords.new ? "text" : "password"}
               value={passwords.newPassword}
               onChange={(e) => setPasswords({ ...passwords, newPassword: e.target.value })}
-              className="w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none"
+              className="w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none"
               placeholder="New password"
             />
             <button
@@ -766,7 +884,7 @@ const PasswordModal = ({ onSave, onClose }) => {
               type={showPasswords.confirm ? "text" : "password"}
               value={passwords.confirmPassword}
               onChange={(e) => setPasswords({ ...passwords, confirmPassword: e.target.value })}
-              className="w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg focus:border-[#2BC4B3] focus:outline-none"
+              className="w-full px-4 py-3 pr-12 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none"
               placeholder="Confirm new password"
             />
             <button
@@ -791,7 +909,7 @@ const PasswordModal = ({ onSave, onClose }) => {
         <div className="flex gap-3 mt-6">
           <button
             onClick={handleSubmit}
-            className="flex-1 px-4 py-2 bg-[#2BC4B3] text-white rounded-lg font-semibold hover:bg-[#2BC4B3]"
+            className="flex-1 px-4 py-2 bg-highlight text-white rounded-lg font-semibold hover:bg-highlight"
           >
             Save
           </button>
@@ -828,7 +946,7 @@ const AvatarModal = ({ currentProfile, onSelectDefault, onUploadCustom, fileInpu
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto custom-scrollbar">
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-2xl font-bold text-[#1e5a8e]">Choose Your Avatar</h3>
+          <h3 className="text-2xl font-bold text-secondary">Choose Your Avatar</h3>
           <button 
             onClick={onClose}
             className="text-gray-400"
@@ -847,7 +965,7 @@ const AvatarModal = ({ currentProfile, onSelectDefault, onUploadCustom, fileInpu
             <button
               type="button"
               onClick={onEditAvatar}
-              className="mt-3 px-4 py-2 bg-[#1e5a8e] text-white rounded-lg font-medium"
+              className="mt-3 px-4 py-2 bg-[#346C9A] text-white rounded-lg font-medium"
             >
               Edit Photo
             </button>
@@ -864,8 +982,8 @@ const AvatarModal = ({ currentProfile, onSelectDefault, onUploadCustom, fileInpu
                 onClick={() => setSelectedAvatar(avatar)}
                 className={`relative aspect-square rounded-full overflow-hidden border-4 ${
                   selectedAvatar === avatar
-                    ? 'border-[#2BC4B3] shadow-lg'
-                    : 'border-gray-200 hover:border-[#2BC4B3]/50'
+                    ? 'border-highlight shadow-lg'
+                    : 'border-gray-200 hover:border-highlight/50'
                 }`}
               >
                 <img 
@@ -874,7 +992,7 @@ const AvatarModal = ({ currentProfile, onSelectDefault, onUploadCustom, fileInpu
                   className="w-full h-full object-contain"
                 />
                 {selectedAvatar === avatar && (
-                  <div className="absolute inset-0 bg-[#2BC4B3]/20 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-highlight/20 flex items-center justify-center">
                     <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
@@ -886,7 +1004,7 @@ const AvatarModal = ({ currentProfile, onSelectDefault, onUploadCustom, fileInpu
           <button
             onClick={handleSelectAvatar}
             disabled={!selectedAvatar}
-            className="w-full px-4 py-3 bg-[#2BC4B3] text-white rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full px-4 py-3 bg-highlight text-white rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Use Selected Avatar
           </button>
@@ -905,7 +1023,7 @@ const AvatarModal = ({ currentProfile, onSelectDefault, onUploadCustom, fileInpu
         {/* Custom Upload Section */}
         <div>
           <h4 className="text-lg font-semibold text-gray-800 mb-4">Upload Custom Avatar</h4>
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-[#2BC4B3]">
+          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-highlight">
             <input
               type="file"
               ref={fileInputRef}
@@ -945,29 +1063,44 @@ const AvatarModal = ({ currentProfile, onSelectDefault, onUploadCustom, fileInpu
   );
 };
 
-const LanguageModal = ({ currentLanguage, onSave, onClose }) => {
+const LanguageModal = ({ currentLanguage, onSave, onClose, isTaglish = false }) => {
   const [selectedLanguage, setSelectedLanguage] = useState(normalizePreferredLanguageValue(currentLanguage));
-  const options = ['English', 'Taglish'];
+  const options = [
+    { value: 'English', label: isTaglish ? 'Ingles' : 'English' },
+    { value: 'Taglish', label: 'Taglish' },
+  ];
+
+  const modalCopy = isTaglish
+    ? {
+      title: 'Pumili ng Wika',
+      save: 'I-save',
+      cancel: 'I-cancel',
+    }
+    : {
+      title: 'Select Language',
+      save: 'Save',
+      cancel: 'Cancel',
+    };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
-        <h3 className="text-2xl font-bold mb-6">Select Language</h3>
+        <h3 className="text-2xl font-bold mb-6">{modalCopy.title}</h3>
         <div className="space-y-3 mb-6">
           {options.map((option) => (
             <button
-              key={option}
-              onClick={() => setSelectedLanguage(option)}
+              key={option.value}
+              onClick={() => setSelectedLanguage(option.value)}
               className={`w-full p-4 rounded-lg border-2 text-left ${
-                selectedLanguage === option
-                  ? 'border-[#2BC4B3] bg-[#2BC4B3]/10'
-                  : 'border-gray-200 hover:border-[#2BC4B3]/50'
+                selectedLanguage === option.value
+                  ? 'border-highlight bg-highlight/10'
+                  : 'border-gray-200 hover:border-highlight/50'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="font-semibold">{option}</span>
-                {selectedLanguage === option && (
-                  <svg className="w-6 h-6 text-[#2BC4B3]" fill="currentColor" viewBox="0 0 20 20">
+                <span className="font-semibold">{option.label}</span>
+                {selectedLanguage === option.value && (
+                  <svg className="w-6 h-6 text-highlight-dark" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                 )}
@@ -979,15 +1112,15 @@ const LanguageModal = ({ currentLanguage, onSave, onClose }) => {
         <div className="flex gap-3">
           <button
             onClick={() => onSave(selectedLanguage)}
-            className="flex-1 px-4 py-2 bg-[#2BC4B3] text-white rounded-lg font-semibold hover:bg-[#1e5a8e]"
+            className="flex-1 px-4 py-2 bg-highlight text-white rounded-lg font-semibold hover:bg-[#346C9A]"
           >
-            Save
+            {modalCopy.save}
           </button>
           <button
             onClick={onClose}
             className="flex-1 px-4 py-2 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50"
           >
-            Cancel
+            {modalCopy.cancel}
           </button>
         </div>
       </div>
@@ -996,29 +1129,45 @@ const LanguageModal = ({ currentLanguage, onSave, onClose }) => {
 };
 
 // Theme Modal Component
-const ThemeModal = ({ currentTheme, onSave, onClose }) => {
+const ThemeModal = ({ currentTheme, onSave, onClose, isTaglish = false }) => {
   const [selectedTheme, setSelectedTheme] = useState(currentTheme);
-  const themes = ['Light Mode', 'Dark Mode', 'Auto'];
+  const themes = [
+    { value: 'Light Mode', label: isTaglish ? 'Maliwanag' : 'Light Mode' },
+    { value: 'Dark Mode', label: isTaglish ? 'Madilim' : 'Dark Mode' },
+    { value: 'Auto', label: isTaglish ? 'Awtomatiko' : 'Auto' },
+  ];
+
+  const modalCopy = isTaglish
+    ? {
+      title: 'Pumili ng Tema',
+      apply: 'I-apply',
+      cancel: 'I-cancel',
+    }
+    : {
+      title: 'Select Theme',
+      apply: 'Apply',
+      cancel: 'Cancel',
+    };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
-        <h3 className="text-2xl font-bold mb-6">Select Theme</h3>
+        <h3 className="text-2xl font-bold mb-6">{modalCopy.title}</h3>
         <div className="space-y-3 mb-6">
           {themes.map((theme) => (
             <button
-              key={theme}
-              onClick={() => setSelectedTheme(theme)}
+              key={theme.value}
+              onClick={() => setSelectedTheme(theme.value)}
               className={`w-full p-4 rounded-lg border-2 text-left ${
-                selectedTheme === theme
-                  ? 'border-[#2BC4B3] bg-[#2BC4B3]/10'
-                  : 'border-gray-200 hover:border-[#2BC4B3]/50'
+                selectedTheme === theme.value
+                  ? 'border-highlight bg-highlight/10'
+                  : 'border-gray-200 hover:border-highlight/50'
               }`}
             >
               <div className="flex items-center justify-between">
-                <span className="font-semibold">{theme}</span>
-                {selectedTheme === theme && (
-                  <svg className="w-6 h-6 text-[#2BC4B3]" fill="currentColor" viewBox="0 0 20 20">
+                <span className="font-semibold">{theme.label}</span>
+                {selectedTheme === theme.value && (
+                  <svg className="w-6 h-6 text-highlight-dark" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                 )}
@@ -1029,15 +1178,15 @@ const ThemeModal = ({ currentTheme, onSave, onClose }) => {
         <div className="flex gap-3">
           <button
             onClick={() => onSave(selectedTheme)}
-            className="flex-1 px-4 py-3 bg-[#2BC4B3] text-white rounded-lg font-semibold hover:bg-[#2BC4B3]"
+            className="flex-1 px-4 py-3 bg-highlight text-white rounded-lg font-semibold hover:bg-highlight"
           >
-            Apply
+            {modalCopy.apply}
           </button>
           <button
             onClick={onClose}
             className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50"
           >
-            Cancel
+            {modalCopy.cancel}
           </button>
         </div>
       </div>
@@ -1046,18 +1195,36 @@ const ThemeModal = ({ currentTheme, onSave, onClose }) => {
 };
 
 // Font Size Modal Component
-const FontSizeModal = ({ currentSize, onSave, onClose }) => {
+const FontSizeModal = ({ currentSize, onSave, onClose, isTaglish = false }) => {
   const [selectedSize, setSelectedSize] = useState(currentSize);
-  const sizes = [
-    { value: 'Small', label: 'Small', description: '13px - Compact text' },
-    { value: 'Default', label: 'Default', description: '16px - Standard size' },
-    { value: 'Large', label: 'Large', description: '21px - Easier to read' }
-  ];
+  const sizes = isTaglish
+    ? [
+      { value: 'Small', label: 'Maliit', description: '15px - Mas compact na text' },
+      { value: 'Default', label: 'Default', description: '17px - Kumportableng default' },
+      { value: 'Large', label: 'Malaki', description: '19px - Mas madaling basahin' },
+    ]
+    : [
+      { value: 'Small', label: 'Small', description: '15px - Compact text' },
+      { value: 'Default', label: 'Default', description: '17px - Comfortable default' },
+      { value: 'Large', label: 'Large', description: '19px - Easier to read' },
+    ];
+
+  const modalCopy = isTaglish
+    ? {
+      title: 'Pumili ng Laki ng Font',
+      apply: 'I-apply',
+      cancel: 'I-cancel',
+    }
+    : {
+      title: 'Select Font Size',
+      apply: 'Apply',
+      cancel: 'Cancel',
+    };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
-        <h3 className="text-2xl font-bold mb-6">Select Font Size</h3>
+        <h3 className="text-2xl font-bold mb-6">{modalCopy.title}</h3>
         <div className="space-y-3 mb-6">
           {sizes.map((size) => (
             <button
@@ -1065,8 +1232,8 @@ const FontSizeModal = ({ currentSize, onSave, onClose }) => {
               onClick={() => setSelectedSize(size.value)}
               className={`w-full p-4 rounded-lg border-2 text-left ${
                 selectedSize === size.value
-                  ? 'border-[#2BC4B3] bg-[#2BC4B3]/10'
-                  : 'border-gray-200 hover:border-[#2BC4B3]/50'
+                  ? 'border-highlight bg-highlight/10'
+                  : 'border-gray-200 hover:border-highlight/50'
               }`}
             >
               <div className="flex items-center justify-between">
@@ -1075,7 +1242,7 @@ const FontSizeModal = ({ currentSize, onSave, onClose }) => {
                   <div className="text-sm text-gray-500">{size.description}</div>
                 </div>
                 {selectedSize === size.value && (
-                  <svg className="w-6 h-6 text-[#2BC4B3]" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-6 h-6 text-highlight-dark" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                 )}
@@ -1086,15 +1253,15 @@ const FontSizeModal = ({ currentSize, onSave, onClose }) => {
         <div className="flex gap-3">
           <button
             onClick={() => onSave(selectedSize)}
-            className="flex-1 px-4 py-3 bg-[#2BC4B3] text-white rounded-lg font-semibold hover:bg-[#2BC4B3]"
+            className="flex-1 px-4 py-3 bg-highlight text-white rounded-lg font-semibold hover:bg-highlight"
           >
-            Apply
+            {modalCopy.apply}
           </button>
           <button
             onClick={onClose}
             className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50"
           >
-            Cancel
+            {modalCopy.cancel}
           </button>
         </div>
       </div>
@@ -1103,18 +1270,36 @@ const FontSizeModal = ({ currentSize, onSave, onClose }) => {
 };
 
 // UI Size Modal Component
-const UiSizeModal = ({ currentSize, onSave, onClose }) => {
+const UiSizeModal = ({ currentSize, onSave, onClose, isTaglish = false }) => {
   const [selectedSize, setSelectedSize] = useState(currentSize);
-  const sizes = [
-    { value: 'Small', label: 'Compact', description: 'Tight spacing and compact elements' },
-    { value: 'Default', label: 'Default', description: 'Standard UI components' },
-    { value: 'Large', label: 'Comfortable', description: 'Generous spacing and larger elements' }
-  ];
+  const sizes = isTaglish
+    ? [
+      { value: 'Small', label: 'Compact', description: 'Mas dikit na spacing at mas compact na elements' },
+      { value: 'Default', label: 'Default', description: 'Standard na UI components' },
+      { value: 'Large', label: 'Komportable', description: 'Mas maluwag na spacing at mas malalaking elements' },
+    ]
+    : [
+      { value: 'Small', label: 'Compact', description: 'Tight spacing and compact elements' },
+      { value: 'Default', label: 'Default', description: 'Standard UI components' },
+      { value: 'Large', label: 'Comfortable', description: 'Generous spacing and larger elements' },
+    ];
+
+  const modalCopy = isTaglish
+    ? {
+      title: 'Pumili ng Laki ng UI',
+      apply: 'I-apply',
+      cancel: 'I-cancel',
+    }
+    : {
+      title: 'Select UI Size',
+      apply: 'Apply',
+      cancel: 'Cancel',
+    };
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
-        <h3 className="text-2xl font-bold mb-6">Select UI Size</h3>
+        <h3 className="text-2xl font-bold mb-6">{modalCopy.title}</h3>
         <div className="space-y-3 mb-6">
           {sizes.map((size) => (
             <button
@@ -1122,8 +1307,8 @@ const UiSizeModal = ({ currentSize, onSave, onClose }) => {
               onClick={() => setSelectedSize(size.value)}
               className={`w-full p-4 rounded-lg border-2 text-left ${
                 selectedSize === size.value
-                  ? 'border-[#2BC4B3] bg-[#2BC4B3]/10'
-                  : 'border-gray-200 hover:border-[#2BC4B3]/50'
+                  ? 'border-highlight bg-highlight/10'
+                  : 'border-gray-200 hover:border-highlight/50'
               }`}
             >
               <div className="flex items-center justify-between">
@@ -1132,7 +1317,7 @@ const UiSizeModal = ({ currentSize, onSave, onClose }) => {
                   <div className="text-sm text-gray-500">{size.description}</div>
                 </div>
                 {selectedSize === size.value && (
-                  <svg className="w-6 h-6 text-[#2BC4B3]" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-6 h-6 text-highlight-dark" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                 )}
@@ -1143,15 +1328,15 @@ const UiSizeModal = ({ currentSize, onSave, onClose }) => {
         <div className="flex gap-3">
           <button
             onClick={() => onSave(selectedSize)}
-            className="flex-1 px-4 py-3 bg-[#2BC4B3] text-white rounded-lg font-semibold hover:bg-[#2BC4B3]"
+            className="flex-1 px-4 py-3 bg-highlight text-white rounded-lg font-semibold hover:bg-highlight"
           >
-            Apply
+            {modalCopy.apply}
           </button>
           <button
             onClick={onClose}
             className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg font-semibold hover:bg-gray-50"
           >
-            Cancel
+            {modalCopy.cancel}
           </button>
         </div>
       </div>

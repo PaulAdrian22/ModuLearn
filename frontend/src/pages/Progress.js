@@ -179,7 +179,7 @@ const Progress = () => {
       description: 'Represents your first full assessment win.',
       iconKey: 'flame',
       bgColor: 'bg-[#FF9800]',
-      isUnlocked: (metrics) => metrics.finalTaken >= 1
+      isUnlocked: (metrics) => metrics.finalPassed >= 1
     },
     {
       key: 'safety',
@@ -328,7 +328,14 @@ const Progress = () => {
     return text || fallback;
   };
 
+  const TOTAL_LESSONS = 7;
   const fallbackProgressRows = Array.isArray(progressData) ? progressData : [];
+  const fallbackUniqueLessonOrders = new Set(
+    fallbackProgressRows
+      .map((row) => Number(row.LessonOrder))
+      .filter((order) => Number.isFinite(order) && order > 0)
+  );
+  const fallbackTotalLessons = Math.max(fallbackUniqueLessonOrders.size, TOTAL_LESSONS);
   const fallbackTotalCompletionRate = fallbackProgressRows.reduce(
     (sum, row) => sum + Number(row.CompletionRate || 0),
     0
@@ -337,8 +344,8 @@ const Progress = () => {
   const summary = learningSummary || {
     learningPathProgress: {
       completedLessons: fallbackProgressRows.filter((p) => Number(p.CompletionRate || 0) >= 100).length,
-      totalLessons: fallbackProgressRows.length,
-      progressPercent: fallbackProgressRows.length ? Math.round(fallbackTotalCompletionRate / fallbackProgressRows.length) : 0,
+      totalLessons: fallbackTotalLessons,
+      progressPercent: fallbackTotalLessons ? Math.round(fallbackTotalCompletionRate / fallbackTotalLessons) : 0,
     },
     lessonPerformance: {
       learningTimeMinutes: 0,
@@ -353,6 +360,8 @@ const Progress = () => {
       averageReviewAssessmentScore: 0,
       totalFinalAssessmentsTaken: 0,
       averageFinalAssessmentScore: 0,
+      totalReviewAssessmentsPassed: 0,
+      totalFinalAssessmentsPassed: 0,
     }
   };
 
@@ -365,6 +374,7 @@ const Progress = () => {
     masteryPercent: summary.lessonPerformance.masteryLevelPercent || 0,
     reviewTaken: summary.assessment.totalReviewAssessmentsTaken || 0,
     finalTaken: summary.assessment.totalFinalAssessmentsTaken || 0,
+    finalPassed: summary.assessment.totalFinalAssessmentsPassed || 0,
     avgReview: summary.assessment.averageReviewAssessmentScore || 0,
     avgFinal: summary.assessment.averageFinalAssessmentScore || 0,
     highSkillCount: skills.filter((skill) => skill.percentage >= 70).length,
@@ -413,7 +423,7 @@ const Progress = () => {
                   <span className="text-gray-400"> / {iconTokens.length}</span>
                 </div>
               </div>
-              <p className="text-sm text-gray-500 mt-2">
+              <p className="text-[18px] leading-[1.45] text-gray-500 mt-2">
                 Tokens unlock automatically based on your current progress and mastery.
               </p>
             </div>
@@ -447,9 +457,9 @@ const Progress = () => {
                       <div className={`w-20 h-20 ${token.bgColor} rounded-full flex items-center justify-center mb-3 shadow-inner`}>
                         {token.icon}
                       </div>
-                      <h3 className="font-bold text-[#0B2B4C] mb-1">{token.name}</h3>
-                      <p className="text-xs text-gray-500 mb-2">{token.subtitle}</p>
-                      <p className="text-xs text-gray-600">{token.description}</p>
+                      <h3 className="text-lg font-bold text-[#0B2B4C] mb-1">{token.name}</h3>
+                      <p className="text-base text-gray-600 mb-2">{token.subtitle}</p>
+                      <p className="text-[18px] leading-[1.45] text-gray-600 font-poppins">{token.description}</p>
                     </div>
                   ))}
                 </div>
@@ -488,13 +498,13 @@ const Progress = () => {
                             </div>
                           )}
                         </div>
-                        <h3 className={`font-bold mb-1 text-sm ${token.unlocked ? 'text-[#0B2B4C]' : 'text-gray-500'}`}>
+                        <h3 className={`font-bold mb-1 text-lg ${token.unlocked ? 'text-[#0B2B4C]' : 'text-gray-500'}`}>
                           {token.name}
                         </h3>
-                        <p className="text-xs text-gray-500 mb-2">{token.subtitle}</p>
-                        <p className="text-xs text-gray-600">{token.description}</p>
+                        <p className="text-base text-gray-600 mb-2">{token.subtitle}</p>
+                        <p className="text-[18px] leading-[1.45] text-gray-600 font-poppins">{token.description}</p>
                         {!token.unlocked && (
-                          <span className="mt-2 text-[11px] font-semibold text-gray-500 bg-white border border-gray-300 px-2 py-1 rounded-full">
+                          <span className="mt-2 text-sm font-semibold text-gray-500 bg-white border border-gray-300 px-3 py-1 rounded-full">
                             Locked
                           </span>
                         )}
@@ -567,7 +577,7 @@ const Progress = () => {
                         ></div>
                       </div>
                       
-                      <p className="text-sm text-gray-600">{skill.description}</p>
+                      <p className="text-[18px] leading-[1.45] text-gray-600 font-poppins">{skill.description}</p>
                     </div>
                   </div>
                 </div>
@@ -604,7 +614,7 @@ const Progress = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3">Lesson Performance</h3>
-              <div className="space-y-1 text-sm md:text-base leading-snug text-gray-700">
+              <div className="space-y-1 text-base md:text-lg leading-snug text-gray-700">
                 <p>
                   Learning Time : <span className="text-[#4DD0E1] font-semibold">{formatMinutesToHoursAndMinutes(summary.lessonPerformance.learningTimeMinutes)}</span>
                 </p>
@@ -628,7 +638,7 @@ const Progress = () => {
 
             <div>
               <h3 className="text-2xl font-bold text-gray-900 mb-3">Assessment</h3>
-              <div className="space-y-1 text-sm md:text-base leading-snug text-gray-700">
+              <div className="space-y-1 text-base md:text-lg leading-snug text-gray-700">
                 <p>
                   Total Review Assessment Taken: <span className="text-[#4DD0E1] font-semibold">{summary.assessment.totalReviewAssessmentsTaken}</span>
                 </p>
