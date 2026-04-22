@@ -6,7 +6,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const SIM_ASSETS_ROOT = path.join(__dirname, '..', '..', 'Simulations', 'simulation webp grouped by perspective');
+const SIM_ASSETS_ROOT = path.join(__dirname, '..', 'sim-assets');
 
 const PERSPECTIVE_CATEGORY_MAP = {
   'Front Panel': 'Front',

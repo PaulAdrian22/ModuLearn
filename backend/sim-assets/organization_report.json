@@ -1,0 +1,92 @@
+{
+  "generatedAt": "2026-04-16T22:54:21.231Z",
+  "mode": "write",
+  "report": [
+    {
+      "activity": "Activity 1",
+      "totalAssets": 20,
+      "perspectiveCounts": {
+        "Back Panel": 3,
+        "Side View": 2,
+        "CPU Area": 3,
+        "RAM Area": 2,
+        "HDD Area": 2,
+        "SSD Area": 2,
+        "GPU Area": 2,
+        "Back Panel - Inside": 2,
+        "Front Panel": 2
+      }
+    },
+    {
+      "activity": "Activity 2",
+      "totalAssets": 10,
+      "perspectiveCounts": {
+        "Back Panel": 1,
+        "Side View": 1,
+        "CPU Area": 8
+      }
+    },
+    {
+      "activity": "Activity 3",
+      "totalAssets": 7,
+      "perspectiveCounts": {
+        "Back Panel": 1,
+        "Side View": 6
+      }
+    },
+    {
+      "activity": "Activity 4",
+      "totalAssets": 7,
+      "perspectiveCounts": {
+        "Back Panel": 1,
+        "Side View": 1,
+        "RAM Area": 5
+      }
+    },
+    {
+      "activity": "Activity 5",
+      "totalAssets": 7,
+      "perspectiveCounts": {
+        "Back Panel": 1,
+        "Side View": 1,
+        "HDD Area": 5
+      }
+    },
+    {
+      "activity": "Activity 6",
+      "totalAssets": 8,
+      "perspectiveCounts": {
+        "Back Panel": 1,
+        "Side View": 1,
+        "SSD Area": 6
+      }
+    },
+    {
+      "activity": "Activity 7",
+      "totalAssets": 8,
+      "perspectiveCounts": {
+        "Back Panel": 1,
+        "Side View": 1,
+        "GPU Area": 6
+      }
+    },
+    {
+      "activity": "Activity 8",
+      "totalAssets": 6,
+      "perspectiveCounts": {
+        "Side View": 5,
+        "Back Panel": 1
+      }
+    },
+    {
+      "activity": "Activity 9",
+      "totalAssets": 16,
+      "perspectiveCounts": {
+        "Back Panel": 3,
+        "Side View": 4,
+        "SSD Area": 2,
+        "Front Panel": 7
+      }
+    }
+  ]
+}

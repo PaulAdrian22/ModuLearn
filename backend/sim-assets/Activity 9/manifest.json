@@ -1,0 +1,117 @@
+{
+  "activity": "Activity 9",
+  "mappings": [
+    {
+      "stepOrder": 1,
+      "source": "Activity 9/1. Plug - Back.webp",
+      "perspective": "Back Panel",
+      "componentGroup": "Power and PSU",
+      "target": "Activity 9/Back Panel/Power and PSU/1. Plug - Back.webp"
+    },
+    {
+      "stepOrder": 2,
+      "source": "Activity 9/2. Shade - Base.webp",
+      "perspective": "Side View",
+      "componentGroup": "Case and Panels",
+      "target": "Activity 9/Side View/Case and Panels/2. Shade - Base.webp"
+    },
+    {
+      "stepOrder": 3,
+      "source": "Activity 9/3. Cover.webp",
+      "perspective": "Side View",
+      "componentGroup": "Case and Panels",
+      "target": "Activity 9/Side View/Case and Panels/3. Cover.webp"
+    },
+    {
+      "stepOrder": 4,
+      "source": "Activity 9/4. Side.webp",
+      "perspective": "Side View",
+      "componentGroup": "General Components",
+      "target": "Activity 9/Side View/General Components/4. Side.webp"
+    },
+    {
+      "stepOrder": 5,
+      "source": "Activity 9/5. System Fan - SSD Area.webp",
+      "perspective": "SSD Area",
+      "componentGroup": "SSD Storage",
+      "target": "Activity 9/SSD Area/SSD Storage/5. System Fan - SSD Area.webp"
+    },
+    {
+      "stepOrder": 6,
+      "source": "Activity 9/6. Base - SSD Area.webp",
+      "perspective": "SSD Area",
+      "componentGroup": "SSD Storage",
+      "target": "Activity 9/SSD Area/SSD Storage/6. Base - SSD Area.webp"
+    },
+    {
+      "stepOrder": 7,
+      "source": "Activity 9/7. Fan Screw - Back.webp",
+      "perspective": "Back Panel",
+      "componentGroup": "Cooling",
+      "target": "Activity 9/Back Panel/Cooling/7. Fan Screw - Back.webp"
+    },
+    {
+      "stepOrder": 8,
+      "source": "Activity 9/8. Shade - Base.webp",
+      "perspective": "Front Panel",
+      "componentGroup": "Case and Panels",
+      "target": "Activity 9/Front Panel/Case and Panels/8. Shade - Base.webp"
+    },
+    {
+      "stepOrder": 9,
+      "source": "Activity 9/9. Front Panel Cover.webp",
+      "perspective": "Front Panel",
+      "componentGroup": "Case and Panels",
+      "target": "Activity 9/Front Panel/Case and Panels/9. Front Panel Cover.webp"
+    },
+    {
+      "stepOrder": 10,
+      "source": "Activity 9/10. Fan 2 Screw - Front.webp",
+      "perspective": "Front Panel",
+      "componentGroup": "Cooling",
+      "target": "Activity 9/Front Panel/Cooling/10. Fan 2 Screw - Front.webp"
+    },
+    {
+      "stepOrder": 11,
+      "source": "Activity 9/11. Fan 2 - Front.webp",
+      "perspective": "Front Panel",
+      "componentGroup": "Cooling",
+      "target": "Activity 9/Front Panel/Cooling/11. Fan 2 - Front.webp"
+    },
+    {
+      "stepOrder": 12,
+      "source": "Activity 9/12. Base - Front.webp",
+      "perspective": "Front Panel",
+      "componentGroup": "Case and Panels",
+      "target": "Activity 9/Front Panel/Case and Panels/12. Base - Front.webp"
+    },
+    {
+      "stepOrder": 13,
+      "source": "Activity 9/13. System Fan/Back Fan - Side.webp",
+      "perspective": "Back Panel",
+      "componentGroup": "Cooling",
+      "target": "Activity 9/Back Panel/Cooling/Back Fan - Side.webp"
+    },
+    {
+      "stepOrder": 13,
+      "source": "Activity 9/13. System Fan/Front Fan 1 - Side.webp",
+      "perspective": "Front Panel",
+      "componentGroup": "Cooling",
+      "target": "Activity 9/Front Panel/Cooling/Front Fan 1 - Side.webp"
+    },
+    {
+      "stepOrder": 13,
+      "source": "Activity 9/13. System Fan/Front Fan 2 - Side.webp",
+      "perspective": "Front Panel",
+      "componentGroup": "Cooling",
+      "target": "Activity 9/Front Panel/Cooling/Front Fan 2 - Side.webp"
+    },
+    {
+      "stepOrder": 14,
+      "source": "Activity 9/14. Side.webp",
+      "perspective": "Side View",
+      "componentGroup": "General Components",
+      "target": "Activity 9/Side View/General Components/14. Side.webp"
+    }
+  ]
+}

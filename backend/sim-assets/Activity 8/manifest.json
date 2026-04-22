@@ -1,0 +1,47 @@
+{
+  "activity": "Activity 8",
+  "mappings": [
+    {
+      "stepOrder": 1,
+      "source": "Activity 8/1. Cover.webp",
+      "perspective": "Side View",
+      "componentGroup": "Case and Panels",
+      "target": "Activity 8/Side View/Case and Panels/1. Cover.webp"
+    },
+    {
+      "stepOrder": 2,
+      "source": "Activity 8/2. PSU - Side.webp",
+      "perspective": "Side View",
+      "componentGroup": "Power and PSU",
+      "target": "Activity 8/Side View/Power and PSU/2. PSU - Side.webp"
+    },
+    {
+      "stepOrder": 3,
+      "source": "Activity 8/3. HDD Connector - Side.webp",
+      "perspective": "Side View",
+      "componentGroup": "HDD Storage",
+      "target": "Activity 8/Side View/HDD Storage/3. HDD Connector - Side.webp"
+    },
+    {
+      "stepOrder": 4,
+      "source": "Activity 8/4. Case Base - Side.webp",
+      "perspective": "Side View",
+      "componentGroup": "Case and Panels",
+      "target": "Activity 8/Side View/Case and Panels/4. Case Base - Side.webp"
+    },
+    {
+      "stepOrder": 5,
+      "source": "Activity 8/5. PSU Screw - Back.webp",
+      "perspective": "Back Panel",
+      "componentGroup": "Power and PSU",
+      "target": "Activity 8/Back Panel/Power and PSU/5. PSU Screw - Back.webp"
+    },
+    {
+      "stepOrder": 6,
+      "source": "Activity 8/6. Shade - Base.webp",
+      "perspective": "Side View",
+      "componentGroup": "Case and Panels",
+      "target": "Activity 8/Side View/Case and Panels/6. Shade - Base.webp"
+    }
+  ]
+}

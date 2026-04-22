@@ -114,7 +114,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {
 }));
 
 // Serve simulation webp assets (grouped by perspective) for the rebuilt Simulation page
-app.use('/sim-assets', express.static(path.join(__dirname, '..', 'Simulations', 'simulation webp grouped by perspective'), {
+app.use('/sim-assets', express.static(path.join(__dirname, 'sim-assets'), {
   etag: true,
   lastModified: true,
   maxAge: shouldUseUploadCaching ? uploadCacheMaxAgeSeconds * 1000 : 0
