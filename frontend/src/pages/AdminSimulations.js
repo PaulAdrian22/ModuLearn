@@ -73,12 +73,16 @@ const getSkillTheme = (rawSkillType) => {
   };
 };
 
+const FALLBACK_SCAN_MAX_ID = 40;
+const FALLBACK_BREAK_ON_CONSECUTIVE_MISSES = 8;
+
 const AdminSimulations = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [simulations, setSimulations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [warning, setWarning] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
@@ -86,13 +90,76 @@ const AdminSimulations = () => {
       navigate('/dashboard');
       return;
     }
+
+    const fetchSimulationFallbackList = async () => {
+      const recovered = [];
+      let consecutiveMisses = 0;
+
+      for (let simulationId = 1; simulationId <= FALLBACK_SCAN_MAX_ID; simulationId += 1) {
+        try {
+          const detailResponse = await axios.get(`/admin/simulations/${simulationId}`);
+          const detailSimulation = detailResponse?.data?.simulation;
+          if (!detailSimulation?.SimulationID) {
+            consecutiveMisses += 1;
+            continue;
+          }
+
+          const activityOrder = Number(
+            detailResponse?.data?.activityOrder
+            || detailSimulation?.SimulationOrder
+            || detailSimulation?.SimulationID
+            || simulationId
+          );
+
+          recovered.push({
+            SimulationID: detailSimulation.SimulationID,
+            SimulationTitle: detailSimulation.SimulationTitle,
+            Description: detailSimulation.Description,
+            ActivityType: detailSimulation.ActivityType,
+            MaxScore: detailSimulation.MaxScore,
+            TimeLimit: detailSimulation.TimeLimit,
+            SimulationOrder: detailSimulation.SimulationOrder,
+            activityOrder,
+            hasAdminOverride: detailResponse?.data?.source === 'override'
+          });
+
+          consecutiveMisses = 0;
+        } catch (fallbackError) {
+          consecutiveMisses += 1;
+
+          if (
+            recovered.length > 0
+            && consecutiveMisses >= FALLBACK_BREAK_ON_CONSECUTIVE_MISSES
+          ) {
+            break;
+          }
+
+          if (fallbackError?.response?.status !== 404) {
+            console.warn(`Fallback simulation probe failed for ID ${simulationId}:`, fallbackError?.response?.status || fallbackError?.message);
+          }
+        }
+      }
+
+      return recovered;
+    };
+
     const fetch = async () => {
       try {
+        setWarning('');
+        setError('');
         const res = await axios.get('/admin/simulations');
         setSimulations(res.data || []);
       } catch (err) {
         console.error('Failed to load simulations:', err);
-        setError(err.response?.data?.message || 'Failed to load simulations');
+        const fallbackSimulations = await fetchSimulationFallbackList();
+
+        if (fallbackSimulations.length > 0) {
+          setSimulations(fallbackSimulations);
+          setWarning('Primary simulation list endpoint is unavailable. Showing recovered editor list.');
+          setError('');
+        } else {
+          setError(err.response?.data?.message || 'Failed to load simulations');
+        }
       } finally {
         setLoading(false);
       }
@@ -162,6 +229,12 @@ const AdminSimulations = () => {
         {!loading && error && (
           <div className="rounded-xl bg-amber-50 border border-amber-200 text-amber-800 p-4">
             {error}
+          </div>
+        )}
+
+        {!loading && !error && warning && (
+          <div className="rounded-xl bg-blue-50 border border-blue-200 text-blue-800 p-4">
+            {warning}
           </div>
         )}
 
