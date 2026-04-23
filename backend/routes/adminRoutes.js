@@ -1501,7 +1501,9 @@ router.get('/simulations', async (req, res) => {
       simulationSelectField(columns, 'MaxScore', '0'),
       simulationSelectField(columns, 'TimeLimit', '0'),
       simulationSelectField(columns, 'SimulationOrder', '0'),
-      simulationSelectField(columns, 'ZoneData', 'NULL')
+      columns.has('ZoneData')
+        ? "(CASE WHEN `ZoneData` IS NULL OR TRIM(`ZoneData`) = '' THEN 0 ELSE 1 END) AS `HasAdminOverride`"
+        : '0 AS `HasAdminOverride`'
     ];
     const orderBySql = columns.has('SimulationOrder')
       ? 'ORDER BY `SimulationOrder` ASC, `SimulationID` ASC'
@@ -1515,12 +1517,6 @@ router.get('/simulations', async (req, res) => {
 
     const simulations = rows.map((row) => {
       const activityOrder = resolveActivityOrder(row);
-      const hasOverride = Boolean(row.ZoneData && (() => {
-        try {
-          const parsed = typeof row.ZoneData === 'string' ? JSON.parse(row.ZoneData) : row.ZoneData;
-          return parsed && (parsed.meta || parsed.timeline);
-        } catch { return false; }
-      })());
       return {
         SimulationID: row.SimulationID,
         SimulationTitle: row.SimulationTitle,
@@ -1530,7 +1526,7 @@ router.get('/simulations', async (req, res) => {
         TimeLimit: row.TimeLimit,
         SimulationOrder: row.SimulationOrder,
         activityOrder,
-        hasAdminOverride: hasOverride
+        hasAdminOverride: Boolean(Number(row.HasAdminOverride || 0))
       };
     });
 
