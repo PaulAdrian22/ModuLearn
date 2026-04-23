@@ -148,7 +148,21 @@ const AdminSimulations = () => {
         setWarning('');
         setError('');
         const res = await axios.get('/admin/simulations');
-        setSimulations(res.data || []);
+        const listedSimulations = Array.isArray(res.data) ? res.data : [];
+
+        if (listedSimulations.length > 0) {
+          setSimulations(listedSimulations);
+          return;
+        }
+
+        const fallbackSimulations = await fetchSimulationFallbackList();
+        if (fallbackSimulations.length > 0) {
+          setSimulations(fallbackSimulations);
+          setWarning('Primary simulation list endpoint returned no items. Showing recovered editor list.');
+          return;
+        }
+
+        setSimulations(listedSimulations);
       } catch (err) {
         console.error('Failed to load simulations:', err);
         const fallbackSimulations = await fetchSimulationFallbackList();
