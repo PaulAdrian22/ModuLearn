@@ -319,8 +319,8 @@ const normalizeStoredConfig = (raw, activityOrder) => {
               label: safeString(layer?.label) || componentLabelFromFilename(assetPath),
               kind
             };
-            // Preserve click area and animation settings if present
             if (layer?.clickArea) result.clickArea = layer.clickArea;
+            if (layer?.zoomArea) result.zoomArea = layer.zoomArea;
             if (layer?.animation) {
               const animation = String(layer.animation).toLowerCase().trim();
               const validAnimations = ['zoom-in', 'zoom-out', 'move-away-left', 'move-away-right', 'wipe', 'none'];

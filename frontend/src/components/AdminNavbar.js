@@ -112,8 +112,9 @@ const AdminNavbar = ({ beforeNavigate }) => {
           {/* Navigation Items */}
           <div className="flex items-center gap-3">
             {navItems.map((item) => {
-              const isActive = location.pathname === item.path || 
-                             (item.path === '/admin/lessons' && location.pathname.startsWith('/admin/lessons'));
+              const isActive = location.pathname === item.path ||
+                             (item.path === '/admin/lessons' && location.pathname.startsWith('/admin/lessons')) ||
+                             (item.path === '/admin/simulations' && location.pathname.startsWith('/admin/simulations'));
               
               return (
                 <button
