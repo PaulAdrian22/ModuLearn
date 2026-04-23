@@ -20,7 +20,8 @@ const {
   getSimulationConfig,
   normalizeStoredConfig,
   listActivityAssets,
-  resolveActivityOrder
+  resolveActivityOrder,
+  FALLBACK_META
 } = require('../utils/simulationConfig');
 
 // Configure multer for media uploads
@@ -224,6 +225,7 @@ const normalizeLessonTimeInput = (value, warnings) => {
 let moduleAdminColumnsReady = false;
 let simulationAdminColumnCache = null;
 let simulationZoneDataUpgradeAttempted = false;
+let simulationTableMissingConfirmed = false;
 
 const ensureModuleAdminColumns = async () => {
   if (moduleAdminColumnsReady) return;
@@ -321,7 +323,117 @@ const simulationSelectField = (columns, columnName, fallbackSql = 'NULL') => {
 };
 
 const isMissingSimulationTableError = (error) => {
-  return error?.code === 'ER_NO_SUCH_TABLE' && /simulation/i.test(String(error?.message || ''));
+  if (!error) return false;
+  if (error.code === 'ER_NO_SUCH_TABLE') return true;
+  if (error.errno === 1146) return true;
+  const message = String(error.message || '').toLowerCase();
+  return message.includes("doesn't exist") && message.includes('simulation');
+};
+
+const isSimulationSchemaError = (error) => {
+  if (!error) return false;
+  if (isMissingSimulationTableError(error)) return true;
+  // ER_BAD_FIELD_ERROR (1054) — column referenced that doesn't exist.
+  if (error.code === 'ER_BAD_FIELD_ERROR' || error.errno === 1054) return true;
+  return false;
+};
+
+const detectSimulationTableMissing = async () => {
+  if (simulationTableMissingConfirmed) return true;
+  try {
+    const [rows] = await pool.query(
+      `SELECT 1 FROM INFORMATION_SCHEMA.TABLES
+        WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'simulation' LIMIT 1`
+    );
+    if (rows.length === 0) {
+      simulationTableMissingConfirmed = true;
+      return true;
+    }
+    return false;
+  } catch {
+    // If we can't even query INFORMATION_SCHEMA, don't claim the table is missing;
+    // let callers attempt the real query and surface whatever error comes back.
+    return false;
+  }
+};
+
+let simulationTableEnsured = false;
+
+// Create the simulation table (and seed the default activities) if it is missing.
+// Runs once per process; safe to call from every request handler. Designed to
+// recover deployments where the initial migration script was never executed.
+const ensureSimulationTable = async () => {
+  if (simulationTableEnsured) return { created: false, seeded: false };
+
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS simulation (
+        SimulationID INT AUTO_INCREMENT PRIMARY KEY,
+        ModuleID INT NULL,
+        SimulationTitle VARCHAR(200) NOT NULL,
+        Description TEXT,
+        ActivityType VARCHAR(100),
+        MaxScore INT DEFAULT 10,
+        TimeLimit INT DEFAULT 0,
+        Instructions TEXT,
+        SimulationOrder INT NOT NULL DEFAULT 1,
+        Is_Locked BOOLEAN DEFAULT FALSE,
+        ZoneData LONGTEXT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        INDEX idx_order (SimulationOrder)
+      )
+    `);
+
+    // Reset caches now that the table exists.
+    simulationTableMissingConfirmed = false;
+    simulationAdminColumnCache = null;
+    simulationZoneDataUpgradeAttempted = false;
+
+    const [countRows] = await pool.query('SELECT COUNT(*) AS total FROM simulation');
+    const existingCount = Number(countRows?.[0]?.total || 0);
+
+    let seeded = false;
+    if (existingCount === 0) {
+      const seedOrders = Object.keys(FALLBACK_META)
+        .map((key) => Number(key))
+        .filter((order) => Number.isFinite(order) && order > 0)
+        .sort((a, b) => a - b);
+
+      for (const order of seedOrders) {
+        const meta = FALLBACK_META[order];
+        if (!meta) continue;
+        await pool.query(
+          `INSERT INTO simulation
+             (SimulationTitle, Description, ActivityType, MaxScore, TimeLimit, Instructions, SimulationOrder, Is_Locked)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          [
+            meta.title || `Activity ${order}`,
+            meta.description || '',
+            order === 1 ? 'Assembling' : 'Disassembling',
+            10,
+            0,
+            Array.isArray(meta.steps) ? meta.steps.join('\n') : '',
+            order,
+            false
+          ]
+        );
+      }
+      seeded = seedOrders.length > 0;
+    }
+
+    simulationTableEnsured = true;
+    return { created: true, seeded };
+  } catch (error) {
+    console.warn('ensureSimulationTable skipped:', {
+      code: error?.code,
+      errno: error?.errno,
+      message: error?.message
+    });
+    // Don't flip the sentinel — we want to retry on the next request if the
+    // deployment has not yet been granted DDL privileges.
+    return { created: false, seeded: false, error };
+  }
 };
 
 // All routes require authentication and admin role
@@ -1374,6 +1486,12 @@ const clearSimulationAdminCaches = () => {
 // GET /api/admin/simulations - List all simulations (admin view)
 router.get('/simulations', async (req, res) => {
   try {
+    await ensureSimulationTable();
+
+    if (await detectSimulationTableMissing()) {
+      return res.json([]);
+    }
+
     const columns = await ensureSimulationAdminColumns();
     const selectFields = [
       '`SimulationID`',
@@ -1418,11 +1536,21 @@ router.get('/simulations', async (req, res) => {
 
     res.json(simulations);
   } catch (error) {
-    console.error('List admin simulations error:', error);
-    if (isMissingSimulationTableError(error)) {
+    console.error('List admin simulations error:', {
+      code: error?.code,
+      errno: error?.errno,
+      sqlState: error?.sqlState,
+      message: error?.message
+    });
+    if (isSimulationSchemaError(error)) {
+      // Schema isn't ready yet — surface an empty list rather than a hard 500
+      // so the admin UI stays usable and the learner manifests can still be edited.
       return res.json([]);
     }
-    res.status(500).json({ error: 'Internal Server Error', message: 'Failed to list simulations' });
+    res.status(500).json({
+      error: 'Internal Server Error',
+      message: `Failed to list simulations: ${error?.code || error?.message || 'unknown error'}`
+    });
   }
 });
 
@@ -1433,6 +1561,7 @@ router.get('/simulations/:id', [
 ], async (req, res) => {
   try {
     const { id } = req.params;
+    await ensureSimulationTable();
     const columns = await ensureSimulationAdminColumns();
     const selectFields = [
       '`SimulationID`',
@@ -1471,14 +1600,22 @@ router.get('/simulations/:id', [
       config
     });
   } catch (error) {
-    console.error('Get simulation config error:', error);
+    console.error('Get simulation config error:', {
+      code: error?.code,
+      errno: error?.errno,
+      sqlState: error?.sqlState,
+      message: error?.message
+    });
     if (isMissingSimulationTableError(error)) {
       return res.status(503).json({
         error: 'Service Unavailable',
         message: 'Simulation table is missing on this deployment. Run the simulation table migration first.'
       });
     }
-    res.status(500).json({ error: 'Internal Server Error', message: 'Failed to load simulation' });
+    res.status(500).json({
+      error: 'Internal Server Error',
+      message: `Failed to load simulation: ${error?.code || error?.message || 'unknown error'}`
+    });
   }
 });
 

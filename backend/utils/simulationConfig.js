@@ -412,5 +412,6 @@ module.exports = {
   normalizeStoredConfig,
   listActivityAssets,
   categoryForPerspective,
-  PERSPECTIVE_CATEGORY_MAP
+  PERSPECTIVE_CATEGORY_MAP,
+  FALLBACK_META
 };
