@@ -222,6 +222,8 @@ const normalizeLessonTimeInput = (value, warnings) => {
 };
 
 let moduleAdminColumnsReady = false;
+let simulationAdminColumnCache = null;
+let simulationZoneDataUpgradeAttempted = false;
 
 const ensureModuleAdminColumns = async () => {
   if (moduleAdminColumnsReady) return;
@@ -260,6 +262,66 @@ const ensureModuleAdminColumns = async () => {
   }
 
   moduleAdminColumnsReady = true;
+};
+
+const getSimulationAdminColumnSet = async ({ forceRefresh = false } = {}) => {
+  if (simulationAdminColumnCache && !forceRefresh) {
+    return simulationAdminColumnCache;
+  }
+
+  try {
+    const [columns] = await pool.query('SHOW COLUMNS FROM simulation');
+    simulationAdminColumnCache = new Set(
+      columns.map((column) => String(column.Field || '').trim()).filter(Boolean)
+    );
+  } catch (error) {
+    // Some hosted DB users can query rows but cannot inspect schema metadata.
+    // Fall back to the baseline simulation schema so admin listing still works.
+    console.warn('Could not inspect simulation columns via SHOW COLUMNS:', error.message);
+    simulationAdminColumnCache = new Set([
+      'SimulationID',
+      'SimulationTitle',
+      'Description',
+      'ActivityType',
+      'MaxScore',
+      'TimeLimit',
+      'SimulationOrder'
+    ]);
+  }
+
+  return simulationAdminColumnCache;
+};
+
+const ensureSimulationAdminColumns = async () => {
+  const columns = await getSimulationAdminColumnSet();
+
+  if (!columns.has('ZoneData') && !simulationZoneDataUpgradeAttempted) {
+    simulationZoneDataUpgradeAttempted = true;
+    try {
+      await pool.query('ALTER TABLE simulation ADD COLUMN ZoneData LONGTEXT NULL');
+      console.log('Added ZoneData column to simulation table.');
+      return getSimulationAdminColumnSet({ forceRefresh: true });
+    } catch (error) {
+      if (error?.code !== 'ER_DUP_FIELDNAME') {
+        console.warn('ZoneData column is missing and could not be auto-created:', error.message);
+      }
+      return columns;
+    }
+  }
+
+  return columns;
+};
+
+const simulationSelectField = (columns, columnName, fallbackSql = 'NULL') => {
+  if (columns.has(columnName)) {
+    return `\`${columnName}\``;
+  }
+
+  return `${fallbackSql} AS \`${columnName}\``;
+};
+
+const isMissingSimulationTableError = (error) => {
+  return error?.code === 'ER_NO_SUCH_TABLE' && /simulation/i.test(String(error?.message || ''));
 };
 
 // All routes require authentication and admin role
@@ -1312,10 +1374,25 @@ const clearSimulationAdminCaches = () => {
 // GET /api/admin/simulations - List all simulations (admin view)
 router.get('/simulations', async (req, res) => {
   try {
+    const columns = await ensureSimulationAdminColumns();
+    const selectFields = [
+      '`SimulationID`',
+      '`SimulationTitle`',
+      simulationSelectField(columns, 'Description', "''"),
+      simulationSelectField(columns, 'ActivityType', "''"),
+      simulationSelectField(columns, 'MaxScore', '0'),
+      simulationSelectField(columns, 'TimeLimit', '0'),
+      simulationSelectField(columns, 'SimulationOrder', '0'),
+      simulationSelectField(columns, 'ZoneData', 'NULL')
+    ];
+    const orderBySql = columns.has('SimulationOrder')
+      ? 'ORDER BY `SimulationOrder` ASC, `SimulationID` ASC'
+      : 'ORDER BY `SimulationID` ASC';
+
     const [rows] = await pool.query(
-      `SELECT SimulationID, SimulationTitle, Description, ActivityType, MaxScore, TimeLimit, SimulationOrder, ZoneData
+      `SELECT ${selectFields.join(', ')}
        FROM simulation
-       ORDER BY SimulationOrder ASC, SimulationID ASC`
+       ${orderBySql}`
     );
 
     const simulations = rows.map((row) => {
@@ -1342,6 +1419,9 @@ router.get('/simulations', async (req, res) => {
     res.json(simulations);
   } catch (error) {
     console.error('List admin simulations error:', error);
+    if (isMissingSimulationTableError(error)) {
+      return res.json([]);
+    }
     res.status(500).json({ error: 'Internal Server Error', message: 'Failed to list simulations' });
   }
 });
@@ -1353,8 +1433,20 @@ router.get('/simulations/:id', [
 ], async (req, res) => {
   try {
     const { id } = req.params;
+    const columns = await ensureSimulationAdminColumns();
+    const selectFields = [
+      '`SimulationID`',
+      '`SimulationTitle`',
+      simulationSelectField(columns, 'Description', "''"),
+      simulationSelectField(columns, 'ActivityType', "''"),
+      simulationSelectField(columns, 'MaxScore', '0'),
+      simulationSelectField(columns, 'TimeLimit', '0'),
+      simulationSelectField(columns, 'SimulationOrder', '0'),
+      simulationSelectField(columns, 'ZoneData', 'NULL')
+    ];
+
     const [rows] = await pool.query(
-      'SELECT SimulationID, SimulationTitle, Description, ActivityType, MaxScore, TimeLimit, SimulationOrder, ZoneData FROM simulation WHERE SimulationID = ?',
+      `SELECT ${selectFields.join(', ')} FROM simulation WHERE SimulationID = ?`,
       [id]
     );
     if (rows.length === 0) {
@@ -1380,6 +1472,12 @@ router.get('/simulations/:id', [
     });
   } catch (error) {
     console.error('Get simulation config error:', error);
+    if (isMissingSimulationTableError(error)) {
+      return res.status(503).json({
+        error: 'Service Unavailable',
+        message: 'Simulation table is missing on this deployment. Run the simulation table migration first.'
+      });
+    }
     res.status(500).json({ error: 'Internal Server Error', message: 'Failed to load simulation' });
   }
 });
@@ -1393,6 +1491,7 @@ router.put('/simulations/:id', [
   try {
     const { id } = req.params;
     const { config, simulation: simPatch } = req.body;
+    const columns = await ensureSimulationAdminColumns();
 
     const [rows] = await pool.query(
       'SELECT SimulationID, SimulationTitle, SimulationOrder FROM simulation WHERE SimulationID = ?',
@@ -1405,35 +1504,62 @@ router.put('/simulations/:id', [
     const activityOrder = resolveActivityOrder(rows[0]);
     const normalized = normalizeStoredConfig(config, activityOrder);
 
-    const fields = ['ZoneData = ?'];
-    const values = [JSON.stringify(normalized)];
+    const fields = [];
+    const values = [];
+
+    if (columns.has('ZoneData')) {
+      fields.push('ZoneData = ?');
+      values.push(JSON.stringify(normalized));
+    }
 
     if (simPatch && typeof simPatch === 'object') {
       if (typeof simPatch.SimulationTitle === 'string') {
         fields.push('SimulationTitle = ?');
         values.push(simPatch.SimulationTitle.trim());
       }
-      if (typeof simPatch.Description === 'string') {
+      if (typeof simPatch.Description === 'string' && columns.has('Description')) {
         fields.push('Description = ?');
         values.push(simPatch.Description);
       }
-      if (Number.isFinite(Number(simPatch.MaxScore))) {
+      if (Number.isFinite(Number(simPatch.MaxScore)) && columns.has('MaxScore')) {
         fields.push('MaxScore = ?');
         values.push(Number(simPatch.MaxScore));
       }
-      if (Number.isFinite(Number(simPatch.TimeLimit))) {
+      if (Number.isFinite(Number(simPatch.TimeLimit)) && columns.has('TimeLimit')) {
         fields.push('TimeLimit = ?');
         values.push(Number(simPatch.TimeLimit));
       }
+    }
+
+    if (fields.length === 0) {
+      return res.status(409).json({
+        error: 'Database schema not ready',
+        message: 'Simulation editor changes cannot be saved yet. Run the simulation migration to add the ZoneData column.'
+      });
     }
 
     values.push(id);
     await pool.query(`UPDATE simulation SET ${fields.join(', ')} WHERE SimulationID = ?`, values);
     clearSimulationAdminCaches();
 
+    if (!columns.has('ZoneData')) {
+      return res.json({
+        message: 'Simulation details saved (ZoneData is unavailable on this database).',
+        activityOrder,
+        config: normalized,
+        warning: 'Timeline and step edits were not persisted because ZoneData is missing.'
+      });
+    }
+
     res.json({ message: 'Simulation saved', activityOrder, config: normalized });
   } catch (error) {
     console.error('Save simulation config error:', error);
+    if (isMissingSimulationTableError(error)) {
+      return res.status(503).json({
+        error: 'Service Unavailable',
+        message: 'Simulation table is missing on this deployment. Run the simulation table migration first.'
+      });
+    }
     res.status(500).json({ error: 'Internal Server Error', message: 'Failed to save simulation' });
   }
 });
@@ -1445,11 +1571,23 @@ router.delete('/simulations/:id/override', [
 ], async (req, res) => {
   try {
     const { id } = req.params;
+    const columns = await ensureSimulationAdminColumns();
+
+    if (!columns.has('ZoneData')) {
+      return res.json({ message: 'Override storage is not available on this database; manifest fallback is already active.' });
+    }
+
     await pool.query('UPDATE simulation SET ZoneData = NULL WHERE SimulationID = ?', [id]);
     clearSimulationAdminCaches();
     res.json({ message: 'Override cleared — simulation will use the on-disk manifest again.' });
   } catch (error) {
     console.error('Clear simulation override error:', error);
+    if (isMissingSimulationTableError(error)) {
+      return res.status(503).json({
+        error: 'Service Unavailable',
+        message: 'Simulation table is missing on this deployment. Run the simulation table migration first.'
+      });
+    }
     res.status(500).json({ error: 'Internal Server Error', message: 'Failed to clear override' });
   }
 });
@@ -1473,6 +1611,12 @@ router.get('/simulations/:id/assets', [
     res.json({ activityOrder, assets });
   } catch (error) {
     console.error('List simulation assets error:', error);
+    if (isMissingSimulationTableError(error)) {
+      return res.status(503).json({
+        error: 'Service Unavailable',
+        message: 'Simulation table is missing on this deployment. Run the simulation table migration first.'
+      });
+    }
     res.status(500).json({ error: 'Internal Server Error', message: 'Failed to list assets' });
   }
 });
