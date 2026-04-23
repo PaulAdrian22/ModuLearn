@@ -23,6 +23,7 @@ const SimulationActivity = () => {
   const [loadError, setLoadError] = useState('');
   const [simulation, setSimulation] = useState(null);
   const [config, setConfig] = useState(null);
+  const [hasActivityStarted, setHasActivityStarted] = useState(false);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [revealedIds, setRevealedIds] = useState(() => new Set());
@@ -62,6 +63,13 @@ const SimulationActivity = () => {
         setSimulation(simRes.data || null);
         const normalized = normalizeConfig(configRes.data?.config || {});
         setConfig(normalized);
+        setHasActivityStarted(false);
+        setCurrentIndex(0);
+        setRevealedIds(new Set());
+        setMistakes(0);
+        setElapsed(0);
+        setIsCompleted(false);
+        startedRef.current = false;
       } catch (error) {
         console.error('Failed to load simulation:', error);
         if (mounted) setLoadError(error.response?.data?.message || error.message || 'Unable to load simulation.');
@@ -75,6 +83,7 @@ const SimulationActivity = () => {
 
   // Mark the simulation as started server-side.
   useEffect(() => {
+    if (!hasActivityStarted) return;
     if (startedRef.current) return;
     if (!simulation || !user?.userId) return;
     startedRef.current = true;
@@ -83,16 +92,16 @@ const SimulationActivity = () => {
       simulationId: simulation.SimulationID,
       userId: user.userId
     }).catch((error) => console.error('Failed to mark simulation started:', error));
-  }, [simulation, user?.userId]);
+  }, [hasActivityStarted, simulation, user?.userId]);
 
   // Elapsed timer.
   useEffect(() => {
-    if (isCompleted || !simulation) return undefined;
+    if (!hasActivityStarted || isCompleted || !simulation) return undefined;
     const interval = setInterval(() => {
       setElapsed(Math.floor((Date.now() - startTimeRef.current) / 1000));
     }, 1000);
     return () => clearInterval(interval);
-  }, [isCompleted, simulation]);
+  }, [hasActivityStarted, isCompleted, simulation]);
 
   const submitCompletion = useCallback(async (finalScore, finalElapsed) => {
     if (!simulation || !user?.userId || submitting) return;
@@ -112,7 +121,7 @@ const SimulationActivity = () => {
   }, [simulation, user?.userId, submitting]);
 
   const handleAdvance = useCallback((layerId) => {
-    if (isCompleted || !currentMoment) return;
+    if (!hasActivityStarted || isCompleted || !currentMoment) return;
 
     const nextRevealed = new Set(revealedIds);
     if (layerId) nextRevealed.add(layerId);
@@ -132,11 +141,11 @@ const SimulationActivity = () => {
       }
       setCurrentIndex(nextIndex);
     }
-  }, [isCompleted, currentMoment, currentIndex, revealedIds, totalSteps, maxScore, mistakes, submitCompletion]);
+  }, [hasActivityStarted, isCompleted, currentMoment, currentIndex, revealedIds, totalSteps, maxScore, mistakes, submitCompletion]);
 
   // Only advance automatically for truly empty moments.
   useEffect(() => {
-    if (isCompleted || !currentMoment) return;
+    if (!hasActivityStarted || isCompleted || !currentMoment) return;
     if ((currentMoment.layers || []).length === 0) {
       // Empty moment - auto-advance after a short delay
       const timer = setTimeout(() => {
@@ -144,9 +153,15 @@ const SimulationActivity = () => {
       }, 800);
       return () => clearTimeout(timer);
     }
-  }, [isCompleted, currentMoment, currentIndex, handleAdvance]);
+  }, [hasActivityStarted, isCompleted, currentMoment, currentIndex, handleAdvance]);
 
   const handleExit = () => { navigate('/simulations'); };
+
+  const handleStartActivity = () => {
+    setHasActivityStarted(true);
+    setElapsed(0);
+    startTimeRef.current = Date.now();
+  };
 
   const handleReplay = () => {
     setRevealedIds(new Set());
@@ -180,6 +195,60 @@ const SimulationActivity = () => {
           >
             Back to Simulations
           </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!hasActivityStarted) {
+    return (
+      <div className="simulation-theme min-h-screen bg-[#F5F7FA] flex items-center justify-center px-6">
+        <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl border border-gray-200 p-10 relative">
+          <button
+            onClick={handleExit}
+            className="absolute top-5 left-5 p-2 rounded-lg hover:bg-gray-100 text-[#0B2B4C]"
+            title="Back to Simulations"
+          >
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 12H5" />
+              <path d="M12 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <div className="pt-6 pb-20">
+            <p className="text-sm font-semibold text-[#2C5A9E] uppercase tracking-wider mb-3 text-center">
+              Simulation Activity
+            </p>
+            <h1 className="text-4xl font-bold text-[#0B2B4C] mb-5 max-w-3xl mx-auto text-center">
+              {displayedTitle || 'Simulation'}
+            </h1>
+            <p className="text-lg text-gray-600 leading-relaxed max-w-3xl mx-auto text-center mb-6">
+              {meta?.description || simulation?.Description || 'Follow the guided simulation steps and complete all moments to finish the activity.'}
+            </p>
+
+            {(meta?.steps || []).length > 0 && (
+              <div className="max-w-3xl mx-auto bg-[#F8FBFF] border border-[#D7E6F5] rounded-xl p-5">
+                <h2 className="text-base font-semibold text-[#0B2B4C] mb-2">What you will do</h2>
+                <ol className="list-decimal pl-5 space-y-1.5 text-sm text-[#334155] max-h-56 overflow-y-auto custom-scrollbar pr-1">
+                  {meta.steps.map((step, index) => (
+                    <li key={index}>{step}</li>
+                  ))}
+                </ol>
+              </div>
+            )}
+          </div>
+
+          <div className="absolute bottom-6 right-6">
+            <button
+              onClick={handleStartActivity}
+              className="px-8 py-3 bg-[#0B2B4C] hover:bg-[#143a63] text-white rounded-xl font-semibold shadow-lg transition-colors flex items-center gap-2"
+            >
+              Start Activity
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     );
