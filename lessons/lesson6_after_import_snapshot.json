@@ -17,66 +17,21 @@
         "fileName": null
       },
       {
-        "id": 1776122969345,
+        "id": 1777220247049,
         "file": null,
         "type": "paragraph",
         "order": 2,
         "title": "",
         "caption": "",
-        "content": "<p>\tOnce a failure happens, repairs can be both costly. There are preventive measures that you can take to decrease the likelihood of computer problems.<sup>[6]</sup></p><p>The average computer user doesn’t think much about problems that can arise with a computer until a failure actually occurs in the system. Once a failure happens, repairs can be both costly and time-consuming. The good news is that there are some preventive measures that you can take to decrease the likelihood of running into problems with the computer’s smooth and efficient operation and also to lessen any damage that does occur despite best efforts to avoid failures.<sup>[6]</sup></p><p>Preventive maintenance is a type of maintenance strategy that involves regularly checking and servicing equipment or systems to prevent breakdowns and prolong their lifespan. It’s a proactive approach to maintenance that identifies and resolves potential issues before they escalate.<sup>[1]</sup></p><p>Preventive maintenance aims to minimize unexpected downtime, reduce repair costs, and improve the reliability and safety of equipment or systems. This type of maintenance involves performing routine inspections, cleaning, lubrication, calibration, and replacing worn or damaged parts.<sup>[1]<sup>[2]</sup></sup></p>",
+        "content": "<p>Once a failure happens, repairs can be both costly. There are preventive measures that you can take to decrease the likelihood of computer problems.[6]</p>\n<p>The average computer user doesn’t think much about problems that can arise with a computer until a failure actually occurs in the system. Once a failure happens, repairs can be both costly and time-consuming. The good news is that there are some preventive measures that you can take to decrease the likelihood of running into problems with the computer’s smooth and efficient operation and also to lessen any damage that does occur despite best efforts to avoid failures.[6]</p>\n<p>Preventive maintenance is a type of maintenance strategy that involves regularly checking and servicing equipment or systems to prevent breakdowns and prolong their lifespan. It’s a proactive approach to maintenance that identifies and resolves potential issues before they escalate.[1]</p>\n<p>Preventive maintenance aims to minimize unexpected downtime, reduce repair costs, and improve the reliability and safety of equipment or systems. This type of maintenance involves performing routine inspections, cleaning, lubrication, calibration, and replacing worn or damaged parts.[1][2]</p>\n<p>Preventative Maintenance for Computers</p>\n<p>Like many other pieces of technology, computers see constant wear and tear from being used. Simple things like downloading files, clicking on harmful sites by accident and allowing dust to settle on the keyboard can build up to the computer slowing down and possibly being unusable.[3]</p>\n<p>Computer failures occur for a variety of reasons, sometimes because of human error and sometimes because of factors in the environment that cause a computer to malfunction or a combination of both. These factors can include excessive buildup of dust, heat or magnetism; viruses picked up from the Internet or from storage media shared between different computers; static electricity shocks or power surges; carelessness, such as spilling liquids into a computer or bumping or dropping the hard drive casing; software that has not been configured correctly or a PC’s setup that has been handled incorrectly, such as incorrect handling of upgrades.[6]</p>\n<p>Key Aspects of CHS Preventive Maintenance</p>",
         "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969346,
-        "file": null,
-        "type": "subtopic",
-        "order": 3,
-        "title": "Preventative Maintenance for Computers",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969347,
-        "file": null,
-        "type": "paragraph",
-        "order": 4,
-        "title": "",
-        "caption": "",
-        "content": "<p>\tLike many other pieces of technology, computers see constant wear and tear from being used. Simple things like downloading files, clicking on harmful sites by accident and allowing dust to settle on the keyboard can build up to the computer slowing down and possibly being unusable.<sup>[3]</sup></p><p>Computer failures occur for a variety of reasons, sometimes because of human error and sometimes because of factors in the environment that cause a computer to malfunction or a combination of both. These factors can include excessive buildup of dust, heat or magnetism; viruses picked up from the Internet or from storage media shared between different computers; static electricity shocks or power surges; carelessness, such as spilling liquids into a computer or bumping or dropping the hard drive casing; software that has not been configured correctly or a PC’s setup that has been handled incorrectly, such as incorrect handling of upgrades.<sup>[6]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969348,
-        "file": null,
-        "type": "subtopic",
-        "order": 5,
-        "title": "Key Aspects of CHS Preventive Maintenance",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969349,
-        "file": null,
-        "type": "paragraph",
-        "order": 6,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Systematic Cleaning </strong>- Regularly removing dust from computer components (motherboard, fans, power supply) to prevent overheating.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Scheduled Inspection </strong>- Checking loose cables, damaged components, and worn-out parts before they cause failures.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Software Maintenance</strong> - Installing security patches, running antivirus scans, and updating drivers to prevent system issues.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Environmental Control </strong>- Keeping the computer area clean and maintaining proper ventilation to protect against dust and heat.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Documentation </strong>- Keeping logs of maintenance to track equipment performance.<sup>[4]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
         "id": 1776122969351,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 7,
+        "order": 3,
         "title": "",
         "caption": "",
         "content": "",
@@ -101,51 +56,28 @@
         "id": 1776122969352,
         "file": null,
         "type": "topic",
-        "order": 8,
+        "order": 4,
         "title": "Topic 2: Extending component lifespan",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776122969353,
+        "id": 1777220247050,
         "file": null,
         "type": "paragraph",
-        "order": 9,
+        "order": 5,
         "title": "",
         "caption": "",
-        "content": "<p>\tAside from what we have discussed from the previous lesson of preventative maintenance, extending the lifespan of computer hardware through servicing involves a combination of regular, proactive maintenance to prevent failure and strategic component upgrades to improve performance. Component level upgrades, along with repairs and maintenance are all about prolonging the lifespan of your device and keeping your technology working for you for longer. <sup>[6]</sup></p>",
+        "content": "<p>Aside from what we have discussed from the previous lesson of preventative maintenance, extending the lifespan of computer hardware through servicing involves a combination of regular, proactive maintenance to prevent failure and strategic component upgrades to improve performance. Component level upgrades, along with repairs and maintenance are all about prolonging the lifespan of your device and keeping your technology working for you for longer. [6]</p>\n<p>Common CHS Maintenance Tasks</p>\n<p>Operating and Environment Conditions</p>\n<p>Do not place a PC directly near a heating or cooling source, such as heating vents or air conditioners. Both excessive heat and cold can damage a PC. This includes putting the PC in the path of direct sunlight.</p>\n<p>Manufacturers often recommend that PCs be in a humidity-controlled environment, but again the PC should not be positioned so that an air conditioner is blowing cool air directly onto the unit (as temperature drops, the likelihood of static electricity increases).</p>\n<p>Keep the PC’s air vents and fans unobstructed and free of dust.</p>\n<p>Do not smoke around a PC. Cigarette smoke can damage exposed metal contacts.</p>\n<p>Do not place a PC near water sources that can splash onto the components or drip down into them. This includes open windows through which rain can come and also under plants that can drip water down into them.</p>",
         "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969354,
-        "file": null,
-        "type": "subtopic",
-        "order": 10,
-        "title": "Common CHS Maintenance Tasks",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969355,
-        "file": null,
-        "type": "paragraph",
-        "order": 11,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Operating and Environment Conditions</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Do not place a PC directly near a heating or cooling source, such as heating vents or air conditioners. Both excessive heat and cold can damage a PC. This includes putting the PC in the path of direct sunlight.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Manufacturers often recommend that PCs be in a humidity-controlled environment, but again the PC should not be positioned so that an air conditioner is blowing cool air directly onto the unit (as temperature drops, the likelihood of static electricity increases).</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Keep the PC’s air vents and fans unobstructed and free of dust.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Do not smoke around a PC. Cigarette smoke can damage exposed metal contacts.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Do not place a PC near water sources that can splash onto the components or drip down into them. This includes open windows through which rain can come and also under plants that can drip water down into them.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Do not connect power sources directly into wall outlets but rather connect them first to some form of surge protector. Surge protectors prevent electrical surges from destroying hard drives and erasing data.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Buildup of dust can seriously affect a PC’s capability to cool down, and even if you never open your computer’s case dust can still get in through the drive openings. Dust also compromises the lifespan of your PC’s hardware. An efficient way to clean dust from the inside of a computer is with compressed air, blowing dust away from the motherboard and other components.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Always turn off and unplug the system before you clean any of the components inside the case. It is also important to ground yourself to prevent static electricity discharge before touching any components inside.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Be extremely careful when moving a PC from one location to another. Even small jolts can dislodge chips and expansion boards, so be sure to power off the system before moving it even if it’s only going from one side of your desk to another.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Save all documentation that comes with your PC and its components. You may need to refer to the documentation if something goes wrong.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Always shut your system down properly (in Windows use the Start –&gt; Shutdown method) whenever possible. It is also important to respond to warnings and error messages to prevent possible data loss or corruption.<sup>[6]</sup></li></ul></li><li><strong>Operating System and Maintenance</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Always ensure you have downloaded and installed the latest patches and service updates for your operating system, especially on a Windows-based PC. These updates will fix bugs and security exploits.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Keep the root directory organized. Only keep your system’s startup and software initialization files in the root directory. Application files and their data belong in a separate directory from the root directory.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Do not store data files in the same directory that you store the software. This will eliminate the possibility of accidentally erasing or overwriting a software file.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Keep a set of backup rescue disks for the operating system.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Keep meticulous records of default settings, any changes you make in a system’s CMOS setup that differ from the default settings, and any maintenance you perform on the system. You can often use this record to backtrack when you are troubleshooting a problem and will become valuable if you decide to upgrade any of the system’s components. It is also possible for the CMOS to lose settings and you will want a record of the setup to reconstruct it.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Keep backup copies of any important data on a removable medium. Hard drives can fail and having important data on more than one medium can save a lot of stress and headaches.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">If possible use a secondary hard drive in your system for saving files. Your main drive, which is accessed more frequently, is prone to mechanical drive failure sooner than your less frequently accessed secondary hard drive would be.</li></ul></li><li><strong>Hardware and Hard Drive Maintenance</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Keep records of any expansion cards you install and the procedures you follow to install them.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Windows has a disk clean up function which will remove temporary files created by programs. This can free up additional hard drive space.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Extend the lifespan of your computer monitor by shutting it off when not in use.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Be sure to update drivers and software for your expansion cards, such as video or sound cards. By using updated drivers your hardware usually will run better.<sup>[6]</sup></li></ul></li><li><strong>Software Maintenance</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Keep a backup copy of original software, either on CD or DVD. This type of software copying is perfectly legal.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Be wary of installing file sharing and other peer-to-peer software as they represent a security risk to your PC. While the software itself may very well be virus-free and not represent a security risk, sharing your files and downloading other users’ files can be.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Get rid of unused software to free up additional system resources and hard disk space. To uninstall software on a Windows PC, use the “Add/Remove Programs” function from the Control Panel.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">For better system performance avoid using shareware (or freeware) wallpaper, screensavers, and similar audio and visual apps. These will usually require extra system resources to run.<sup>[6]</sup></li></ul></li><li><strong>Antivirus Protection</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Install an antivirus program that automatically scans for viruses when the system boots.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Once you have an antivirus program you will need to update the virus definitions daily to ensure your system is protected against the latest threats.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Do not download any files from the Internet unless you are certain the source is not transmitting a virus to you.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Do not use any storage media that has been used in another computer unless you are certain the other computer is free of viruses and will not pass the virus on to your system.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Never open e-mail attachments from people you don’t know; and don’t open any file attachment that ends in ‘.exe., All downloaded files should be scanned by your anti-virus application before you run or install it.<sup>[6]</sup></li></ul></li></ul><p>Extending the lifespan of computer components relies on regular preventive maintenance, proper operating conditions, and software care. Keeping your PC in a ventilated, dust-free environment and protecting it from heat, moisture, and power surges helps prevent premature hardware failure. Routine maintenance — like dust cleaning, airflow management, and updating drivers and firmware — keeps components running efficiently and reduces wear and tear. In addition, software maintenance (installing system and driver updates, removing unused programs, and backing up data) supports system stability and protects against issues that can indirectly harm hardware performance. Combined, these practices help prolong device usability, reduce repair needs, and maintain system reliability.<sup>[7]</sup></p>",
-        "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
         "id": 1776122969358,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 12,
+        "order": 6,
         "title": "",
         "caption": "",
         "content": "",
@@ -183,29 +115,28 @@
         "id": 1776122969359,
         "file": null,
         "type": "topic",
-        "order": 13,
+        "order": 7,
         "title": "Topic 3: Reducing hardware failures",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776122969360,
+        "id": 1777220247051,
         "file": null,
         "type": "paragraph",
-        "order": 14,
+        "order": 8,
         "title": "",
         "caption": "",
-        "content": "<p>Hardware failure occurs when computer components stop functioning properly due to overheating, electrical issues, wear and tear, improper handling, or lack of preventive maintenance. When hardware components fail, systems may experience data loss, downtime, and costly repairs. Reducing hardware failures requires a systematic approach that includes routine maintenance, environmental control, stable power management, and continuous monitoring to detect early warning signs before they develop into serious system breakdowns. Implementing preventive strategies significantly improves system reliability and extends the operational lifespan of computer equipment.<sup>[8]</sup></p><ol style=\"list-style-type: decimal;\"><li><strong>Regular Cleaning and Cooling</strong> - Dust accumulation inside the computer chassis blocks airflow and reduces the efficiency of cooling systems, causing internal temperatures to rise. Excessive heat weakens electronic circuits, accelerates component wear, and may eventually lead to permanent hardware damage. Regular cleaning of cooling fans, air vents, heat sinks, and internal components using compressed air helps maintain proper airflow and temperature control. Additionally, arranging cables properly inside the system unit improves ventilation, while placing computers in well-ventilated locations prevents heat buildup. Maintaining an effective cooling environment is one of the most important preventive measures for reducing hardware failures.<sup>[7]</sup></li><li><strong>Power Protection</strong> - Electrical instability is another major cause of hardware damage. Sudden power surges, voltage fluctuations, lightning strikes, or unexpected power interruptions can damage power supplies, motherboards, and storage devices. Installing surge protectors, voltage regulators, and uninterruptible power supply (UPS) devices ensures stable power delivery and protects systems from sudden electrical spikes. Proper grounding of electrical systems further reduces the risk of electrical damage by safely redirecting excess voltage. Organizations that implement proper power protection measures significantly reduce the occurrence of unexpected hardware failure.<sup>[7]</sup></li><li><strong>Proper Handling and Installation</strong> - Improper handling during installation, repair, or transport may result in physical damage to sensitive components. Electrostatic discharge (ESD), which occurs when static electricity transfers from the technician’s body to electronic parts, can destroy integrated circuits even if the damage is not immediately visible. To prevent this, technicians should always power off and unplug systems before servicing, wear anti-static wrist straps, and handle circuit boards only by their edges. Components should be installed carefully without forcing connectors, ensuring compatibility and correct alignment to prevent mechanical damage.<sup>[9]</sup></li><li><strong>Monitoring and Early Detection</strong> - Continuous monitoring of hardware performance helps detect early warning signs of potential failure. Indicators such as unusual noises from fans or hard drives, unexpected system shutdowns, overheating alerts, and declining system performance may signal developing hardware problems. Running built-in diagnostic utilities, checking system temperature readings, and periodically inspecting cables and connectors allow technicians to identify issues early and take corrective action before total component failure occurs. Early detection reduces repair costs and prevents major operational disruptions.<sup>[9]</sup></li><li><strong>Preventive Maintenance Practice</strong> - Establishing a routine preventive maintenance program ensures that hardware components are regularly inspected and serviced. Maintenance procedures include cleaning both internal and external components, verifying the operation of cooling systems, replacing worn-out fans, inspecting cables and connectors for damage, testing power supply stability, and updating firmware or hardware drivers to maintain compatibility and performance. A structured maintenance schedule—performed weekly, monthly, quarterly, and annually—helps organizations maintain consistent system performance and reduce unexpected equipment failures.<sup>[8]</sup></li></ol><p>When these preventive strategies are implemented systematically, computer systems operate more efficiently, hardware lifespan is extended, maintenance costs are minimized, and system reliability is significantly improved. Preventive action is therefore essential for both individual users and organizations that rely heavily on computer systems for daily operations.<sup>[7]<sup>[8]</sup></sup></p>",
+        "content": "<p>Hardware failure occurs when computer components stop functioning properly due to overheating, electrical issues, wear and tear, improper handling, or lack of preventive maintenance. When hardware components fail, systems may experience data loss, downtime, and costly repairs. Reducing hardware failures requires a systematic approach that includes routine maintenance, environmental control, stable power management, and continuous monitoring to detect early warning signs before they develop into serious system breakdowns. Implementing preventive strategies significantly improves system reliability and extends the operational lifespan of computer equipment.[8]</p>\n<p>Regular Cleaning and Cooling - Dust accumulation inside the computer chassis blocks airflow and reduces the efficiency of cooling systems, causing internal temperatures to rise. Excessive heat weakens electronic circuits, accelerates component wear, and may eventually lead to permanent hardware damage. Regular cleaning of cooling fans, air vents, heat sinks, and internal components using compressed air helps maintain proper airflow and temperature control. Additionally, arranging cables properly inside the system unit improves ventilation, while placing computers in well-ventilated locations prevents heat buildup. Maintaining an effective cooling environment is one of the most important preventive measures for reducing hardware failures.[7]</p>\n<p>Power Protection - Electrical instability is another major cause of hardware damage. Sudden power surges, voltage fluctuations, lightning strikes, or unexpected power interruptions can damage power supplies, motherboards, and storage devices. Installing surge protectors, voltage regulators, and uninterruptible power supply (UPS) devices ensures stable power delivery and protects systems from sudden electrical spikes. Proper grounding of electrical systems further reduces the risk of electrical damage by safely redirecting excess voltage. Organizations that implement proper power protection measures significantly reduce the occurrence of unexpected hardware failure.[7]</p>\n<p>Proper Handling and Installation - Improper handling during installation, repair, or transport may result in physical damage to sensitive components. Electrostatic discharge (ESD), which occurs when static electricity transfers from the technician’s body to electronic parts, can destroy integrated circuits even if the damage is not immediately visible. To prevent this, technicians should always power off and unplug systems before servicing, wear anti-static wrist straps, and handle circuit boards only by their edges. Components should be installed carefully without forcing connectors, ensuring compatibility and correct alignment to prevent mechanical damage.[9]</p>\n<p>Monitoring and Early Detection - Continuous monitoring of hardware performance helps detect early warning signs of potential failure. Indicators such as unusual noises from fans or hard drives, unexpected system shutdowns, overheating alerts, and declining system performance may signal developing hardware problems. Running built-in diagnostic utilities, checking system temperature readings, and periodically inspecting cables and connectors allow technicians to identify issues early and take corrective action before total component failure occurs. Early detection reduces repair costs and prevents major operational disruptions.[9]</p>\n<p>Preventive Maintenance Practice - Establishing a routine preventive maintenance program ensures that hardware components are regularly inspected and serviced. Maintenance procedures include cleaning both internal and external components, verifying the operation of cooling systems, replacing worn-out fans, inspecting cables and connectors for damage, testing power supply stability, and updating firmware or hardware drivers to maintain compatibility and performance. A structured maintenance schedule—performed weekly, monthly, quarterly, and annually—helps organizations maintain consistent system performance and reduce unexpected equipment failures.[8]</p>\n<p>When these preventive strategies are implemented systematically, computer systems operate more efficiently, hardware lifespan is extended, maintenance costs are minimized, and system reliability is significantly improved. Preventive action is therefore essential for both individual users and organizations that rely heavily on computer systems for daily operations.[7][8]</p>\n<p>Which factor most contributes to hardware failure?</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
         "id": 1776122969363,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 15,
+        "order": 9,
         "title": "",
         "caption": "",
         "content": "",
@@ -243,472 +174,28 @@
         "id": 1776122969364,
         "file": null,
         "type": "topic",
-        "order": 16,
+        "order": 10,
         "title": "Topic 4: Ensuring system reliability",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776122969365,
+        "id": 1777220247052,
         "file": null,
         "type": "paragraph",
-        "order": 17,
+        "order": 11,
         "title": "",
         "caption": "",
-        "content": "<p>In modern computing environments, computers must operate consistently and efficiently to support work, communication, education, and business processes. A reliable computer system ensures that hardware and software function properly without frequent failures.\t</p><p>System reliability refers to the ability of a computer system to operate continuously without failure over a given period. It includes both hardware functionality and service procedures that support uptime, performance, and safety. A reliable system minimizes interruptions and reduces costly downtime. It involves a proactive, structured approach to maintaining, repairing, and optimizing physical components to prevent failures before they occur. Key strategies include regular maintenance, environmental controls, rigorous testing, and the use of high-quality components to achieve high availability, low, downtime, and consistent performance.<sup>[10]<sup>[11]</sup></sup></p><p>In computer hardware servicing, technicians must ensure that systems remain stable, secure, and operational through maintenance, monitoring, and proper installation practices.</p>",
+        "content": "<p>In modern computing environments, computers must operate consistently and efficiently to support work, communication, education, and business processes. A reliable computer system ensures that hardware and software function properly without frequent failures.</p>\n<p>System reliability refers to the ability of a computer system to operate continuously without failure over a given period. It includes both hardware functionality and service procedures that support uptime, performance, and safety. A reliable system minimizes interruptions and reduces costly downtime. It involves a proactive, structured approach to maintaining, repairing, and optimizing physical components to prevent failures before they occur. Key strategies include regular maintenance, environmental controls, rigorous testing, and the use of high-quality components to achieve high availability, low, downtime, and consistent performance.[10][11]</p>\n<p>In computer hardware servicing, technicians must ensure that systems remain stable, secure, and operational through maintenance, monitoring, and proper installation practices.</p>\n<p>A reliable computer system:</p>\n<p>Works consistently</p>\n<p>Produces accurate results</p>\n<p>Minimizes errors and downtime</p>\n<p>Without reliability the system may crash, lose data, or interrupt important operations.</p>",
         "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969366,
-        "file": null,
-        "type": "subtopic",
-        "order": 18,
-        "title": "A reliable computer system",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969367,
-        "file": null,
-        "type": "paragraph",
-        "order": 19,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>Works consistently</li><li>Produces accurate results</li><li>Minimizes errors and downtime</li></ul><p>\tWithout reliability the system may crash, lose data, or interrupt important operations.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969368,
-        "file": null,
-        "type": "subtopic",
-        "order": 20,
-        "title": "Key Concepts of System Reliability",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969369,
-        "file": null,
-        "type": "paragraph",
-        "order": 21,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Reliability, Availability, and Serviceability (RAS)</strong></li></ol><p>System reliability in computer hardware servicing is often explained through the concept of RAS, which stands for Reliability, Availability, and Serviceability/ These three principles are also used in the IT industry to evaluate how well a computer system performs over time and how efficiently it can recover from problems.</p><ol style=\"list-style-type: decimal;\"><li><strong>Reliability</strong> - refers to the ability of a computer system or hardware component to perform its intended function consistently without failure over a specified period of time.</li></ol><p>Low reliability leads to frequent system failures, which can result in downtime, data loss, and decreased productivity.<sup>[12]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969370,
-        "file": null,
-        "type": "paragraph",
-        "order": 22,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Operates without unexpected crashes or error</li><li>Maintains stable performance under normal and heavy workloads</li><li>Protects data from corruption or loss</li></ul>",
-              "<ul style=\"list-style-type: disc;\"><li>Quality of hardware components (e.g, branded vs. generic parts)</li><li>Environmental conditions (heat, dust, humidity)</li><li>Proper installation and configuration</li><li>Regular maintenance (cleaning, updates, diagnostics)</li></ul>"
-            ]
-          ],
-          "headers": [
-            "<p><strong>Characteristics of a Reliable System:</strong></p>",
-            "<p><strong>Factors affecting reliability:</strong></p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776122969371,
-        "file": null,
-        "type": "paragraph",
-        "order": 23,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Availability </strong>- is the measure of how often a system is accessible and ready for use when needed. Even if a system is reliable, it must also be available to users at the right time.</li></ol><p>\tHigh availability ensures that users can access systems whenever required, which is critical in businesses, hospitals, and online services.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969372,
-        "file": null,
-        "type": "paragraph",
-        "order": 24,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ul style=\"list-style-type: disc;\"><li>High Uptime </li><li>Minimal Downtime</li><li>Fast Recovery (the system can quickly restart or restore services after a crash or power loss)</li><li>Fault Tolerance (continues to operate even when a hardware component fails)</li></ul>",
-              "<ul style=\"list-style-type: disc;\"><li>System reliability (fewer failures = more uptime)</li><li>Speed of repair (downtime duration)</li><li>Backup systems and redundancy</li><li>Network stability and power supply</li></ul>"
-            ]
-          ],
-          "headers": [
-            "<p><strong>Characteristics of a Available System:</strong></p>",
-            "<p><strong>Factors affecting availability:</strong></p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776122969373,
-        "file": null,
-        "type": "paragraph",
-        "order": 25,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Serviceability</strong> - refers to how easily and quickly a system can be repaired, maintained, or upgraded when problems occur.</li></ol><p>\tGood serviceability reduces downtime and maintenance costs, improving overall system performance and user satisfaction.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969374,
-        "file": null,
-        "type": "paragraph",
-        "order": 26,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Has easily replaceable parts (modular design)</li><li>Provides clear error messages or diagnostic tools</li><li>Includes accessible documentation and support</li><li>Allows quick troubleshooting and repair</li></ul>",
-              "<ul style=\"list-style-type: disc;\"><li>System design (tool-less cases, labeled components)</li><li>Availability of spare parts</li><li>Technician skill level</li><li>Manufacturer support and documentation</li></ul>"
-            ]
-          ],
-          "headers": [
-            "<p><strong>Characteristics of a Reliable System:</strong></p>",
-            "<p><strong>Factors affecting availability:</strong></p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776122969375,
-        "file": null,
-        "type": "paragraph",
-        "order": 27,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Relationship Between Reliability, Availability, and Serviceability</strong></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969376,
-        "file": null,
-        "type": "subtopic",
-        "order": 28,
-        "title": "These three concepts are interconnected",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969377,
-        "file": null,
-        "type": "paragraph",
-        "order": 29,
-        "title": "",
-        "caption": "",
-        "content": "<table><thead><tr><th><ul style=\"list-style-type: disc;\"><li>High reliability reduces the chances of failure</li><li>High serviceability ensures fast recovery when a failure occurs</li></ul></th></tr></thead></table><p>A system that rarely fails but takes a long time to repair may still have low availability. Likewise, a system that fails often but is quickly repaired may maintain moderate availability.</p><ol style=\"list-style-type: decimal;\"><li><strong>Fault Tolerance</strong></li></ol><p>\tFault tolerance is the ability of a computer system to continue operating properly even when one or more of its components fail. Instead of stopping completely, the system detects the problem and automatically switches to a backup component or alternative process to maintain operation.<sup>[13]</sup></p><p>In simple terms, a fault-tolerant system is designed so that failures do not interrupt the user’s experience.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969378,
-        "file": null,
-        "type": "subtopic",
-        "order": 30,
-        "title": "Fault tolerance is achieved through several techniques",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969379,
-        "file": null,
-        "type": "paragraph",
-        "order": 31,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ul style=\"list-style-type: disc;\"><li><strong>Error Detection</strong></li></ul>",
-              "<p>The system constantly checks for problems (e.g., hardware monitoring, system logs)</p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li><strong>Error Recovery</strong></li></ul>",
-              "<p>Once a fault is detected, the system automatically corrects or bypasses it</p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li><strong>Failover Mechanism</strong></li></ul>",
-              "<p>Automatic switching to a standby system when failure occurs</p>"
-            ]
-          ],
-          "headers": [
-            "<ul style=\"list-style-type: disc;\"><li><strong>Redundancy</strong></li></ul>",
-            "<p>Adding extra components (backup power supply, extra servers, duplicate disks)</p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776122969380,
-        "file": null,
-        "type": "subtopic",
-        "order": 32,
-        "title": "Types of Faults",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969381,
-        "file": null,
-        "type": "paragraph",
-        "order": 33,
-        "title": "",
-        "caption": "",
-        "content": "<p><strong>\t</strong>In any computer system, faults (or failures) can occur unexpectedly and disrupt normal operations. Understanding the different types of faults is essential in designing systems that can continue functioning even when problems arise. Fault-tolerant systems are specifically built to detect, isolate, and recover from these faults with minimal or no downtime.<sup>[14]</sup></p><ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Hardware faults</strong> – occur when physical components of a computer system fail or malfunction. These are often caused by wear and tear, overheating, electrical issues, or manufacturing defects.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Software faults</strong> – are errors within programs or operating systems that lead to incorrect or unexpected behavior. These faults are usually caused by coding errors, compatibility issues, or corrupted files.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Network faults</strong> – occur when communication between devices is disrupted. These faults are especially critical in environments that rely on internet connectivity or network-based services.</li></ul><p><strong>Fault tolerance</strong> is a critical concept in system reliability. It ensures that even when parts of a system fail, the overall system continues to function. By using techniques like redundancy, failover, and error recovery, fault-tolerant systems provide<strong> </strong>reliable, uninterrupted service.<sup>[15]</sup></p><ol style=\"list-style-type: decimal;\"><li><strong>Downtime</strong></li></ol><p>Downtime refers to the period of time when a computer system, network, or service is not operational or unavailable for use. During downtime, users cannot access the system, perform tasks, or use services that depend on it.<sup>[16]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969382,
-        "file": null,
-        "type": "subtopic",
-        "order": 34,
-        "title": "In simple terms, downtime means “the system is not working.”",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969383,
-        "file": null,
-        "type": "subtopic",
-        "order": 35,
-        "title": "Causes of Downtime",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969384,
-        "file": null,
-        "type": "paragraph",
-        "order": 36,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Hardware Failure</strong> - Hardware failure is one of the most common causes of downtime. It happens when the physical components of a computer system stop working properly due to damage, aging, or environmental conditions.</li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969385,
-        "file": null,
-        "type": "subtopic",
-        "order": 37,
-        "title": "Common Causes of Hardware Failure",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969386,
-        "file": null,
-        "type": "paragraph",
-        "order": 38,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ul style=\"list-style-type: disc;\"><li><strong>Power supply failure</strong></li></ul>",
-              "<p>A faulty PSU can suddenly shut down the system</p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li><strong>Overheating components</strong></li></ul>",
-              "<p>Poor cooling can cause CPUs, GPUs, or motherboards to overheat</p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li><strong>Faulty RAM or motherboard</strong></li></ul>",
-              "<p>Defective memory or circuit boards can cause crashes or boot failure</p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li><strong>Wear and tear</strong></li></ul>",
-              "<p>Components degrade over time due to continuous use</p>"
-            ]
-          ],
-          "headers": [
-            "<ul style=\"list-style-type: disc;\"><li><strong>Damaged hard drives</strong></li></ul>",
-            "<p>Hard disks can develop bad sectors or completely fail, leading to data loss</p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776122969387,
-        "file": null,
-        "type": "paragraph",
-        "order": 39,
-        "title": "",
-        "caption": "",
-        "content": "<p>According to IT sources, hardware issues such as disk crashes, power failures, and cooling problems are major contributors to system downtime.<sup>[1]<sup>[18]</sup></sup></p><ol style=\"list-style-type: decimal;\"><li><strong>Software Issues</strong> - Software issues are one of the leading causes of system downtime.</li></ol><p>Software acts as the “brain” of a computer system. When it fails, the entire system may crash, freeze, or stop responding.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969388,
-        "file": null,
-        "type": "subtopic",
-        "order": 40,
-        "title": "Common Software Issues That Cause Downtime",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969389,
-        "file": null,
-        "type": "paragraph",
-        "order": 41,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Operating System Errors</li></ul>",
-              "<p>The operating system (OS) manages all hardware and software resources. If it develops problems, the entire system is affected.</p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Corrupted Files</li></ul>",
-              "<p>File corruption occurs when data becomes damaged or unreadable. This can affect both system files and user data.</p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Failed Updates</li></ul>",
-              "<p>Software updates are meant to fix bugs and improve performance, but sometimes they can introduce new problems.</p>"
-            ]
-          ],
-          "headers": [
-            "<ul style=\"list-style-type: disc;\"><li>System Crashes or Bugs</li></ul>",
-            "<p>A system crash occurs when a program or operating system suddenly stops working. This is often caused by software bugs, which are errors in the program’s code.</p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776122969390,
-        "file": null,
-        "type": "paragraph",
-        "order": 42,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Scheduled Maintenance</strong> - Scheduled maintenance refers to planned downtime that is intentionally performed to keep computer systems reliable, secure, and efficient. Unlike unexpected failures, this type of downtime is controlled and necessary to prevent bigger problems in the future.</li></ol><p>Organizations schedule maintenance during off-peak hours to minimize disruption, but systems may still become temporarily unavailable.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969391,
-        "file": null,
-        "type": "subtopic",
-        "order": 43,
-        "title": "Importance of System Reliability",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969392,
-        "file": null,
-        "type": "subtopic",
-        "order": 44,
-        "title": "Ensuring system reliability is critical because",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969393,
-        "file": null,
-        "type": "paragraph",
-        "order": 45,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Builds User Trust</li></ul>",
-              "<p>Users depend on systems that consistently perform correctly</p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Saves Cost</li></ul>",
-              "<p>Less frequent repairs and replacements reduce expenses</p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Protects Data</li></ul>",
-              "<p>Reliable systems prevent data loss and corruption</p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Improves Productivity</li></ul>",
-              "<p>Stable systems allow continuous work without delays</p>"
-            ]
-          ],
-          "headers": [
-            "<ul style=\"list-style-type: disc;\"><li>Reduces Downtime</li></ul>",
-            "<p>Reliable systems experience fewer failures and interruptions</p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776122969394,
-        "file": null,
-        "type": "paragraph",
-        "order": 46,
-        "title": "",
-        "caption": "",
-        "content": "<p><strong>System reliability</strong> is a critical aspect of computer hardware servicing. A reliable computer system ensures continuous and stable operation, allowing users to perform tasks efficiently without frequent interruptions. When systems are reliable, they experience less downtime, improved performance, and reduced risk of data loss or hardware damage.</p><p>In real-world environments such as businesses, schools, and organizations, system reliability is essential for maintaining productivity and delivering consistent services. Even a short period of system failure can lead to delays, financial losses, and user dissatisfaction.<sup>[19]</sup></p>",
-        "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
         "id": 1776122969397,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 47,
+        "order": 12,
         "title": "",
         "caption": "",
         "content": "",
@@ -746,121 +233,147 @@
         "id": 1776122969398,
         "file": null,
         "type": "topic",
-        "order": 48,
+        "order": 13,
         "title": "Topic 5: Types of Preventive Maintenance",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776122969399,
+        "id": 1777220247053,
         "file": null,
         "type": "paragraph",
-        "order": 49,
+        "order": 14,
         "title": "",
         "caption": "",
-        "content": "<p>Preventive maintenance in computer hardware servicing refers to regular and planned actions performed to keep computer systems functioning efficiently and to prevent unexpected failures. Instead of waiting for problems to occur, this approach focuses on maintaining systems in good condition at all times. (refer to topic 1)</p><p>Preventive maintenance is considered a proactive strategy, meaning that potential issues are identified and resolved before they develop into serious and costly problems. By doing so, technicians and users can avoid sudden system breakdowns, data loss, and expensive repairs.<sup>[20]</sup></p>",
+        "content": "<p>Preventive maintenance in computer hardware servicing refers to regular and planned actions performed to keep computer systems functioning efficiently and to prevent unexpected failures. Instead of waiting for problems to occur, this approach focuses on maintaining systems in good condition at all times. (refer to topic 1)</p>\n<p>Preventive maintenance is considered a proactive strategy, meaning that potential issues are identified and resolved before they develop into serious and costly problems. By doing so, technicians and users can avoid sudden system breakdowns, data loss, and expensive repairs.[20]</p>\n<p>Key Characteristics of Preventive Maintenance:</p>\n<p>Preventive maintenance is effective because of several important characteristics that guide how it is performed. These characteristics ensure that maintenance activities are organized, efficient, and focused on preventing system failure.</p>\n<p>Planned and Scheduled</p>\n<p>Preventive maintenance is carefully planned in advance and performed at regular intervals such as daily, weekly, monthly, or yearly. Instead of waiting for equipment to break down, technicians follow a maintenance schedule based on time, usage, or manufacturer recommendations. This ensures that all necessary tasks are completed on time.[21][22]</p>\n<p>Routine-Based</p>\n<p>Preventive maintenance involves repeating regular tasks consistently to keep systems in good condition.</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
-        "id": 1776122969400,
-        "file": null,
-        "type": "subtopic",
-        "order": 50,
-        "title": "Key Characteristics of Preventive Maintenance",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969401,
-        "file": null,
-        "type": "paragraph",
-        "order": 51,
-        "title": "",
-        "caption": "",
-        "content": "<p>Preventive maintenance is effective because of several important characteristics that guide how it is performed. These characteristics ensure that maintenance activities are organized, efficient, and focused on preventing system failure.</p><ol style=\"list-style-type: decimal;\"><li><strong>Planned and Scheduled</strong></li></ol><ul style=\"list-style-type: disc;\"><li>Preventive maintenance is carefully planned in advance and performed at regular intervals such as daily, weekly, monthly, or yearly. Instead of waiting for equipment to break down, technicians follow a maintenance schedule based on time, usage, or manufacturer recommendations. This ensures that all necessary tasks are completed on time.<sup>[21]<sup>[22]</sup></sup></li></ul><ol style=\"list-style-type: decimal;\"><li><strong>Routine-Based</strong></li></ol><ul style=\"list-style-type: disc;\"><li>Preventive maintenance involves repeating regular tasks consistently to keep systems in good condition.</li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969402,
-        "file": null,
-        "type": "subtopic",
-        "order": 52,
-        "title": "These routine activities are simple but very important when done regularly",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969403,
+        "id": 1777220247054,
         "file": null,
         "type": "image",
-        "order": 53,
-        "title": "",
+        "order": 15,
+        "title": "Cleaning dust from internal components",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776122970028-1.png",
-            "caption": "",
-            "fileName": "docx-lesson-6-1776122970028-1.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-6-1776122970032-2.png",
-            "caption": "",
-            "fileName": "docx-lesson-6-1776122970032-2.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-6-1776122970033-3.png",
-            "caption": "",
-            "fileName": "docx-lesson-6-1776122970033-3.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-6-1776122970047-4.png",
-            "caption": "",
-            "fileName": "docx-lesson-6-1776122970047-4.png"
+            "url": "/uploads/lessons/197_cleaning_dust_from_internal_components_2.webp",
+            "file": null,
+            "fileName": "197_cleaning_dust_from_internal_components_2.webp",
+            "caption": "Cleaning dust from internal components"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-6-1776122970028-1.png",
-        "fileName": "docx-lesson-6-1776122970028-1.png",
+        "content": "/uploads/lessons/197_cleaning_dust_from_internal_components_2.webp",
+        "fileName": "197_cleaning_dust_from_internal_components_2.webp",
         "sideTexts": [
-          "<ul style=\"list-style-type: disc;\"><li>Cleaning dust from internal components<sup>[23]</sup></li></ul>",
-          "<ul style=\"list-style-type: disc;\"><li>Inspecting cables and connections<sup>[24]</sup></li></ul>",
-          "<ul style=\"list-style-type: disc;\"><li>Updating software and drivers<sup>[25]</sup></li></ul>",
-          "<ul style=\"list-style-type: disc;\"><li>Running antivirus scans<sup>[26]</sup></li></ul>"
+          "<p><strong>Cleaning dust from internal components</strong></p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776122970028-1.png",
-              "caption": "",
-              "fileName": "docx-lesson-6-1776122970028-1.png"
+              "url": "/uploads/lessons/197_cleaning_dust_from_internal_components_2.webp",
+              "file": null,
+              "fileName": "197_cleaning_dust_from_internal_components_2.webp",
+              "caption": "Cleaning dust from internal components"
             }
-          ],
+          ]
+        ]
+      },
+      {
+        "id": 1777220247055,
+        "file": null,
+        "type": "image",
+        "order": 16,
+        "title": "Inspecting cables and connections",
+        "images": [
+          {
+            "url": "/uploads/lessons/198_inspecting_cables_and_connections_24.webp",
+            "file": null,
+            "fileName": "198_inspecting_cables_and_connections_24.webp",
+            "caption": "Inspecting cables and connections"
+          }
+        ],
+        "layout": "text-left",
+        "caption": "",
+        "content": "/uploads/lessons/198_inspecting_cables_and_connections_24.webp",
+        "fileName": "198_inspecting_cables_and_connections_24.webp",
+        "sideTexts": [
+          "<p><strong>Inspecting cables and connections</strong></p>"
+        ],
+        "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776122970032-2.png",
-              "caption": "",
-              "fileName": "docx-lesson-6-1776122970032-2.png"
+              "url": "/uploads/lessons/198_inspecting_cables_and_connections_24.webp",
+              "file": null,
+              "fileName": "198_inspecting_cables_and_connections_24.webp",
+              "caption": "Inspecting cables and connections"
             }
-          ],
+          ]
+        ]
+      },
+      {
+        "id": 1777220247056,
+        "file": null,
+        "type": "image",
+        "order": 17,
+        "title": "Updating software and drivers",
+        "images": [
+          {
+            "url": "/uploads/lessons/199_updating_software_and_drivers_25.webp",
+            "file": null,
+            "fileName": "199_updating_software_and_drivers_25.webp",
+            "caption": "Updating software and drivers"
+          }
+        ],
+        "layout": "text-left",
+        "caption": "",
+        "content": "/uploads/lessons/199_updating_software_and_drivers_25.webp",
+        "fileName": "199_updating_software_and_drivers_25.webp",
+        "sideTexts": [
+          "<p><strong>Updating software and drivers</strong></p>"
+        ],
+        "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776122970033-3.png",
-              "caption": "",
-              "fileName": "docx-lesson-6-1776122970033-3.png"
+              "url": "/uploads/lessons/199_updating_software_and_drivers_25.webp",
+              "file": null,
+              "fileName": "199_updating_software_and_drivers_25.webp",
+              "caption": "Updating software and drivers"
             }
-          ],
+          ]
+        ]
+      },
+      {
+        "id": 1777220247057,
+        "file": null,
+        "type": "image",
+        "order": 18,
+        "title": "Running antivirus scans",
+        "images": [
+          {
+            "url": "/uploads/lessons/200_running_antivirus_scans_26.webp",
+            "file": null,
+            "fileName": "200_running_antivirus_scans_26.webp",
+            "caption": "Running antivirus scans"
+          }
+        ],
+        "layout": "text-left",
+        "caption": "",
+        "content": "/uploads/lessons/200_running_antivirus_scans_26.webp",
+        "fileName": "200_running_antivirus_scans_26.webp",
+        "sideTexts": [
+          "<p><strong>Running antivirus scans</strong></p>"
+        ],
+        "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776122970047-4.png",
-              "caption": "",
-              "fileName": "docx-lesson-6-1776122970047-4.png"
+              "url": "/uploads/lessons/200_running_antivirus_scans_26.webp",
+              "file": null,
+              "fileName": "200_running_antivirus_scans_26.webp",
+              "caption": "Running antivirus scans"
             }
           ]
         ]
@@ -869,7 +382,7 @@
         "id": 1776122969406,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 54,
+        "order": 19,
         "title": "",
         "caption": "",
         "content": "",
@@ -907,221 +420,252 @@
         "id": 1776122969407,
         "file": null,
         "type": "topic",
-        "order": 55,
+        "order": 20,
         "title": "Topic 6: Hardware Preventive Maintenance",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776122969408,
+        "id": 1777220247058,
         "file": null,
         "type": "paragraph",
-        "order": 56,
+        "order": 21,
         "title": "",
         "caption": "",
-        "content": "<p>Hardware Preventive Maintenance refers to the regular, systematic, and planned care of computer hardware to ensure that all components continue to function efficiently and reliably. Instead of waiting for equipment to break down, this approach focuses on maintaining devices in good working condition to avoid unexpected failures.</p><p>It involves a variety of tasks such as cleaning internal and external parts, inspecting components for wear and damage, repairing minor issues, and replacing parts before they fail. These activities help maintain optimal system performance and extend the lifespan of the computer.<sup>[27]</sup></p>",
+        "content": "<p>Hardware Preventive Maintenance refers to the regular, systematic, and planned care of computer hardware to ensure that all components continue to function efficiently and reliably. Instead of waiting for equipment to break down, this approach focuses on maintaining devices in good working condition to avoid unexpected failures.</p>\n<p>It involves a variety of tasks such as cleaning internal and external parts, inspecting components for wear and damage, repairing minor issues, and replacing parts before they fail. These activities help maintain optimal system performance and extend the lifespan of the computer.[27]</p>\n<p>Types of Hardware Preventive Maintenance</p>\n<p>Cleaning Maintenance</p>\n<p>One of the most important types of hardware preventive maintenance. It involves the regular removal of dust, dirt, and debris from both the internal and external parts of a computer system to keep it functioning properly.</p>\n<p>Over time, dust naturally accumulates inside and outside a computer. If not removed, this buildup can block airflow, trap heat, and cause components to overheat or fail.[28]</p>\n<p>Internal Cleaning</p>\n<p>Videos to watch:</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
-        "id": 1776122969409,
-        "file": null,
-        "type": "subtopic",
-        "order": 57,
-        "title": "Types of Hardware Preventive Maintenance",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969410,
-        "file": null,
-        "type": "paragraph",
-        "order": 58,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Cleaning Maintenance</strong></li></ol><p>One of the most important types of hardware preventive maintenance. It involves the regular removal of dust, dirt, and debris from both the internal and external parts of a computer system to keep it functioning properly. </p><p>Over time, dust naturally accumulates inside and outside a computer. If not removed, this buildup can block airflow, trap heat, and cause components to overheat or fail.<sup>[28]</sup> \t</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969411,
+        "id": 1777220247059,
         "file": null,
         "type": "image",
-        "order": 59,
-        "title": "",
+        "order": 22,
+        "title": "Fans",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-6-1776122970625-5.png",
-            "caption": "",
-            "fileName": "docx-lesson-6-1776122970625-5.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-6-1776122970628-6.png",
-            "caption": "",
-            "fileName": "docx-lesson-6-1776122970628-6.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-6-1776122970629-7.png",
-            "caption": "",
-            "fileName": "docx-lesson-6-1776122970629-7.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-6-1776122970635-8.png",
-            "caption": "",
-            "fileName": "docx-lesson-6-1776122970635-8.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-6-1776122970640-9.png",
-            "caption": "",
-            "fileName": "docx-lesson-6-1776122970640-9.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-6-1776122970642-10.png",
-            "caption": "",
-            "fileName": "docx-lesson-6-1776122970642-10.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-6-1776122970643-11.png",
-            "caption": "",
-            "fileName": "docx-lesson-6-1776122970643-11.png"
+            "url": "/uploads/lessons/201_fans_29_crop.webp",
+            "file": null,
+            "fileName": "201_fans_29_crop.webp",
+            "caption": "Fans"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-6-1776122970625-5.png",
-        "fileName": "docx-lesson-6-1776122970625-5.png",
+        "content": "/uploads/lessons/201_fans_29_crop.webp",
+        "fileName": "201_fans_29_crop.webp",
         "sideTexts": [
-          "<ul style=\"list-style-type: disc;\"><li><strong>Internal Cleaning</strong></li></ul><p>Videos to watch:</p><ul style=\"list-style-type: disc;\"><li><a href=\"https://www.youtube.com/watch?v=OhRgBE6qgaU&amp;t=66\">How To PROPERLY Deep-Clean PC Fans</a></li><li><a href=\"https://www.youtube.com/watch?v=o0I7Porz7EQ\">PC Cleaning (Fans, Heat-Sinks, Thermal Paste, PSU, Case) - Smoker</a></li><li><a href=\"https://www.youtube.com/watch?v=1kdURHUHztw\">How to clean computer power supply unit - Cleaning the PSU</a></li></ul><ul style=\"list-style-type: disc;\"><li>Fans<sup>[29]</sup></li></ul><p></p><ul style=\"list-style-type: disc;\"><li>Motherboard<sup>[30]</sup></li></ul><p></p><ul style=\"list-style-type: disc;\"><li>Power Supply Vents<sup>[31]</sup></li></ul><p></p>",
-          "<ul style=\"list-style-type: disc;\"><li><strong>External Cleaning</strong></li></ul><p>Videos to watch:</p><ul style=\"list-style-type: disc;\"><li><a href=\"https://www.youtube.com/watch?v=gJCNAD9Ga-8\">How to Clean a Keyboard Properly (Remove the Keycaps)</a></li><li><a href=\"https://www.youtube.com/shorts/XRoksluU4Bk\">https://www.youtube.com/shorts/XRoksluU4Bk</a></li><li><a href=\"https://www.youtube.com/watch?v=a1gvxsSGl-k\">How To Clean a Computer's USB Ports</a></li><li><a href=\"https://www.youtube.com/watch?v=own1U0sTQZ0\">How To Deep-Clean Your PC Case</a></li></ul><ul style=\"list-style-type: disc;\"><li>Keyboards<sup>[32]</sup></li></ul><p></p><ul style=\"list-style-type: disc;\"><li>Monitors<sup>[33]</sup></li></ul><p></p><ul style=\"list-style-type: disc;\"><li>Ports<sup>[34]</sup></li></ul><p></p><ul style=\"list-style-type: disc;\"><li>System unit casing</li></ul><p></p>"
+          "<p><strong>Fans</strong></p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-6-1776122970625-5.png",
-              "caption": "",
-              "fileName": "docx-lesson-6-1776122970625-5.png"
-            },
-            {
-              "url": "/uploads/lessons/docx-lesson-6-1776122970628-6.png",
-              "caption": "",
-              "fileName": "docx-lesson-6-1776122970628-6.png"
-            },
-            {
-              "url": "/uploads/lessons/docx-lesson-6-1776122970629-7.png",
-              "caption": "",
-              "fileName": "docx-lesson-6-1776122970629-7.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-6-1776122970635-8.png",
-              "caption": "",
-              "fileName": "docx-lesson-6-1776122970635-8.png"
-            },
-            {
-              "url": "/uploads/lessons/docx-lesson-6-1776122970640-9.png",
-              "caption": "",
-              "fileName": "docx-lesson-6-1776122970640-9.png"
-            },
-            {
-              "url": "/uploads/lessons/docx-lesson-6-1776122970642-10.png",
-              "caption": "",
-              "fileName": "docx-lesson-6-1776122970642-10.png"
-            },
-            {
-              "url": "/uploads/lessons/docx-lesson-6-1776122970643-11.png",
-              "caption": "",
-              "fileName": "docx-lesson-6-1776122970643-11.png"
+              "url": "/uploads/lessons/201_fans_29_crop.webp",
+              "file": null,
+              "fileName": "201_fans_29_crop.webp",
+              "caption": "Fans"
             }
           ]
         ]
       },
       {
-        "id": 1776122969412,
+        "id": 1777220247060,
         "file": null,
-        "type": "paragraph",
-        "order": 60,
-        "title": "",
+        "type": "image",
+        "order": 23,
+        "title": "Motherboard",
+        "images": [
+          {
+            "url": "/uploads/lessons/202_motherboard_30.webp",
+            "file": null,
+            "fileName": "202_motherboard_30.webp",
+            "caption": "Motherboard"
+          }
+        ],
+        "layout": "text-left",
         "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Safety Tips</strong><ul style=\"list-style-type: circle;\"><li>Always turn off and unplug the computer before cleaning</li><li>Avoid using water directly on components</li><li>Use anti-static protection to prevent damage</li><li>Handle internal parts carefully</li></ul></li></ul><ol style=\"list-style-type: decimal;\"><li><strong>Inspection Maintenance</strong></li></ol><p>Inspection Maintenance is a preventive approach that involves regularly examining computer hardware to detect signs of damage, wear, or potential failure before they lead to bigger problems. While cleaning removes dirt, inspection ensures that all components are physically and electrically sound.<sup>[35]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969413,
-        "file": null,
-        "type": "paragraph",
-        "order": 61,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ol style=\"list-style-type: decimal;\"><li><strong>Checking Ports</strong></li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>Examine USB, HDMI, audio, and network ports for dust, corrosion, or bent pins</li><li>Test each port to confirm proper functionality</li><li>Prevents device connection failures</li></ul>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li><strong>Checking Hardware Components</strong></li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>Look for bulging capacitors on the motherboard</li><li>Inspect hard drives and SSDs for unusual noises or vibration</li><li>Check fans for smooth operation and wear</li><li>Examine power supply for overheating or unusual smell</li></ul>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li><strong>Software-Assisted Inspection</strong></li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>Use diagnostic tools to check hardware health (e.g., hard drive S.M.A.R.T. status)</li><li>Monitor system temperatures and voltages</li><li>Detect early signs of failure that may not be visible physically</li></ul>"
-            ]
-          ],
-          "headers": [
-            "<ol style=\"list-style-type: decimal;\"><li><strong>Checking Cables and Connectors</strong></li></ol>",
-            "<ul style=\"list-style-type: disc;\"><li>Inspect power cords, USB cables, HDMI cables, and internal connectors</li><li>Look for wear, cracks, or loose connections</li><li>Ensures uninterrupted power and data flow</li></ul>"
+        "content": "/uploads/lessons/202_motherboard_30.webp",
+        "fileName": "202_motherboard_30.webp",
+        "sideTexts": [
+          "<p><strong>Motherboard</strong></p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/202_motherboard_30.webp",
+              "file": null,
+              "fileName": "202_motherboard_30.webp",
+              "caption": "Motherboard"
+            }
           ]
-        },
-        "contentLayout": "table"
+        ]
       },
       {
-        "id": 1776122969414,
+        "id": 1777220247061,
         "file": null,
-        "type": "paragraph",
-        "order": 62,
-        "title": "",
+        "type": "image",
+        "order": 24,
+        "title": "Power Supply Vents",
+        "images": [
+          {
+            "url": "/uploads/lessons/203_power_supply_vents_31.webp",
+            "file": null,
+            "fileName": "203_power_supply_vents_31.webp",
+            "caption": "Power Supply Vents"
+          }
+        ],
+        "layout": "text-left",
         "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Replacement Maintenance</strong></li></ol><p>Replacement maintenance is a type of hardware preventive maintenance that involves replacing worn-out, outdated, or aging components before they fail completely. Instead of waiting for a device to break down, parts are changed at the right time to ensure continuous and reliable system operation.</p><p>This proactive strategy helps maintain system performance and prevents unexpected interruptions.<sup>[36]<sup>[37]</sup></sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
+        "content": "/uploads/lessons/203_power_supply_vents_31.webp",
+        "fileName": "203_power_supply_vents_31.webp",
+        "sideTexts": [
+          "<p><strong>Power Supply Vents</strong></p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/203_power_supply_vents_31.webp",
+              "file": null,
+              "fileName": "203_power_supply_vents_31.webp",
+              "caption": "Power Supply Vents"
+            }
+          ]
+        ]
       },
       {
-        "id": 1776122969415,
+        "id": 1777220247062,
         "file": null,
-        "type": "subtopic",
-        "order": 63,
-        "title": "Common Components Replaced",
+        "type": "image",
+        "order": 25,
+        "title": "Keyboards",
+        "images": [
+          {
+            "url": "/uploads/lessons/204_keyboards_32.webp",
+            "file": null,
+            "fileName": "204_keyboards_32.webp",
+            "caption": "Keyboards"
+          }
+        ],
+        "layout": "text-left",
         "caption": "",
-        "content": "",
-        "fileName": null
+        "content": "/uploads/lessons/204_keyboards_32.webp",
+        "fileName": "204_keyboards_32.webp",
+        "sideTexts": [
+          "<p><strong>Keyboards</strong></p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/204_keyboards_32.webp",
+              "file": null,
+              "fileName": "204_keyboards_32.webp",
+              "caption": "Keyboards"
+            }
+          ]
+        ]
       },
       {
-        "id": 1776122969416,
+        "id": 1777220247063,
         "file": null,
-        "type": "paragraph",
-        "order": 64,
-        "title": "",
+        "type": "image",
+        "order": 26,
+        "title": "Monitors",
+        "images": [
+          {
+            "url": "/uploads/lessons/205_monitors_33.webp",
+            "file": null,
+            "fileName": "205_monitors_33.webp",
+            "caption": "Monitors"
+          }
+        ],
+        "layout": "text-left",
         "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Hard Drives (HDD/SSD)</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Storage devices are among the most commonly replaced parts.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">HDDs (Hard Disk Drives) typically last 3–5 years because they have moving parts that wear out.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">SSDs (Solid-State Drives) last longer (around 5–10 years) but still degrade with use.<sup>[38]</sup></li></ul></li><li><strong>Cooling Fans</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Cooling fans keep the system temperature under control.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Over time, they may become noisy, slow, or stop working.</li></ul></li><li><strong>Power Supply Unit (PSU)</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">The PSU provides electrical power to all computer components.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">It typically lasts around 7–10 years, depending on quality.<sup>[38]</sup></li></ul></li><li><strong>RAM (Memory Modules)</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">RAM rarely fails physically but may become insufficient or unstable over time.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">It is often replaced due to performance upgrades rather than failure.<sup>[38]</sup></li></ul></li><li><strong>Cables and Connectors</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Includes power cables, SATA cables, and internal connectors.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\">These may become loose, damaged, or worn out.</li></ul></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
+        "content": "/uploads/lessons/205_monitors_33.webp",
+        "fileName": "205_monitors_33.webp",
+        "sideTexts": [
+          "<p><strong>Monitors</strong></p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/205_monitors_33.webp",
+              "file": null,
+              "fileName": "205_monitors_33.webp",
+              "caption": "Monitors"
+            }
+          ]
+        ]
+      },
+      {
+        "id": 1777220247064,
+        "file": null,
+        "type": "image",
+        "order": 27,
+        "title": "Ports",
+        "images": [
+          {
+            "url": "/uploads/lessons/206_ports_34.webp",
+            "file": null,
+            "fileName": "206_ports_34.webp",
+            "caption": "Ports"
+          }
+        ],
+        "layout": "text-left",
+        "caption": "",
+        "content": "/uploads/lessons/206_ports_34.webp",
+        "fileName": "206_ports_34.webp",
+        "sideTexts": [
+          "<p><strong>Ports</strong></p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/206_ports_34.webp",
+              "file": null,
+              "fileName": "206_ports_34.webp",
+              "caption": "Ports"
+            }
+          ]
+        ]
+      },
+      {
+        "id": 1777220247065,
+        "file": null,
+        "type": "image",
+        "order": 28,
+        "title": "System unit casing",
+        "images": [
+          {
+            "url": "/uploads/lessons/207_system_unit_casing.webp",
+            "file": null,
+            "fileName": "207_system_unit_casing.webp",
+            "caption": "System unit casing"
+          }
+        ],
+        "layout": "text-left",
+        "caption": "",
+        "content": "/uploads/lessons/207_system_unit_casing.webp",
+        "fileName": "207_system_unit_casing.webp",
+        "sideTexts": [
+          "<p><strong>System unit casing</strong></p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/207_system_unit_casing.webp",
+              "file": null,
+              "fileName": "207_system_unit_casing.webp",
+              "caption": "System unit casing"
+            }
+          ]
+        ]
       },
       {
         "id": 1776122969419,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 65,
+        "order": 29,
         "title": "",
         "caption": "",
         "content": "",
@@ -1159,196 +703,28 @@
         "id": 1776122969420,
         "file": null,
         "type": "topic",
-        "order": 66,
+        "order": 30,
         "title": "Topic 7: Software Preventive Maintenance",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776122969421,
+        "id": 1777220247066,
         "file": null,
         "type": "paragraph",
-        "order": 67,
+        "order": 31,
         "title": "",
         "caption": "",
-        "content": "<p>Software preventive maintenance refers to the proactive process of improving, updating, and managing software systems to prevent future problems, errors, or failures.</p><p>Unlike corrective maintenance (which fixes issues after they occur), preventive maintenance focuses on anticipating and avoiding problems before they happen, ensuring long-term system stability, security, and performance.<sup>[39]</sup></p>",
+        "content": "<p>Software preventive maintenance refers to the proactive process of improving, updating, and managing software systems to prevent future problems, errors, or failures.</p>\n<p>Unlike corrective maintenance (which fixes issues after they occur), preventive maintenance focuses on anticipating and avoiding problems before they happen, ensuring long-term system stability, security, and performance.[39]</p>\n<p>Types of Software Preventive Maintenance</p>\n<p>Software preventive maintenance is part of broader software maintenance, which includes four main types. Understanding these helps explain how preventive maintenance fits into the system.</p>\n<p>Corrective Maintenance</p>\n<p>Corrective maintenance refers to the process of fixing errors, bugs, or faults in a system after they have been detected. Unlike preventive maintenance, which aims to avoid problems, corrective maintenance is performed after an issue occurs.</p>\n<p>This type of maintenance is necessary to restore the system to its normal working condition and ensure that it continues to function properly.[40]</p>\n<p>Bug Fixing</p>",
         "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969422,
-        "file": null,
-        "type": "subtopic",
-        "order": 68,
-        "title": "Types of Software Preventive Maintenance",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969423,
-        "file": null,
-        "type": "paragraph",
-        "order": 69,
-        "title": "",
-        "caption": "",
-        "content": "<p> Software preventive maintenance is part of broader software maintenance, which includes four main types. Understanding these helps explain how preventive maintenance fits into the system.</p><ol style=\"list-style-type: decimal;\"><li><strong>Corrective Maintenance</strong></li></ol><p>Corrective maintenance refers to the process of fixing errors, bugs, or faults in a system after they have been detected. Unlike preventive maintenance, which aims to avoid problems, corrective maintenance is performed after an issue occurs.</p><p>This type of maintenance is necessary to restore the system to its normal working condition and ensure that it continues to function properly.<sup>[40]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969424,
-        "file": null,
-        "type": "paragraph",
-        "order": 70,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ol style=\"list-style-type: decimal;\"><li>Error Resolution</li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>Fixing system crashes, freezes, or unexpected shutdowns</li><li>Restores system stability</li></ul>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li>Security Fixes</li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>Addressing vulnerabilities that may be exploited</li><li>Installing patches to protect the system</li></ul>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li>System Updates and Patches</li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>Applying updates that fix known issues</li><li>Improves system reliability and performance</li></ul>"
-            ]
-          ],
-          "headers": [
-            "<ol style=\"list-style-type: decimal;\"><li>Bug Fixing</li></ol>",
-            "<ul style=\"list-style-type: disc;\"><li>Identifying and correcting software errors or glitches</li><li>Ensures programs run as intended</li></ul>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776122969425,
-        "file": null,
-        "type": "paragraph",
-        "order": 71,
-        "title": "",
-        "caption": "",
-        "content": "<p>Corrective maintenance is a reactive type of maintenance that focuses on fixing problems after they occur. It plays a critical role in ensuring that systems remain functional, secure, and reliable.</p><p>While it cannot prevent issues, it is essential for restoring operations and maintaining system performance.<sup>[40]</sup></p><ol style=\"list-style-type: decimal;\"><li><strong>Adaptive Maintenance</strong></li></ol><p>\tAdaptive maintenance refers to the process of modifying and updating software so it can continue to operate effectively in a changing environment. These changes are not made because the software is faulty, but because the environment around it has changed.</p><p>This includes updates needed due to new operating systems, hardware upgrades, software platforms, or government regulations.<sup>[41]</sup>\t</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969426,
-        "file": null,
-        "type": "paragraph",
-        "order": 72,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ol style=\"list-style-type: decimal;\"><li><strong>Hardware Compatibility Adjustments</strong></li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>Updating software to support new processors, memory, or devices</li><li>Ensures smooth performance on upgraded machines</li></ul>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li><strong>Platform and Technology Changes</strong></li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>Adapting software to work with new browsers, databases, or frameworks</li><li>Keeps applications functional in modern environments</li></ul>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li><strong>Regulatory and Policy Updates</strong></li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>Updating systems to comply with new laws or standards</li><li>Ensures legal and ethical operation of software</li></ul>"
-            ]
-          ],
-          "headers": [
-            "<ol style=\"list-style-type: decimal;\"><li><strong>Operating System Updates</strong></li></ol>",
-            "<ul style=\"list-style-type: disc;\"><li>Modifying software to run on newer versions of operating systems</li><li>Ensures compatibility with updated system features</li></ul>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776122969427,
-        "file": null,
-        "type": "paragraph",
-        "order": 73,
-        "title": "",
-        "caption": "",
-        "content": "<p><strong>Adaptive maintenance</strong> is essential for keeping software up-to-date with changing technology and environments. By making necessary adjustments, developers ensure that software remains:</p><ul style=\"list-style-type: disc;\"><li>Compatible</li><li>Functional</li><li>Reliable</li></ul><ol style=\"list-style-type: decimal;\"><li><strong>Perfective Maintenance</strong></li></ol><p>Perfective maintenance refers to the process of enhancing and improving software performance, usability, and functionality after it has been deployed. Unlike corrective maintenance (which fixes errors) or adaptive maintenance (which ensures compatibility), perfective maintenance focuses on making the system better than before.<sup>[42]</sup></p><p>It involves adding new features, optimizing performance, and improving the overall user experience based on user feedback and system analysis.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969428,
-        "file": null,
-        "type": "subtopic",
-        "order": 74,
-        "title": "Key Characteristics of a Perfective Maintenance",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969429,
-        "file": null,
-        "type": "paragraph",
-        "order": 75,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ol style=\"list-style-type: decimal;\"><li><strong>User-Driven</strong></li></ol><ul style=\"list-style-type: disc;\"><li>This type of maintenance is often guided by feedback from users who interact with the system daily.</li></ul>",
-              "<ul style=\"list-style-type: disc;\"><li>Based on suggestions, complaints, and reviews</li><li>Prioritizes features that users actually want</li><li>Helps increase user satisfaction and engagement</li><li>Aligns the system with real-world usage needs</li></ul>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li><strong>Performance-Focused</strong></li></ol><ul style=\"list-style-type: disc;\"><li>aims to improve system efficiency and speed.</li></ul>",
-              "<ul style=\"list-style-type: disc;\"><li>Reduces loading time and system lag</li><li>Optimizes memory and resource usage</li><li>Enhances response time of applications</li><li>Improves scalability for handling more users</li></ul>"
-            ]
-          ],
-          "headers": [
-            "<ol style=\"list-style-type: decimal;\"><li><strong>Improvement-Oriented</strong></li></ol><ul style=\"list-style-type: disc;\"><li>enhancing the overall quality of the system rather than fixing errors.</li></ul>",
-            "<ul style=\"list-style-type: disc;\"><li>Improves system design and structure</li><li>Refines existing features for better usability</li><li>Enhances interface layout and navigation</li><li>Optimizes code for better readability and maintainability</li></ul>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776122969430,
-        "file": null,
-        "type": "subtopic",
-        "order": 76,
-        "title": "Scheduled and Unscheduled Maintenance",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969431,
-        "file": null,
-        "type": "paragraph",
-        "order": 77,
-        "title": "",
-        "caption": "",
-        "content": "<p>In computer hardware servicing, maintenance activities are essential to ensure that systems run smoothly, efficiently, and without interruption. Under software maintenance, these activities also include tasks that support the proper functioning of hardware through updates, monitoring tools, and system management.</p><ul style=\"list-style-type: disc;\"><li><strong>Scheduled Maintenance</strong></li></ul><p>\tScheduled maintenance is any pre-planned maintenance work that must be completed by a specific person or group within a set timeframe. Examples of scheduled maintenance include tasks that occur at regular intervals like replacing air filters, performing oil changes, or conducting routine inspections. You can also coordinate scheduled maintenance for planned work that only needs to occur once.</p><p>Scheduled maintenance may or may not include planned downtime. Some maintenance activities like vibration monitoring can be done on machines in active operation. Others, like rewinding an electric motor, require a full equipment shutdown.<sup>[43]</sup></p><ul style=\"list-style-type: disc;\"><li><strong>Unscheduled Maintenance</strong></li></ul><p>Unscheduled maintenance is performed in response to an equipment failure or when a problem is detected that could lead to failure. Unlike planned maintenance, unscheduled maintenance occurs without prior planning or scheduling, often requiring immediate attention to prevent further damage or operational disruptions. While necessary, reliance on unscheduled maintenance can indicate underlying issues with maintenance planning or equipment reliability.<sup>[44]</sup></p><p>Maintenance—whether scheduled or unscheduled—is essential for keeping computer systems running efficiently, securely, and reliably. Scheduled maintenance helps prevent problems before they occur, while unscheduled maintenance ensures quick recovery when issues arise. Together, they reduce downtime, protect data, and improve system performance. Overall, both types of maintenance help extend the lifespan of hardware and minimize costs.</p>",
-        "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
         "id": 1776122969434,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 78,
+        "order": 32,
         "title": "",
         "caption": "",
         "content": "",
@@ -1386,301 +762,28 @@
         "id": 1776122969435,
         "file": null,
         "type": "topic",
-        "order": 79,
+        "order": 33,
         "title": "Topic 8: Documentation in Computer Servicing",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776122969436,
+        "id": 1777220247067,
         "file": null,
         "type": "paragraph",
-        "order": 80,
+        "order": 34,
         "title": "",
         "caption": "",
-        "content": "<p>Documentation in Computer Servicing refers to the systematic recording of all activities, procedures, configurations, and maintenance actions performed on computer systems.</p><p>It serves as a guide, record, and reference for technicians, ensuring that all servicing tasks are consistent, traceable, and efficient. Proper documentation helps both current and future technicians understand the system’s history and condition.<sup>[45]</sup></p><ol style=\"list-style-type: decimal;\"><li><strong>Importance of Documentation </strong></li></ol><p>Documentation plays a critical role in computer hardware servicing because it ensures that all processes, repairs, and system details are properly recorded and easily accessible. Below are the key reasons why documentation is important:</p>",
+        "content": "<p>Documentation in Computer Servicing refers to the systematic recording of all activities, procedures, configurations, and maintenance actions performed on computer systems.</p>\n<p>It serves as a guide, record, and reference for technicians, ensuring that all servicing tasks are consistent, traceable, and efficient. Proper documentation helps both current and future technicians understand the system’s history and condition.[45]</p>\n<p>Importance of Documentation</p>\n<p>Documentation plays a critical role in computer hardware servicing because it ensures that all processes, repairs, and system details are properly recorded and easily accessible. Below are the key reasons why documentation is important:</p>\n<p>Improves Troubleshooting and Problem Solving</p>\n<p>Documentation provides a record of previous issues and solutions, allowing technicians to quickly identify and fix recurring problems. This avoids repeating the same steps and speeds up repair time.[46]</p>\n<p>Increases Efficiency and Saves Time</p>\n<p>With documented procedures and past cases, technicians can work more efficiently by following proven solutions instead of starting from scratch. This reduces delays and improves productivity.[47]</p>",
         "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969437,
-        "file": null,
-        "type": "paragraph",
-        "order": 81,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Increases Efficiency and Saves Time</li></ul>",
-              "<p>With documented procedures and past cases, technicians can work more efficiently by following proven solutions instead of starting from scratch. This reduces delays and improves productivity.<sup>[47]</sup></p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Serves as a Knowledge Base</li></ul>",
-              "<p>Documentation acts as a repository of knowledge, helping technicians share information, learn from each other, and retain important technical skills within an organization.<sup>[47]</sup></p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Helps in Training and Learning</li></ul>",
-              "<p>New technicians can use documentation as a guide to understand procedures, tools, and troubleshooting methods, making training faster and more effective.<sup>[47]</sup></p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Ensures Consistency and Standardization</li></ul>",
-              "<p>Standard procedures documented in manuals or reports ensure that all technicians follow the same methods, leading to consistent and high-quality service.<sup>[47]</sup></p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Enhances Communication</li></ul>",
-              "<p>Documentation clearly explains problems, repairs, and solutions to both technicians and clients, improving understanding and customer satisfaction.<sup>[47]</sup></p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Supports Maintenance and Future Planning</li></ul>",
-              "<p>Records of repairs, upgrades, and system configurations help in planning preventive maintenance and tracking hardware performance over time.<sup>[46]</sup></p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Provides Evidence and Accountability</li></ul>",
-              "<p>Documentation serves as proof of work done, including repairs, replacements, and changes. This is important for accountability, audits, and service tracking.<sup>[46]</sup></p>"
-            ]
-          ],
-          "headers": [
-            "<ul style=\"list-style-type: disc;\"><li>Improves Troubleshooting and Problem Solving</li></ul>",
-            "<p>Documentation provides a record of previous issues and solutions, allowing technicians to quickly identify and fix recurring problems. This avoids repeating the same steps and speeds up repair time.<sup>[46]</sup></p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776122969438,
-        "file": null,
-        "type": "paragraph",
-        "order": 82,
-        "title": "",
-        "caption": "",
-        "content": "<p><strong>B. Type of Service Documentation</strong></p><p>Service documentation refers to the records and materials used to track, manage, and support computer hardware servicing activities. Each type serves a specific purpose in ensuring efficient and organized work.<sup>[48]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969439,
-        "file": null,
-        "type": "paragraph",
-        "order": 83,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Service Report</li></ul>",
-              "<p>A Service Report is a document prepared after the repair or maintenance work has been completed. It provides a detailed summary of what the technician did, the condition of the device after servicing, and any important observations.</p><p>If the job order is the plan, the service report is the final result—it tells the full story of the service performed.</p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Inspection Checklist</li></ul>",
-              "<p>An Inspection Checklist is a document used by technicians to systematically check and evaluate the condition of computer hardware before, during, or after maintenance.</p><p>It acts as a guide with a list of items to inspect, ensuring that no important part of the system is overlooked.</p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Maintenance Log</li></ul>",
-              "<p>A Maintenance Log is a document used to record all maintenance activities performed on a computer system over time. It provides a chronological history of inspections, repairs, upgrades, and routine servicing.</p><p>Unlike a service report (which focuses on one completed task), a maintenance log is continuous—it tracks everything that happens to a device throughout its lifecycle.</p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Technical Documentation / Manuals</li></ul>",
-              "<p>Technical Documentation or Manuals are detailed written guides that provide instructions, specifications, and information about computer hardware, software, and systems.</p><p>These documents are usually created by manufacturers or developers to help users and technicians understand, operate, maintain, and troubleshoot equipment properly.</p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Configuration Documentation</li></ul>",
-              "<p>Configuration Documentation is a record that details how a computer system, network, or hardware setup is configured and customized for proper operation.</p><p>It provides a snapshot of system settings, installed components, and network parameters to ensure consistency, reproducibility, and easier troubleshooting.</p><p>Think of it as a blueprint of how the system is set up.</p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Inventory Records</li></ul>",
-              "<p>Inventory Records are documents used to track and manage all hardware components, spare parts, and consumables in a service or IT environment.</p><p>They ensure that technicians and IT staff always know what items are available, what needs replenishment, and what has been used, helping prevent shortages and unnecessary delays in maintenance or repairs.</p><p>Think of it as a detailed log of all equipment and parts.</p>"
-            ],
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Incident Report</li></ul>",
-              "<p>An Incident Report is a document used to record any unexpected events, accidents, or unusual occurrences that happen during computer hardware servicing or while using computer systems.</p><p>It helps track problems, security breaches, damages, or failures, ensuring proper follow-up, accountability, and preventive measures.</p><p>Think of it as the official record of “what went wrong, when, and how it was handled.”</p>"
-            ]
-          ],
-          "headers": [
-            "<ul style=\"list-style-type: disc;\"><li>Job Order / Work Order</li></ul>",
-            "<p>A Job Order (also called a Work Order) is one of the most important documents used in computer hardware servicing. It serves as an official record that tells technicians what problem needs to be fixed, who will fix it, and how the work will be carried out.</p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776122969440,
-        "file": null,
-        "type": "paragraph",
-        "order": 84,
-        "title": "",
-        "caption": "",
-        "content": "<p>Service documentation in computer hardware servicing includes job orders, service reports, checklists, logs, manuals, and inventory records. These documents help technicians stay organized, ensure accurate work, and maintain a reliable history of all servicing activities.</p><p><strong>C. Writing Effective Reports</strong></p><p>An effective service report in computer hardware servicing is a clear, detailed, and well-organized document that records everything that happened during a repair or maintenance task. It serves as an official record that explains the issue, the actions taken, and the final outcome of the service.</p><p>It is not just a simple summary—it is a professional communication tool used by technicians, clients, and organizations to ensure transparency, accountability, and future reference.<sup>[49]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969441,
-        "file": null,
-        "type": "subtopic",
-        "order": 85,
-        "title": "Key Elements of an Effective Report",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969442,
-        "file": null,
-        "type": "paragraph",
-        "order": 86,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Clear Objective and Scope</strong></li></ol><ul style=\"list-style-type: disc;\"><li>Begin with the purpose of the report:</li><li>What service was performed?</li><li>What problem or task was addressed?</li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969443,
-        "file": null,
-        "type": "subtopic",
-        "order": 87,
-        "title": "This section provides context for the reader.[50]",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969444,
-        "file": null,
-        "type": "paragraph",
-        "order": 88,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Accurate Identification</strong></li></ol><ul style=\"list-style-type: disc;\"><li>Customer name and contact</li><li>Date and time of service</li><li>Technician name</li><li>Equipment details (model/serial numbers)</li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969445,
-        "file": null,
-        "type": "subtopic",
-        "order": 89,
-        "title": "This ensures everyone knows who and what the report is about.[49]",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969446,
-        "file": null,
-        "type": "paragraph",
-        "order": 90,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Description of the Problem</strong></li></ol><ul style=\"list-style-type: disc;\"><li>Describe the observed issue precisely and objectively:</li><li>What went wrong?</li><li>What symptoms were noticed?</li><li>When did the problem occur?</li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969447,
-        "file": null,
-        "type": "subtopic",
-        "order": 91,
-        "title": "Avoid vague phrases like “computer not working” — describe what exactly failed.[50]",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969448,
-        "file": null,
-        "type": "paragraph",
-        "order": 92,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Diagnosis and Work Done</strong></li></ol><ul style=\"list-style-type: disc;\"><li>Explain the steps you took to find the problem and how you fixed it:</li><li>Did you test components?</li><li>Which parts were replaced?</li><li>What tools or software were used?</li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969449,
-        "file": null,
-        "type": "subtopic",
-        "order": 93,
-        "title": "This section is the heart of your report.[49]",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969450,
-        "file": null,
-        "type": "paragraph",
-        "order": 94,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Results and Outcome</strong></li></ol><ul style=\"list-style-type: disc;\"><li>Show whether the issue was resolved, and explain new performance status:</li><li>Tests after repair show normal function</li><li>Any follow‑up tasks or warnings for users <sup>[51]</sup></li></ul><p>\t\tBe honest and concise.</p><ol style=\"list-style-type: decimal;\"><li><strong>Recommendations</strong></li></ol><ul style=\"list-style-type: disc;\"><li>If further action is needed, include:</li><li>Suggested maintenance schedule</li><li>Parts that might fail soon</li><li>Advice for preventing similar issues</li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969451,
-        "file": null,
-        "type": "subtopic",
-        "order": 95,
-        "title": "This adds value to your report.[49]",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969452,
-        "file": null,
-        "type": "paragraph",
-        "order": 96,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Supporting Evidence</strong></li></ol><ul style=\"list-style-type: disc;\"><li>Use visuals and appendices:</li><li>Photos of hardware before/after</li><li>Tables of test results</li><li>Diagrams if needed</li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122969453,
-        "file": null,
-        "type": "subtopic",
-        "order": 97,
-        "title": "Evidence makes the report more professional and credible.[52]",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122969454,
-        "file": null,
-        "type": "paragraph",
-        "order": 98,
-        "title": "",
-        "caption": "",
-        "content": "<p>Writing effective reports in computer hardware servicing is essential for clearly documenting problems, solutions, and results of technical work. A good report includes accurate details such as the issue, diagnosis, actions taken, and final outcome, helping technicians and clients understand the service performed. It should be clear, well-organized, and concise, using proper structure and simple language. Effective reports also improve communication, support future troubleshooting, and serve as reliable records for maintenance and decision-making.</p>",
-        "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
         "id": 1776122969457,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 99,
+        "order": 35,
         "title": "",
         "caption": "",
         "content": "",
@@ -1713,16 +816,6 @@
             "correctAnswer": 2
           }
         ]
-      },
-      {
-        "id": 1776122969458,
-        "file": null,
-        "type": "references",
-        "order": 100,
-        "title": "",
-        "caption": "",
-        "content": "https://safetyculture.com/topics/preventive-maintenance\nhttps://snapfix.com/news/corrective-maintenance-vs.-preventive-maintenance-in-hotel-operations\nhttps://www.scribd.com/presentation/596597062/PREVENTIVE-MAINTENANCE-OF-COMPUTER-SYSTEM-AND-NETWORK-Week-8\nhttps://www.slideshare.net/slideshow/preventive-maintenance-63450922/63450922\nhttps://www.techbuyer.com/uk/blog/extending-lifespan-of-tech#:~:text=to%20their%20functionality.%E2%80%9D-,Find%20out%20more%20here.,working%20for%20you%20for%20longer\nhttps://www.webopedia.com/insights/preventivemaintenancepc/\nhttps://us.norton.com/blog/how-to/computer-maintenance\nhttps://www.divergeit.com/blog/it-hardware-maintenance?utm_source=chatgpt.com\nhttps://its.uiowa.edu/services/windows/best-practices-computer-owners\nhttps://www.techtarget.com/whatis/definition/reliability#:~:text=System%20reliability%20can%20be%20achieved,1's%20disk%20mirroring%20provides%20redundancy\nhttps://www.sciencedirect.com/science/chapter/edited-volume/abs/pii/B9780857092120000080\nhttps://learn.microsoft.com/en-us/azure/well-architected/reliability/\nhttps://www.techtarget.com/searchdisasterrecovery/definition/fault-tolerant\nhttps://www.sciencedirect.com/topics/computer-science/fault-tolerance\nhttps://flowdit.com/glossary/downtime/\nhttps://www.vpnunlimited.com/help/cybersecurity/hardware-failure?utm\nhttps://www.numberanalytics.com/blog/system-downtime-risk-analysis-guide\nhttps://www.womentech.net/how-to/ensuring-system-reliability-and-availability#:~:text=Role%2DSpecific%20Career%20Paths,in%20or%20register%20to%20contribute\nhttps://giwmscdnone.gov.np/media/pdf_upload/compress-%205.%20Computer%20Hardware%2C%20Electronics%20Repair%20and%20Maintenance%20G10_mezehjf.pdf\nhttps://www.maintainnow.app/learn/definitions/preventive-maintenance\nhttps://theintactone.com/2019/06/17/pom-u4-topic-5-routine-and-planned-maintenance/\nhttps://www.alamy.com/hand-of-professional-repairman-holding-a-cleaning-brush-inside-old-personal-computer-pc-cleaning-and-maintenance-concept-close-up-view-image273088046.html?imageid=F0313298-E871-4217-864E-DAFE407B6848&pn=1&searchId=3c906cc346df6366b5e2efbb4d12b67d&searchtype=0\nhttps://www.istockphoto.com/photo/plugging-pc-cables-and-wires-gm184415451-27711778?searchscope=image%2Cfilm\nhttps://www.pcmag.com/how-to/update-drivers-in-windows\nhttps://support.avg.com/SupportArticleView?l=en&urlName=avg-run-antivirus-smart-scan&supportType=home\nhttps://cdnsm5-ss6.sharpschool.com/UserFiles/Servers/Server_20856499/File/Teacher%20Pages/Lindsay%20Dolezal/IT%20Essentials/4.1.pdf\nhttps://box.co.uk/blog/case-fan-not-spinning-fix\nhttps://www.shutterstock.com/image-photo/cleaning-motherboard-computer-1209290149\nhttps://www.pcsteps.com/16112-safely-remove-the-dust-computer/\nhttps://www.forbes.com/sites/ryanwhitwam/2017/02/08/how-to-clean-your-keyboard-without-breaking-anything/\nhttps://www.benq.com/en-ca/knowledge-center/knowledge/how-to-clean-and-disinfect-my-monitor.html\nhttps://www.ifixit.com/Guide/How+to+Clean+the+Ports+on+your+Electronic+Device/164721\nhttps://www.hp.com/us-en/shop/tech-takes/pc-maintenance-and-repair-tips\nhttps://cgtechnologies.com/hardware-support/what-is-computer-hardware-maintenance/#:~:text=PC%20hardware%20maintenance%20primarily%20involves,from%20your%20keyboard%20and%20mouse\nhttps://www.geek-aid.com/resources/articles/pc-hardware-repair.html\nhttps://goscreenworks.com/how-often-should-you-replace-pc-parts/?utm_source=chatgpt.com\nhttps://www.abbacustechnologies.com/what-are-the-4-types-of-software-maintenance/\nhttps://guidelines.risa.gov.rw/books/software-support-and-maintenance-guidelines/page/types-of-software-maintenance\nhttps://www.finoit.com/articles/software-maintenance-benefits-phases-objectives\nhttps://automios.com/blogs/what-is-software-maintenance-and-its-types\nhttps://limble.com/learn/scheduled-maintenance\nhttps://www.assetwatch.com/glossary/unscheduled-maintenance?utm_source=chatgpt.com\nhttps://www.scribd.com/document/699652125/Computer-documentation#:~:text=of%20Computer%20Documentation-,Documentation%20in%20computer%20support%20and%20maintenance%20serves%20several%20important%20purposes,for%20disasters%20or%20system%20outages\nhttps://cdnsm5-ss6.sharpschool.com/UserFiles/Servers/Server_20856499/File/Teacher%20Pages/Lindsay%20Dolezal/IT%20Essentials/2.2.pdf?utm_source=chatgpt.com\nhttps://moldstud.com/articles/p-the-importance-of-documentation-in-computer-technician-services?utm_source=chatgpt.com\nhttps://www.atlassian.com/incident-management\nhttps://antsroute.com/en/solutions/write-service-report\nhttps://www.mwediting.com/how-to-write-a-technical-report\nhttps://ca.indeed.com/career-advice/career-development/technical-report\nhttps://buildops.com/resources/field-service-reporting",
-        "fileName": null
       }
     ],
     "diagnosticQuestions": [

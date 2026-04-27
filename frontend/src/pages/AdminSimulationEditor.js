@@ -63,6 +63,28 @@ const SKILL_TYPE_THEME = {
   }
 };
 
+const DOCX_SIMULATION_SKILL_MAP = {
+  3: {
+    1: 'Memorization',
+    2: 'Technical Comprehension',
+    3: 'Analytical Thinking',
+    4: 'Problem Solving',
+    5: 'Critical Thinking',
+    6: 'Memorization',
+    7: 'Technical Comprehension',
+    8: 'Analytical Thinking',
+    9: 'Problem Solving',
+    10: 'Critical Thinking'
+  },
+  4: {
+    1: 'Problem Solving',
+    2: 'Critical Thinking',
+    3: 'Analytical Thinking',
+    4: 'Technical Comprehension',
+    5: 'Memorization'
+  }
+};
+
 const ACTIVITY_TYPE_THEME = {
   Disassembling: {
     label: 'Disassembling',
@@ -96,6 +118,14 @@ const getSkillTheme = (rawSkillType) => {
     skillType: normalizedSkillType,
     ...(SKILL_TYPE_THEME[normalizedSkillType] || SKILL_TYPE_THEME['Technical Comprehension'])
   };
+};
+
+const getDocxSkillForSimulation = (simulation = {}) => {
+  const moduleId = Number(simulation?.ModuleID || 0);
+  const simulationOrder = Number(simulation?.SimulationOrder || 0);
+  if (!moduleId || !simulationOrder) return '';
+
+  return DOCX_SIMULATION_SKILL_MAP[moduleId]?.[simulationOrder] || '';
 };
 
 const uid = () => `id-${Math.random().toString(36).slice(2, 10)}`;
@@ -480,6 +510,9 @@ const AdminSimulationEditor = () => {
   };
 
   const timeline = config?.timeline || [];
+  const mappedSkillType = getDocxSkillForSimulation(simulation);
+  const displaySkillType = mappedSkillType || meta.skill;
+  const skillTheme = getSkillTheme(displaySkillType);
 
   return (
     <div className="simulation-theme min-h-screen bg-[#F5F7FA]">
@@ -519,7 +552,7 @@ const AdminSimulationEditor = () => {
           </div>
         </div>
 
-        <div className="simulation-surface bg-white rounded-2xl shadow-sm p-6 mb-6 border border-[#e4ebf2]" style={{ borderTop: `4px solid ${getSkillTheme(meta.skill).solid}` }}>
+        <div className="simulation-surface bg-white rounded-2xl shadow-sm p-6 mb-6 border border-[#e4ebf2]" style={{ borderTop: `4px solid ${skillTheme.solid}` }}>
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="text-xs uppercase tracking-wide text-gray-500">Simulation</p>
@@ -550,9 +583,9 @@ const AdminSimulationEditor = () => {
                 </span>
                 <span
                   className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold"
-                  style={{ backgroundColor: getSkillTheme(meta.skill).soft, color: getSkillTheme(meta.skill).text, border: `1px solid ${getSkillTheme(meta.skill).solid}40` }}
+                  style={{ backgroundColor: skillTheme.soft, color: skillTheme.text, border: `1px solid ${skillTheme.solid}40` }}
                 >
-                  Skill: {getSkillTheme(meta.skill).skillType}
+                  Skill: {skillTheme.skillType}
                 </span>
               </div>
             </div>
@@ -562,7 +595,7 @@ const AdminSimulationEditor = () => {
               onClick={handleSave}
               disabled={saving}
               className="px-6 py-2.5 text-white rounded-lg font-semibold transition-all disabled:opacity-60 disabled:cursor-not-allowed"
-              style={{ backgroundColor: getSkillTheme(meta.skill).solid }}
+              style={{ backgroundColor: skillTheme.solid }}
             >
               {saving ? 'Saving...' : 'Save Simulation'}
             </button>

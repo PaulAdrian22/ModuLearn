@@ -154,11 +154,18 @@ const ImageCropper = ({
 
 // Helper function to create cropped image
 const getCroppedImg = (imageSrc, pixelCrop, options = {}) => {
+  const inferMimeFromName = (name = '') => {
+    const lower = String(name).toLowerCase();
+    if (lower.endsWith('.webp')) return 'image/webp';
+    if (lower.endsWith('.jpg') || lower.endsWith('.jpeg')) return 'image/jpeg';
+    if (lower.endsWith('.gif')) return 'image/gif';
+    return 'image/png';
+  };
   const {
     aspect = 1,
     outputSize = 600,
     fileName = 'cropped-image.png',
-    mimeType = 'image/png'
+    mimeType = inferMimeFromName(fileName)
   } = options;
 
   return new Promise((resolve, reject) => {

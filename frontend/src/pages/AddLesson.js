@@ -6526,7 +6526,7 @@ const AddLesson = () => {
                                                     Change
                                                     <input
                                                       type="file"
-                                                      accept="image/*"
+                                                      accept="image/png,image/jpeg,image/jpg,image/gif,image/webp,image/*"
                                                       onChange={(e) => handleLayerImageUpload(section.id, layerIdx, imgIdx, e)}
                                                       className="hidden"
                                                     />
@@ -6549,7 +6549,7 @@ const AddLesson = () => {
                                                   Import
                                                   <input
                                                     type="file"
-                                                    accept="image/*"
+                                                    accept="image/png,image/jpeg,image/jpg,image/gif,image/webp,image/*"
                                                     onChange={(e) => handleLayerImageUpload(section.id, layerIdx, imgIdx, e)}
                                                     className="hidden"
                                                   />
@@ -6686,7 +6686,7 @@ const AddLesson = () => {
                                           Change
                                           <input
                                             type="file"
-                                            accept="image/*"
+                                            accept="image/png,image/jpeg,image/jpg,image/gif,image/webp,image/*"
                                             onChange={(e) => handleImageSlotUpload(section.id, imgIdx, e)}
                                             className="hidden"
                                           />
@@ -6709,7 +6709,7 @@ const AddLesson = () => {
                                         Import
                                         <input
                                           type="file"
-                                          accept="image/*"
+                                          accept="image/png,image/jpeg,image/jpg,image/gif,image/webp,image/*"
                                           onChange={(e) => handleImageSlotUpload(section.id, imgIdx, e)}
                                           className="hidden"
                                         />

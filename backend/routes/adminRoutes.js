@@ -1496,8 +1496,10 @@ router.get('/simulations', async (req, res) => {
     const selectFields = [
       '`SimulationID`',
       '`SimulationTitle`',
+      simulationSelectField(columns, 'ModuleID', '0'),
       simulationSelectField(columns, 'Description', "''"),
       simulationSelectField(columns, 'ActivityType', "''"),
+      simulationSelectField(columns, 'SkillType', "''"),
       simulationSelectField(columns, 'MaxScore', '0'),
       simulationSelectField(columns, 'TimeLimit', '0'),
       simulationSelectField(columns, 'SimulationOrder', '0'),
@@ -1509,25 +1511,53 @@ router.get('/simulations', async (req, res) => {
       ? 'ORDER BY `SimulationOrder` ASC, `SimulationID` ASC'
       : 'ORDER BY `SimulationID` ASC';
 
-    const [rows] = await pool.query(
-      `SELECT ${selectFields.join(', ')}
-       FROM simulation
-       ${orderBySql}`
-    );
+    let rows;
+    try {
+      const [orderedRows] = await pool.query(
+        `SELECT ${selectFields.join(', ')}
+         FROM simulation
+         ${orderBySql}`
+      );
+      rows = orderedRows;
+    } catch (queryError) {
+      // Some hosted MySQL plans are configured with very small sort buffers.
+      // Retry without ORDER BY and sort in Node to keep admin tooling usable.
+      if (queryError?.code !== 'ER_OUT_OF_SORTMEMORY') {
+        throw queryError;
+      }
+
+      const [unorderedRows] = await pool.query(
+        `SELECT ${selectFields.join(', ')}
+         FROM simulation`
+      );
+      rows = unorderedRows;
+    }
 
     const simulations = rows.map((row) => {
       const activityOrder = resolveActivityOrder(row);
       return {
         SimulationID: row.SimulationID,
         SimulationTitle: row.SimulationTitle,
+        ModuleID: row.ModuleID,
         Description: row.Description,
         ActivityType: row.ActivityType,
+        SkillType: row.SkillType,
         MaxScore: row.MaxScore,
         TimeLimit: row.TimeLimit,
         SimulationOrder: row.SimulationOrder,
         activityOrder,
         hasAdminOverride: Boolean(Number(row.HasAdminOverride || 0))
       };
+    });
+
+    simulations.sort((a, b) => {
+      const leftOrder = Number.isFinite(Number(a.SimulationOrder)) ? Number(a.SimulationOrder) : Number.MAX_SAFE_INTEGER;
+      const rightOrder = Number.isFinite(Number(b.SimulationOrder)) ? Number(b.SimulationOrder) : Number.MAX_SAFE_INTEGER;
+      if (leftOrder !== rightOrder) return leftOrder - rightOrder;
+
+      const leftId = Number.isFinite(Number(a.SimulationID)) ? Number(a.SimulationID) : Number.MAX_SAFE_INTEGER;
+      const rightId = Number.isFinite(Number(b.SimulationID)) ? Number(b.SimulationID) : Number.MAX_SAFE_INTEGER;
+      return leftId - rightId;
     });
 
     res.json(simulations);
@@ -1562,8 +1592,10 @@ router.get('/simulations/:id', [
     const selectFields = [
       '`SimulationID`',
       '`SimulationTitle`',
+      simulationSelectField(columns, 'ModuleID', '0'),
       simulationSelectField(columns, 'Description', "''"),
       simulationSelectField(columns, 'ActivityType', "''"),
+      simulationSelectField(columns, 'SkillType', "''"),
       simulationSelectField(columns, 'MaxScore', '0'),
       simulationSelectField(columns, 'TimeLimit', '0'),
       simulationSelectField(columns, 'SimulationOrder', '0'),
@@ -1585,8 +1617,10 @@ router.get('/simulations/:id', [
       simulation: {
         SimulationID: simulation.SimulationID,
         SimulationTitle: simulation.SimulationTitle,
+        ModuleID: simulation.ModuleID,
         Description: simulation.Description,
         ActivityType: simulation.ActivityType,
+        SkillType: simulation.SkillType,
         MaxScore: simulation.MaxScore,
         TimeLimit: simulation.TimeLimit,
         SimulationOrder: simulation.SimulationOrder

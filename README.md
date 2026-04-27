@@ -43,6 +43,11 @@ modulearn/
 ## Getting Started
 (To be updated as development progresses)
 
+## Localhost Migration (New Device Testing)
+- Quick setup (recommended): `powershell -ExecutionPolicy Bypass -File .\QUICK_SETUP_LOCALHOST.ps1 -AutoStart`
+- Export portable package: `powershell -ExecutionPolicy Bypass -File .\EXPORT_LOCALHOST_PACKAGE.ps1`
+- Full instructions: `LOCALHOST_MIGRATION_GUIDE.md`
+
 ## Deployment Paths
 - Netlify frontend + Azure backend deployment: `docs/NETLIFY_DEPLOYMENT.md`
 - Credit-optimized frontend deployment (GitHub Pages): `docs/GITHUB_PAGES_DEPLOYMENT.md`

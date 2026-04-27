@@ -17,54 +17,31 @@
         "fileName": null
       },
       {
+        "id": 1777220246972,
+        "file": null,
+        "type": "paragraph",
+        "order": 2,
+        "title": "",
+        "caption": "",
+        "content": "<p>Computer servicing may look safe on the surface, but hidden hazards can injure, damage equipment, or disrupt workflow if not understood. This topic will help you identify common risks, practice safe troubleshooting habits, and maintain a secure, hazard-free environment.</p>\n<p>Understanding workplace hazards in computer servicing means learning to identify, assess, and prevent the risks that technicians may face while repairing, assembling, or maintaining computer systems and related equipment. Even though computer servicing may look like a low-risk job, it involves several hidden hazards that can lead to accidents, injuries or equipment damage if not properly managed.</p>\n<p>Here are the 4 hazards to be discussed in this lesson:</p>\n<p>Electric Hazard - Electrical shocks, burns, or arc flashes from live circuits, frayed power cords, or ungrounded outlets during computer servicing; always unplug devices, use insulated tools, and verify power is off with a multimeter before handling components.[73][74]</p>\n<p>Physical Hazard - Cuts from sharp edges on cases or fans, impacts from dropping heavy components like monitors or PSUs, trips over cables, or strains from awkward handling; secure workspaces, wear cut-resistant gloves, and use trolleys for transport.[73][75]</p>\n<p>Ergonomic Hazard - Repetitive strain injuries (RSI) from prolonged typing, mouse use, or awkward postures while assembling parts, leading to carpal tunnel or back pain; adjust workstations to elbow height, take micro-breaks, and use anti-fatigue mats.[73][76]</p>\n<p>Chemical Hazard - Toxic fumes or skin irritation from solder flux, cleaning solvents (e.g., isopropyl alcohol), battery leaks, or thermal paste; ensure ventilation, wear nitrile gloves and respirators, and use spill kits for containment.[73][74]</p>",
+        "fileName": null,
+        "contentLayout": "text"
+      },
+      {
         "id": 1776122922630,
         "file": null,
         "type": "video",
-        "order": 2,
+        "order": 3,
         "title": "",
         "caption": "Lesson 2 Topic 1 Video",
         "content": "https://www.dropbox.com/scl/fi/k6xe1dbu0spvw6uv54d9k/Lesson-2-Topic-1.mp4?rlkey=otk72a7ujsb19blh4i59xu9zw&st=520yiyvs&dl=0",
         "fileName": null
       },
       {
-        "id": 1776122922463,
-        "file": null,
-        "type": "paragraph",
-        "order": 3,
-        "title": "",
-        "caption": "",
-        "content": "<p>Computer servicing may look safe on the surface, but hidden hazards can injure, damage equipment, or disrupt workflow if not understood. This topic will help you identify common risks, practice safe troubleshooting habits, and maintain a secure, hazard-free environment.</p><p>Understanding workplace hazards in computer servicing means learning to identify, assess, and prevent the risks that technicians may face while repairing, assembling, or maintaining computer systems and related equipment. Even though computer servicing may look like a low-risk job, it involves several hidden hazards that can lead to accidents, injuries or equipment damage if not properly managed.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922464,
-        "file": null,
-        "type": "subtopic",
-        "order": 4,
-        "title": "Here are the 4 hazards to be discussed in this lesson",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922465,
-        "file": null,
-        "type": "paragraph",
-        "order": 5,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Electric Hazard</strong> - Electrical shocks, burns, or arc flashes from live circuits, frayed power cords, or ungrounded outlets during computer servicing; always unplug devices, use insulated tools, and verify power is off with a multimeter before handling components.<sup>[73][74]</sup></li><li><strong>Physical Hazard</strong> - Cuts from sharp edges on cases or fans, impacts from dropping heavy components like monitors or PSUs, trips over cables, or strains from awkward handling; secure workspaces, wear cut-resistant gloves, and use trolleys for transport.<sup>[73][75]</sup></li><li><strong>Ergonomic Hazard</strong> - Repetitive strain injuries (RSI) from prolonged typing, mouse use, or awkward postures while assembling parts, leading to carpal tunnel or back pain; adjust workstations to elbow height, take micro-breaks, and use anti-fatigue mats.<sup>[73][76]</sup></li><li><strong>Chemical Hazard </strong>- Toxic fumes or skin irritation from solder flux, cleaning solvents (e.g., isopropyl alcohol), battery leaks, or thermal paste; ensure ventilation, wear nitrile gloves and respirators, and use spill kits for containment.<sup>[73][74]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
         "id": 1776122922469,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 6,
+        "order": 4,
         "title": "",
         "caption": "",
         "content": "",
@@ -115,260 +92,77 @@
         "id": 1776122922470,
         "file": null,
         "type": "topic",
+        "order": 5,
+        "title": "Topic 2: Electric Hazards",
+        "caption": "",
+        "content": "",
+        "fileName": null
+      },
+      {
+        "id": 1777220246973,
+        "file": null,
+        "type": "paragraph",
+        "order": 6,
+        "title": "",
+        "caption": "",
+        "content": "<p>In this field, a lot of devices are being used—computers, routers, printers, monitors—everything is powered by electricity. That means, in any situation where electricity can harm a person or damage equipment, there’s always a risk if we’re not careful.</p>\n<p>Damaged or Exposed Wires</p>\n<p>Overloading Power Outlets</p>\n<p>Wet Areas Near Equipment</p>\n<p>Faulty Power Supplies or Old Equipment</p>\n<p>Poor Cable Management</p>\n<p>Ungrounded Outlets</p>\n<p>Safe Practices Against Electric Hazards:</p>",
+        "fileName": null,
+        "contentLayout": "text"
+      },
+      {
+        "id": 1777220246974,
+        "file": null,
+        "type": "image",
         "order": 7,
-        "title": "Topic 2: Electric Hazards In this field, a lot of devices are being used—computers, routers, printers, monitors—everything is powered by electricity. That means, in any situation where electricity can harm a person or damage equipment, there’s always a risk if we’re not careful.",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922471,
-        "file": null,
-        "type": "paragraph",
-        "order": 8,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>Damaged or Exposed Wires</li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922472,
-        "file": null,
-        "type": "image",
-        "order": 9,
-        "title": "",
+        "title": "Electric Hazards",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122924844-1.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122924844-1.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122924844-1.png",
-        "fileName": "docx-lesson-2-1776122924844-1.png"
-      },
-      {
-        "id": 1776122922473,
-        "file": null,
-        "type": "paragraph",
-        "order": 10,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>Overloading Power Outlets</li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922474,
-        "file": null,
-        "type": "image",
-        "order": 11,
-        "title": "",
-        "images": [
+            "url": "/uploads/lessons/001_damaged_or_exposed_wires.webp",
+            "file": null,
+            "fileName": "001_damaged_or_exposed_wires.webp",
+            "caption": "Damaged or Exposed Wires"
+          },
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122924848-2.jpg",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122924848-2.jpg"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122924848-2.jpg",
-        "fileName": "docx-lesson-2-1776122924848-2.jpg"
-      },
-      {
-        "id": 1776122922475,
-        "file": null,
-        "type": "paragraph",
-        "order": 12,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>Wet Areas Near Equipment</li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922476,
-        "file": null,
-        "type": "image",
-        "order": 13,
-        "title": "",
-        "images": [
+            "url": "/uploads/lessons/002_overloading_power_outlets.webp",
+            "file": null,
+            "fileName": "002_overloading_power_outlets.webp",
+            "caption": "Overloading Power Outlets"
+          },
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122924852-3.jpg",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122924852-3.jpg"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122924852-3.jpg",
-        "fileName": "docx-lesson-2-1776122924852-3.jpg"
-      },
-      {
-        "id": 1776122922477,
-        "file": null,
-        "type": "image",
-        "order": 14,
-        "title": "",
-        "images": [
+            "url": "/uploads/lessons/003_wet_areas_near_equipment.webp",
+            "file": null,
+            "fileName": "003_wet_areas_near_equipment.webp",
+            "caption": "Wet Areas Near Equipment"
+          },
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122924865-4.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122924865-4.png"
-          }
-        ],
-        "layout": "text-right",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122924865-4.png",
-        "fileName": "docx-lesson-2-1776122924865-4.png",
-        "sideTexts": [
-          "<ul style=\"list-style-type: disc;\"><li>Faulty Power Supplies or Old Equipment</li><li>Poor Cable Management</li></ul>"
-        ],
-        "layerImages": [
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-2-1776122924865-4.png",
-              "caption": "",
-              "fileName": "docx-lesson-2-1776122924865-4.png"
-            }
-          ]
-        ]
-      },
-      {
-        "id": 1776122922478,
-        "file": null,
-        "type": "image",
-        "order": 15,
-        "title": "",
-        "images": [
+            "url": "/uploads/lessons/004_faulty_power_supplies_or_old_equipment.webp",
+            "file": null,
+            "fileName": "004_faulty_power_supplies_or_old_equipment.webp",
+            "caption": "Faulty Power Supplies or Old Equipment"
+          },
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122924881-5.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122924881-5.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122924881-5.png",
-        "fileName": "docx-lesson-2-1776122924881-5.png"
-      },
-      {
-        "id": 1776122922479,
-        "file": null,
-        "type": "paragraph",
-        "order": 16,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>Ungrounded Outlets</li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922480,
-        "file": null,
-        "type": "image",
-        "order": 17,
-        "title": "",
-        "images": [
+            "url": "/uploads/lessons/005_poor_cable_management.webp",
+            "file": null,
+            "fileName": "005_poor_cable_management.webp",
+            "caption": "Poor Cable Management"
+          },
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122924895-6.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122924895-6.png"
+            "url": "/uploads/lessons/006_ungrounded_outlets.webp",
+            "file": null,
+            "fileName": "006_ungrounded_outlets.webp",
+            "caption": "Ungrounded Outlets"
           }
         ],
-        "layout": "single",
+        "layout": "grid-3",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122924895-6.png",
-        "fileName": "docx-lesson-2-1776122924895-6.png"
-      },
-      {
-        "id": 1776122922481,
-        "file": null,
-        "type": "subtopic",
-        "order": 18,
-        "title": "Safe Practices Against Electric Hazards",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922482,
-        "file": null,
-        "type": "paragraph",
-        "order": 19,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<p>Inspect cables before using computers.</p>",
-              "<p>Don’t overload extension cords.</p>"
-            ],
-            [
-              "<p>Keep liquids away from your workstation.</p>",
-              "<p>Don’t pull cords by the wire—pull the plug.</p>"
-            ],
-            [
-              "<p>Report any damaged equipment immediately.</p>",
-              "<p>Don’t open power supply units—they store dangerous electricity.</p>"
-            ],
-            [
-              "<p>Keep your hands dry before touching electrical devices.</p>",
-              "<p>Don’t DIY repairs if you’re not trained.</p>"
-            ]
-          ],
-          "headers": [
-            "<p>Do’s</p>",
-            "<p>Dont’s</p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776122922483,
-        "file": null,
-        "type": "subtopic",
-        "order": 20,
-        "title": "Video",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922484,
-        "file": null,
-        "type": "subtopic",
-        "order": 21,
-        "title": "Quick Demonstrations",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922485,
-        "file": null,
-        "type": "subtopic",
-        "order": 22,
-        "title": "How to Plug in & Unplug a Power Cord Safely",
-        "caption": "",
-        "content": "",
-        "fileName": null
+        "content": "/uploads/lessons/001_damaged_or_exposed_wires.webp",
+        "fileName": "001_damaged_or_exposed_wires.webp"
       },
       {
         "id": 1776122922486,
         "file": null,
         "type": "video",
-        "order": 23,
+        "order": 8,
         "title": "",
         "caption": "",
         "content": "https://www.youtube.com/shorts/EGhmCir-Bdk",
@@ -378,7 +172,7 @@
         "id": 1776122922490,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 24,
+        "order": 9,
         "title": "",
         "caption": "",
         "content": "",
@@ -429,242 +223,71 @@
         "id": 1776122922491,
         "file": null,
         "type": "topic",
-        "order": 25,
+        "order": 10,
         "title": "Topic 3: Physical Hazards",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776122922492,
+        "id": 1777220246975,
         "file": null,
         "type": "paragraph",
-        "order": 26,
+        "order": 11,
         "title": "",
         "caption": "",
-        "content": "<p><strong>\t</strong>Physical hazards are anything in the environment that can physically harm a person. Unlike electrical hazards, these don’t involve electricity. Instead, they involve your body—your posture, movement, and surroundings. These are situations that can cause injuries like slips, falls, cuts, muscle pain, or even long-term health problems if we are not careful.</p>",
+        "content": "<p>Physical hazards are anything in the environment that can physically harm a person. Unlike electrical hazards, these don’t involve electricity. Instead, they involve your body—your posture, movement, and surroundings. These are situations that can cause injuries like slips, falls, cuts, muscle pain, or even long-term health problems if we are not careful.</p>\n<p>Most physical hazards come from:</p>\n<p>Poor workstation setup</p>\n<p>Misplaced equipment</p>\n<p>Unsafe lifting techniques</p>\n<p>Cluttered areas</p>\n<p>Inadequate lighting or ventilation</p>\n<p>These sources of physical hazards tend to appear as a result in workplace through the following:</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
-        "id": 1776122922493,
-        "file": null,
-        "type": "subtopic",
-        "order": 27,
-        "title": "Most physical hazards come from",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922494,
-        "file": null,
-        "type": "paragraph",
-        "order": 28,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>Poor workstation setup</li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922495,
+        "id": 1777220246976,
         "file": null,
         "type": "image",
-        "order": 29,
-        "title": "",
+        "order": 12,
+        "title": "Physical Hazards",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122927079-7.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122927079-7.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122927079-7.png",
-        "fileName": "docx-lesson-2-1776122927079-7.png"
-      },
-      {
-        "id": 1776122922496,
-        "file": null,
-        "type": "paragraph",
-        "order": 30,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>Misplaced equipment </li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922497,
-        "file": null,
-        "type": "image",
-        "order": 31,
-        "title": "",
-        "images": [
+            "url": "/uploads/lessons/007_poor_workstation_setup.webp",
+            "file": null,
+            "fileName": "007_poor_workstation_setup.webp",
+            "caption": "Poor workstation setup"
+          },
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122927097-8.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122927097-8.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122927097-8.png",
-        "fileName": "docx-lesson-2-1776122927097-8.png"
-      },
-      {
-        "id": 1776122922498,
-        "file": null,
-        "type": "paragraph",
-        "order": 32,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>Unsafe lifting techniques</li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922499,
-        "file": null,
-        "type": "image",
-        "order": 33,
-        "title": "",
-        "images": [
+            "url": "/uploads/lessons/008_misplaced_equipment.webp",
+            "file": null,
+            "fileName": "008_misplaced_equipment.webp",
+            "caption": "Misplaced equipment"
+          },
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122927103-9.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122927103-9.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122927103-9.png",
-        "fileName": "docx-lesson-2-1776122927103-9.png"
-      },
-      {
-        "id": 1776122922500,
-        "file": null,
-        "type": "paragraph",
-        "order": 34,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>Cluttered areas</li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922501,
-        "file": null,
-        "type": "image",
-        "order": 35,
-        "title": "",
-        "images": [
+            "url": "/uploads/lessons/009_unsafe_lifting_techniques.webp",
+            "file": null,
+            "fileName": "009_unsafe_lifting_techniques.webp",
+            "caption": "Unsafe lifting techniques"
+          },
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122927121-10.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122927121-10.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122927121-10.png",
-        "fileName": "docx-lesson-2-1776122927121-10.png"
-      },
-      {
-        "id": 1776122922502,
-        "file": null,
-        "type": "paragraph",
-        "order": 36,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>Inadequate lighting or ventilation</li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922503,
-        "file": null,
-        "type": "image",
-        "order": 37,
-        "title": "",
-        "images": [
+            "url": "/uploads/lessons/010_cluttered_areas_crop.webp",
+            "file": null,
+            "fileName": "010_cluttered_areas_crop.webp",
+            "caption": "Cluttered areas"
+          },
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122927126-11.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122927126-11.png"
+            "url": "/uploads/lessons/011_inadequate_lighting_or_ventilation.webp",
+            "file": null,
+            "fileName": "011_inadequate_lighting_or_ventilation.webp",
+            "caption": "Inadequate lighting or ventilation"
           }
         ],
-        "layout": "single",
+        "layout": "grid-3",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122927126-11.png",
-        "fileName": "docx-lesson-2-1776122927126-11.png"
-      },
-      {
-        "id": 1776122922504,
-        "file": null,
-        "type": "paragraph",
-        "order": 38,
-        "title": "",
-        "caption": "",
-        "content": "<p>These sources of physical hazards tend to appear as a result in workplace through the following:</p><ol style=\"list-style-type: decimal;\"><li><strong>Poor Ergonomics</strong> - ergonomics means designing a workspace that fits the user. However, if various physical constraints are present, an ergonomic workspace may not be achievable.</li><li><strong>Cluttered Cables and Wires </strong>- messy cables can cause tripping, making it difficult to move around, and can lead to equipment falling or breaking.</li><li><strong>Heavy Lifting or Improper Handling of Equipment</strong> - equipment like CPUs, printers, or monitors may be heavier than they look. That's why lifting with incorrect posture can cause back injuries and dropping equipment can injure feet or hands.</li><li><strong>Poor Lighting</strong> - dim lighting causes eye strain, headaches, accidental bumps or falls, but bright lights or glare from screens can also affect concentration.</li><li><strong>Slip, Trip, and Fall Hazards</strong> - these occur when floors are wet, objects are left on walkways, and wires run across the floor.</li><li><strong>Repetitive Strain Injuries</strong> - these happen when you repeat certain movements too often such as typing, using the mouse, and operating tools.</li><li><strong>Noise and Poor Ventilation</strong> - fans or server rooms can be noisy and poor air circulation can cause discomfort or headaches.</li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922505,
-        "file": null,
-        "type": "subtopic",
-        "order": 39,
-        "title": "Safety Practices to Prevent Physical Hazards",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922506,
-        "file": null,
-        "type": "paragraph",
-        "order": 40,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<p>Proper Cable Management</p>",
-              "<p>- Use cable ties or clips</p><p>- Keep cables away from walkways</p><p>- Label wires to avoid confusion</p><p>- Regularly check for loose or tangled cables</p>"
-            ],
-            [
-              "<p>Safe Lifting Techniques</p>",
-              "<p>- Lift with your legs, not your back</p><p>- Bend your knees when picking up equipment</p><p>- Ask for help if the device is too heavy</p><p>- Hold items close to your body</p>"
-            ],
-            [
-              "<p>Maintaining a Clean and Organized Workspace</p>",
-              "<p>- Keep floors dry and free from clutter</p><p>- Put tools back in place</p><p>- Ensure aisles and pathways are clear</p>"
-            ]
-          ],
-          "headers": [
-            "<p>Safe Workstation Setup (Ergonomics)</p>",
-            "<p>- Monitor at eye level</p><p>- Chair adjusted so feet touch the floor</p><p>- Keyboard and mouse close to the body</p><p>- Sit with a straight posture</p><p>- Take breaks every 30-45 minutes</p>"
-          ]
-        },
-        "contentLayout": "table"
+        "content": "/uploads/lessons/007_poor_workstation_setup.webp",
+        "fileName": "007_poor_workstation_setup.webp"
       },
       {
         "id": 1776122922510,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 41,
+        "order": 13,
         "title": "",
         "caption": "",
         "content": "",
@@ -715,73 +338,28 @@
         "id": 1776122922511,
         "file": null,
         "type": "topic",
-        "order": 42,
+        "order": 14,
         "title": "Topic 4. Ergonomic Hazards",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776122922512,
+        "id": 1777220246977,
         "file": null,
         "type": "paragraph",
-        "order": 43,
+        "order": 15,
         "title": "",
         "caption": "",
-        "content": "<p><strong>\t</strong>We are now going to talk about something that affects everyone who uses computers—whether in school, at home, or in the workplace: <strong>ergonomics</strong>. You might not think about it, but the way you sit, type, use the mouse, or position your monitor can affect your health over time.</p><p>\tIn computer servicing or ICT, people often sit for long hours doing repetitive tasks. This can lead to pain, discomfort, and long-term injuries if the workstations aren't designed correctly. </p><p>\tErgonomic hazards are risks in the workplace that can hurt your muscles, joints, tendons, or posture. These hazards come from the way the work is set up–your chair, your table, the height of your monitor, even how far you reach for the mouse. </p><p>\tUnlike accidents that happen suddenly, ergonomic hazards cause injuries slowly over time.</p>",
+        "content": "<p>We are now going to talk about something that affects everyone who uses computers—whether in school, at home, or in the workplace: ergonomics. You might not think about it, but the way you sit, type, use the mouse, or position your monitor can affect your health over time.</p>\n<p>In computer servicing or ICT, people often sit for long hours doing repetitive tasks. This can lead to pain, discomfort, and long-term injuries if the workstations aren't designed correctly.</p>\n<p>Ergonomic hazards are risks in the workplace that can hurt your muscles, joints, tendons, or posture. These hazards come from the way the work is set up–your chair, your table, the height of your monitor, even how far you reach for the mouse.</p>\n<p>Unlike accidents that happen suddenly, ergonomic hazards cause injuries slowly over time.</p>\n<p>For example:</p>\n<p>Sitting in a slouched position for hours</p>\n<p>Reaching too far for the keyboard</p>\n<p>Working without taking breaks</p>",
         "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922513,
-        "file": null,
-        "type": "subtopic",
-        "order": 44,
-        "title": "For example",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922514,
-        "file": null,
-        "type": "paragraph",
-        "order": 45,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>Sitting in a slouched position for hours</li><li>Reaching too far for the keyboard </li><li>Working without taking breaks</li><li>A monitor that’s too high or too low</li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922515,
-        "file": null,
-        "type": "subtopic",
-        "order": 46,
-        "title": "How to Prevent Ergonomic Hazards",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922516,
-        "file": null,
-        "type": "paragraph",
-        "order": 47,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li>Correct Sitting Posture</li><li>Proper Monitor Position</li><li>Proper Keyboard and Mouse Placement</li><li>Take Regular Breaks</li><li>Stretching and Movement</li><li>Adjust Your Workspace</li></ol>",
-        "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
         "id": 1776122922520,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 48,
+        "order": 16,
         "title": "",
         "caption": "",
         "content": "",
@@ -832,129 +410,28 @@
         "id": 1776122922521,
         "file": null,
         "type": "topic",
-        "order": 49,
+        "order": 17,
         "title": "Topic 5. Chemical Hazards",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776122922522,
+        "id": 1777220246978,
         "file": null,
         "type": "paragraph",
-        "order": 50,
+        "order": 18,
         "title": "",
         "caption": "",
-        "content": "<p>In our workplace, chemical hazards come from maintenance/cleaning supplies like solvents and sprays, compressed gases like dusters, and components like solder, potentially causing skin/respiratory issues from inhalation or contact, requiring personal protective equipment (PPE) like gloves and masks, good ventilation proper storage, and training on handling risks from chemicals like cleaning agents, aerosols, and potentially even heavy metals in components.</p>",
+        "content": "<p>In our workplace, chemical hazards come from maintenance/cleaning supplies like solvents and sprays, compressed gases like dusters, and components like solder, potentially causing skin/respiratory issues from inhalation or contact, requiring personal protective equipment (PPE) like gloves and masks, good ventilation proper storage, and training on handling risks from chemicals like cleaning agents, aerosols, and potentially even heavy metals in components.</p>\n<p>Common Chemical Hazards</p>\n<p>Cleaning &amp; Maintenance: Solvents, contact cleaners, keyboard cleaners, sprays, and wipes used for equipment upkeep can release harmful vapors or skin irritation.</p>\n<p>Compressed Gas Dusters: Used to remove dust, these can cause frostbite if held too close or sprayed on skin and release irritant propellants.</p>\n<p>Solder &amp; Flux: Used for hardware repair, these contain chemicals that can produce toxic fumes.</p>\n<p>Adhesives &amp; Sealants: Glues like superglue or epoxy used in repairs can bond skin and release irritating fumes.</p>\n<p>Old Components: Older electronics might contain hazardous materials like asbestos or heavy metals.</p>\n<p>Health Effects</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
-      },
-      {
-        "id": 1776122922523,
-        "file": null,
-        "type": "subtopic",
-        "order": 51,
-        "title": "Common Chemical Hazards",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922524,
-        "file": null,
-        "type": "paragraph",
-        "order": 52,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Cleaning &amp; Maintenance</strong>: Solvents, contact cleaners, keyboard cleaners, sprays, and wipes used for equipment upkeep can release harmful vapors or skin irritation.</li><li><strong>Compressed Gas Dusters</strong>: Used to remove dust, these can cause frostbite if held too close or sprayed on skin and release irritant propellants.</li><li><strong>Solder &amp; Flux</strong>: Used for hardware repair, these contain chemicals that can produce toxic fumes.</li><li><strong>Adhesives &amp; Sealants:</strong> Glues like superglue or epoxy used in repairs can bond skin and release irritating fumes.</li><li><strong>Old Components</strong>: Older electronics might contain hazardous materials like asbestos or heavy metals.</li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922525,
-        "file": null,
-        "type": "subtopic",
-        "order": 53,
-        "title": "Health Effects",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922526,
-        "file": null,
-        "type": "paragraph",
-        "order": 54,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<p>Skin/Eye Contact</p>",
-              "<p>- Irritation</p><p>- Burns</p><p>- Dermatitis</p><p>- Allergic Reactions</p>"
-            ],
-            [
-              "<p>Ingestion</p>",
-              "<p>- Digestive tract irritation</p>"
-            ]
-          ],
-          "headers": [
-            "<p>Inhalation</p>",
-            "<p>- Respiratory irritation</p><p>- Headaches</p><p>- Dizziness</p><p>- Occupational asthma</p><p>- Serious lung condition</p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776122922527,
-        "file": null,
-        "type": "subtopic",
-        "order": 55,
-        "title": "Prevention & Control Measures",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922528,
-        "file": null,
-        "type": "paragraph",
-        "order": 56,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<p>Administrative Controls</p>",
-              "<p><strong>- </strong>Proper labeling of chemicals</p><p>- Clear storage</p><p>- Regular safety training</p>"
-            ],
-            [
-              "<p>Personal Protective Equipment (PPE)</p>",
-              "<p><strong>- </strong>Gloves</p><p>- Safety glasses</p><p>- Respirators</p>"
-            ],
-            [
-              "<p>Safe Practices</p>",
-              "<p>- Unplug equipment before cleaning</p><p>- Use chemicals sparingly</p><p>- Read Safety Data Sheets (SDS)</p><p>- Proper disposal</p>"
-            ]
-          ],
-          "headers": [
-            "<p>Engineering Controls</p>",
-            "<p>- Ensure good ventilation</p><p>- Use fume extractors when soldering</p>"
-          ]
-        },
-        "contentLayout": "table"
       },
       {
         "id": 1776122922532,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 57,
+        "order": 19,
         "title": "",
         "caption": "",
         "content": "",
@@ -1005,1078 +482,636 @@
         "id": 1776122922533,
         "file": null,
         "type": "topic",
-        "order": 58,
+        "order": 20,
         "title": "Topic 6. Different Tools Used in Computer Hardware Servicing",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776122922534,
+        "id": 1777220246979,
         "file": null,
         "type": "paragraph",
-        "order": 59,
+        "order": 21,
         "title": "",
         "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Proper Use of Tools</strong></li></ol><p><strong>i. Procedures for Using Hand Tools Correctly</strong></p>",
+        "content": "<p>Proper Use of Tools</p>\n<p>i. Procedures for Using Hand Tools Correctly</p>\n<p>Phillips head screwdriver is a tool used to loosen or tighten cross-head screws. To properly use the tool, select the right size bit for the screw head to avoid stripping. Apply firm, straight downward pressure while turning clockwise to tighten or counterclockwise to loosen; never over-torque to prevent cam-out, or when the screwdriver bit—a detachable tip or toolhead used to drive screws—comes out of the screw head while turning it.[31]</p>\n<p>Flat Head Screwdriver</p>\n<p>Flat head screwdriver is a tool used to loosen or tighten slotted screw-a single straight slot on the head. To properly use the tool, match the blade width to the screw slot exactly. Insert fully straight into the slot, then turn slowly with steady pressure to avoid slipping, which can damage the screw or surrounding case.[31]</p>\n<p>Torx Screwdriver</p>\n<p>Torx screwdriver is a tool used to loosen or tighten screws that have a star-like depression on the top. To properly use the tool, align the T-bit precisely with the star-shaped recess. Rotate smoothly with even force, as Torx resists stripping better but requires full seating to avoid rounding the drive.[31]</p>\n<p>Hex Driver</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
-        "id": 1776122922535,
-        "file": null,
-        "type": "subtopic",
-        "order": 60,
-        "title": "Phillips Head Screwdriver",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922536,
-        "file": null,
-        "type": "paragraph",
-        "order": 61,
-        "title": "",
-        "caption": "",
-        "content": "<p>Phillips head screwdriver is a tool used to loosen or tighten cross-head screws. To properly use the tool, select the right size bit for the screw head to avoid stripping. Apply firm, straight downward pressure while turning clockwise to tighten or counterclockwise to loosen; never over-torque to prevent cam-out. <sup>[31]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922537,
+        "id": 1777220246980,
         "file": null,
         "type": "image",
-        "order": 62,
-        "title": "",
+        "order": 22,
+        "title": "Phillips head screwdriver",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122931674-12.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122931674-12.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-2-1776122931677-13.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122931677-13.png"
-          }
-        ],
-        "layout": "side-by-side",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122931674-12.png",
-        "fileName": "docx-lesson-2-1776122931674-12.png"
-      },
-      {
-        "id": 1776122922538,
-        "file": null,
-        "type": "paragraph",
-        "order": 63,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Flat Head Screwdriver</strong></li></ul><p>Flat head screwdriver is a tool used to loosen or tighten slotted screw. To properly use the tool, match the blade width to the screw slot exactly. Insert fully straight into the slot, then turn slowly with steady pressure to avoid slipping, which can damage the screw or surrounding case.<sup>[31]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922539,
-        "file": null,
-        "type": "image",
-        "order": 64,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-2-1776122931688-14.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122931688-14.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-2-1776122931674-12.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122931674-12.png"
-          }
-        ],
-        "layout": "side-by-side",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122931688-14.png",
-        "fileName": "docx-lesson-2-1776122931688-14.png"
-      },
-      {
-        "id": 1776122922540,
-        "file": null,
-        "type": "paragraph",
-        "order": 65,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Torx Screwdriver</strong></li></ul><p>Torx screwdriver is a tool used to loosen or tighten screws that have a star-like depression on the top. To properly use the tool, align the T-bit precisely with the star-shaped recess. Rotate smoothly with even force, as Torx resists stripping better but requires full seating to avoid rounding the drive.<sup>[31]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922541,
-        "file": null,
-        "type": "image",
-        "order": 66,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-2-1776122931674-12.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122931674-12.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-2-1776122931704-15.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122931704-15.png"
-          }
-        ],
-        "layout": "side-by-side",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122931674-12.png",
-        "fileName": "docx-lesson-2-1776122931674-12.png"
-      },
-      {
-        "id": 1776122922542,
-        "file": null,
-        "type": "paragraph",
-        "order": 67,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Hex Driver</strong></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922543,
-        "file": null,
-        "type": "image",
-        "order": 68,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-2-1776122931720-16.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122931720-16.png"
+            "url": "/uploads/lessons/012_flathead_crop.webp",
+            "file": null,
+            "fileName": "012_flathead_crop.webp",
+            "caption": "Phillips head screwdriver"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122931720-16.png",
-        "fileName": "docx-lesson-2-1776122931720-16.png",
+        "content": "/uploads/lessons/012_flathead_crop.webp",
+        "fileName": "012_flathead_crop.webp",
         "sideTexts": [
-          "<p>Hex driver, sometimes called a nut driver, is a tool used to tighten nuts in the same way that a screwdriver tightens. To properly use the tool, you have to choose the correct hex size (e.g., 2mm–5mm for PC cases). Insert fully into the socket and turn steadily without wobbling; use a ball-end hex for angled access but straight-on for torque.<sup>[31]</sup></p>"
+          "<p><strong>Phillips head screwdriver</strong></p><p>Phillips head screwdriver is a tool used to loosen or tighten cross-head…</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-2-1776122931720-16.png",
-              "caption": "",
-              "fileName": "docx-lesson-2-1776122931720-16.png"
+              "url": "/uploads/lessons/012_flathead_crop.webp",
+              "file": null,
+              "fileName": "012_flathead_crop.webp",
+              "caption": "Phillips head screwdriver"
             }
           ]
         ]
       },
       {
-        "id": 1776122922544,
+        "id": 1777220246981,
         "file": null,
         "type": "image",
-        "order": 69,
-        "title": "",
+        "order": 23,
+        "title": "Flat head screwdriver",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122931674-12.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122931674-12.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122931674-12.png",
-        "fileName": "docx-lesson-2-1776122931674-12.png"
-      },
-      {
-        "id": 1776122922545,
-        "file": null,
-        "type": "paragraph",
-        "order": 70,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Needle Nose Pliers</strong></li></ul><p>Needle nose pliers is a tool used to hold small parts. To properly use the tool, grip small components or wires firmly in the tapered jaws without squeezing too hard. Use for bending leads or holding parts; avoid cutting with them unless designed for it.<sup>[32]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922546,
-        "file": null,
-        "type": "image",
-        "order": 71,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-2-1776122931742-17.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122931742-17.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122931742-17.png",
-        "fileName": "docx-lesson-2-1776122931742-17.png"
-      },
-      {
-        "id": 1776122922547,
-        "file": null,
-        "type": "paragraph",
-        "order": 72,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Wire Cutter</strong></li></ul><p>Wire cutter is a tool used to strip and cut wires. To properly use the tool, position wire in the appropriate notch for its gauge. Close handles fully in one smooth motion to shear cleanly, then release; cut perpendicular to wire to minimize fraying.<sup>[32]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922548,
-        "file": null,
-        "type": "image",
-        "order": 73,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-2-1776122931755-18.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122931755-18.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122931755-18.png",
-        "fileName": "docx-lesson-2-1776122931755-18.png"
-      },
-      {
-        "id": 1776122922549,
-        "file": null,
-        "type": "paragraph",
-        "order": 74,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Wire Stripper</strong></li></ul><p>Wire stripper is a handheld tool designed to precisely remove the insulation from the ends of electrical wires without damaging the conductor inside. It features notched jaws calibrated for different wire gauges such as American Wire Gauge (AWG) sizes to grip, cut, and strip the outer coating cleanly. <sup>[39][40]</sup></p><p>To properly use the tool, select the notch matching the wire gauge (e.g., 22–24 AWG). Clamp lightly on insulation 1/4-inch from end, rotate if needed, then pull to remove sheath without nicking conductor.<sup>[39]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922550,
-        "file": null,
-        "type": "image",
-        "order": 75,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-2-1776122931764-19.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122931764-19.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122931764-19.png",
-        "fileName": "docx-lesson-2-1776122931764-19.png"
-      },
-      {
-        "id": 1776122922551,
-        "file": null,
-        "type": "paragraph",
-        "order": 76,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Flashlight</strong></li></ul><p>Flashlight is a tool used to light up areas that you cannot see well. To properly use the tool, press the button indicating to turn it on, brighten tight spaces like PC internals by directing beams at an angle to minimize glare. Hold steady or use a hands-free clip; check batteries before critical tasks.<sup>[31]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922552,
-        "file": null,
-        "type": "image",
-        "order": 77,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-2-1776122931784-20.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122931784-20.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122931784-20.png",
-        "fileName": "docx-lesson-2-1776122931784-20.png"
-      },
-      {
-        "id": 1776122922553,
-        "file": null,
-        "type": "paragraph",
-        "order": 78,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Part Retriever</strong></li></ul><p>Part retriever is a tool used to retrieve parts from a location that is too small for your hand to fit. To properly use the tool, use the hooked or magnetic end to gently snag dropped screws or jumpers from cases. Hook under item and pull slowly to avoid pushing it further; clean tip after use.<sup>[31]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922554,
-        "file": null,
-        "type": "image",
-        "order": 79,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-2-1776122931789-21.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122931789-21.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122931789-21.png",
-        "fileName": "docx-lesson-2-1776122931789-21.png"
-      },
-      {
-        "id": 1776122922555,
-        "file": null,
-        "type": "paragraph",
-        "order": 80,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Tweezers</strong></li></ul><p>Tweezers is a tool used to manipulate small parts. To properly use the tool, grasp tiny components like capacitors by edges with precision tips. Apply minimal force to position or remove; anti-static versions prevent ESD damage to chips.<sup>[31]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922556,
-        "file": null,
-        "type": "image",
-        "order": 81,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-2-1776122931800-22.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122931800-22.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122931800-22.png",
-        "fileName": "docx-lesson-2-1776122931800-22.png"
-      },
-      {
-        "id": 1776122922557,
-        "file": null,
-        "type": "image",
-        "order": 82,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-2-1776122931813-23.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122931813-23.png"
-          }
-        ],
-        "layout": "text-right",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122931813-23.png",
-        "fileName": "docx-lesson-2-1776122931813-23.png",
-        "sideTexts": [
-          "<ul style=\"list-style-type: disc;\"><li><strong>Crimping Tool</strong></li></ul>"
-        ],
-        "layerImages": [
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-2-1776122931813-23.png",
-              "caption": "",
-              "fileName": "docx-lesson-2-1776122931813-23.png"
-            }
-          ]
-        ]
-      },
-      {
-        "id": 1776122922558,
-        "file": null,
-        "type": "paragraph",
-        "order": 83,
-        "title": "",
-        "caption": "",
-        "content": "<p>Crimping tool is a specialized hand tool used to join wires or cables to connectors by compressing a metal terminal around the stripped wire end, creating a secure, solderless electrical connection. It typically features color-coded or adjustable dies matched to wire gauges like AWG sizes and often includes a ratcheting mechanism for consistent pressure. <sup>[41][42][43]</sup></p><p>To properly use the tool, strip wire, insert into terminal matching gauge, place in correct die. Squeeze handles fully until ratchet releases for secure crimp; inspect for uniform deformation.<sup>[41].</sup></p><ul style=\"list-style-type: disc;\"><li><strong>RJ45</strong></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922559,
-        "file": null,
-        "type": "image",
-        "order": 84,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-2-1776122931819-24.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122931819-24.png"
+            "url": "/uploads/lessons/014_flat_head_screwdriver_is_a_tool_used_to_.webp",
+            "file": null,
+            "fileName": "014_flat_head_screwdriver_is_a_tool_used_to_.webp",
+            "caption": "Flat head screwdriver"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122931819-24.png",
-        "fileName": "docx-lesson-2-1776122931819-24.png",
+        "content": "/uploads/lessons/014_flat_head_screwdriver_is_a_tool_used_to_.webp",
+        "fileName": "014_flat_head_screwdriver_is_a_tool_used_to_.webp",
         "sideTexts": [
-          "<p>RJ45 is a standardized 8-pin connector, known as Registered Jack 45, commonly used at the ends of Ethernet cables for wired network connections in LANs. It enables devices like computers, routers, and switches to transmit data via twisted-pair wiring schemes such as T568A or T568B. <sup>[44][45][46][47]</sup></p>"
+          "<p><strong>Flat head screwdriver</strong></p><p>Flat head screwdriver is a tool used to loosen or tighten slotted screw-a…</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-2-1776122931819-24.png",
-              "caption": "",
-              "fileName": "docx-lesson-2-1776122931819-24.png"
+              "url": "/uploads/lessons/014_flat_head_screwdriver_is_a_tool_used_to_.webp",
+              "file": null,
+              "fileName": "014_flat_head_screwdriver_is_a_tool_used_to_.webp",
+              "caption": "Flat head screwdriver"
             }
           ]
         ]
       },
       {
-        "id": 1776122922560,
-        "file": null,
-        "type": "paragraph",
-        "order": 85,
-        "title": "",
-        "caption": "",
-        "content": "<p>To properly use the tool, strip cable jacket, untwist pairs, arranged per T568B (e.g., orange-white, orange). Trim evenly, insert fully into connector, crimp with RJ45 tool until seated.<sup>[52]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922561,
-        "file": null,
-        "type": "subtopic",
-        "order": 86,
-        "title": "ii. Safe Use of Diagnostic Tools",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922562,
-        "file": null,
-        "type": "paragraph",
-        "order": 87,
-        "title": "",
-        "caption": "",
-        "content": "<p>Safe use of diagnostic tools prevents electrical hazards, inaccurate readings, and equipment damage during network or circuit troubleshooting.</p><ul style=\"list-style-type: disc;\"><li><strong>Loopback Adapter</strong></li></ul><p>Loopback adapter is a tool used to test the functionality of computer ports. To safely use the tool, insert the adapter firmly into the network port only on powered-off devices or isolated test setups to avoid network loops that could flood switches. Remove immediately after testing and verify compatibility with port type (e.g., RJ45) to prevent bent pins.<sup>[53][54]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922563,
+        "id": 1777220246982,
         "file": null,
         "type": "image",
-        "order": 88,
-        "title": "",
+        "order": 24,
+        "title": "Torx screwdriver",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122933229-25.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122933229-25.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122933229-25.png",
-        "fileName": "docx-lesson-2-1776122933229-25.png"
-      },
-      {
-        "id": 1776122922564,
-        "file": null,
-        "type": "image",
-        "order": 89,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-2-1776122933242-26.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122933242-26.png"
-          }
-        ],
-        "layout": "text-right",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122933242-26.png",
-        "fileName": "docx-lesson-2-1776122933242-26.png",
-        "sideTexts": [
-          "<ul style=\"list-style-type: disc;\"><li><strong>Multimeter</strong></li></ul>"
-        ],
-        "layerImages": [
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-2-1776122933242-26.png",
-              "caption": "",
-              "fileName": "docx-lesson-2-1776122933242-26.png"
-            }
-          ]
-        ]
-      },
-      {
-        "id": 1776122922565,
-        "file": null,
-        "type": "paragraph",
-        "order": 90,
-        "title": "",
-        "caption": "",
-        "content": "<p>Multimeter is a tool used to test the integrity of circuits and the quality of electricity in computer components. To safely use the tool, set to the correct mode and range before probing (e.g., DC volts for low-voltage circuits). Touch probes firmly to test points without bridging contacts, wear insulated gloves for live tests, and avoid exceeding CAT ratings to prevent shocks or probe melting.<sup>[49]</sup></p><ul style=\"list-style-type: disc;\"><li><strong>LAN Tester</strong></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922566,
-        "file": null,
-        "type": "image",
-        "order": 91,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-2-1776122933250-27.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122933250-27.png"
+            "url": "/uploads/lessons/017_torx_screwdriver_is_a_tool_used_to_loose.webp",
+            "file": null,
+            "fileName": "017_torx_screwdriver_is_a_tool_used_to_loose.webp",
+            "caption": "Torx screwdriver"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122933250-27.png",
-        "fileName": "docx-lesson-2-1776122933250-27.png",
+        "content": "/uploads/lessons/017_torx_screwdriver_is_a_tool_used_to_loose.webp",
+        "fileName": "017_torx_screwdriver_is_a_tool_used_to_loose.webp",
         "sideTexts": [
-          "<p>LAN tester, also known as a network cable tester, is a handheld diagnostic device used to verify the integrity, wiring continuity, and proper pin assignments of Ethernet or LAN cables like twisted-pair RJ45 connections. It detects faults such as opens, shorts, miswires, or crossed pairs by sending signals between a main unit and remote receiver, often indicated by LEDs. This ensures reliable data transmission in local area networks before deployment. <sup>[48][49][50][51]</sup></p>"
+          "<p><strong>Torx screwdriver</strong></p><p>Torx screwdriver is a tool used to loosen or tighten screws that have a…</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-2-1776122933250-27.png",
-              "caption": "",
-              "fileName": "docx-lesson-2-1776122933250-27.png"
+              "url": "/uploads/lessons/017_torx_screwdriver_is_a_tool_used_to_loose.webp",
+              "file": null,
+              "fileName": "017_torx_screwdriver_is_a_tool_used_to_loose.webp",
+              "caption": "Torx screwdriver"
             }
           ]
         ]
       },
       {
-        "id": 1776122922567,
-        "file": null,
-        "type": "paragraph",
-        "order": 92,
-        "title": "",
-        "caption": "",
-        "content": "<p>To safely use the tool, Power off cables and devices before connecting main and remote units to avoid shorts. Test one segment at a time, check for crossed pairs via LEDs, and store probes capped; never use on live PoE lines without isolation to prevent shocks or false positives.<sup>[48][50]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922568,
-        "file": null,
-        "type": "subtopic",
-        "order": 93,
-        "title": "iii. Proper Use of Cleaning Tools",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922569,
-        "file": null,
-        "type": "paragraph",
-        "order": 94,
-        "title": "",
-        "caption": "",
-        "content": "<p>Proper use of cleaning tools maintains dust-free components and organized cables without causing damage or residue buildup.</p><ul style=\"list-style-type: disc;\"><li><strong>Lint-Free Cloth</strong></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922570,
+        "id": 1777220246983,
         "file": null,
         "type": "image",
-        "order": 95,
-        "title": "",
+        "order": 25,
+        "title": "Hex Driver",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122934133-28.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122934133-28.png"
+            "url": "/uploads/lessons/018_hex_driver.webp",
+            "file": null,
+            "fileName": "018_hex_driver.webp",
+            "caption": "Hex Driver"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122934133-28.png",
-        "fileName": "docx-lesson-2-1776122934133-28.png",
+        "content": "/uploads/lessons/018_hex_driver.webp",
+        "fileName": "018_hex_driver.webp",
         "sideTexts": [
-          "<p>Lint-free cloth is a tool used to clean different computer components without computer components without scratching or leaving debris. To safely use the tool, wipe surfaces gently in one direction using minimal pressure to avoid lint residue or scratches on delicate parts like screens or circuit boards. Dampen slightly with isopropyl alcohol (90%+) for stubborn smudges, then dry immediately; never use on powered equipment.<sup>[31]</sup></p>"
+          "<p><strong>Hex Driver</strong></p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-2-1776122934133-28.png",
-              "caption": "",
-              "fileName": "docx-lesson-2-1776122934133-28.png"
+              "url": "/uploads/lessons/018_hex_driver.webp",
+              "file": null,
+              "fileName": "018_hex_driver.webp",
+              "caption": "Hex Driver"
             }
           ]
         ]
       },
       {
-        "id": 1776122922571,
-        "file": null,
-        "type": "paragraph",
-        "order": 96,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Compressed Air</strong></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922572,
+        "id": 1777220246984,
         "file": null,
         "type": "image",
-        "order": 97,
-        "title": "",
+        "order": 26,
+        "title": "Needle nose pliers",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122934146-29.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122934146-29.png"
+            "url": "/uploads/lessons/020_needle_nose_pliers_is_a_tool_used_to_hol.webp",
+            "file": null,
+            "fileName": "020_needle_nose_pliers_is_a_tool_used_to_hol.webp",
+            "caption": "Needle nose pliers"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122934146-29.png",
-        "fileName": "docx-lesson-2-1776122934146-29.png",
+        "content": "/uploads/lessons/020_needle_nose_pliers_is_a_tool_used_to_hol.webp",
+        "fileName": "020_needle_nose_pliers_is_a_tool_used_to_hol.webp",
         "sideTexts": [
-          "<p>Compressed air is a tool used to blow away dust and debris from different computer parts from different computer parts without touching the components. To safely use the tool, hold can upright and use short bursts from 4-6 inches away to dislodge dust from fans, heatsinks, or crevices. Avoid tilting more than 45 degrees to prevent liquid propellant discharge; never insert straw into tight spaces or blow toward yourself.<sup>[31]</sup></p>"
+          "<p><strong>Needle nose pliers</strong></p><p>Needle nose pliers is a tool used to hold small parts. To properly use the…</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-2-1776122934146-29.png",
-              "caption": "",
-              "fileName": "docx-lesson-2-1776122934146-29.png"
+              "url": "/uploads/lessons/020_needle_nose_pliers_is_a_tool_used_to_hol.webp",
+              "file": null,
+              "fileName": "020_needle_nose_pliers_is_a_tool_used_to_hol.webp",
+              "caption": "Needle nose pliers"
             }
           ]
         ]
       },
       {
-        "id": 1776122922573,
+        "id": 1777220246985,
         "file": null,
         "type": "image",
-        "order": 98,
-        "title": "",
+        "order": 27,
+        "title": "Wire cutter",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122934161-30.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122934161-30.png"
-          }
-        ],
-        "layout": "text-right",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122934161-30.png",
-        "fileName": "docx-lesson-2-1776122934161-30.png",
-        "sideTexts": [
-          "<ul style=\"list-style-type: disc;\"><li><strong>Cable Ties</strong></li></ul>"
-        ],
-        "layerImages": [
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-2-1776122934161-30.png",
-              "caption": "",
-              "fileName": "docx-lesson-2-1776122934161-30.png"
-            }
-          ]
-        ]
-      },
-      {
-        "id": 1776122922574,
-        "file": null,
-        "type": "paragraph",
-        "order": 99,
-        "title": "",
-        "caption": "",
-        "content": "<p>Cable ties is a tool used to bundle cables Used to bundle cables neatly inside and outside of neatly inside and outside of a computer. To safely use the tool, gather cables loosely and thread through the tie's head, pulling snug but not overtight to avoid pinching wires. Trim excess with cutters after securing, use velcro reusable ties for frequent access, and bundle by function for airflow.<sup>[31]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922575,
-        "file": null,
-        "type": "subtopic",
-        "order": 100,
-        "title": "iv. Preventing Damage to Components",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922576,
-        "file": null,
-        "type": "paragraph",
-        "order": 101,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Anti-Static Mat</strong></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922577,
-        "file": null,
-        "type": "image",
-        "order": 102,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-2-1776122934613-31.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122934613-31.png"
+            "url": "/uploads/lessons/021_wire_cutter_is_a_tool_used_to_strip_and_.webp",
+            "file": null,
+            "fileName": "021_wire_cutter_is_a_tool_used_to_strip_and_.webp",
+            "caption": "Wire cutter"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122934613-31.png",
-        "fileName": "docx-lesson-2-1776122934613-31.png",
+        "content": "/uploads/lessons/021_wire_cutter_is_a_tool_used_to_strip_and_.webp",
+        "fileName": "021_wire_cutter_is_a_tool_used_to_strip_and_.webp",
         "sideTexts": [
-          "<p>Anti-static mat is a tool used to stand on or place hardware on to prevent static electricity building up. To prevent damage to components, place the mat on a flat workbench, connect its grounding cord to a grounded outlet, and position components only on its surface. Wear conductive shoes or slippers when standing on it; avoid placing sharp tools directly on the mat to prevent punctures.<sup>[33]</sup></p>"
+          "<p><strong>Wire cutter</strong></p><p>Wire cutter is a tool used to strip and cut wires. To properly use the tool,…</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-2-1776122934613-31.png",
-              "caption": "",
-              "fileName": "docx-lesson-2-1776122934613-31.png"
+              "url": "/uploads/lessons/021_wire_cutter_is_a_tool_used_to_strip_and_.webp",
+              "file": null,
+              "fileName": "021_wire_cutter_is_a_tool_used_to_strip_and_.webp",
+              "caption": "Wire cutter"
             }
           ]
         ]
       },
       {
-        "id": 1776122922578,
-        "file": null,
-        "type": "paragraph",
-        "order": 103,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Anti-Static Wrist Strap</strong></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922579,
+        "id": 1777220246986,
         "file": null,
         "type": "image",
-        "order": 104,
-        "title": "",
+        "order": 28,
+        "title": "Wire Stripper",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122934618-32.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122934618-32.png"
+            "url": "/uploads/lessons/022_to_properly_use_the_tool_select_the_notc.webp",
+            "file": null,
+            "fileName": "022_to_properly_use_the_tool_select_the_notc.webp",
+            "caption": "Wire Stripper"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122934618-32.png",
-        "fileName": "docx-lesson-2-1776122934618-32.png",
+        "content": "/uploads/lessons/022_to_properly_use_the_tool_select_the_notc.webp",
+        "fileName": "022_to_properly_use_the_tool_select_the_notc.webp",
         "sideTexts": [
-          "<p>Anti-static wrist strap is a tool used to prevent ESD damage to computer equipment. To prevent damage to components, snap the strap securely around your wrist, attach the alligator clip to the mat's grounding point or a grounded chassis, and ensure skin contact under the band. Adjust tension comfortably without restricting blood flow; test continuity with a multimeter before each session.<sup>[31]</sup></p>"
+          "<p><strong>Wire Stripper</strong></p><p>To properly use the tool, select the notch matching the wire gauge (e.g., 22–24…</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-2-1776122934618-32.png",
-              "caption": "",
-              "fileName": "docx-lesson-2-1776122934618-32.png"
+              "url": "/uploads/lessons/022_to_properly_use_the_tool_select_the_notc.webp",
+              "file": null,
+              "fileName": "022_to_properly_use_the_tool_select_the_notc.webp",
+              "caption": "Wire Stripper"
             }
           ]
         ]
       },
       {
-        "id": 1776122922580,
+        "id": 1777220246987,
         "file": null,
-        "type": "paragraph",
-        "order": 105,
-        "title": "",
+        "type": "image",
+        "order": 29,
+        "title": "Flashlight",
+        "images": [
+          {
+            "url": "/uploads/lessons/023_flashlight_is_a_tool_used_to_light_up_ar.webp",
+            "file": null,
+            "fileName": "023_flashlight_is_a_tool_used_to_light_up_ar.webp",
+            "caption": "Flashlight"
+          }
+        ],
+        "layout": "text-left",
         "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Inspection and Maintenance of Tools</strong></li></ol><p>Regular inspection and maintenance of tools are essential to ensure safety, reliability, and optimal performance. These procedures apply to all tools used in technical, electrical, and electronic work, regardless of type or function.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
+        "content": "/uploads/lessons/023_flashlight_is_a_tool_used_to_light_up_ar.webp",
+        "fileName": "023_flashlight_is_a_tool_used_to_light_up_ar.webp",
+        "sideTexts": [
+          "<p><strong>Flashlight</strong></p><p>Flashlight is a tool used to light up areas that you cannot see well. To…</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/023_flashlight_is_a_tool_used_to_light_up_ar.webp",
+              "file": null,
+              "fileName": "023_flashlight_is_a_tool_used_to_light_up_ar.webp",
+              "caption": "Flashlight"
+            }
+          ]
+        ]
       },
       {
-        "id": 1776122922581,
+        "id": 1777220246988,
         "file": null,
-        "type": "subtopic",
-        "order": 106,
-        "title": "Visual Inspection Techniques",
+        "type": "image",
+        "order": 30,
+        "title": "Part retriever",
+        "images": [
+          {
+            "url": "/uploads/lessons/024_part_retriever_is_a_tool_used_to_retriev.webp",
+            "file": null,
+            "fileName": "024_part_retriever_is_a_tool_used_to_retriev.webp",
+            "caption": "Part retriever"
+          }
+        ],
+        "layout": "text-left",
         "caption": "",
-        "content": "",
-        "fileName": null
+        "content": "/uploads/lessons/024_part_retriever_is_a_tool_used_to_retriev.webp",
+        "fileName": "024_part_retriever_is_a_tool_used_to_retriev.webp",
+        "sideTexts": [
+          "<p><strong>Part retriever</strong></p><p>Part retriever is a tool used to retrieve parts from a location that is too…</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/024_part_retriever_is_a_tool_used_to_retriev.webp",
+              "file": null,
+              "fileName": "024_part_retriever_is_a_tool_used_to_retriev.webp",
+              "caption": "Part retriever"
+            }
+          ]
+        ]
       },
       {
-        "id": 1776122922582,
+        "id": 1777220246989,
         "file": null,
-        "type": "paragraph",
-        "order": 107,
-        "title": "",
+        "type": "image",
+        "order": 31,
+        "title": "Tweezers",
+        "images": [
+          {
+            "url": "/uploads/lessons/025_tweezers_is_a_tool_used_to_manipulate_sm.webp",
+            "file": null,
+            "fileName": "025_tweezers_is_a_tool_used_to_manipulate_sm.webp",
+            "caption": "Tweezers"
+          }
+        ],
+        "layout": "text-left",
         "caption": "",
-        "content": "<p>Examine all hand tools (screwdrivers, pliers, cutters, strippers, retriever, tweezers, crimping tool), diagnostic tools (loopback adapter, multimeter, LAN tester), cleaning tools (lint-free cloth, compressed air, cable ties), and ESD items (anti-static mat, wrist strap) for cracks, rust, bent tips, frayed cords, or wear on jaws/handles. Check labels on cloths for lint-free status, canisters for dents/leaks, and mats/straps for tears or coil damage; inspect under good lighting and clean surfaces first.<sup>[31][32]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
+        "content": "/uploads/lessons/025_tweezers_is_a_tool_used_to_manipulate_sm.webp",
+        "fileName": "025_tweezers_is_a_tool_used_to_manipulate_sm.webp",
+        "sideTexts": [
+          "<p><strong>Tweezers</strong></p><p>Tweezers is a tool used to manipulate small parts. To properly use the tool,…</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/025_tweezers_is_a_tool_used_to_manipulate_sm.webp",
+              "file": null,
+              "fileName": "025_tweezers_is_a_tool_used_to_manipulate_sm.webp",
+              "caption": "Tweezers"
+            }
+          ]
+        ]
       },
       {
-        "id": 1776122922583,
+        "id": 1777220246990,
         "file": null,
-        "type": "subtopic",
-        "order": 108,
-        "title": "Functional Checks",
+        "type": "image",
+        "order": 32,
+        "title": "Crimping Tool",
+        "images": [
+          {
+            "url": "/uploads/lessons/026_crimping_tool.webp",
+            "file": null,
+            "fileName": "026_crimping_tool.webp",
+            "caption": "Crimping Tool"
+          }
+        ],
+        "layout": "text-left",
         "caption": "",
-        "content": "",
-        "fileName": null
+        "content": "/uploads/lessons/026_crimping_tool.webp",
+        "fileName": "026_crimping_tool.webp",
+        "sideTexts": [
+          "<p><strong>Crimping Tool</strong></p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/026_crimping_tool.webp",
+              "file": null,
+              "fileName": "026_crimping_tool.webp",
+              "caption": "Crimping Tool"
+            }
+          ]
+        ]
       },
       {
-        "id": 1776122922584,
+        "id": 1777220246991,
         "file": null,
-        "type": "paragraph",
-        "order": 109,
-        "title": "",
+        "type": "image",
+        "order": 33,
+        "title": "RJ45",
+        "images": [
+          {
+            "url": "/uploads/lessons/027_rj45.webp",
+            "file": null,
+            "fileName": "027_rj45.webp",
+            "caption": "RJ45"
+          }
+        ],
+        "layout": "text-left",
         "caption": "",
-        "content": "<p>Test hand tools by engaging mechanisms like screwdrivers on test screws, pliers/cutters/strippers/crimper on scrap wire, flashlight beam, retriever hook strength. Verify diagnostic tools: loopback adapter pings ports, multimeter beeps continuity/volts on known circuits, LAN tester lights all pins on short cables. Confirm cleaning tools dispense properly (air bursts upright, ties lock securely) and ESD gear conducts via multimeter resistance under 1 megohm.<sup>[48][49]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
+        "content": "/uploads/lessons/027_rj45.webp",
+        "fileName": "027_rj45.webp",
+        "sideTexts": [
+          "<p><strong>RJ45</strong></p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/027_rj45.webp",
+              "file": null,
+              "fileName": "027_rj45.webp",
+              "caption": "RJ45"
+            }
+          ]
+        ]
       },
       {
-        "id": 1776122922585,
+        "id": 1777220246992,
         "file": null,
-        "type": "subtopic",
-        "order": 110,
-        "title": "Regular Maintenance Practices",
+        "type": "image",
+        "order": 34,
+        "title": "Loopback adapter",
+        "images": [
+          {
+            "url": "/uploads/lessons/028_loopback_adapter_is_a_tool_used_to_test_.webp",
+            "file": null,
+            "fileName": "028_loopback_adapter_is_a_tool_used_to_test_.webp",
+            "caption": "Loopback adapter"
+          }
+        ],
+        "layout": "text-left",
         "caption": "",
-        "content": "",
-        "fileName": null
+        "content": "/uploads/lessons/028_loopback_adapter_is_a_tool_used_to_test_.webp",
+        "fileName": "028_loopback_adapter_is_a_tool_used_to_test_.webp",
+        "sideTexts": [
+          "<p><strong>Loopback adapter</strong></p><p>Loopback adapter is a tool used to test the functionality of computer ports. To…</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/028_loopback_adapter_is_a_tool_used_to_test_.webp",
+              "file": null,
+              "fileName": "028_loopback_adapter_is_a_tool_used_to_test_.webp",
+              "caption": "Loopback adapter"
+            }
+          ]
+        ]
       },
       {
-        "id": 1776122922586,
+        "id": 1777220246993,
         "file": null,
-        "type": "paragraph",
-        "order": 111,
-        "title": "",
+        "type": "image",
+        "order": 35,
+        "title": "Multimeter",
+        "images": [
+          {
+            "url": "/uploads/lessons/029_multimeter.webp",
+            "file": null,
+            "fileName": "029_multimeter.webp",
+            "caption": "Multimeter"
+          }
+        ],
+        "layout": "text-left",
         "caption": "",
-        "content": "<p>Wipe tools clean after use, lubricate moving parts (pliers, crimper) sparingly with WD-40, store in dry organized cases to prevent corrosion. Replace disposable items like cloths/air cans promptly, test ESD equipment monthly, sharpen cutters/strippers as needed, and log inspections quarterly; calibrate multimeters/LAN testers annually per manufacturer specs.<sup>[32][34]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
+        "content": "/uploads/lessons/029_multimeter.webp",
+        "fileName": "029_multimeter.webp",
+        "sideTexts": [
+          "<p><strong>Multimeter</strong></p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/029_multimeter.webp",
+              "file": null,
+              "fileName": "029_multimeter.webp",
+              "caption": "Multimeter"
+            }
+          ]
+        ]
       },
       {
-        "id": 1776122922587,
+        "id": 1777220246994,
         "file": null,
-        "type": "paragraph",
-        "order": 112,
-        "title": "",
+        "type": "image",
+        "order": 36,
+        "title": "LAN Tester",
+        "images": [
+          {
+            "url": "/uploads/lessons/030_lan_tester.webp",
+            "file": null,
+            "fileName": "030_lan_tester.webp",
+            "caption": "LAN Tester"
+          }
+        ],
+        "layout": "text-left",
         "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Proper Storage and Organization</strong></li></ol><p>Proper storage and organization of computer servicing tools ensure longevity, safety, and workflow efficiency.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
+        "content": "/uploads/lessons/030_lan_tester.webp",
+        "fileName": "030_lan_tester.webp",
+        "sideTexts": [
+          "<p><strong>LAN Tester</strong></p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/030_lan_tester.webp",
+              "file": null,
+              "fileName": "030_lan_tester.webp",
+              "caption": "LAN Tester"
+            }
+          ]
+        ]
       },
       {
-        "id": 1776122922588,
+        "id": 1777220246995,
         "file": null,
-        "type": "subtopic",
-        "order": 113,
-        "title": "Storage Requirements for Different Tools",
+        "type": "image",
+        "order": 37,
+        "title": "Lint-Free Cloth",
+        "images": [
+          {
+            "url": "/uploads/lessons/031_lint_free_cloth.webp",
+            "file": null,
+            "fileName": "031_lint_free_cloth.webp",
+            "caption": "Lint-Free Cloth"
+          }
+        ],
+        "layout": "text-left",
         "caption": "",
-        "content": "",
-        "fileName": null
+        "content": "/uploads/lessons/031_lint_free_cloth.webp",
+        "fileName": "031_lint_free_cloth.webp",
+        "sideTexts": [
+          "<p><strong>Lint-Free Cloth</strong></p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/031_lint_free_cloth.webp",
+              "file": null,
+              "fileName": "031_lint_free_cloth.webp",
+              "caption": "Lint-Free Cloth"
+            }
+          ]
+        ]
       },
       {
-        "id": 1776122922589,
+        "id": 1777220246996,
         "file": null,
-        "type": "paragraph",
-        "order": 114,
-        "title": "",
+        "type": "image",
+        "order": 38,
+        "title": "Compressed Air",
+        "images": [
+          {
+            "url": "/uploads/lessons/032_compressed_air.webp",
+            "file": null,
+            "fileName": "032_compressed_air.webp",
+            "caption": "Compressed Air"
+          }
+        ],
+        "layout": "text-left",
         "caption": "",
-        "content": "<p>Hand tools like Phillips head screwdrivers, flat head screwdrivers, Torx screwdrivers, hex drivers, needle nose pliers, wire cutters, flashlights, part retrievers, and tweezers require dry, dust-free compartments to prevent rust and damage; use divided toolboxes or pegboards with individual slots. Diagnostic tools such as loopback adapters and multimeters need padded cases or anti-static bags to protect sensitive electronics from impacts. Cleaning tools (lint-free cloths, compressed air cans, cable ties) should be kept in ventilated bins to avoid moisture buildup, while ESD items like anti-static mats and wrist straps demand dedicated anti-static storage bags or drawers. <sup>[31][32][33][34][35]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
+        "content": "/uploads/lessons/032_compressed_air.webp",
+        "fileName": "032_compressed_air.webp",
+        "sideTexts": [
+          "<p><strong>Compressed Air</strong></p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/032_compressed_air.webp",
+              "file": null,
+              "fileName": "032_compressed_air.webp",
+              "caption": "Compressed Air"
+            }
+          ]
+        ]
       },
       {
-        "id": 1776122922590,
+        "id": 1777220246997,
         "file": null,
-        "type": "subtopic",
-        "order": 115,
-        "title": "Organizing Tools for Efficient Workflow",
+        "type": "image",
+        "order": 39,
+        "title": "Anti-Static Mat",
+        "images": [
+          {
+            "url": "/uploads/lessons/034_anti_static_mat.webp",
+            "file": null,
+            "fileName": "034_anti_static_mat.webp",
+            "caption": "Anti-Static Mat"
+          }
+        ],
+        "layout": "text-left",
         "caption": "",
-        "content": "",
-        "fileName": null
+        "content": "/uploads/lessons/034_anti_static_mat.webp",
+        "fileName": "034_anti_static_mat.webp",
+        "sideTexts": [
+          "<p><strong>Anti-Static Mat</strong></p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/034_anti_static_mat.webp",
+              "file": null,
+              "fileName": "034_anti_static_mat.webp",
+              "caption": "Anti-Static Mat"
+            }
+          ]
+        ]
       },
       {
-        "id": 1776122922591,
+        "id": 1777220246998,
         "file": null,
-        "type": "paragraph",
-        "order": 116,
-        "title": "",
+        "type": "image",
+        "order": 40,
+        "title": "Anti-Static Wrist Strap",
+        "images": [
+          {
+            "url": "/uploads/lessons/035_anti_static_wrist_strap.webp",
+            "file": null,
+            "fileName": "035_anti_static_wrist_strap.webp",
+            "caption": "Anti-Static Wrist Strap"
+          }
+        ],
+        "layout": "text-left",
         "caption": "",
-        "content": "<p>Group hand tools by type—screwdrivers together, pliers and cutters nearby—for quick access during disassembly; magnetic strips work well for hex drivers and Torx bits. Place diagnostic tools near testing stations, cleaning supplies in a portable caddy, and ESD gear at the workbench center to minimize setup time. Label all sections such as \"Pliers/Tweezers,\" \"Multimeter\" and position frequently used items like flashlights and part retrievers at eye level.<sup>[31][35][36][37]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922592,
-        "file": null,
-        "type": "subtopic",
-        "order": 117,
-        "title": "Safety Considerations in Storage",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922593,
-        "file": null,
-        "type": "paragraph",
-        "order": 118,
-        "title": "",
-        "caption": "",
-        "content": "<p>Store sharp tools like wire cutters, needle nose pliers, and tweezers in sheaths or closed drawers to prevent cuts, keeping heavier items like anti-static mats low to avoid falls. Ensure ESD tools are segregated from metal surfaces to discharge risks, and keep compressed air upright in cool areas away from heat sources. Regularly inspect for wear, clean before storing, and maintain clear aisles around storage to reduce tripping hazards.<sup>[32][34][37[38]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922594,
-        "file": null,
-        "type": "paragraph",
-        "order": 119,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Emergency Procedures Related to Tools</strong></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922595,
-        "file": null,
-        "type": "subtopic",
-        "order": 120,
-        "title": "Accidents Involving Hand Tools",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922596,
-        "file": null,
-        "type": "paragraph",
-        "order": 121,
-        "title": "",
-        "caption": "",
-        "content": "<p>Cuts from wire cutters, strippers, pliers, or screwdrivers require immediate rinsing under cool water for 5 minutes, apply pressure with sterile gauze, and elevate the area; seek stitches if deep or bleeding persists over 10 minutes. For slips causing bruises (e.g., screwdriver cam-out), ice the injury 15 minutes and rest; report if near eyes or head. Eye debris from part retriever or tweezers needs flushing with saline—never rub; get medical help if vision blurs.<sup>[32]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922597,
-        "file": null,
-        "type": "subtopic",
-        "order": 122,
-        "title": "Electrical Incidents from Diagnostic Tools",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922598,
-        "file": null,
-        "type": "paragraph",
-        "order": 123,
-        "title": "",
-        "caption": "",
-        "content": "<p>If shocked by multimeter or LAN tester probes on live circuits, release by pushing away with wood/plastic, then check for burns or heart irregularities—call emergency if unconscious or chest pain. For loopback adapters causing network overloads, unplug immediately to stop loops; power cycle devices. Unplug all tools, document voltage involved, and use insulated probes/GFCI outlets next time.<sup>[48][49]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922599,
-        "file": null,
-        "type": "subtopic",
-        "order": 124,
-        "title": "Chemical or Cleaning Material Exposure",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922600,
-        "file": null,
-        "type": "paragraph",
-        "order": 125,
-        "title": "",
-        "caption": "",
-        "content": "<p>Skin contact with isopropyl from lint-free cloths or compressed air propellant: rinse with soap/water 10 minutes; remove contaminated clothes. Eye exposure: flush with water 15 minutes holding lids open, seek doctor. Inhalation of air duster: move to fresh air, loosen clothing; if dizzy, get oxygen/medical eval. Cable ties rarely cause issues, but cut cleanly to avoid plastic shards.<sup>[31]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922601,
-        "file": null,
-        "type": "subtopic",
-        "order": 126,
-        "title": "Fire or Overheating Caused by Tools",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922602,
-        "file": null,
-        "type": "paragraph",
-        "order": 127,
-        "title": "",
-        "caption": "",
-        "content": "<p>Shorts from damaged crimping tool or multimeter on high amps: unplug power, smother with CO2 extinguisher or lid—never water on electrical fires. Overheating compressed air near heat sinks: stop use, ventilate; cool components. For ESD mat sparks from static buildup, ground properly first; isolate and inspect for frayed cords. Evacuate if smoke persists, call fire dept., and store flammables away post-incident.<sup>[32][34]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
+        "content": "/uploads/lessons/035_anti_static_wrist_strap.webp",
+        "fileName": "035_anti_static_wrist_strap.webp",
+        "sideTexts": [
+          "<p><strong>Anti-Static Wrist Strap</strong></p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/035_anti_static_wrist_strap.webp",
+              "file": null,
+              "fileName": "035_anti_static_wrist_strap.webp",
+              "caption": "Anti-Static Wrist Strap"
+            }
+          ]
+        ]
       },
       {
         "id": 1776122922604,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 128,
+        "order": 41,
         "title": "",
         "caption": "",
         "content": "",
@@ -2101,273 +1136,59 @@
         "id": 1776122922605,
         "file": null,
         "type": "topic",
-        "order": 129,
+        "order": 42,
         "title": "Topic 7: Reporting and Documenting Accidents or Hazards",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776122922606,
+        "id": 1777220246999,
         "file": null,
         "type": "paragraph",
-        "order": 130,
+        "order": 43,
         "title": "",
         "caption": "",
-        "content": "<p>A hazard is a potential source of harm or dangerous condition that could lead to injury, damage, or illness but has not yet caused it—essentially a risk waiting to be realized. In contrast, an accident is an unplanned event where that hazard actually results in harm, injury, property damage, or loss. </p><p>For example, worn jaws on needle nose pliers represent a hazard because they could slip and pinch a finger, while the actual finger cut from that slip during wire bending is the accident; frayed multimeter leads pose a shock hazard, but the electric jolt from touching a live circuit turns it into an accident. </p><p>Similarly, a compressed air can lying on its side is a hazard for propellant leaks and chemical splashes, whereas the resulting skin burn from the tipped can is the accident, and an ungrounded ESD mat creates a static buildup hazard that becomes an accident when it fries a motherboard during a CPU swap. </p><p>The key takeaway is to identify hazards like dull wire stripper blades through inspections to prevent accidents such as nicked wires causing shorts; in Philippine DOLE terms, report both via WAIR forms—hazards preventively and accidents reactively.<sup>[60][63]</sup></p>",
+        "content": "<p>A hazard is a potential source of harm or dangerous condition that could lead to injury, damage, or illness but has not yet caused it—essentially a risk waiting to be realized. In contrast, an accident is an unplanned event where that hazard actually results in harm, injury, property damage, or loss.</p>\n<p>For example, worn jaws on needle nose pliers represent a hazard because they could slip and pinch a finger, while the actual finger cut from that slip during wire bending is the accident; frayed multimeter leads pose a shock hazard, but the electric jolt from touching a live circuit turns it into an accident.</p>\n<p>Similarly, a compressed air can lying on its side is a hazard for propellant leaks and chemical splashes, whereas the resulting skin burn from the tipped can is the accident, and an ungrounded ESD mat creates a static buildup hazard that becomes an accident when it fries a motherboard during a CPU swap.</p>\n<p>The key takeaway is to identify hazards like dull wire stripper blades through inspections to prevent accidents such as nicked wires causing shorts; in Philippine DOLE terms, report both via WAIR forms—hazards preventively and accidents reactively.[60][63]</p>\n<p>According to the lesson, what best distinguishes a hazard from an accident?</p>\n<p>A hazard is a potential source of harm, while an accident is the actual harmful event</p>\n<p>A hazard is intentional, while an accident is planned</p>\n<p>A hazard causes damage, while an accident does not</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
-        "id": 1776122922607,
-        "file": null,
-        "type": "paragraph",
-        "order": 131,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Importance of Reporting in the Workplace</strong></li></ol><p>Reporting accidents or hazards in the workplace is essential for fostering a proactive safety culture, especially when handling tools like screwdrivers, multimeters, or compressed air in computer servicing.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922608,
+        "id": 1777220247000,
         "file": null,
         "type": "image",
-        "order": 132,
-        "title": "",
+        "order": 44,
+        "title": "Reporting and Documenting Accidents or Hazards",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122934675-33.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122934675-33.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122934675-33.png",
-        "fileName": "docx-lesson-2-1776122934675-33.png"
-      },
-      {
-        "id": 1776122922609,
-        "file": null,
-        "type": "paragraph",
-        "order": 133,
-        "title": "",
-        "caption": "",
-        "content": "<p><strong>i. Ensuring Worker Safety</strong></p><p>Timely reporting identifies risks from tool misuse—such as cuts from wire strippers or shocks from LAN testers—allowing immediate corrective actions like retraining or equipment replacement to prevent recurrence. It tracks patterns, like frequent ESD strap failures, enabling targeted interventions that protect technicians from injuries.<sup>[55]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922610,
-        "file": null,
-        "type": "subtopic",
-        "order": 134,
-        "title": "ii. Legal and Organizational Compliance",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922611,
-        "file": null,
-        "type": "image",
-        "order": 135,
-        "title": "",
-        "images": [
+            "url": "/uploads/lessons/036_reporting_accidents_or_hazards_in_the_wo.webp",
+            "file": null,
+            "fileName": "036_reporting_accidents_or_hazards_in_the_wo.webp",
+            "caption": "Reporting accidents or hazards in the workplace is essential"
+          },
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122934789-34.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122934789-34.png"
-          }
-        ],
-        "layout": "text-left",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122934789-34.png",
-        "fileName": "docx-lesson-2-1776122934789-34.png",
-        "sideTexts": [
-          "<p>Philippine regulations under Republic Act No. 11058 (Occupational Safety and Health Standards) and DOLE Department Order No. 198-18 mandate immediate reporting of workplace accidents via Employer’s Report of Occupational Injuries/Illnesses (Form WAIR/BFS-1000-S-OD) within 24 hours for fatalities/dangerous occurrences or 30 days for disabling injuries in electronics firms, detailing incidents like crimping tool injuries or cleaning exposures. Non-compliance risks fines from ₱20,000 to ₱100,000 per violation plus possible business suspension; internal logs ensure DOLE Regional Office audits and support SSS/Pag-IBIG insurance claims. <sup>[60][61][62]</sup></p>"
-        ],
-        "layerImages": [
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-2-1776122934789-34.png",
-              "caption": "",
-              "fileName": "docx-lesson-2-1776122934789-34.png"
-            }
-          ]
-        ]
-      },
-      {
-        "id": 1776122922612,
-        "file": null,
-        "type": "subtopic",
-        "order": 136,
-        "title": "iii. Improving Workplace Processes",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922613,
-        "file": null,
-        "type": "paragraph",
-        "order": 137,
-        "title": "",
-        "caption": "",
-        "content": "<p>Documented reports reveal trends, such as overuse of compressed air causing slips, prompting better storage or alternatives like mats. Analysis drives enhancements—like adding glove stations near diagnostic tools—reducing downtime and boosting efficiency in tool-heavy environments.<sup>[58][59]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922614,
-        "file": null,
-        "type": "paragraph",
-        "order": 138,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Facilitating Emergency Response</strong></li></ol><p>Timely reporting of tool-related incidents in electronics servicing accelerates coordinated responses and limits escalation.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922615,
-        "file": null,
-        "type": "subtopic",
-        "order": 139,
-        "title": "Ensuring Proper First Aid and Medical Assistance",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922616,
-        "file": null,
-        "type": "paragraph",
-        "order": 140,
-        "title": "",
-        "caption": "",
-        "content": "<p>Detailed reporting captures critical info—like the exact tool involved (e.g., multimeter probe slip causing a burn), injury severity (minor cut from needle nose pliers vs. deep laceration), location, time, and witness accounts—enabling first responders to grab the right supplies fast, such as burn gel for electrical shocks, sterile bandages for wire stripper nicks, or eye irrigation for compressed air debris. It lists nearby first aid kits stocked with specifics (gauze, antiseptics, splints) and identifies certified staff for CPR/AED use, cutting response time from minutes to seconds; attach incident photos, tool condition notes, or even voltage readings to inform paramedics precisely, while immediate supervisor notification feeds into OSHA 301 forms due within 24 hours to track and prevent repeats.<sup>[55][58]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922617,
-        "file": null,
-        "type": "subtopic",
-        "order": 141,
-        "title": "OSHA 301 FORMS",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922618,
-        "file": null,
-        "type": "image",
-        "order": 142,
-        "title": "",
-        "images": [
+            "url": "/uploads/lessons/037_ii_legal_and_organizational_compliance.webp",
+            "file": null,
+            "fileName": "037_ii_legal_and_organizational_compliance.webp",
+            "caption": "ii"
+          },
           {
-            "url": "/uploads/lessons/docx-lesson-2-1776122935580-35.png",
-            "caption": "",
-            "fileName": "docx-lesson-2-1776122935580-35.png"
+            "url": "/uploads/lessons/038_osha_301_forms.webp",
+            "file": null,
+            "fileName": "038_osha_301_forms.webp",
+            "caption": "OSHA 301 FORMS"
           }
         ],
-        "layout": "single",
+        "layout": "grid-3",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-2-1776122935580-35.png",
-        "fileName": "docx-lesson-2-1776122935580-35.png"
-      },
-      {
-        "id": 1776122922619,
-        "file": null,
-        "type": "subtopic",
-        "order": 143,
-        "title": "Preventing Worsening of the Incident or Hazard",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922620,
-        "file": null,
-        "type": "paragraph",
-        "order": 144,
-        "title": "",
-        "caption": "",
-        "content": "<p>Immediate, thorough reports isolate hazards instantly like tagging a malfunctioning LAN tester to avoid further shocks or cordoning off areas with spilled isopropyl from lint-free cloths, stopping minor issues like ESD wrist strap snaps from escalating to full component damage or multi-person incidents. They trigger chain-stopping actions: quarantine suspect tools (crimpers with worn dies), power-down zones for overheating flashlights, or ventilate for air duster fumes; root-cause analysis from logs uncovers patterns (frequent screwdriver slips from poor handles), leading to fixes like mandatory glove use or tool audits, plus safety alerts (emails, posters) warning teams of risks like loopback adapter overloads for preemptive shutdowns and evacuations.<sup>[56][59]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922621,
-        "file": null,
-        "type": "paragraph",
-        "order": 145,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Types of Incidents That Must Be Reported </strong></li></ol><p>Under Philippine DOLE RA 11058, report all incidents within specified timelines using WAIR Form (BFS-1000-S-OD) to Regional Offices for investigation and prevention.</p><p><strong>i. Accidents (minor, major injuries)</strong></p><p>Minor accidents—like cuts from wire strippers requiring stitches or burns from multimeter shocks—must be reported within 30 days if they cause absence from work beyond the day of incident. Major accidents, such as deep lacerations from crimping tools needing hospitalization, fatalities from electrical shocks, or amputations from wire cutters, require immediate notification within 24 hours, triggering DOLE inspection and possible work suspension. <sup>[60][61]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922622,
-        "file": null,
-        "type": "subtopic",
-        "order": 146,
-        "title": "ii. Workplace Hazards",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922623,
-        "file": null,
-        "type": "paragraph",
-        "order": 147,
-        "title": "",
-        "caption": "",
-        "content": "<p>Report identified hazards immediately, even without injury, such as frayed ESD wrist straps risking static damage, ungrounded anti-static mats, leaking compressed air cans, or worn screwdriver tips that could slip; these \"near-misses\" or dangerous conditions prompt preventive orders like tool replacement or retraining to avoid accidents.<sup>[60]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776122922624,
-        "file": null,
-        "type": "subtopic",
-        "order": 148,
-        "title": "iii. Property or Equipment Damage",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776122922625,
-        "file": null,
-        "type": "paragraph",
-        "order": 149,
-        "title": "",
-        "caption": "",
-        "content": "<p>Document damage over ₱40,000 or affecting operations—like shorted motherboards from LAN tester misuse, fried circuits from improper crimping, or corroded tools from poor storage—within 24-30 days; includes incidents disabling equipment such as dropped part retriever shattering components, ensuring compensation claims via SSS and process improvements.<sup>[60][61]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
+        "content": "/uploads/lessons/036_reporting_accidents_or_hazards_in_the_wo.webp",
+        "fileName": "036_reporting_accidents_or_hazards_in_the_wo.webp"
       },
       {
         "id": 1776122922629,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 150,
+        "order": 45,
         "title": "",
         "caption": "",
         "content": "",
@@ -2413,16 +1234,6 @@
             "correctAnswer": 0
           }
         ]
-      },
-      {
-        "id": 1776122922631,
-        "file": null,
-        "type": "references",
-        "order": 151,
-        "title": "",
-        "caption": "",
-        "content": "https://safetyculture.com/topics/occupational-health-and-safety%5C\nhttps://www.slideshare.net/slideshow/different-hazards-in-the-ict-environment-pptx/272302863\nhttps://www.dreamstime.com/damaged-black-electric-cord-white-background-dangerous-broken-power-electrical-cable-damaged-black-electric-cord-white-image141938039\nhttps://harrison-electric.com/Blog/entryid/170/electrical-outlets-the-dangers-of-overloading-your-sockets\nhttps://watchdoginspectors.com/electrical-safety/\nhttps://www.simpsonmillar.co.uk/personal-injury-solicitors/accident-at-work-claims/defective-equipment-injury-claims/\nhttps://www.scribd.com/presentation/649779671/OHS-Computer-Hardware-Servicin\nhttps://www.slideshare.net/slideshow/computer-hardware-servicing-practice-occupational-health-and-safety-procedure/91253846\nhttps://legalclarity.org/electrical-hazard-definition-types-risks-and-causes/\nhttps://www.scribd.com/document/396648721/Tools-in-Computer-Hardware-Servicing\nhttps://www.wrenchandscrewdriver.com/how-to-use-a-phillips-head-screwdriver/\nhttps://www.wrenchandscrewdriver.com/how-to-use-a-flat-head-screwdriver/\nhttps://www.wrenchandscrewdriver.com/how-to-use-torx-screwdriver/\nhttps://protguide.com/tips/hex-key-screwdriver/\nhttps://www.wrenchandscrewdriver.com/how-to-use-needle-nose-pliers/\nhttps://www.electricianmentor.com/how-to-use-a-wire-cutter/\nhttps://alloftheanimals.com/how-should-a-part-retriever-be-used/\nhttps://www.clipperpro.com/blogs/news/how-to-use-tweezers-effectively\nhttps://hi-spec.com/blogs/news/how-to-use-pliers-and-tweezers-effectively-in-computer-repairs\nhttps://cleanhomeexpert.co.uk/lint-free-cloth-an-essential-cleaning-tool-for-a-spotless-finish/\nhttps://www.powertoolslab.com/how-to-use-an-air-compressor/\nhttps://www.raptoris.com.au/how-to-use-a-cable-tie-hand-tensioning-tool/\nhttps://www.wolontek.com/loopback-cables-explained-network-testing/\nhttps://ascentoptics.com/blog/loopback-adapter/\nhttps://coconote.app/notes/c2b3eabc-c257-4bfd-bcce-b3723a121017\nhttps://www.osha.com/blog/incident-accident-difference\nhttps://www.safetyevolution.com/blog/7-essential-elements-of-an-incident-report-and-a-free-guide\nhttps://www.osha.gov/hand-and-power-tools\nhttps://www.iso.org/iso-9001-quality-management.html\nhttps://www.slideshare.net/slideshow/tle-lesson-1-computer-servicing-toolspptx/266377276\nhttps://www.storenational.com/blog/how-to-store-tools-properly\nhttps://www.slideshare.net/slideshow/computer-electronicsservicinglearningmodule/22773133\nhttps://www.scribd.com/document/425904003/Hand-Outs\nhttps://www.creativesafetysupply.com/qa/tool-organization/what-tools-can-be-organized\nhttps://www.studocu.com/ph/document/cor-jesu-college/bs-physical-education/css-module-4tle-te-10-q1-w2-mod2-ict-css/33209450\nhttps://www.scribd.com/presentation/738448197/PROPER-STORAGE-OF-TOOLS-AND-EQUIPMENT\nhttps://threesixtysafety.com/safe-storage-practices-for-tools-and-equipment/\nhttps://www.lenovo.com/us/en/glossary/what-is-wire-stripper/\nhttps://en.wikipedia.org/wiki/Wire_stripper\nhttps://haisstronica.com/blogs/wire-connectors/what-is-a-crimping-tool-used-for\nhttps://en.wikipedia.org/wiki/Crimp_(joining)\nhttps://www.emeadstools.com/news-show-212.html\nhttps://www.lenovo.com/us/en/glossary/what-is-rj-45/\nhttps://www.geeksforgeeks.org/computer-networks/what-is-an-rj45-connector/\nhttps://www.anixter.com/en_us/resources/literature/techbriefs/what-is-an-rj45-connector.html\nhttps://techterms.com/definition/rj45\nhttps://www.instructables.com/How-to-install-RJ45-plug-in-5-minutes/\nhttps://www.juniper.net/documentation/us/en/software/junos/interfaces-ethernet/topics/topic-map/ethernet-fast-and-gigabit-loopback-testing.html\nhttps://community.spiceworks.com/t/are-there-dangers-with-loopback-plugs/346573\nhttps://www.corfix.com/blog/oshas-new-electronic-injury-submission-requirements/\nhttps://safetypartnersinc.com/2025-osha-electronic-injury-and-illness-submission-requirements-what-you-need-to-know/\nhttp://www.osha.gov/recordkeeping\nhttps://jetblacksafety.com/blog/post/25-faq-workplace-accidents-recording-and-reporting.html\nhttps://www.ehs.com/blogs/oshas-2023-electronic-reporting-final-rule-your-faqs-answered/\nhttps://sprout.ph/articles/dole-osh-incident-reporting-guide-philippines/\nhttps://library.laborlaw.ph/r-a-11058-occupational-safety-and-health-standards/\nhttps://trainovate.com.ph/wp-content/uploads/2023/03/OSH-PROGRAM-FORM.pdf\nhttps://www.hsestudyguide.com/hazard-risk-accident-incident-and-near-miss/\nhttps://www.lawyer-philippines.com/articles/dole-requirements-for-employer-memo-after-workplace-incident-in-the-philippines\nhttps://www.scribd.com/document/417883807/WAIR-Employer-s-Work-Accident-Illness-Report\nhttps://www.tripleiconsulting.com/wair-with-dole-what-is-it/\nhttps://www.scribd.com/document/478759174/DOLE-BQF-WAIR-with-COVID-final\nhttps://www.dolecavite.com/downloadable-forms\nhttps://static1.squarespace.com/static/61e4207ee869ca1e5bddfe81/t/6826d3e453b99f75a81a8824/1747375080281/DOLE+OSH+Compliance+Checklist.pdf\nhttps://www.scribd.com/document/706972943/Osh-Form-Dole\nhttps://www.dolecavite.com/osh-and-other-reports\nhttps://www.respicio.ph/commentaries/report-unsafe-working-conditions-to-dole-philippines\nhttps://safetylineloneworker.com/blog/workplace-hazards\nhttps://publichealth.tulane.edu/blog/types-of-hazards-in-the-workplace/\nhttps://www.hsestudyguide.com/25-most-common-workplace-hazards/\nhttps://lohp.berkeley.edu/wp-content/uploads/2021/03/11-Factsheet_H_JobHazards.pdf",
-        "fileName": null
       }
     ],
     "diagnosticQuestions": [
@@ -3449,12 +2260,13 @@
       {
         "id": 1776122922634,
         "file": null,
-        "type": "subtopic",
+        "type": "paragraph",
         "order": 4,
-        "title": "Narito ang 4 na hazard na tatalakayin sa aralin na ito",
+        "title": "",
         "caption": "",
-        "content": "",
-        "fileName": null
+        "content": "<p>Narito ang 4 na hazard na tatalakayin sa aralin na ito</p>",
+        "fileName": null,
+        "contentLayout": "text"
       },
       {
         "id": 1776122922635,
@@ -4156,12 +2968,13 @@
       {
         "id": 1776122922685,
         "file": null,
-        "type": "subtopic",
+        "type": "paragraph",
         "order": 46,
-        "title": "Halimbawa",
+        "title": "",
         "caption": "",
-        "content": "",
-        "fileName": null
+        "content": "<p>Halimbawa</p>",
+        "fileName": null,
+        "contentLayout": "text"
       },
       {
         "id": 1776122922686,

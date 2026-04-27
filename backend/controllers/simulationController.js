@@ -22,6 +22,12 @@ const getSimulationColumnSet = async () => {
   return simulationColumnCache;
 };
 
+const simulationSelectField = (columns, columnName, fallbackSql = 'NULL') => {
+  return columns.has(columnName)
+    ? `s.${columnName} AS ${columnName}`
+    : `${fallbackSql} AS ${columnName}`;
+};
+
 // Get all simulations
 const getAllSimulations = async (req, res) => {
   try {
@@ -33,11 +39,25 @@ const getAllSimulations = async (req, res) => {
 
     const userId = req.query.userId;
     
+    const columns = await getSimulationColumnSet();
+    const selectFields = [
+      's.SimulationID',
+      simulationSelectField(columns, 'ModuleID', '0'),
+      's.SimulationTitle',
+      simulationSelectField(columns, 'Description', "''"),
+      simulationSelectField(columns, 'ActivityType', "''"),
+      simulationSelectField(columns, 'MaxScore', '0'),
+      simulationSelectField(columns, 'TimeLimit', '0'),
+      simulationSelectField(columns, 'Instructions', "''"),
+      simulationSelectField(columns, 'SimulationOrder', '0'),
+      simulationSelectField(columns, 'Is_Locked', '0'),
+      simulationSelectField(columns, 'created_at', 'NULL'),
+      simulationSelectField(columns, 'updated_at', 'NULL')
+    ];
+
     let query = `
       SELECT
-        s.SimulationID, s.ModuleID, s.SimulationTitle, s.Description,
-        s.ActivityType, s.MaxScore, s.TimeLimit, s.Instructions,
-        s.SimulationOrder, s.Is_Locked, s.created_at, s.updated_at,
+        ${selectFields.join(', ')},
         sp.Score,
         sp.Attempts,
         sp.TimeSpent,
@@ -75,11 +95,24 @@ const getSimulationsByModule = async (req, res) => {
     const columns = await getSimulationColumnSet();
     const hasModuleColumn = columns.has('ModuleID');
 
+    const selectFields = [
+      's.SimulationID',
+      simulationSelectField(columns, 'ModuleID', '0'),
+      's.SimulationTitle',
+      simulationSelectField(columns, 'Description', "''"),
+      simulationSelectField(columns, 'ActivityType', "''"),
+      simulationSelectField(columns, 'MaxScore', '0'),
+      simulationSelectField(columns, 'TimeLimit', '0'),
+      simulationSelectField(columns, 'Instructions', "''"),
+      simulationSelectField(columns, 'SimulationOrder', '0'),
+      simulationSelectField(columns, 'Is_Locked', '0'),
+      simulationSelectField(columns, 'created_at', 'NULL'),
+      simulationSelectField(columns, 'updated_at', 'NULL')
+    ];
+
     const baseSelect = `
       SELECT
-        s.SimulationID, s.ModuleID, s.SimulationTitle, s.Description,
-        s.ActivityType, s.MaxScore, s.TimeLimit, s.Instructions,
-        s.SimulationOrder, s.Is_Locked, s.created_at, s.updated_at,
+        ${selectFields.join(', ')},
         sp.Score,
         sp.Attempts,
         sp.TimeSpent,
@@ -308,8 +341,15 @@ const deleteSimulation = async (req, res) => {
 const getSimulationRuntimeConfig = async (req, res) => {
   try {
     const { id } = req.params;
+    const columns = await getSimulationColumnSet();
+    const selectFields = [
+      'SimulationID',
+      'SimulationTitle',
+      columns.has('SimulationOrder') ? 'SimulationOrder' : '0 AS SimulationOrder',
+      columns.has('ZoneData') ? 'ZoneData' : 'NULL AS ZoneData'
+    ];
     const [rows] = await pool.query(
-      'SELECT SimulationID, SimulationTitle, SimulationOrder, ZoneData FROM simulation WHERE SimulationID = ?',
+      `SELECT ${selectFields.join(', ')} FROM simulation WHERE SimulationID = ?`,
       [id]
     );
     if (rows.length === 0) {

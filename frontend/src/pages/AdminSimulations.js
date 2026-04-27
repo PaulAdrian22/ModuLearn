@@ -38,6 +38,28 @@ const SKILL_TYPE_THEME = {
   }
 };
 
+const DOCX_SIMULATION_SKILL_MAP = {
+  3: {
+    1: 'Memorization',
+    2: 'Technical Comprehension',
+    3: 'Analytical Thinking',
+    4: 'Problem Solving',
+    5: 'Critical Thinking',
+    6: 'Memorization',
+    7: 'Technical Comprehension',
+    8: 'Analytical Thinking',
+    9: 'Problem Solving',
+    10: 'Critical Thinking'
+  },
+  4: {
+    1: 'Problem Solving',
+    2: 'Critical Thinking',
+    3: 'Analytical Thinking',
+    4: 'Technical Comprehension',
+    5: 'Memorization'
+  }
+};
+
 const ACTIVITY_TYPE_THEME = {
   Disassembling: {
     label: 'Disassembling',
@@ -56,13 +78,26 @@ const ACTIVITY_TYPE_THEME = {
 };
 
 const getActivityType = (simulation = {}) => {
-  const rawType = String(simulation?.ActivityType || '').trim().toLowerCase();
-  if (rawType.includes('disassembl')) return 'Disassembling';
-  if (rawType.includes('assembl')) return 'Assembling';
+  const moduleId = Number(simulation?.ModuleID || 0);
+  if (moduleId === 3) return 'Disassembling';
+  if (moduleId === 4) return 'Assembling';
 
   const title = String(simulation?.SimulationTitle || '').toLowerCase();
   if (/^\s*installing\b/.test(title) || /\bassembl/.test(title)) return 'Assembling';
   return 'Disassembling';
+};
+
+const getDocxSkillForSimulation = (simulation = {}) => {
+  const moduleId = Number(simulation?.ModuleID || 0);
+  const simulationOrder = Number(simulation?.SimulationOrder || 0);
+  if (!moduleId || !simulationOrder) return '';
+
+  return DOCX_SIMULATION_SKILL_MAP[moduleId]?.[simulationOrder] || '';
+};
+
+const getSkillTypeAssignedPerSimulation = (simulation = {}) => {
+  // Keep admin card skill colors aligned with the learner simulation list.
+  return getDocxSkillForSimulation(simulation);
 };
 
 const getSkillTheme = (rawSkillType) => {
@@ -114,8 +149,10 @@ const AdminSimulations = () => {
           recovered.push({
             SimulationID: detailSimulation.SimulationID,
             SimulationTitle: detailSimulation.SimulationTitle,
+            ModuleID: detailSimulation.ModuleID,
             Description: detailSimulation.Description,
             ActivityType: detailSimulation.ActivityType,
+            SkillType: detailSimulation.SkillType,
             MaxScore: detailSimulation.MaxScore,
             TimeLimit: detailSimulation.TimeLimit,
             SimulationOrder: detailSimulation.SimulationOrder,
@@ -187,6 +224,9 @@ const AdminSimulations = () => {
 
   const sortedSimulations = useMemo(() => {
     return [...simulations].sort((a, b) => {
+      const moduleDelta = Number(a.ModuleID || 0) - Number(b.ModuleID || 0);
+      if (moduleDelta !== 0) return moduleDelta;
+
       const orderDelta = Number(a.SimulationOrder || 0) - Number(b.SimulationOrder || 0);
       if (orderDelta !== 0) return orderDelta;
 
@@ -273,8 +313,8 @@ const AdminSimulations = () => {
             {filteredSimulations.map((simulation, index) => {
               const activityType = getActivityType(simulation);
               const activityTheme = ACTIVITY_TYPE_THEME[activityType] || ACTIVITY_TYPE_THEME.Disassembling;
-              const activityOrder = simulation.activityOrder || simulation.SimulationOrder || index + 1;
-              const resolvedSkillType = String(simulation?.SkillType || '').trim();
+              const activityOrder = index + 1;
+              const resolvedSkillType = getSkillTypeAssignedPerSimulation(simulation);
               const { skillType, solid, soft, text } = getSkillTheme(resolvedSkillType);
 
               return (
@@ -295,19 +335,25 @@ const AdminSimulations = () => {
                         className="px-3 py-1 text-xs font-semibold rounded-full"
                         style={{ backgroundColor: activityTheme.soft, color: activityTheme.text }}
                       >
-                        Activity {activityOrder}
+                        Available
                       </span>
                     </div>
 
                     {simulation.hasAdminOverride ? (
-                      <span className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full text-white bg-emerald-500">
+                      <span
+                        className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full text-white"
+                        style={{ backgroundColor: solid }}
+                      >
                         <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                         Admin Override
                       </span>
                     ) : (
-                      <span className="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-700">
+                      <span
+                        className="px-3 py-1 text-xs font-semibold rounded-full"
+                        style={{ backgroundColor: soft, color: text }}
+                      >
                         Default Manifest
                       </span>
                     )}
@@ -376,7 +422,7 @@ const AdminSimulations = () => {
                     type="button"
                     onClick={() => handleEdit(simulation.SimulationID)}
                     className="w-full py-3 text-white rounded-lg font-medium text-sm flex items-center justify-center gap-2 shadow-sm"
-                    style={{ backgroundColor: activityTheme.solid }}
+                    style={{ backgroundColor: solid }}
                   >
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5" />
