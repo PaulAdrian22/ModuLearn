@@ -316,7 +316,7 @@ const Simulations = () => {
                       <div
                         className="h-2 rounded-full transition-all"
                         style={{
-                          width: `${isCompleted ? scorePercent : 0}%`,
+                          width: `${isCompleted ? 100 : 0}%`,
                           backgroundColor: isCompleted ? solid : '#9CA3AF'
                         }}
                       ></div>

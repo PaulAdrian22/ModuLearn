@@ -8,7 +8,7 @@ const Login = () => {
   const { login } = useAuth();
   const loginScale = 'min(1, calc((100dvh - 72px) / 760))';
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
   });
   const [error, setError] = useState('');
@@ -97,17 +97,18 @@ const Login = () => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-semibold text-[#0B2B4C] mb-2">
-                Email Address
+              <label htmlFor="username" className="block text-sm font-semibold text-[#0B2B4C] mb-2">
+                Username
               </label>
               <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
+                type="text"
+                id="username"
+                name="username"
+                value={formData.username}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-[#2BC4B3] focus:outline-none transition-all text-[#0B2B4C] placeholder-gray-400"
-                placeholder="Enter your email"
+                placeholder="Enter your username"
+                autoComplete="username"
                 required
               />
             </div>

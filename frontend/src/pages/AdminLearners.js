@@ -634,7 +634,6 @@ const AdminLearners = () => {
                 <div className="min-w-[300px]">
                   <div className="flex flex-wrap gap-3 mb-3">
                     <button className="px-5 py-2 bg-highlight text-white rounded-lg font-semibold">Enrolled Lessons</button>
-                    <button className="px-5 py-2 bg-[#4A4A4A] text-white rounded-lg font-semibold">Suspend Learner</button>
                     <button onClick={() => handleDeleteLearner(selectedLearner.UserID)} className="px-5 py-2 bg-[#FF7D7D] text-white rounded-lg font-semibold">Delete Learner</button>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-4 text-base md:text-lg text-text-primary">

@@ -17,46 +17,58 @@ const handleValidationErrors = (req, res, next) => {
   next();
 };
 
+// Accept either `username` or legacy `email` field as the credential.
+const normalizeUsernameField = (req, _res, next) => {
+  if (req.body && typeof req.body === 'object') {
+    if (!req.body.username && req.body.email) {
+      req.body.username = req.body.email;
+    }
+  }
+  next();
+};
+
 // User registration validation
 const validateRegistration = [
+  normalizeUsernameField,
+
   body('name')
     .trim()
     .notEmpty().withMessage('Name is required')
     .isLength({ min: 2, max: 100 }).withMessage('Name must be 2-100 characters'),
-  
-  body('email')
+
+  body('username')
     .trim()
-    .notEmpty().withMessage('Email is required')
-    .isEmail().withMessage('Invalid email format')
-    .normalizeEmail(),
-  
+    .notEmpty().withMessage('Username is required')
+    .isLength({ min: 3, max: 100 }).withMessage('Username must be 3-100 characters')
+    .matches(/^[A-Za-z0-9._@-]+$/).withMessage('Username may only contain letters, numbers, and . _ - @'),
+
   body('password')
     .notEmpty().withMessage('Password is required')
     .isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
-  
+
   body('age')
     .optional()
     .isInt({ min: 1, max: 120 }).withMessage('Age must be between 1 and 120'),
-  
+
   body('educationalBackground')
     .optional()
     .trim()
     .isLength({ max: 100 }).withMessage('Educational background must be max 100 characters'),
-  
+
   handleValidationErrors
 ];
 
 // User login validation
 const validateLogin = [
-  body('email')
+  normalizeUsernameField,
+
+  body('username')
     .trim()
-    .notEmpty().withMessage('Email is required')
-    .isEmail().withMessage('Invalid email format')
-    .normalizeEmail(),
-  
+    .notEmpty().withMessage('Username is required'),
+
   body('password')
     .notEmpty().withMessage('Password is required'),
-  
+
   handleValidationErrors
 ];
 

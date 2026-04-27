@@ -45,7 +45,9 @@ const SimulationActivity = () => {
   const displayedTitle = title.replace(/^activity\s*\d+\s*:?\s*/i, '').trim() || title;
   const maxScore = Number(simulation?.MaxScore || 100);
   const score = Math.max(0, maxScore - mistakes * PENALTY_PER_MISTAKE);
-  const progressPercent = totalSteps > 0 ? Math.round((revealedIds.size / totalSteps) * 100) : 0;
+  const progressPercent = totalSteps > 0
+    ? (isCompleted ? 100 : Math.min(100, Math.round((Math.min(currentIndex, totalSteps) / totalSteps) * 100)))
+    : (isCompleted ? 100 : 0);
 
   // Fetch simulation + merged config.
   useEffect(() => {

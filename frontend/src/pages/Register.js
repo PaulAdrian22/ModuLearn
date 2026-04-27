@@ -10,7 +10,7 @@ const Register = () => {
   const [formData, setFormData] = useState({
     name: '',
     age: '',
-    email: '',
+    username: '',
     password: '',
     confirmPassword: ''
   });
@@ -131,19 +131,21 @@ const Register = () => {
               />
             </div>
 
-            {/* Email Address */}
+            {/* Username */}
             <div>
               <label className="block text-sm font-semibold mb-2" style={{ color: '#173F65' }}>
-                Email Address <span className="text-red-500">*</span>
+                Username <span className="text-red-500">*</span>
               </label>
               <input
-                type="email"
-                name="email"
-                value={formData.email}
+                type="text"
+                name="username"
+                value={formData.username}
                 onChange={handleChange}
-                placeholder="Enter your email"
+                placeholder="Choose a username"
                 className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-highlight focus:outline-none transition-all placeholder-gray-400"
                 style={{ color: '#173F65' }}
+                autoComplete="username"
+                minLength="3"
                 required
               />
             </div>

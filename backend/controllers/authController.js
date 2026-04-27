@@ -6,9 +6,9 @@ const jwt = require('jsonwebtoken');
 const { query } = require('../config/database');
 
 // Generate JWT token
-const generateToken = (userId, email, name, role = 'student') => {
+const generateToken = (userId, username, name, role = 'student') => {
   return jwt.sign(
-    { userId, email, name, role },
+    { userId, username, email: username, name, role },
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRE || '24h' }
   );
@@ -17,44 +17,46 @@ const generateToken = (userId, email, name, role = 'student') => {
 // Register new user
 const register = async (req, res) => {
   try {
-    const { name, email, password, age, educationalBackground } = req.body;
-    
-    // Check if user already exists
+    const { name, password, age, educationalBackground } = req.body;
+    const username = (req.body.username || req.body.email || '').trim();
+
+    // Check if user already exists (Email column stores the username)
     const existingUser = await query(
       'SELECT UserID FROM user WHERE Email = ?',
-      [email]
+      [username]
     );
-    
+
     if (existingUser.length > 0) {
       return res.status(400).json({
         error: 'Registration Failed',
-        message: 'Email already registered'
+        message: 'Username already taken'
       });
     }
-    
+
     // Hash password
     const hashedPassword = await bcrypt.hash(
       password,
       parseInt(process.env.BCRYPT_ROUNDS) || 10
     );
-    
-    // Insert new user
+
+    // Insert new user (Email column stores username for backward compatibility)
     const result = await query(
       'INSERT INTO user (Name, Email, Password, Age, EducationalBackground, Role) VALUES (?, ?, ?, ?, ?, ?)',
-      [name, email, hashedPassword, age || null, educationalBackground || null, 'student']
+      [name, username, hashedPassword, age || null, educationalBackground || null, 'student']
     );
-    
+
     const userId = result.insertId;
-    
+
     // Generate token
-    const token = generateToken(userId, email, name, 'student');
-    
+    const token = generateToken(userId, username, name, 'student');
+
     res.status(201).json({
       message: 'Registration successful',
       user: {
         userId,
         name,
-        email,
+        username,
+        email: username,
         age,
         educationalBackground
       },
@@ -73,51 +75,53 @@ const register = async (req, res) => {
 // Login user
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    
-    // Query user by email (updated to include avatar fields)
+    const { password } = req.body;
+    const username = (req.body.username || req.body.email || '').trim();
+
+    // Query user by username (stored in Email column for legacy reasons)
     const users = await query(
       'SELECT UserID, Name, Email, Password, Age, EducationalBackground, profile_picture, avatar_type, default_avatar, Role, last_login FROM user WHERE Email = ?',
-      [email]
+      [username]
     );
-    
+
     if (users.length === 0) {
       return res.status(401).json({
         error: 'Authentication Failed',
-        message: 'Invalid email or password'
+        message: 'Invalid username or password'
       });
     }
-    
+
     const user = users[0];
-    
+
     // Verify password
     const isValidPassword = await bcrypt.compare(password, user.Password);
-    
+
     if (!isValidPassword) {
       return res.status(401).json({
         error: 'Authentication Failed',
-        message: 'Invalid email or password'
+        message: 'Invalid username or password'
       });
     }
-    
+
     // Update last login
     await query(
       'UPDATE user SET last_login = CURRENT_TIMESTAMP WHERE UserID = ?',
       [user.UserID]
     );
-    
+
     // Generate token
     const token = generateToken(user.UserID, user.Email, user.Name, user.Role || 'student');
-    
+
     // Only treat a learner as "new" on their first-ever successful login.
     // This prevents the initial assessment from reappearing for returning users.
     const isNewUser = !user.last_login;
-    
+
     res.json({
       message: 'Login successful',
       user: {
         userId: user.UserID,
         name: user.Name,
+        username: user.Email,
         email: user.Email,
         age: user.Age,
         educationalBackground: user.EducationalBackground,
@@ -163,6 +167,7 @@ const verifyToken = async (req, res) => {
       user: {
         userId: users[0].UserID,
         name: users[0].Name,
+        username: users[0].Email,
         email: users[0].Email,
         age: users[0].Age,
         educationalBackground: users[0].EducationalBackground,
