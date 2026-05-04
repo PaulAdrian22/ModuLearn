@@ -19,7 +19,8 @@ create table public.profiles (
     id                      uuid primary key references auth.users(id) on delete cascade,
     name                    text not null,
     username                text unique,
-    age                     int,
+    age                     int check (age >= 15 and age <= 65),
+    gender                  text check (gender in ('Male','Female','Prefer not to say')),
     educational_background  text,
     role                    text not null default 'student'
                             check (role in ('student', 'admin')),
@@ -42,11 +43,13 @@ security definer
 set search_path = public
 as $$
 begin
-    insert into public.profiles (id, name, username)
+    insert into public.profiles (id, name, username, age, gender)
     values (
         new.id,
         coalesce(new.raw_user_meta_data->>'name', split_part(new.email, '@', 1)),
-        coalesce(new.raw_user_meta_data->>'username', split_part(new.email, '@', 1))
+        coalesce(new.raw_user_meta_data->>'username', split_part(new.email, '@', 1)),
+        nullif(new.raw_user_meta_data->>'age', '')::int,
+        nullif(new.raw_user_meta_data->>'gender', '')
     )
     on conflict (id) do nothing;
     return new;

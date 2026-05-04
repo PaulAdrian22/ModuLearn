@@ -41,6 +41,9 @@ const AdminDashboard = () => {
   const [selectedToggleMetric, setSelectedToggleMetric] = useState('lessonProgress');
   const [showExportModal, setShowExportModal] = useState(false);
   const [selectedExportMetrics, setSelectedExportMetrics] = useState(['lessonProgress', 'lessonEngagement']);
+  const [notifPage, setNotifPage] = useState(1);
+  const [selectedNotifIndices, setSelectedNotifIndices] = useState(new Set());
+  const [localNotifications, setLocalNotifications] = useState([]);
 
   useEffect(() => {
     if (user?.role !== 'admin') navigate('/dashboard');
@@ -88,6 +91,9 @@ const AdminDashboard = () => {
 
   const handleOpenNotificationsModal = () => {
     setShowNotificationsModal(true);
+    setNotifPage(1);
+    setSelectedNotifIndices(new Set());
+    setLocalNotifications([...notifications]);
 
     const notificationsSignature = buildNotificationsSignature(notifications);
     const seenSignatureKey = user?.userId
@@ -462,52 +468,164 @@ const AdminDashboard = () => {
       </div>
 
       {/* Notifications Modal */}
-      {showNotificationsModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[80vh] overflow-hidden">
-            <div className="bg-highlight px-6 py-4 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-white">Notifications</h2>
-              <button
-                onClick={() => setShowNotificationsModal(false)}
-                className="text-white hover:text-gray-200 transition-colors"
-              >
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
+      {showNotificationsModal && (() => {
+        const NOTIFS_PER_PAGE = 20;
+        const totalPages = Math.max(1, Math.ceil(localNotifications.length / NOTIFS_PER_PAGE));
+        const safePage = Math.min(notifPage, totalPages);
+        const pageStart = (safePage - 1) * NOTIFS_PER_PAGE;
+        const pageNotifs = localNotifications.slice(pageStart, pageStart + NOTIFS_PER_PAGE);
+        const pageIndices = pageNotifs.map((_, i) => pageStart + i);
+        const allPageSelected = pageIndices.length > 0 && pageIndices.every(i => selectedNotifIndices.has(i));
+        const someSelected = selectedNotifIndices.size > 0;
 
-            <div className="p-6 overflow-y-auto max-h-[calc(80vh-80px)] custom-scrollbar">
-              {notifications.length === 0 ? (
-                <p className="text-gray-400 text-center py-10">No notifications yet</p>
-              ) : (
-                <div className="space-y-4">
-                  {notifications.map((notification, index) => {
-                    const typeColors = {
-                      new_user: '#42C5B6',
-                      enrollment: '#589AD7',
-                      completion: '#66BB6A',
-                      issue: '#EF5350'
-                    };
-                    const barColor = typeColors[notification.type] || '#42C5B6';
-                    return (
-                      <div key={index} className="border-b border-gray-100 pb-4 last:border-b-0">
-                        <div className="flex gap-3">
-                          <div className="flex-shrink-0 w-1 rounded-full" style={{ backgroundColor: barColor }}></div>
-                          <div className="flex-1">
-                            <p className="text-sm font-semibold text-gray-800 mb-1">{notification.date}</p>
+        const toggleSelectAll = () => {
+          if (allPageSelected) {
+            setSelectedNotifIndices(prev => {
+              const next = new Set(prev);
+              pageIndices.forEach(i => next.delete(i));
+              return next;
+            });
+          } else {
+            setSelectedNotifIndices(prev => {
+              const next = new Set(prev);
+              pageIndices.forEach(i => next.add(i));
+              return next;
+            });
+          }
+        };
+
+        const toggleOne = (idx) => {
+          setSelectedNotifIndices(prev => {
+            const next = new Set(prev);
+            if (next.has(idx)) next.delete(idx);
+            else next.add(idx);
+            return next;
+          });
+        };
+
+        const deleteSelected = () => {
+          const remaining = localNotifications.filter((_, i) => !selectedNotifIndices.has(i));
+          setLocalNotifications(remaining);
+          setSelectedNotifIndices(new Set());
+          const newTotal = Math.max(1, Math.ceil(remaining.length / NOTIFS_PER_PAGE));
+          if (notifPage > newTotal) setNotifPage(newTotal);
+        };
+
+        const typeColors = { new_user: '#42C5B6', enrollment: '#589AD7', completion: '#66BB6A', issue: '#EF5350' };
+
+        return (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[85vh] flex flex-col overflow-hidden">
+              {/* Header */}
+              <div className="bg-highlight px-6 py-4 flex items-center justify-between flex-shrink-0">
+                <h2 className="text-2xl font-bold text-white">
+                  Notifications {localNotifications.length > 0 && <span className="text-base font-normal opacity-80">({localNotifications.length})</span>}
+                </h2>
+                <button
+                  onClick={() => setShowNotificationsModal(false)}
+                  className="text-white hover:text-gray-200 transition-colors"
+                >
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Toolbar */}
+              {localNotifications.length > 0 && (
+                <div className="px-6 py-3 border-b border-gray-100 flex items-center justify-between flex-shrink-0 bg-gray-50">
+                  <label className="flex items-center gap-2 cursor-pointer select-none">
+                    <input
+                      type="checkbox"
+                      checked={allPageSelected}
+                      onChange={toggleSelectAll}
+                      className="w-4 h-4 accent-[#42C5B6] cursor-pointer"
+                    />
+                    <span className="text-sm text-gray-600">
+                      {allPageSelected ? 'Deselect all on page' : 'Select all on page'}
+                    </span>
+                  </label>
+                  {someSelected && (
+                    <button
+                      onClick={deleteSelected}
+                      className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-sm transition-colors"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                      Delete ({selectedNotifIndices.size})
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {/* List */}
+              <div className="p-6 overflow-y-auto flex-1 custom-scrollbar">
+                {localNotifications.length === 0 ? (
+                  <p className="text-gray-400 text-center py-10">No notifications yet</p>
+                ) : (
+                  <div className="space-y-1">
+                    {pageNotifs.map((notification, i) => {
+                      const absIdx = pageStart + i;
+                      const barColor = typeColors[notification.type] || '#42C5B6';
+                      const isSelected = selectedNotifIndices.has(absIdx);
+                      return (
+                        <div
+                          key={absIdx}
+                          onClick={() => toggleOne(absIdx)}
+                          className={`flex items-start gap-3 px-3 py-3 rounded-xl cursor-pointer transition-colors border ${
+                            isSelected ? 'bg-[#f0faf9] border-[#42C5B6]/30' : 'border-transparent hover:bg-gray-50'
+                          }`}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => toggleOne(absIdx)}
+                            onClick={e => e.stopPropagation()}
+                            className="mt-0.5 w-4 h-4 accent-[#42C5B6] cursor-pointer flex-shrink-0"
+                          />
+                          <div className="flex-shrink-0 w-1 self-stretch rounded-full" style={{ backgroundColor: barColor }}></div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-semibold text-gray-800 mb-0.5">{notification.date}</p>
                             <p className="text-sm text-gray-600">{notification.message}</p>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* Pagination footer */}
+              {localNotifications.length > NOTIFS_PER_PAGE && (
+                <div className="px-6 py-3 border-t border-gray-100 flex items-center justify-between flex-shrink-0 bg-gray-50">
+                  <button
+                    onClick={() => { setNotifPage(p => Math.max(1, p - 1)); setSelectedNotifIndices(new Set()); }}
+                    disabled={safePage === 1}
+                    className="flex items-center gap-1 px-4 py-1.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Previous
+                  </button>
+                  <span className="text-sm text-gray-500">Page {safePage} of {totalPages}</span>
+                  <button
+                    onClick={() => { setNotifPage(p => Math.min(totalPages, p + 1)); setSelectedNotifIndices(new Set()); }}
+                    disabled={safePage === totalPages}
+                    className="flex items-center gap-1 px-4 py-1.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  >
+                    Next
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
                 </div>
               )}
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Issues Report Modal */}
       {showIssuesModal && (

@@ -90,7 +90,7 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
-  const register = async ({ username, password, name, age, educational_background }) => {
+  const register = async ({ username, password, name, age, gender, educational_background }) => {
     const { data, error } = await supabase.auth.signUp({
       email: usernameToEmail(username),
       password,
@@ -99,6 +99,7 @@ export const AuthProvider = ({ children }) => {
           username: String(username).trim().toLowerCase(),
           name,
           age: age ?? null,
+          gender: gender ?? null,
           educational_background: educational_background ?? null,
         },
       },

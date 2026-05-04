@@ -398,25 +398,6 @@ const Navbar = ({ suppressAutoTour = false }) => {
             )}
           </button>
 
-          <button
-            data-tour-target="settings"
-            onClick={() => navigate('/profile')}
-            className={`relative flex items-center gap-3 px-5 py-4 text-lg font-semibold transition-colors duration-200 ${
-              location.pathname === '/profile'
-                ? 'text-[#1e3a5f]'
-                : 'text-gray-400 hover:text-[#1e3a5f]'
-            }`}
-          >
-            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <span>{uiText.settings}</span>
-            {location.pathname === '/profile' && (
-              <span className="absolute bottom-0 left-4 right-4 h-[3px] bg-[#2BC4B3] rounded-full"></span>
-            )}
-          </button>
-
           {user?.role === 'admin' && (
             <button
               onClick={() => navigate('/admin/lessons')}
@@ -460,6 +441,21 @@ const Navbar = ({ suppressAutoTour = false }) => {
                 strokeWidth={2}
                 d="M9 18h6M10 22h4M12 2a7 7 0 00-4 12c.6.7 1 1.6 1 2.5V17h6v-.5c0-.9.4-1.8 1-2.5a7 7 0 00-4-12z"
               />
+            </svg>
+          </button>
+          <button
+            data-tour-target="settings"
+            onClick={() => navigate('/profile')}
+            className={`flex items-center p-3 rounded-lg transition-colors duration-200 ${
+              location.pathname === '/profile'
+                ? 'text-[#1e3a5f] bg-[#2BC4B3]/10'
+                : 'text-gray-400 hover:text-[#1e3a5f] hover:bg-gray-100'
+            }`}
+            title={uiText.settings}
+          >
+            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </button>
           <button onClick={handleLogout} className="flex items-center text-gray-400 hover:text-red-500 transition-colors duration-200 p-3 rounded-lg hover:bg-red-50" title={uiText.logout}>

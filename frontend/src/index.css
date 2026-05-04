@@ -492,51 +492,63 @@
   color-scheme: dark;
 }
 
+/* ============================================================
+   DARK MODE — comprehensive overrides
+   ============================================================ */
+
+/* Base */
 .theme-dark body,
 .theme-dark #root {
   background-color: #0f172a;
   color: #e2e8f0;
 }
 
-.theme-dark .bg-\[\#F5F7FA\] {
-  background-color: #0f172a !important;
-}
-
-.theme-dark .bg-white {
-  background-color: #1e293b !important;
-}
-
-.theme-dark .text-gray-400 {
-  color: #94a3b8 !important;
-}
-
-.theme-dark .text-gray-500,
-.theme-dark .text-gray-600 {
-  color: #cbd5e1 !important;
-}
-
-.theme-dark .text-gray-700,
-.theme-dark .text-gray-800,
-.theme-dark .text-gray-900 {
-  color: #e2e8f0 !important;
-}
-
-.theme-dark .border-gray-100,
-.theme-dark .border-gray-200,
-.theme-dark .border-gray-300 {
-  border-color: #475569 !important;
-}
-
+/* Backgrounds */
+.theme-dark .bg-white          { background-color: #1e293b !important; }
+.theme-dark .bg-background     { background-color: #0f172a !important; }
+.theme-dark .bg-surface        { background-color: #1e293b !important; }
 .theme-dark .bg-gray-50,
 .theme-dark .bg-gray-100,
-.theme-dark .bg-gray-200 {
-  background-color: #273449 !important;
-}
+.theme-dark .bg-gray-200       { background-color: #273449 !important; }
 
-.theme-dark .bg-\[\#f8fbff\] {
-  background-color: #243247 !important;
-}
+/* Hardcoded bg colours used in JSX */
+.theme-dark .bg-\[\#F5F7FA\],
+.theme-dark .bg-\[\#f5f7fa\]   { background-color: #0f172a !important; }
+.theme-dark .bg-\[\#f8fbff\],
+.theme-dark .bg-\[\#f0faf9\],
+.theme-dark .bg-\[\#eef8ff\],
+.theme-dark .bg-\[\#d9f5f1\],
+.theme-dark .bg-\[\#d3ecfb\]   { background-color: #162032 !important; }
+.theme-dark .bg-\[\#e9f2f8\],
+.theme-dark .bg-\[\#dce8f2\],
+.theme-dark .bg-\[\#cde3f1\]   { background-color: #1e3248 !important; }
+.theme-dark .bg-\[\#173F65\],
+.theme-dark .bg-\[\#173f65\],
+.theme-dark .bg-\[\#1e3a5f\],
+.theme-dark .bg-\[\#1E3A5F\],
+.theme-dark .bg-\[\#284C71\],
+.theme-dark .bg-\[\#346C9A\]   { background-color: #1e3a5f !important; }
 
+/* White/light panels inside modals and cards */
+.theme-dark .rounded-2xl.bg-white,
+.theme-dark .rounded-3xl.bg-white,
+.theme-dark .rounded-xl.bg-white { background-color: #1e293b !important; }
+
+/* Navbar */
+.theme-dark nav.bg-white        { background-color: #0f172a !important; border-color: #1e293b !important; }
+
+/* Text colours */
+.theme-dark .text-gray-400      { color: #94a3b8 !important; }
+.theme-dark .text-gray-500,
+.theme-dark .text-gray-600      { color: #cbd5e1 !important; }
+.theme-dark .text-gray-700,
+.theme-dark .text-gray-800,
+.theme-dark .text-gray-900      { color: #e2e8f0 !important; }
+.theme-dark .text-black         { color: #f1f5f9 !important; }
+
+/* Hardcoded text colours used in JSX */
+.theme-dark .text-\[\#173F65\],
+.theme-dark .text-\[\#173f65\],
 .theme-dark .text-\[\#1e3a5f\],
 .theme-dark .text-\[\#1E3A5F\],
 .theme-dark .text-\[\#1B5E87\],
@@ -545,50 +557,75 @@
 .theme-dark .text-\[\#1E5A8E\],
 .theme-dark .text-\[\#0B2B4C\],
 .theme-dark .text-\[\#0b2b4c\],
-.theme-dark .text-\[\#000000\] {
-  color: #e2e8f0 !important;
-}
+.theme-dark .text-\[\#1f4c72\],
+.theme-dark .text-\[\#214f74\],
+.theme-dark .text-\[\#000000\]  { color: #e2e8f0 !important; }
+.theme-dark .text-\[\#4b5563\],
+.theme-dark .text-\[\#374151\]  { color: #cbd5e1 !important; }
 
+/* Borders */
+.theme-dark .border-gray-100,
+.theme-dark .border-gray-200,
+.theme-dark .border-gray-300,
+.theme-dark .border-\[\#E5E7EB\],
+.theme-dark .border-\[\#e5e7eb\],
+.theme-dark .border-\[\#cde3f1\] { border-color: #334155 !important; }
+.theme-dark .border-b           { border-color: #1e293b !important; }
+
+/* Inputs & selects */
+.theme-dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+.theme-dark textarea,
+.theme-dark select {
+  background-color: #0f172a !important;
+  color: #e2e8f0 !important;
+  border-color: #334155 !important;
+}
+.theme-dark input::placeholder,
+.theme-dark textarea::placeholder { color: #64748b !important; }
+.theme-dark select option         { background-color: #1e293b; color: #e2e8f0; }
+
+/* Shadows */
 .theme-dark .shadow-sm,
 .theme-dark .shadow-md,
 .theme-dark .shadow-lg,
 .theme-dark .shadow-xl,
-.theme-dark .shadow-2xl {
-  box-shadow: 0 10px 24px rgba(2, 6, 23, 0.55) !important;
-}
+.theme-dark .shadow-2xl { box-shadow: 0 10px 24px rgba(2, 6, 23, 0.6) !important; }
 
+/* Dividers / horizontal rules */
+.theme-dark hr                  { border-color: #334155 !important; }
+.theme-dark .divide-gray-200 > * + * { border-color: #334155 !important; }
+
+/* Tables */
+.theme-dark table               { color: #e2e8f0; }
+.theme-dark th                  { background-color: #273449 !important; color: #94a3b8 !important; }
+.theme-dark td                  { border-color: #334155 !important; }
+.theme-dark tr:hover td         { background-color: #1e3248 !important; }
+
+/* Scrollbar */
+.theme-dark ::-webkit-scrollbar-track { background: #1e293b; }
+.theme-dark ::-webkit-scrollbar-thumb { border-color: #1e293b; }
+
+/* Lesson content */
+.theme-dark .lesson-content,
+.theme-dark .lesson-content p,
+.theme-dark .lesson-content li,
+.theme-dark .lesson-content span { color: #e2e8f0; }
+.theme-dark .lesson-content table th,
+.theme-dark .lesson-content table td { border-color: #334155 !important; }
+.theme-dark .lesson-content figcaption { color: #94a3b8; }
+
+/* Admin learners */
 .theme-dark .admin-learners-page,
-.theme-dark .admin-learners-page .bg-background {
-  background-color: #0f172a !important;
-}
-
-.theme-dark .admin-learners-page .text-text-primary {
-  color: #e2e8f0 !important;
-}
-
-.theme-dark .admin-learners-page .text-text-secondary {
-  color: #94a3b8 !important;
-}
-
+.theme-dark .admin-learners-page .bg-background { background-color: #0f172a !important; }
+.theme-dark .admin-learners-page .text-text-primary  { color: #e2e8f0 !important; }
+.theme-dark .admin-learners-page .text-text-secondary { color: #94a3b8 !important; }
 .theme-dark .admin-learners-page .border-border,
 .theme-dark .admin-learners-page .border-gray-300,
-.theme-dark .admin-learners-page .border-gray-400 {
-  border-color: #334155 !important;
-}
-
+.theme-dark .admin-learners-page .border-gray-400 { border-color: #334155 !important; }
 .theme-dark .admin-learners-page .card,
-.theme-dark .admin-learners-page .bg-white {
-  background-color: #273449 !important;
-  color: #e2e8f0 !important;
-}
-
-.theme-dark .admin-learners-page .card svg {
-  color: #93c5fd !important;
-}
-
-.theme-dark .admin-learners-page input::placeholder {
-  color: #94a3b8;
-}
+.theme-dark .admin-learners-page .bg-white { background-color: #273449 !important; color: #e2e8f0 !important; }
+.theme-dark .admin-learners-page .card svg { color: #93c5fd !important; }
+.theme-dark .admin-learners-page input::placeholder { color: #94a3b8; }
 
 .font-size-small {
   --font-scale: 0.82;

@@ -11,6 +11,7 @@ const Register = () => {
   const [formData, setFormData] = useState({
     name: '',
     age: '',
+    gender: '',
     username: '',
     password: '',
     confirmPassword: ''
@@ -46,19 +47,30 @@ const Register = () => {
       return;
     }
 
-    if (formData.age && (Number(formData.age) < 1 || Number(formData.age) > 120)) {
-      setError('Age must be between 1 and 120');
+    if (!formData.age || formData.age.trim() === '') {
+      setError('Age is required');
+      setLoading(false);
+      return;
+    }
+    const ageNum = Number(formData.age);
+    if (ageNum < 15 || ageNum > 65) {
+      setError('Age must be between 15 and 65');
+      setLoading(false);
+      return;
+    }
+    if (!formData.gender) {
+      setError('Please select your gender');
       setLoading(false);
       return;
     }
 
     try {
-      const ageValue = formData.age && formData.age.trim() !== '' ? Number(formData.age) : null;
       await register({
         username: formData.username,
         password: formData.password,
         name: formData.name,
-        age: ageValue,
+        age: Number(formData.age),
+        gender: formData.gender,
       });
       navigate('/login');
     } catch (err) {
@@ -115,22 +127,43 @@ const Register = () => {
               />
             </div>
 
-            {/* Age */}
-            <div>
-              <label className="block text-sm font-semibold mb-2" style={{ color: '#173F65' }}>
-                Age
-              </label>
-              <input
-                type="number"
-                name="age"
-                value={formData.age}
-                onChange={handleChange}
-                placeholder="Enter your age"
-                className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-highlight focus:outline-none transition-all placeholder-gray-400"
-                style={{ color: '#173F65' }}
-                min="1"
-                max="120"
-              />
+            {/* Age + Gender row */}
+            <div className="flex gap-3">
+              <div className="flex-1">
+                <label className="block text-sm font-semibold mb-2" style={{ color: '#173F65' }}>
+                  Age <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="number"
+                  name="age"
+                  value={formData.age}
+                  onChange={handleChange}
+                  placeholder="15 – 65"
+                  className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-highlight focus:outline-none transition-all placeholder-gray-400"
+                  style={{ color: '#173F65' }}
+                  min="15"
+                  max="65"
+                  required
+                />
+              </div>
+              <div className="flex-1">
+                <label className="block text-sm font-semibold mb-2" style={{ color: '#173F65' }}>
+                  Gender <span className="text-red-500">*</span>
+                </label>
+                <select
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-highlight focus:outline-none transition-all"
+                  style={{ color: formData.gender ? '#173F65' : '#9CA3AF' }}
+                  required
+                >
+                  <option value="" disabled>Select</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Prefer not to say">Prefer not to say</option>
+                </select>
+              </div>
             </div>
 
             {/* Username */}

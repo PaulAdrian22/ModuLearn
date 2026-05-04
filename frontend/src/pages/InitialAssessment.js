@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../App';
-import { modulesApi } from '../services/api';
 import InitialAssessmentModal from '../components/InitialAssessmentModal';
 import { normalizePreferredLanguage } from '../utils/languagePreference';
 import { buildInitialAssessmentQuestions } from '../utils/initialAssessmentQuestions';
@@ -52,7 +51,16 @@ const InitialAssessment = () => {
 
       try {
         const resolvedLanguage = normalizePreferredLanguage(language || 'English');
-        const contentModules = await modulesApi.list({ language: resolvedLanguage });
+        const { data: rawModules, error: modError } = await (async () => {
+          const { supabase } = await import('../lib/supabase');
+          return supabase
+            .from('modules')
+            .select('id, title, lesson_order, diagnostic_questions')
+            .eq('is_deleted', false)
+            .order('lesson_order', { ascending: true });
+        })();
+        if (modError) throw modError;
+        const contentModules = rawModules ?? [];
         if (cancelled) return;
 
         const generatedQuestions = buildInitialAssessmentQuestions(contentModules, resolvedLanguage);

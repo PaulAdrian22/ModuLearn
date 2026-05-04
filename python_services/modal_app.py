@@ -84,7 +84,7 @@ CORS = {
 # ============================================================
 # Endpoint
 # ============================================================
-@app.function(secrets=[secret], min_containers=0, scaledown_window=300)
+@app.function(secrets=[secret], min_containers=1, scaledown_window=300)
 @modal.fastapi_endpoint(method="POST")
 def batch_update(request: Request) -> JSONResponse:
     import asyncio
