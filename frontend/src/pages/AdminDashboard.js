@@ -53,23 +53,23 @@ const AdminDashboard = () => {
   // counters) fall back to defaults instead of taking the page down.
   const { data: bundle, loading, refetch: refetchBundle } = useAsyncData(
     async () => {
-      const [lessons, users, reportsCount, certifiedCount, activity, notificationsList] = await Promise.all([
-        adminApi.modules.listAll({ includeDeleted: false }),
-        adminApi.users.listAll(),
+      const [lessonCount, learnerCount, reportsCount, certifiedCount, activity, notificationsList] = await Promise.all([
+        adminApi.dashboard.lessonCount().catch(() => ({ count: 0 })),
+        adminApi.dashboard.learnerCount().catch(() => ({ count: 0 })),
         adminApi.dashboard.reportCount().catch(() => ({ count: 0 })),
         adminApi.dashboard.certifiedCount().catch(() => ({ count: 0 })),
         adminApi.dashboard.recentActivity().catch(() => []),
         adminApi.dashboard.notifications().catch(() => []),
       ]);
-      return { lessons, users, reportsCount, certifiedCount, activity, notifications: notificationsList };
+      return { lessonCount, learnerCount, reportsCount, certifiedCount, activity, notifications: notificationsList };
     },
     [],
-    { initial: { lessons: [], users: [], reportsCount: { count: 0 }, certifiedCount: { count: 0 }, activity: [], notifications: [] } },
+    { initial: { lessonCount: { count: 0 }, learnerCount: { count: 0 }, reportsCount: { count: 0 }, certifiedCount: { count: 0 }, activity: [], notifications: [] } },
   );
 
   const stats = useMemo(() => ({
-    lessonsDeployed: (bundle?.lessons ?? []).length,
-    learnerCount: (bundle?.users ?? []).filter((u) => u.Role === 'student').length,
+    lessonsDeployed: bundle?.lessonCount?.count || 0,
+    learnerCount: bundle?.learnerCount?.count || 0,
     certifiedLearners: bundle?.certifiedCount?.count || 0,
     reportedIssues: bundle?.reportsCount?.count || 0,
   }), [bundle]);

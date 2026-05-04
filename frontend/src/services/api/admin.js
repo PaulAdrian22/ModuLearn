@@ -153,6 +153,21 @@ const adminSimulations = {
 };
 
 const adminDashboard = {
+  // Lightweight counts for the dashboard landing page — avoids pulling heavy JSONB lesson content.
+  async lessonCount() {
+    const { count, error } = await supabase
+      .from('modules').select('id', { count: 'exact', head: true }).eq('is_deleted', false);
+    if (error) throw error;
+    return { count: count ?? 0 };
+  },
+
+  async learnerCount() {
+    const { count, error } = await supabase
+      .from('profiles').select('id', { count: 'exact', head: true }).eq('role', 'student');
+    if (error) throw error;
+    return { count: count ?? 0 };
+  },
+
   async reportCount() {
     const { count, error } = await supabase
       .from('reports').select('*', { count: 'exact', head: true }).eq('status', 'open');
