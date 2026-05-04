@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../App';
+import { assessmentsApi, questionsApi } from '../services/api';
 import Navbar from '../components/Navbar';
 import { trackFinalAssessment } from '../services/adaptiveLearning';
 import { themedConfirm } from '../utils/themedConfirm';
@@ -52,14 +52,13 @@ const Assessment = () => {
     try {
       setLoading(true);
       
-      // Fetch assessment details
-      const assessmentResponse = await axios.get(`/assessments/${assessmentId}`);
-      setAssessment(assessmentResponse.data);
-      
-      // Fetch questions for the assessment
-      const questionsResponse = await axios.get(`/questions/assessment/${assessmentId}`);
-      setQuestions(questionsResponse.data);
-      const shuffledOptionMap = questionsResponse.data.reduce((accumulator, question) => {
+      const assessmentRow = await assessmentsApi.get(assessmentId);
+      setAssessment(assessmentRow);
+
+      // Questions are scoped to the assessment's module under the new schema.
+      const moduleQuestions = await questionsApi.forModule(assessmentRow?.ModuleID || assessmentRow?.module_id);
+      setQuestions(moduleQuestions);
+      const shuffledOptionMap = moduleQuestions.reduce((accumulator, question) => {
         const rawOptions = normalizeQuestionOptionList([
           question.OptionA,
           question.OptionB,
@@ -133,33 +132,42 @@ const Assessment = () => {
     setSubmitting(true);
 
     try {
-      // Submit all answers
-      const answerPromises = Object.entries(answers).map(([questionId, answer]) =>
-        axios.post('/assessments/submit', {
-          assessmentId: parseInt(assessmentId),
-          questionId: parseInt(questionId),
-          answer
+      // Persist each answer + grade client-side; the legacy server-side grade
+      // endpoint computed score from CorrectAnswer matches, which we can do
+      // here directly against the loaded questions list.
+      const correctByQuestion = new Map(
+        questions.map((q) => [q.QuestionID, q.CorrectAnswer])
+      );
+
+      let correct = 0;
+      await Promise.all(
+        Object.entries(answers).map(([questionId, answer]) => {
+          const isCorrect = correctByQuestion.get(questionId) === answer;
+          if (isCorrect) correct += 1;
+          return assessmentsApi.submitAnswer({
+            assessmentId,
+            questionId,
+            userAnswer: answer,
+            isCorrect,
+            responseTime: Number(updatedQuestionTimes[questionId] || 0),
+          });
         })
       );
 
-      await Promise.all(answerPromises);
+      const total = questions.length;
+      const score = total > 0 ? (correct / total) * 100 : 0;
+      const finalized = await assessmentsApi.finalize(assessmentId, {
+        totalScore: score,
+        resultStatus: score >= 75 ? 'Pass' : 'Fail',
+      });
 
-      // Grade the assessment
-      const gradeResponse = await axios.post(`/assessments/grade/${assessmentId}`);
-      setResults(gradeResponse.data);
+      setResults({ score, correct, total, ...finalized });
       const totalTimeSpent = Object.values(updatedQuestionTimes).reduce(
         (total, seconds) => total + Number(seconds || 0),
         0
       );
       setElapsedTime(totalTimeSpent);
       setShowResults(true);
-      
-      // Track final assessment performance for adaptive learning (Lessons 1-4 only)
-      if (assessment && assessment.ModuleID && assessment.ModuleID <= 4) {
-        trackFinalAssessment(assessment.ModuleID, {
-          score: gradeResponse.data.score || 0
-        });
-      }
 
       notifyAchievementRefresh();
     } catch (err) {

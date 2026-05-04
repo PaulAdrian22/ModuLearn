@@ -13,8 +13,20 @@
   html {
     background-color: #F5F7FA;
     overflow-y: auto;
+    /* Disable iOS double-tap zoom so the app feels app-like rather than
+       page-like when installed via Add to Home Screen. */
+    touch-action: manipulation;
   }
-  
+
+  /* Touch-only refinement: ensure interactive controls meet the WCAG 44px
+     minimum tap target. (pointer:fine — mouse — keeps tighter spacing.) */
+  @media (pointer: coarse) {
+    button, [role="button"], a.btn, input[type="checkbox"], input[type="radio"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+
   body {
     @apply text-text-primary font-sans;
     -webkit-font-smoothing: antialiased;

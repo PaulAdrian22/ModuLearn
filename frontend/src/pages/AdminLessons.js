@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../App';
 import AdminNavbar from '../components/AdminNavbar';
 import { themedConfirm } from '../utils/themedConfirm';
+import { adminApi } from '../services/api';
+import { useAsyncData } from '../hooks/useAsyncData';
 
 const decodeHtmlEntities = (value = '') => {
   const normalized = String(value)
@@ -66,45 +67,33 @@ const isProtectedLessonFromDeletion = (lesson) => {
 const AdminLessons = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [lessons, setLessons] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('english'); // 'english', 'taglish', 'deleted'
   const [lessonActionLoading, setLessonActionLoading] = useState({});
 
   useEffect(() => {
-    // Check if user is admin
-    if (user?.role !== 'admin') {
-      navigate('/dashboard');
-      return;
-    }
-
-    fetchLessons();
+    if (user?.role !== 'admin') navigate('/dashboard');
   }, [user, navigate]);
 
-  const fetchLessons = async () => {
-    try {
-      const response = await axios.get('/admin/modules');
-      console.log('Admin fetched lessons:', response.data);
-      setLessons(response.data);
-      setLoading(false);
-    } catch (err) {
-      console.error('Error fetching lessons:', err);
-      setError('Failed to load lessons');
-      setLoading(false);
-    }
-  };
+  const {
+    data: lessonsData,
+    loading,
+    refetch: fetchLessons,
+  } = useAsyncData(
+    () => adminApi.modules.listAll({ includeDeleted: true }),
+    [],
+    { initial: [] },
+  );
+  const lessons = lessonsData ?? [];
 
   const handleAddLesson = () => {
     navigate('/admin/lessons/add?type=supplementary');
   };
 
-  const updateLessonInState = (lessonId, patch) => {
-    setLessons((prevLessons) =>
-      prevLessons.map((lesson) =>
-        lesson.ModuleID === lessonId ? { ...lesson, ...patch } : lesson
-      )
-    );
+  // Optimistic updates dropped in favor of refetch — useAsyncData owns the
+  // list and re-fires on demand. The visual delay is small (~200ms in
+  // practice); if it becomes a UX problem, swap to a local mirror.
+  const updateLessonInState = (/* lessonId, patch */) => {
+    fetchLessons();
   };
 
   const withLessonAction = async (lessonId, actionFn) => {
@@ -143,7 +132,7 @@ const AdminLessons = () => {
 
     try {
       await withLessonAction(lessonId, async () => {
-        await axios.delete(`/admin/modules/${lessonId}`);
+        await adminApi.modules.softDelete(lessonId);
       });
       fetchLessons();
     } catch (err) {
@@ -166,7 +155,7 @@ const AdminLessons = () => {
 
     try {
       await withLessonAction(lessonId, async () => {
-        await axios.put(`/admin/modules/${lessonId}/restore`);
+        await adminApi.modules.restore(lessonId);
       });
       fetchLessons();
     } catch (err) {
@@ -193,7 +182,7 @@ const AdminLessons = () => {
 
     try {
       await withLessonAction(lessonId, async () => {
-        await axios.delete(`/admin/modules/${lessonId}/permanent`);
+        await adminApi.modules.hardDelete(lessonId);
       });
       fetchLessons();
     } catch (err) {
@@ -222,13 +211,8 @@ const AdminLessons = () => {
 
     try {
       await withLessonAction(lessonId, async () => {
-        const response = await axios.put(`/admin/modules/${lessonId}/completion`, {
-          isCompleted: nextCompleted
-        });
-
-        updateLessonInState(lessonId, {
-          Is_Completed: response?.data?.isCompleted ?? nextCompleted
-        });
+        const updated = await adminApi.modules.setCompletion(lessonId, nextCompleted);
+        updateLessonInState(lessonId, { Is_Completed: updated?.is_completed ?? nextCompleted });
       });
     } catch (err) {
       console.error('Error updating lesson completion state:', err);
@@ -242,13 +226,8 @@ const AdminLessons = () => {
 
     try {
       await withLessonAction(lessonId, async () => {
-        const response = await axios.put(`/admin/modules/${lessonId}/lock-state`, {
-          isUnlocked: nextUnlocked
-        });
-
-        updateLessonInState(lessonId, {
-          Is_Unlocked: response?.data?.isUnlocked ?? nextUnlocked
-        });
+        const updated = await adminApi.modules.setLockState(lessonId, nextUnlocked);
+        updateLessonInState(lessonId, { Is_Unlocked: updated?.is_unlocked ?? nextUnlocked });
       });
     } catch (err) {
       console.error('Error updating lesson lock state:', err);

@@ -1,0 +1,16 @@
+{
+  "name": "modulearn-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "One-off migration / seed scripts for the Supabase rebuild. Independent of the legacy backend so it survives backend deletion.",
+  "scripts": {
+    "migrate:media": "node migrate_media_to_supabase.js",
+    "migrate:media:dry": "node migrate_media_to_supabase.js --dry-run"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

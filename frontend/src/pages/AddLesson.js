@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../App';
 import AdminNavbar from '../components/AdminNavbar';
 import ImageCropper from '../components/ImageCropper';
-import { API_BASE_URL } from '../config/api';
 import { themedConfirm } from '../utils/themedConfirm';
+import { adminApi, modulesApi, simulationsApi, mediaApi } from '../services/api';
 
 const OBJECTIVE_HEADING_REGEX = /(?:<p[^>]*>\s*|<div[^>]*>\s*)?(?:<strong>|<b>)?\s*(?:🎯\s*)?(?:learning\s*objectives?|objectives?)\s*[:\-]?\s*(?:<\/strong>|<\/b>)?\s*(?:<\/p>|<\/div>)?/i;
 
@@ -1213,8 +1212,8 @@ const AddLesson = () => {
   useEffect(() => {
     const fetchSimulations = async () => {
       try {
-        const response = await axios.get('/simulations');
-        setAvailableSimulations(response.data || []);
+        const data = await simulationsApi.list();
+        setAvailableSimulations(data || []);
       } catch (err) {
         console.error('Error fetching simulations:', err);
       }
@@ -1224,13 +1223,16 @@ const AddLesson = () => {
 
   const fetchLesson = async () => {
     try {
-      const [response, adminModulesResponse] = await Promise.all([
-        axios.get(`/modules/${id}`),
-        axios.get('/admin/modules').catch(() => ({ data: [] }))
+      const [moduleData, adminModulesData] = await Promise.all([
+        modulesApi.get(id),
+        adminApi.modules.listAll({ includeDeleted: true }).catch(() => []),
       ]);
+      // shape-shim so the rest of the function reads `response.data`
+      const response = { data: moduleData };
+      const adminModulesResponse = { data: adminModulesData };
 
       const adminLesson = Array.isArray(adminModulesResponse?.data)
-        ? adminModulesResponse.data.find((moduleItem) => Number(moduleItem?.ModuleID) === Number(id))
+        ? adminModulesResponse.data.find((moduleItem) => String(moduleItem?.ModuleID) === String(id))
         : null;
 
       if (Array.isArray(adminModulesResponse?.data)) {
@@ -1305,8 +1307,10 @@ const AddLesson = () => {
           return sectionType !== 'references';
         });
 
-        const apiBaseUrl = axios.defaults.baseURL || API_BASE_URL;
-        const baseUrl = apiBaseUrl.replace('/api', '');
+        // Media is served as fully-qualified Supabase Storage URLs now; the
+        // baseUrl shim is left empty so legacy `/uploads/...` paths render
+        // as-is (mostly only an issue for not-yet-migrated content).
+        const baseUrl = '';
         const timestamp = new Date().getTime();
 
         const toDisplayUrl = (url) => {
@@ -4783,14 +4787,9 @@ const AddLesson = () => {
     saveInFlightRef.current = true;
     setLoading(true);
     try {
-      const apiBaseUrl = axios.defaults.baseURL || API_BASE_URL;
-      const backendHost = (() => {
-        try {
-          return new URL(String(apiBaseUrl || '')).hostname.toLowerCase();
-        } catch {
-          return '';
-        }
-      })();
+      // No legacy backend host to detect anymore — Supabase Storage URLs are
+      // always retained as-is.
+      const backendHost = '';
 
       const normalizeStoredMediaUrl = (rawUrl = '') => {
         const value = String(rawUrl || '').trim();
@@ -4829,13 +4828,8 @@ const AddLesson = () => {
 
               if (img.file && img.url?.startsWith('blob:')) {
                 try {
-                  const formData = new FormData();
-                  formData.append('file', img.file);
-                  formData.append('type', 'image');
-                  const uploadResponse = await axios.post('/admin/upload-media', formData, {
-                    headers: { 'Content-Type': 'multipart/form-data' }
-                  });
-                  return { url: uploadResponse.data.url, file: null, fileName: null, caption: img.caption || '' };
+                  const uploaded = await mediaApi.upload(img.file, { folder: 'lessons' });
+                  return { url: uploaded.url, file: null, fileName: null, caption: img.caption || '' };
                 } catch (uploadErr) {
                   console.error('Failed to upload image:', uploadErr);
                   throw uploadErr;
@@ -4878,24 +4872,16 @@ const AddLesson = () => {
             };
           }
           // Check if section has a file that needs uploading (blob URL)
-          if ((section.type === 'image' || section.type === 'video') && 
-              section.file && 
+          if ((section.type === 'image' || section.type === 'video') &&
+              section.file &&
               section.content?.startsWith('blob:')) {
             try {
-              const formData = new FormData();
-              formData.append('file', section.file);
-              formData.append('type', section.type);
-              
-              const uploadResponse = await axios.post('/admin/upload-media', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-              });
-              
-              // Return section with server URL instead of blob URL
+              const uploaded = await mediaApi.upload(section.file, { folder: 'lessons' });
               return {
                 ...section,
-                content: uploadResponse.data.url,
-                file: null, // Remove file object after upload
-                fileName: null // Remove fileName after upload
+                content: uploaded.url,
+                file: null,
+                fileName: null,
               };
             } catch (uploadErr) {
               console.error('Failed to upload media:', uploadErr);
@@ -5014,27 +5000,16 @@ const AddLesson = () => {
       });
 
       if (isEditMode) {
-        const response = await axios.put(`/admin/modules/${id}`, payload);
-        console.log('Backend response:', response.data);
+        await adminApi.modules.update(id, payload);
         baselineSnapshotRef.current = currentEditorSnapshot;
         setHasUnsavedChanges(false);
       } else {
-        const targetModuleId = Number(savedModuleId);
-
-        let response;
-        if (Number.isFinite(targetModuleId) && targetModuleId > 0) {
-          response = await axios.put(`/admin/modules/${targetModuleId}`, payload);
+        if (savedModuleId) {
+          await adminApi.modules.update(savedModuleId, payload);
         } else {
-          response = await axios.post('/admin/modules', payload);
-          const createdModuleId = Number(
-            response?.data?.moduleId ?? response?.data?.module?.ModuleID ?? response?.data?.module?.id
-          );
-          if (Number.isFinite(createdModuleId) && createdModuleId > 0) {
-            setSavedModuleId(createdModuleId);
-          }
+          const created = await adminApi.modules.create(payload);
+          if (created?.id) setSavedModuleId(created.id);
         }
-
-        console.log('Backend response:', response.data);
         baselineSnapshotRef.current = currentEditorSnapshot;
         setHasUnsavedChanges(false);
       }
@@ -6526,7 +6501,7 @@ const AddLesson = () => {
                                                     Change
                                                     <input
                                                       type="file"
-                                                      accept="image/*"
+                                                      accept="image/png,image/jpeg,image/jpg,image/gif,image/webp,image/*"
                                                       onChange={(e) => handleLayerImageUpload(section.id, layerIdx, imgIdx, e)}
                                                       className="hidden"
                                                     />
@@ -6549,7 +6524,7 @@ const AddLesson = () => {
                                                   Import
                                                   <input
                                                     type="file"
-                                                    accept="image/*"
+                                                    accept="image/png,image/jpeg,image/jpg,image/gif,image/webp,image/*"
                                                     onChange={(e) => handleLayerImageUpload(section.id, layerIdx, imgIdx, e)}
                                                     className="hidden"
                                                   />
@@ -6686,7 +6661,7 @@ const AddLesson = () => {
                                           Change
                                           <input
                                             type="file"
-                                            accept="image/*"
+                                            accept="image/png,image/jpeg,image/jpg,image/gif,image/webp,image/*"
                                             onChange={(e) => handleImageSlotUpload(section.id, imgIdx, e)}
                                             className="hidden"
                                           />
@@ -6709,7 +6684,7 @@ const AddLesson = () => {
                                         Import
                                         <input
                                           type="file"
-                                          accept="image/*"
+                                          accept="image/png,image/jpeg,image/jpg,image/gif,image/webp,image/*"
                                           onChange={(e) => handleImageSlotUpload(section.id, imgIdx, e)}
                                           className="hidden"
                                         />

@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../App';
 import Navbar from '../components/Navbar';
 import QuickAssessment from '../components/QuickAssessment';
 import Diagnostic from '../components/Diagnostic';
 import { API_SERVER_URL } from '../config/api';
-import { withPreferredLanguage, getPreferredLanguage } from '../utils/languagePreference';
+import { getPreferredLanguage } from '../utils/languagePreference';
+import { modulesApi, progressApi, bktApi, reportsApi } from '../services/api';
+import { getReviewCooldownRemaining } from '../utils/reviewCooldown';
 import { 
   getPerformance, 
   shouldShowChallenge, 
@@ -763,18 +764,19 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
   const fetchModuleData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(withPreferredLanguage(`/modules/${moduleId}?userId=${user.userId}`));
-      const diagnosticBeforeIntro = shouldRunDiagnosticBeforeIntro(response.data.roadmapStages);
+      const moduleData = await modulesApi.get(moduleId);
+      const diagnosticBeforeIntro = shouldRunDiagnosticBeforeIntro(moduleData.roadmapStages);
 
       try {
-        await axios.post('/progress/start', { moduleId: Number(moduleId) });
+        await progressApi.start(moduleId);
       } catch (progressStartError) {
         console.error('Error opening module progress:', progressStartError);
       }
 
       const savedLessonProgress = readSavedLessonProgress();
-      
-      setModule(response.data);
+
+      setModule(moduleData);
+      const response = { data: moduleData }; // legacy variable name used below
       
       console.log('Fetched module data:', response.data);
       console.log('Sections:', response.data.sections);
@@ -902,34 +904,20 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
     const numericModuleId = parseInt(moduleId, 10);
 
     const persistProgress = async () => {
-      await axios.put('/progress/update', {
-        moduleId: numericModuleId,
-        completionRate
+      // upsert via start() then update — start() is idempotent.
+      await progressApi.start(numericModuleId);
+      await progressApi.update(numericModuleId, {
+        completion_rate: completionRate,
+        ...(completionRate >= 100 ? { date_completion: new Date().toISOString() } : {}),
       });
     };
 
     try {
       await persistProgress();
-
       if (completionRate >= 100 && navigateOnComplete) {
         navigate('/dashboard');
       }
     } catch (err) {
-      if (err?.response?.status === 404) {
-        try {
-          await axios.post('/progress/start', { moduleId: numericModuleId });
-          await persistProgress();
-
-          if (completionRate >= 100 && navigateOnComplete) {
-            navigate('/dashboard');
-          }
-          return;
-        } catch (retryErr) {
-          console.error('Error updating progress after starting module:', retryErr);
-          return;
-        }
-      }
-
       console.error('Error updating progress:', err);
     }
   };
@@ -955,10 +943,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
       lessonTimeFlushInFlightRef.current = true;
 
       try {
-        await axios.post('/progress/track-time', {
-          moduleId: numericModuleId,
-          timeSpentSeconds: bufferedSeconds,
-        });
+        await progressApi.trackTime(numericModuleId, bufferedSeconds);
       } catch (error) {
         if (!isDisposed) {
           lessonTimeBufferRef.current += bufferedSeconds;
@@ -994,16 +979,21 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
 
       const bufferedSeconds = Math.floor(Number(lessonTimeBufferRef.current || 0));
       if (bufferedSeconds > 0) {
-        axios.post('/progress/track-time', {
-          moduleId: numericModuleId,
-          timeSpentSeconds: bufferedSeconds,
-        }).catch(() => {});
+        progressApi.trackTime(numericModuleId, bufferedSeconds).catch(() => {});
         lessonTimeBufferRef.current = 0;
       }
     };
   }, [moduleId, module, loading, showQuickAssessment, showDiagnostic, activeReview]);
 
   const handleShowQuickAssessment = () => {
+    // Per General Process diagram: if the previous Review attempt had any
+    // incorrect items, a 30s cooldown gates the next attempt.
+    const remaining = getReviewCooldownRemaining(moduleId);
+    if (remaining > 0) {
+      // eslint-disable-next-line no-alert
+      alert(`Please wait ${remaining}s before retaking the review. Use the time to revisit the lesson discussion.`);
+      return;
+    }
     setShowQuickAssessment(true);
   };
 
@@ -1319,7 +1309,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
         {/* Lesson Intro Page from Database */}
         {lessonSections.length > 0 && !showQuickAssessment && showLessonIntro && (
           <div className="fixed inset-0 z-40 bg-background flex items-center justify-center px-6">
-            <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl border border-gray-200 p-10 relative">
+            <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl border border-gray-200 p-5 sm:p-10 relative">
               <button
                 onClick={() => navigate('/dashboard')}
                 className="absolute top-5 left-5 p-2 rounded-lg hover:bg-gray-100 text-primary"
@@ -1368,7 +1358,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
           <div className="fixed inset-0 z-40 flex">
 
             {/* Sidebar - Always visible */}
-            <div className="w-80 min-w-[320px] bg-white shadow-2xl z-50 flex flex-col">
+            <div className="w-full sm:w-80 sm:min-w-[320px] bg-white shadow-2xl z-50 flex flex-col">
               {/* Sidebar Header */}
               <div className="p-6 border-b border-gray-200">
                 <button 
@@ -1732,8 +1722,8 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                     : validImgs.length === 2
                                       ? 'grid grid-cols-2'
                                       : validImgs.length === 3
-                                        ? 'grid grid-cols-3'
-                                        : 'grid grid-cols-2 lg:grid-cols-3';
+                                        ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+                                        : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3';
 
                                 const imageBlock = validImgs.length > 0 ? (
                                   <div className={`${imageGridClass} gap-3`}>
@@ -1796,7 +1786,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                           const gridClass =
                             layout === 'side-by-side' ? 'grid grid-cols-2' :
                             layout === 'grid-2x2' ? 'grid grid-cols-2' :
-                            layout === 'grid-3' ? 'grid grid-cols-3' :
+                            layout === 'grid-3' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' :
                             layout === 'one-plus-two' ? 'grid grid-cols-2 [&>*:first-child]:col-span-2' :
                             layout === 'two-plus-one' ? 'grid grid-cols-2 [&>*:last-child]:col-span-2' :
                             layout === 'big-left' ? 'grid grid-cols-2 grid-rows-2 [&>*:first-child]:row-span-2' :
@@ -2155,11 +2145,11 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                                 const numericModuleId = Number.parseInt(moduleId, 10);
                                                 const batchAnswers = skillAnswers.filter((answer) => answer.skill !== 'No Skill');
                                                 if (batchAnswers.length > 0) {
-                                                  await axios.post('/bkt/batch-update', {
+                                                  await bktApi.batchUpdate({
                                                     answers: batchAnswers,
                                                     assessmentType: 'Review',
                                                     moduleId: Number.isFinite(numericModuleId) ? numericModuleId : null,
-                                                    timeSpentSeconds
+                                                    timeSpentSeconds,
                                                   });
                                                 }
                                               } catch (error) {
@@ -2875,15 +2865,13 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                         lessonTitle: module?.ModuleTitle
                       });
                       
-                      const response = await axios.post('/users/report-issue', {
-                        moduleId: moduleId ? parseInt(moduleId) : null,
-                        issueType: reportType,
-                        details: reportDetails.trim(),
-                        lessonTitle: module?.ModuleTitle || ''
+                      await reportsApi.file({
+                        moduleId: moduleId ?? null,
+                        category: reportType,
+                        message: reportDetails.trim(),
                       });
-                      
-                      console.log('Report submitted successfully:', response.data);
-                      
+
+
                       setShowReportModal(false);
                       setReportDetails('');
                       setReportType('Lesson Content');

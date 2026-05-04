@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../App';
+import { passwordErrorMessage } from '../utils/passwordPolicy';
 
 const Register = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
-  const registerScale = 'min(1, calc((100dvh - 56px) / 980))';
+  const { register } = useAuth();
+  // Floor scale at 0.85 so input tap targets stay >=44px on small phones.
+  const registerScale = 'clamp(0.85, calc((100dvh - 56px) / 980), 1)';
   const [formData, setFormData] = useState({
     name: '',
     age: '',
@@ -38,8 +39,9 @@ const Register = () => {
       return;
     }
 
-    if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters');
+    const passwordIssue = passwordErrorMessage(formData.password);
+    if (passwordIssue) {
+      setError(passwordIssue);
       setLoading(false);
       return;
     }
@@ -51,20 +53,20 @@ const Register = () => {
     }
 
     try {
-      const { confirmPassword, ...registerData } = formData;
-      if (!registerData.age || registerData.age.trim() === '') {
-        delete registerData.age;
-      } else {
-        registerData.age = Number(registerData.age);
-      }
-      const response = await axios.post('/auth/register', registerData);
+      const ageValue = formData.age && formData.age.trim() !== '' ? Number(formData.age) : null;
+      await register({
+        username: formData.username,
+        password: formData.password,
+        name: formData.name,
+        age: ageValue,
+      });
       navigate('/login');
     } catch (err) {
-      if (err.response?.data?.errors) {
-        const validationErrors = err.response.data.errors.map(e => e.msg).join(', ');
-        setError(validationErrors);
+      const msg = err?.message || '';
+      if (msg.toLowerCase().includes('already registered') || msg.toLowerCase().includes('user already')) {
+        setError('That username is already taken.');
       } else {
-        setError(err.response?.data?.message || 'Registration failed. Please try again.');
+        setError(msg || 'Registration failed. Please try again.');
       }
     } finally {
       setLoading(false);

@@ -1,8 +1,0 @@
-{
-  "name": "modulearn-netlify-functions",
-  "private": true,
-  "version": "1.0.0",
-  "dependencies": {
-    "serverless-http": "^3.2.0"
-  }
-}

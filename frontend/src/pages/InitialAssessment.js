@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../App';
+import { modulesApi } from '../services/api';
 import InitialAssessmentModal from '../components/InitialAssessmentModal';
 import { normalizePreferredLanguage } from '../utils/languagePreference';
 import { buildInitialAssessmentQuestions } from '../utils/initialAssessmentQuestions';
@@ -52,15 +52,8 @@ const InitialAssessment = () => {
 
       try {
         const resolvedLanguage = normalizePreferredLanguage(language || 'English');
-        const contentModulesResponse = await axios.get(
-          `/modules?includeAssessmentContent=true&language=${encodeURIComponent(resolvedLanguage)}`
-        );
-
+        const contentModules = await modulesApi.list({ language: resolvedLanguage });
         if (cancelled) return;
-
-        const contentModules = Array.isArray(contentModulesResponse.data)
-          ? contentModulesResponse.data
-          : [];
 
         const generatedQuestions = buildInitialAssessmentQuestions(contentModules, resolvedLanguage);
 

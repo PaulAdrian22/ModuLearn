@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../App';
+import { adminApi, reportsApi } from '../services/api';
+import { useAsyncData } from '../hooks/useAsyncData';
 import AdminNavbar from '../components/AdminNavbar';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -29,16 +30,7 @@ const buildNotificationsSignature = (list = []) =>
 const AdminDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [stats, setStats] = useState({
-    lessonsDeployed: 0,
-    learnerCount: 0,
-    certifiedLearners: 0,
-    reportedIssues: 0
-  });
-  const [notifications, setNotifications] = useState([]);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
-  const [activityData, setActivityData] = useState([]);
-  const [loading, setLoading] = useState(true);
   
   // Issues Report Modal State
   const [showIssuesModal, setShowIssuesModal] = useState(false);
@@ -51,49 +43,48 @@ const AdminDashboard = () => {
   const [selectedExportMetrics, setSelectedExportMetrics] = useState(['lessonProgress', 'lessonEngagement']);
 
   useEffect(() => {
-    if (user?.role !== 'admin') {
-      navigate('/dashboard');
-      return;
-    }
-
-    fetchDashboardStats();
+    if (user?.role !== 'admin') navigate('/dashboard');
   }, [user, navigate]);
 
-  const fetchDashboardStats = async () => {
-    try {
-      const [lessonsRes, usersRes, reportsRes, certifiedRes, activityRes, notificationsRes] = await Promise.all([
-        axios.get('/admin/modules'),
-        axios.get('/users/all'),
-        axios.get('/admin/reports/count').catch(() => ({ data: { count: 0 } })),
-        axios.get('/admin/dashboard/certified').catch(() => ({ data: { count: 0 } })),
-        axios.get('/admin/dashboard/activity').catch(() => ({ data: [] })),
-        axios.get('/admin/dashboard/notifications').catch(() => ({ data: [] }))
+  // Six parallel reads for the admin landing page; non-critical ones (dashboard
+  // counters) fall back to defaults instead of taking the page down.
+  const { data: bundle, loading, refetch: refetchBundle } = useAsyncData(
+    async () => {
+      const [lessons, users, reportsCount, certifiedCount, activity, notificationsList] = await Promise.all([
+        adminApi.modules.listAll({ includeDeleted: false }),
+        adminApi.users.listAll(),
+        adminApi.dashboard.reportCount().catch(() => ({ count: 0 })),
+        adminApi.dashboard.certifiedCount().catch(() => ({ count: 0 })),
+        adminApi.dashboard.recentActivity().catch(() => []),
+        adminApi.dashboard.notifications().catch(() => []),
       ]);
+      return { lessons, users, reportsCount, certifiedCount, activity, notifications: notificationsList };
+    },
+    [],
+    { initial: { lessons: [], users: [], reportsCount: { count: 0 }, certifiedCount: { count: 0 }, activity: [], notifications: [] } },
+  );
 
-      const fetchedNotifications = Array.isArray(notificationsRes.data) ? notificationsRes.data : [];
-      const notificationsSignature = buildNotificationsSignature(fetchedNotifications);
-      const seenSignatureKey = user?.userId
-        ? `admin_notifications_seen_signature_u${user.userId}`
-        : 'admin_notifications_seen_signature';
-      const seenSignature = localStorage.getItem(seenSignatureKey) || '';
+  const stats = useMemo(() => ({
+    lessonsDeployed: (bundle?.lessons ?? []).length,
+    learnerCount: (bundle?.users ?? []).filter((u) => u.Role === 'student').length,
+    certifiedLearners: bundle?.certifiedCount?.count || 0,
+    reportedIssues: bundle?.reportsCount?.count || 0,
+  }), [bundle]);
+  const activityData = bundle?.activity ?? [];
+  const notifications = useMemo(
+    () => (Array.isArray(bundle?.notifications) ? bundle.notifications : []),
+    [bundle?.notifications],
+  );
 
-      setStats({
-        lessonsDeployed: lessonsRes.data.length,
-        learnerCount: usersRes.data.filter(u => u.Role === 'student').length,
-        certifiedLearners: certifiedRes.data.count || 0,
-        reportedIssues: reportsRes.data.count || 0
-      });
-      setActivityData(activityRes.data);
-      setNotifications(fetchedNotifications);
-      setUnreadNotifications(
-        notificationsSignature && notificationsSignature !== seenSignature ? fetchedNotifications.length : 0
-      );
-      setLoading(false);
-    } catch (err) {
-      console.error('Error fetching stats:', err);
-      setLoading(false);
-    }
-  };
+  // Compute unread-notifications badge against the user's last-seen signature.
+  useEffect(() => {
+    const sig = buildNotificationsSignature(notifications);
+    const key = user?.userId
+      ? `admin_notifications_seen_signature_u${user.userId}`
+      : 'admin_notifications_seen_signature';
+    const seen = localStorage.getItem(key) || '';
+    setUnreadNotifications(sig && sig !== seen ? notifications.length : 0);
+  }, [notifications, user?.userId]);
 
   const handleOpenNotificationsModal = () => {
     setShowNotificationsModal(true);
@@ -110,14 +101,10 @@ const AdminDashboard = () => {
   const fetchIssueReports = async () => {
     setIssuesLoading(true);
     try {
-      console.log('Fetching issue reports...');
-      const response = await axios.get('/admin/reports');
-      console.log('Issue reports response:', response.data);
-      console.log('Number of reports:', response.data.length);
-      setIssueReports(response.data);
+      const data = await reportsApi.list();
+      setIssueReports(data);
     } catch (err) {
       console.error('Error fetching issue reports:', err);
-      console.error('Error details:', err.response?.data);
     }
     setIssuesLoading(false);
   };
@@ -138,15 +125,11 @@ const AdminDashboard = () => {
 
   const handleTagAsResolved = async (reportId) => {
     try {
-      await axios.put(`/admin/reports/${reportId}/resolve`);
-      // Refresh the reports list
+      await reportsApi.resolve(reportId);
       fetchIssueReports();
-      // Update stats
-      setStats(prev => ({
-        ...prev,
-        reportedIssues: Math.max(0, prev.reportedIssues - 1)
-      }));
-      // Return to list view
+      // Refetch the dashboard bundle so the reportedIssues counter updates.
+      // Was an optimistic decrement before the bundle moved to useAsyncData.
+      refetchBundle();
       setSelectedReport(null);
     } catch (err) {
       console.error('Error resolving report:', err);

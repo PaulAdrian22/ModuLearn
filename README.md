@@ -13,40 +13,33 @@ MODULEARN is an adaptive learning platform designed to provide personalized lear
 - **Interactive Assessments**: Quizzes and exercises with immediate feedback
 
 ## Technology Stack
-- **Frontend**: HTML5, CSS3, JavaScript (React/Vue.js)
-- **Backend**: Node.js with Express / Python with Django
-- **Database**: MySQL / PostgreSQL / MongoDB
-- **BKT Algorithm**: Custom implementation with probability calculations
+- **Frontend**: React 18 + Tailwind CSS, deployed on Vercel (PWA-installable, offline-capable for previously-loaded lessons)
+- **Database + Auth + Storage**: Supabase (Postgres with RLS, Supabase Auth, Storage buckets)
+- **BKT Engine**: Python with [pyBKT](https://github.com/CAHLR/pyBKT), deployed on Modal (serverless)
+- **Edge Functions**: Deno/TypeScript on Supabase (knowledge-states, final-history, admin-delete-user, learner-metrics)
 
 ## Project Structure
 ```
 modulearn/
-├── backend/          # Server-side application
-├── frontend/         # Client-side application
-├── database/         # Database schemas and migrations
-├── docs/             # Documentation
-├── tests/            # Test files
-└── assets/           # Static assets (images, videos)
+├── frontend/             # React app (services/api/, hooks/, constants/, contexts/)
+├── supabase/
+│   ├── migrations/       # SQL schema migrations applied in order
+│   ├── functions/        # Deno Edge Functions
+│   └── seed.sql          # Baseline seed data
+├── python_services/      # Modal app + pyBKT BKT engine + tests
+├── scripts/              # One-off migration / sync scripts
+└── lessons/              # Source lesson content (re-imported via editor)
 ```
-
-## Development Timeline
-- Phase 1: Foundation & Planning
-- Phase 2: Core Development
-- Phase 3: User Interface
-- Phase 4: Testing & Deployment
 
 ## Research Information
 - **Title**: MODULEARN: A Web-Based Individualized Learning Platform on Computer Hardware Servicing Using Bayesian Knowledge Tracing Algorithm
 - **Domain**: Educational Technology, Adaptive Learning Systems
-- **Target Users**: Computer Hardware Servicing Students
+- **Target Users**: TESDA Computer Hardware Servicing NC II students
 
 ## Getting Started
-(To be updated as development progresses)
 
-## Deployment Paths
-- Netlify frontend + Azure backend deployment: `docs/NETLIFY_DEPLOYMENT.md`
-- Credit-optimized frontend deployment (GitHub Pages): `docs/GITHUB_PAGES_DEPLOYMENT.md`
-- Azure backend + database deployment: `docs/AZURE_BACKEND_DEPLOYMENT.md`
+- **First-time deploy**: see [DEPLOY.md](DEPLOY.md). Step-by-step from zero (no Supabase/Vercel/Modal accounts) to a live production URL in ~30 minutes.
+- **Long-term operation**: see [SUSTAINABILITY.md](SUSTAINABILITY.md). Cost trajectory, backup recipe, monitoring setup, succession plan.
 
 ## License
 (To be determined)

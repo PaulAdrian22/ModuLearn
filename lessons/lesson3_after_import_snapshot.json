@@ -17,422 +17,82 @@
         "fileName": null
       },
       {
-        "id": 1776123188181,
+        "id": 1777220247001,
         "file": null,
         "type": "paragraph",
         "order": 2,
         "title": "",
         "caption": "",
-        "content": "<p>\tLearning the basics of computers may seem complicated on the inside, but every device—from the smallest smartphone to the largest desktop—relies on the same essential building blocks. These building blocks are called hardware components, the physical parts of a computer that you can see and touch.<sup>[1][2]</sup></p><p>Computer hardware is everything from the central processing unit (CPU) to random access memory (RAM), storage devices (like hard disk drives and solid-state drives), motherboards, power supplies, and input/output devices (such as keyboards, mice, and printers). Each component has a specific function and plays an integral role in the overall performance of the computer.<sup>[1][2]</sup></p>",
+        "content": "<p>Learning the basics of computers may seem complicated on the inside, but every device—from the smallest smartphone to the largest desktop—relies on the same essential building blocks. These building blocks are called hardware components, the physical parts of a computer that you can see and touch.[1][2]</p>\n<p>Computer hardware is everything from the central processing unit (CPU) to random access memory (RAM), storage devices (like hard disk drives and solid-state drives), motherboards, power supplies, and input/output devices (such as keyboards, mice, and printers). Each component has a specific function and plays an integral role in the overall performance of the computer.[1][2]</p>\n<p>Source: https://scot-comp.co.uk/</p>\n<p>A computer is an electronic device that accepts data, performs operations, displays results, and stores the data or results as needed. It is a combination of hardware and software resources that integrate and provide various functionalities to the user. Hardware is the physical components of a computer, such as a processor, memory devices, monitor, keyboard, etc., while software is a set of programs or instructions that are required by the hardware resources to function properly.[1]</p>\n<p>In this lesson, you will learn about the different parts and components that make up a desktop computer unit. It is important for us to know the basic parts of the computer hardware, so that you can establish your understanding and keep up for the following lessons in ModuLearn. Along with it, you will learn their functions and parts as well. To further prepare your learning drive, here is an overview of what we will be discussing along the lesson:</p>\n<p>Central processing unit (CPU) - known as the ‘brain’ of the computer because it executes instructions and carries out commands.[image-33]</p>\n<p>Motherboard - provides the structure for all other components and connects them, while also providing a way to distribute power, deliver information and connect to devices such as a printer or mouse.[image-34]</p>\n<p>Random Access Memory (RAM) - is where data lives temporarily while it’s being actively used by programs, such as when a user launches a computer application.[image-35]</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
-        "id": 1776123188182,
+        "id": 1777220247002,
         "file": null,
         "type": "image",
         "order": 3,
-        "title": "",
+        "title": "The Hardware Components of a Computer",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123188245-1.jpg",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123188245-1.jpg"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123188245-1.jpg",
-        "fileName": "docx-lesson-3-1776123188245-1.jpg"
-      },
-      {
-        "id": 1776123188183,
-        "file": null,
-        "type": "subtopic",
-        "order": 4,
-        "title": "Source",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123188184,
-        "file": null,
-        "type": "paragraph",
-        "order": 5,
-        "title": "",
-        "caption": "",
-        "content": "<h4><a id=\"_tv8n3ath40x9\"></a><strong>A. The Computer As a Hardware</strong></h4><p>A computer is an electronic device that accepts data, performs operations, displays results, and stores the data or results as needed. It is a combination of hardware and software resources that integrate and provide various functionalities to the user. Hardware is the physical components of a computer, such as a processor, memory devices, monitor, keyboard, etc., while software is a set of programs or instructions that are required by the hardware resources to function properly.<sup>[1]</sup></p><table><thead><tr><th><h5><a id=\"_mii1ffgxa0hg\"></a><strong>Insert Simulation # 1</strong></h5></th></tr></thead></table><h4><a id=\"_fulxz5428f0b\"></a><strong>B. Computer and Its Parts</strong>:</h4>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188185,
-        "file": null,
-        "type": "image",
-        "order": 6,
-        "title": "",
-        "images": [
+            "url": "/uploads/lessons/051_computer_hardware_is_everything_from_the.webp",
+            "file": null,
+            "fileName": "051_computer_hardware_is_everything_from_the.webp",
+            "caption": "Computer hardware is everything from the central processing"
+          },
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123198916-2.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123198916-2.png"
-          }
-        ],
-        "layout": "text-left",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123198916-2.png",
-        "fileName": "docx-lesson-3-1776123198916-2.png",
-        "sideTexts": [
-          "<p>In this lesson, you will learn about the different parts and components that make up a desktop computer unit. It is important for us to know the basic parts of the computer hardware, so that you can establish your understanding and keep up for the following lessons inModuLearn. Along with it, you will learn their functions and parts as well. To further prepare your learning drive, here is an overview of what we will be discussing along the lesson:</p>"
-        ],
-        "layerImages": [
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-3-1776123198916-2.png",
-              "caption": "",
-              "fileName": "docx-lesson-3-1776123198916-2.png"
-            }
-          ]
-        ]
-      },
-      {
-        "id": 1776123188186,
-        "file": null,
-        "type": "paragraph",
-        "order": 7,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Central processing unit (CPU)</strong> - known as the ‘brain’ of the computer because it executes instructions and carries out commands.<sup>[image-33]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188187,
-        "file": null,
-        "type": "image",
-        "order": 8,
-        "title": "",
-        "images": [
+            "url": "/uploads/lessons/052_in_this_lesson_you_will_learn_about_the_.webp",
+            "file": null,
+            "fileName": "052_in_this_lesson_you_will_learn_about_the_.webp",
+            "caption": "In this lesson"
+          },
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123198943-3.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123198943-3.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123198943-3.png",
-        "fileName": "docx-lesson-3-1776123198943-3.png"
-      },
-      {
-        "id": 1776123188188,
-        "file": null,
-        "type": "paragraph",
-        "order": 9,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Motherboard </strong>- provides the structure for all other components and connects them, while also providing a way to distribute power, deliver information and connect to devices such as a printer or mouse.<sup>[image-34]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188189,
-        "file": null,
-        "type": "image",
-        "order": 10,
-        "title": "",
-        "images": [
+            "url": "/uploads/lessons/053_central_processing_unit_cpu_known_as_the.webp",
+            "file": null,
+            "fileName": "053_central_processing_unit_cpu_known_as_the.webp",
+            "caption": "Central processing unit (CPU)"
+          },
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123198962-4.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123198962-4.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123198962-4.png",
-        "fileName": "docx-lesson-3-1776123198962-4.png"
-      },
-      {
-        "id": 1776123188190,
-        "file": null,
-        "type": "paragraph",
-        "order": 11,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Random Access Memory (RAM) </strong>- is where data lives temporarily while it’s being actively used by programs, such as when a user launches a computer application.[<sup>image-35]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188191,
-        "file": null,
-        "type": "image",
-        "order": 12,
-        "title": "",
-        "images": [
+            "url": "/uploads/lessons/056_storage_devices_an_essential_hardware_th_approx.webp",
+            "file": null,
+            "fileName": "056_storage_devices_an_essential_hardware_th_approx.webp",
+            "caption": "Storage Devices"
+          },
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123198975-5.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123198975-5.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123198975-5.png",
-        "fileName": "docx-lesson-3-1776123198975-5.png"
-      },
-      {
-        "id": 1776123188192,
-        "file": null,
-        "type": "paragraph",
-        "order": 13,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Storage Devices </strong>- an essential hardware that saves and retrieves digital data, like documents, photos, and programs, for both temporary and permanent use.<sup>[image-36]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188193,
-        "file": null,
-        "type": "image",
-        "order": 14,
-        "title": "",
-        "images": [
+            "url": "/uploads/lessons/057_graphics_processing_unit_gpu_a_specializ_approx.webp",
+            "file": null,
+            "fileName": "057_graphics_processing_unit_gpu_a_specializ_approx.webp",
+            "caption": "Graphics Processing Unit (GPU)"
+          },
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123198993-6.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123198993-6.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123198993-6.png",
-        "fileName": "docx-lesson-3-1776123198993-6.png"
-      },
-      {
-        "id": 1776123188194,
-        "file": null,
-        "type": "paragraph",
-        "order": 15,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Graphics Processing Unit (GPU) </strong>- a specialized processor that rapidly manipulates and alters memory to accelerate the creation of images, videos, and animations for display.<sup>[image-37]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188195,
-        "file": null,
-        "type": "image",
-        "order": 16,
-        "title": "",
-        "images": [
+            "url": "/uploads/lessons/059_cooling_system_a_computer_s_system_to_de_approx.webp",
+            "file": null,
+            "fileName": "059_cooling_system_a_computer_s_system_to_de_approx.webp",
+            "caption": "Cooling System"
+          },
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123199008-7.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123199008-7.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123199008-7.png",
-        "fileName": "docx-lesson-3-1776123199008-7.png"
-      },
-      {
-        "id": 1776123188196,
-        "file": null,
-        "type": "paragraph",
-        "order": 17,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Power Supply </strong>- provides electricity to all components of a computer system.<sup>[image-38]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188197,
-        "file": null,
-        "type": "image",
-        "order": 18,
-        "title": "",
-        "images": [
+            "url": "/uploads/lessons/062_hard_drive_a_data_storage_device_used_to_approx.webp",
+            "file": null,
+            "fileName": "062_hard_drive_a_data_storage_device_used_to_approx.webp",
+            "caption": "Hard drive"
+          },
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123199024-8.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123199024-8.png"
+            "url": "/uploads/lessons/063_monitor_an_electronic_device_that_displa_approx.webp",
+            "file": null,
+            "fileName": "063_monitor_an_electronic_device_that_displa_approx.webp",
+            "caption": "Monitor"
           }
         ],
-        "layout": "single",
+        "layout": "grid-3",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123199024-8.png",
-        "fileName": "docx-lesson-3-1776123199024-8.png"
-      },
-      {
-        "id": 1776123188198,
-        "file": null,
-        "type": "paragraph",
-        "order": 19,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Cooling System </strong>- a computer’s system to decrease overheating.<sup>[image-39]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188199,
-        "file": null,
-        "type": "image",
-        "order": 20,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123199033-9.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123199033-9.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123199033-9.png",
-        "fileName": "docx-lesson-3-1776123199033-9.png"
-      },
-      {
-        "id": 1776123188200,
-        "file": null,
-        "type": "paragraph",
-        "order": 21,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Input Devices </strong>- any hardware that sends data, commands, or signals to a computer.<sup>[image-40]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188201,
-        "file": null,
-        "type": "image",
-        "order": 22,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123199055-10.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123199055-10.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123199055-10.png",
-        "fileName": "docx-lesson-3-1776123199055-10.png"
-      },
-      {
-        "id": 1776123188202,
-        "file": null,
-        "type": "image",
-        "order": 23,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123199356-11.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123199356-11.png"
-          }
-        ],
-        "layout": "text-left",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123199356-11.png",
-        "fileName": "docx-lesson-3-1776123199356-11.png",
-        "sideTexts": [
-          "<ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Output Devices </strong>- any hardware that takes processed digital data from the computer and presents the results to the user.<sup>[image-41]</sup></li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Hard drive</strong> - a data storage device used to store files, programs or other information on a computer system.<sup>image-[42][43]</sup></li></ul>"
-        ],
-        "layerImages": [
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-3-1776123199356-11.png",
-              "caption": "",
-              "fileName": "docx-lesson-3-1776123199356-11.png"
-            }
-          ]
-        ]
-      },
-      {
-        "id": 1776123188203,
-        "file": null,
-        "type": "image",
-        "order": 24,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123199378-12.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123199378-12.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123199378-12.png",
-        "fileName": "docx-lesson-3-1776123199378-12.png"
-      },
-      {
-        "id": 1776123188204,
-        "file": null,
-        "type": "paragraph",
-        "order": 25,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Monitor </strong>- an electronic device that displays what programs are running on the computer.<sup>[image-44]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188205,
-        "file": null,
-        "type": "image",
-        "order": 26,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123199430-13.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123199430-13.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123199430-13.png",
-        "fileName": "docx-lesson-3-1776123199430-13.png"
-      },
-      {
-        "id": 1776123188206,
-        "file": null,
-        "type": "paragraph",
-        "order": 27,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Printer </strong>- a machine that produces copies of text or images on paper using ink.<sup>[2] [image-45]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
+        "content": "/uploads/lessons/051_computer_hardware_is_everything_from_the.webp",
+        "fileName": "051_computer_hardware_is_everything_from_the.webp"
       },
       {
         "id": 1776123188209,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 28,
+        "order": 4,
         "title": "",
         "caption": "",
         "content": "",
@@ -470,39 +130,38 @@
         "id": 1776123188210,
         "file": null,
         "type": "topic",
-        "order": 29,
+        "order": 5,
         "title": "Topic 2: Central Processing Unit (CPU)",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
+        "id": 1777220247003,
+        "file": null,
+        "type": "paragraph",
+        "order": 6,
+        "title": "",
+        "caption": "",
+        "content": "<p>Do you know that a computer cannot function without a CPU, even if it has a monitor, keyboard, and a mouse? Just like the human brain, the CPU controls all the activities of the computer. Without it, the system cannot think, calculate, or respond.</p>\n<p>In computer hardware servicing, knowing how the CPU works is essential for installation, troubleshooting, upgrading, and maintenance.        This is the main processing component of a computer. It executes instructions from programs and controls all hardware operations.[3]</p>\n<p>Arithmetic/Logic Unit</p>\n<p>This part of the CPU is responsible for doing calculations and making decisions based on comparisons. Its math functionality is based on four types of operations (addition, subtraction, multiplication and division). Logical operations typically involve some type of comparison (checking whether something is greater than, less than, or equal to something else) that is tied to a particular computer action.[3][4] In simple terms, the ALU is the “calculator and decision maker” of the CPU.</p>\n<p>Control Unit (CU)</p>\n<p>The Control Unit acts like a manager or traffic controller inside the CPU. The control unit of the CPU houses circuitry (electronic pathways that allow electricity to move and control components) that guides the computer system through a system of electrical pulses (tiny bursts of electrical signals used to send instructions) and notifies it to execute high-level computer instructions (commands given by programs or software).[3][4] Simply put, the CU tells all the other parts of the computer what to do and when to do it.</p>\n<p>Memory Unit</p>\n<p>The Memory Unit is responsible for handling data and instructions while the CPU is working. It handles several key functions related to memory usage, from managing the data flow (movement of information) that occurs between RAM and the CPU to overseeing the important work of the cache memory (a small, very fast memory used to store frequently used data). Memory units contain all types of data and instructions needed for data processing (handling and organizing information) and offer memory-protection safeguards (features that prevent programs from interfering with each other’s data).[3][4] In simple terms, the Memory Unit keeps important data ready so the CPU can use it quickly and safely.</p>",
+        "fileName": null,
+        "contentLayout": "text"
+      },
+      {
         "id": 1776123188311,
         "file": null,
         "type": "video",
-        "order": 30,
+        "order": 7,
         "title": "",
         "caption": "Lesson 3 CPU Video",
         "content": "https://www.dropbox.com/scl/fi/8rmvptztbdqs9g6a689we/Lesson-3-Topic-1-CPU.mp4?rlkey=ujw4423z4xfgh6lv7zwfbpmd1&st=m45e58vs&dl=0",
         "fileName": null
       },
       {
-        "id": 1776123188211,
-        "file": null,
-        "type": "paragraph",
-        "order": 31,
-        "title": "",
-        "caption": "",
-        "content": "<h4><a id=\"_84ak3gq08vcc\"></a><strong>A. What is a CPU?</strong></h4><p>Do you know that a computer cannot function without a CPU, even if it has a monitor, keyboard, and a mouse? Just like the human brain, the CPU controls all the activities of the computer. Without it, the system cannot think, calculate, or respond.</p><p>In computer hardware servicing, knowing how the CPU works is essential for installation, troubleshooting, upgrading, and maintenance.\tThis is the main processing component of a computer. It executes instructions from programs and controls all hardware operations.<sup>[3]</sup></p><h4><a id=\"_twmuipncp1av\"></a><strong>B. Main Parts of the CPU</strong></h4><ol style=\"list-style-type: decimal;\"><li><strong>Arithmetic/Logic Unit</strong></li></ol><ul style=\"list-style-type: disc;\"><li>This part of the CPU is responsible for doing calculations and making decisions based on comparisons. Its math functionality is based on four types of operations (addition, subtraction, multiplication and division). Logical operations typically involve some type of comparison (checking whether something is greater than, less than, or equal to something else) that is tied to a particular computer action.[3][4] In simple terms, the ALU is the <strong>“</strong>calculator and decision maker” of the CPU.</li></ul><ol style=\"list-style-type: decimal;\"><li><strong>Control Unit (CU)</strong></li></ol><ul style=\"list-style-type: disc;\"><li>The Control Unit acts like a manager or traffic controller inside the CPU. The control unit of the CPU houses circuitry (electronic pathways that allow electricity to move and control components) that guides the computer system through a system of electrical pulses (tiny bursts of electrical signals used to send instructions) and notifies it to execute high-level computer instructions (commands given by programs or software).[3][4] Simply put, the CU tells all the other parts of the computer what to do and when to do it.</li></ul><ol style=\"list-style-type: decimal;\"><li><strong>Memory Unit</strong></li></ol><ul style=\"list-style-type: disc;\"><li>The Memory Unit is responsible for handling data and instructions while the CPU is working. It handles several key functions related to memory usage, from managing the data flow (movement of information) that occurs between RAM and the CPU to overseeing the important work of the cache memory (a small, very fast memory used to store frequently used data). Memory units contain all types of data and instructions needed for data processing (handling and organizing information) and offer memory-protection safeguards (features that prevent programs from interfering with each other’s data).[3][4] In simple terms, the Memory Unit keeps important data ready so the CPU can use it quickly and safely.</li></ul><h4><a id=\"_r2ir7cuq29m1\"></a><strong>C. CPU Components</strong></h4><ul style=\"list-style-type: disc;\"><li><strong>Cache</strong>: Memory speed is a critical aspect of how CPUs run, and yet, ironically, the CPU does not actually access RAM. Instead, modern CPUs have one or multiple layers of cache that routinely handle such tasks due to the cache’s advantageous position on the CPUs processor chip. In simpler terms, cache acts like a quick-access storage area for frequently used information.</li><li><strong>Registers:</strong> For immediate and constant data needs that must be satisfied quickly to ensure smooth operation, the CPU uses registers, which are a form of permanent memory. By building registers into the CPU itself, those registers’ data can be accessed the millisecond it’s needed. Simply put, registers store tiny pieces of data that the CPU needs right away.</li><li><strong>Clock:</strong> It’s essential that the complicated circuitry (electronic pathways that allow signals to travel within the CPU) within a CPU works together in a highly synchronized manner (working together at the same timing). The CPU’s clock manages this process by issuing electrical pulses at regular intervals , which coordinate with various computer components. The rate at which those pulses are delivered is referred to as clock speed, measured in Hertz (Hz) or megahertz (MHz). In simpler terms, the clock keeps the CPU working in rhythm so all parts operate at the right time.</li><li><strong>Instruction register and pointer</strong>: When an instruction set (a sequence of commands that the CPU must perform) is being carried out by the CPU, the instruction pointer shows the location of the next instruction (the next command the CPU needs to execute). Once one instruction has been accomplished, the next information pops into the instruction register (a small storage area that holds the current instruction being processed) and a new instruction will be spotlighted within the instruction pointer. Simply put, this component helps the CPU know what command it is doing now and what command comes next.</li><li><strong>Buses</strong>: A computer bus has a very singular role within most computers, ensuring proper data transfer and data flow (movement of digital information) between the computing components inside a computer system. The width of a bus describes the number of how many bits (smallest unit of digital data, usually represented as 0 or 1) the bus transfers in parallel. Buses provide a way for computers to link CPUs to on-board memory (memory located directly on the motherboard) and serve other purposes.[3][4] In simpler terms, buses are like roads that allow data to travel between computer parts</li></ul><h4><a id=\"_oun8hjd5jrwh\"></a><strong>D. Functions of the CPU</strong></h4><p>CPU functionality is handled by the control unit, with synchronization assistance provided by the computer clock. CPU work occurs according to an established cycle that calls for a certain number of repetitions of the following basic computing instructions.</p><ol style=\"list-style-type: decimal;\"><li>Processing Data - calculations and logical operations</li><li>Executing Instructions - runs commands from software and the operating system.</li><li>Controlling System Operations - communicates with memory, storage, and input/output devices.<sup>[4]</sup></li></ol><h4><a id=\"_nm7jyq5dttqh\"></a><strong>E. How the CPU Works (Fetch-Decode-Execute Cycle)</strong></h4><ol style=\"list-style-type: decimal;\"><li>Fetch - Gets instructions from memory.</li><li>Decode - Understands what the instruction means or translates binary instructions into electrical signals that engage other parts of the CPU.</li><li>Execute - Occurs when the computers interpret and carry out a computer program’s set of instructions.<sup>[4]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
         "id": 1776123188214,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 32,
+        "order": 8,
         "title": "",
         "caption": "",
         "content": "",
@@ -540,39 +199,38 @@
         "id": 1776123188215,
         "file": null,
         "type": "topic",
-        "order": 33,
+        "order": 9,
         "title": "Topic 3: Motherboard",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
+        "id": 1777220247004,
+        "file": null,
+        "type": "paragraph",
+        "order": 10,
+        "title": "",
+        "caption": "",
+        "content": "<p>If the CPU is the brain, the motherboard is the body’s nervous system. Without it, the computer’s parts cannot communicate or function together. It is also called the mainboard or system board, it is the main circuit board of a computer. It connects, controls, and allows communication among all major hardware components such as the CPU, RAM, storage devices, and peripherals.[5]</p>\n<p>A motherboard is easily identified, as it is the largest board inside a computer’s casing. In tower computer’s, it stands vertically on the tower’s left or right side. While motherboards come in a variety of types and sizes– each designed to be placed in a different kind of computer and to work with different types of processors and memory– they all have the same basic components. The base of any motherboard is made of a hard sheet of nonconductive material, usually plastic.[6]</p>\n<p>When you turn your computer on, the power supply transfers electricity to the motherboard to be used by the computer. Data is transported between the chipset components via data buses and travels between the southbridge and northbridge sections.</p>\n<p>The data connections to the CPU, RAM, or PCIe are made through the northbridge component. The operations performed by the RAM are first “interpreted” by the CPU as being output after the RAM begins to deliver inputs to the CPU. After being written to the PCIe, the data is either copied or moved to the expansion card, based on the kind of card you have.</p>\n<p>The data connection to the basic input/output system (BIOS), the universal serial bus (USB), the serial advanced technology attachment (SATA), and the PCI bus are managed by the southbridge component. Your computer can start up because of signals sent to the BIOS, and the data sent to the SATA “awakens” your optical, hard disc, and solid-state drives. The video card, network card, and sound card receive power from the information stored on the SATA.</p>\n<p>The remaining components interact via an electrical signal, which serves as a hub for them. These data buses pass via a microchip’s northbridge or southbridge elements, which then branch off to other components like the CPU, RAM, PCI, and PCIe, amongst other elements.</p>\n<p>The information sent over buses will be encoded using a programming language (1 and 0). When a signal is sent to a motherboard from one of its components, the motherboard will process it and translate it into a language the other component can comprehend. On most of today’s computing systems, all of this will occur in a split second, and there is almost no delay between the input and the output.[5]</p>\n<p>Connectivity - refers to the motherboard’s ability to link all major computer components so they can communicate and work together. It connects the CPU (the computer’s main processor), RAM (temporary working memory), storage devices like SSDs/HDDs (where files are permanently stored), the GPU (graphics processor), and peripherals (devices like keyboard and mouse). The motherboard acts as the central hub where all these parts exchange information.</p>",
+        "fileName": null,
+        "contentLayout": "text"
+      },
+      {
         "id": 1776123188309,
         "file": null,
         "type": "video",
-        "order": 34,
+        "order": 11,
         "title": "",
         "caption": "Lesson 3 Motherboard Video",
         "content": "https://www.dropbox.com/scl/fi/8199jhk8dcan8c460jxcv/Lesson-3-Topic-1-Motherboard.mp4?rlkey=osshw5z07qcpykhtt40cayohg&st=4vgafh3c&dl=0",
         "fileName": null
       },
       {
-        "id": 1776123188216,
-        "file": null,
-        "type": "paragraph",
-        "order": 35,
-        "title": "",
-        "caption": "",
-        "content": "<h4><a id=\"_1bxkhwar16p9\"></a><strong>A. What is a Motherboard?</strong></h4><p>If the CPU is the brain, the motherboard is the body’s nervous system. Without it, the computer’s parts cannot communicate or function together. It is also called the mainboard or system board, it is the main circuit board of a computer. It connects, controls, and allows communication among all major hardware components such as the CPU, RAM, storage devices, and peripherals.<sup>[5]</sup></p><p>A motherboard is easily identified, as it is the largest board inside a computer’s casing. In tower computer’s, it stands vertically on the tower’s left or right side. While motherboards come in a variety of types and sizes– each designed to be placed in a different kind of computer and to work with different types of processors and memory– they all have the same basic components. The base of any motherboard is made of a hard sheet of nonconductive material, usually plastic.<sup>[6]</sup></p><h4><a id=\"_wa3rjfpberjm\"></a><strong>B. How Does A Motherboard Work?</strong></h4><p>\tWhen you turn your computer on, the power supply transfers electricity to the motherboard to be used by the computer. Data is transported between the chipset components via data buses and travels between the southbridge and northbridge sections.</p><p>The data connections to the CPU, RAM, or PCIe are made through the northbridge component. The operations performed by the RAM are first “interpreted” by the CPU as being output after the RAM begins to deliver inputs to the CPU. After being written to the PCIe, the data is either copied or moved to the expansion card, based on the kind of card you have.</p><p>The data connection to the basic input/output system (BIOS), the universal serial bus (USB), the serial advanced technology attachment (SATA), and the PCI bus are managed by the southbridge component. Your computer can start up because of signals sent to the BIOS, and the data sent to the SATA “awakens” your optical, hard disc, and solid-state drives. The video card, network card, and sound card receive power from the information stored on the SATA.</p><p>The remaining components interact via an electrical signal, which serves as a hub for them. These data buses pass via a microchip’s northbridge or southbridge elements, which then branch off to other components like the CPU, RAM, PCI, and PCIe, amongst other elements.</p><p>The information sent over buses will be encoded using a programming language (1 and 0). When a signal is sent to a motherboard from one of its components, the motherboard will process it and translate it into a language the other component can comprehend. On most of today’s computing systems, all of this will occur in a split second, and there is almost no delay between the input and the output.<sup>[5]</sup></p><h4><a id=\"_uzf3dal9tlsn\"></a><strong>C. Key Functions &amp; Components:</strong></h4><ol style=\"list-style-type: decimal;\"><li><strong>Connectivity </strong>- refers to the motherboard’s ability to link all major computer components so they can communicate and work together. It connects the CPU (the computer’s main processor), RAM (temporary working memory), storage devices like SSDs/HDDs (where files are permanently stored), the GPU (graphics processor), and peripherals (devices like keyboard and mouse). The motherboard acts as the central hub where all these parts exchange information.</li><li><strong>Data Highway </strong>- The motherboard serves as a data highway that allows information to travel between computer components. This happens through printed circuits (thin copper pathways on the motherboard that carry electrical signals). These circuits move digital data between the CPU, memory, storage, and other hardware..</li><li><strong>CPU Socket</strong> - The motherboard has a CPU socket, the slot on the where the processor is installed. It physically holds the CPU and provides the electrical connections needed for it to communicate with the rest of the computer.</li><li><strong>Expansion Slots (PCIe) </strong>- Expansion slots allow additional hardware components to be installed to expand a computer’s capabilities. Most modern systems use PCIe (Peripheral Component Interconnect Express), which supports high-speed expansion cards. Examples include graphics cards, Wi-Fi cards, and sound cards.</li><li><strong>Storage Connectors (SATA, M.2) </strong>- Storage connectors are used to attach storage devices such as hard drives and solid-state drives to the motherboard. SATA (Serial Advanced Technology Attachment) typically uses cables to connect drives, while M.2 allows drives to plug directly into the motherboard. These connectors allow the computer to store the operating system, programs, and user files.</li><li><strong>Input/Output Ports </strong>- Input/Output (I/O) ports are the connectors on the back panel of the motherboard that allow external devices to connect to the computer. These include USB ports for devices, audio ports for speakers and microphones, and Ethernet ports for network connections. They enable communication between the computer and external hardware.</li><li><strong>Power Distribution </strong>- Power distribution refers to how the motherboard supplies electricity to the different computer components. Power from the power supply unit (PSU) is delivered through circuits on the motherboard to parts like the CPU, RAM, and storage devices. This ensures each component receives the proper electrical power needed to operate..</li><li><strong>Firmware (BIOS/UEFI) </strong>- Firmware is low-level software stored on the motherboard that controls basic hardware operations. BIOS (Basic Input/Output System) and UEFI (Unified Extensible Firmware Interface) initialize hardware when the computer starts. They also run checks on system components and load the operating system during startup..</li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
         "id": 1776123188218,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 36,
+        "order": 12,
         "title": "",
         "caption": "",
         "content": "",
@@ -597,39 +255,38 @@
         "id": 1776123188219,
         "file": null,
         "type": "topic",
-        "order": 37,
+        "order": 13,
         "title": "Topic 4: RAM",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
+        "id": 1777220247005,
+        "file": null,
+        "type": "paragraph",
+        "order": 14,
+        "title": "",
+        "caption": "",
+        "content": "<p>Every time you open an app, browse the web, or run a program, the Random Access Memory (RAM) is working behind the scenes to keep everything fast and smooth.</p>\n<p>Think of RAM as your computer’s short-term brain—the more brain power it has, the better it can think, remember, and multitask!</p>\n<p>Random Access Memory (RAM) is one of the most important components in Computer Hardware Servicing (CHS) because it directly affects a computer’s speed and overall performance. RAM serves as the computer’s temporary working memory, where data and programs that are currently in use are stored, so the processor can access them quickly. When a computer is powered on, the operating system and active applications are loaded into RAM, allowing tasks such as opening files, browsing the internet, and running software to be performed smoothly. However, once the computer is shut down, all data stored in RAM is erased, which is why it is referred to as volatile memory.[7]</p>\n<p>In practical terms, RAM can be compared to a study desk: the larger the desk, the more books and materials can be opened at the same time without clutter. Similarly, a computer with higher RAM capacity can run multiple applications simultaneously with less lag or freezing. RAM works much faster than storage devices such as hard disk drives (HDDs) or solid-state drives (SSDs), which are used for long-term data storage. While storage keeps files permanently, RAM focuses on speed and efficiency, ensuring that the CPU can quickly retrieve the information it needs to perform tasks.[7]</p>\n<p>Dynamic Random Access Memory (DRAM) - is typically used for a computer’s main memory. It needs continuous power to retain stored data. DRAM is cheaper than Static Random Access Memory (SRAM), has a higher density, but it produces more heat, consumes more power and is not as fast as SRAM. Each DRAM cell stores a positive or negative charge held in an electrical capacitor. This data must be constantly refreshed with an electronic charge every few milliseconds to compensate for leaks from the capacitor. A transistor serves as a gate, determining whether a capacitor’s value can be read or written.</p>\n<p>Double Data Rate (DDR) - The first generation, released around 2000, offering twice the bandwidth of SDRAM by transferring data on both clock edges, operating at ~2.5V.</p>\n<p>DDR2 (2nd Generation) - Faster bus speeds than DDR1, lower voltage (1.8V), and a 4n prefetch buffer, released around 2003.</p>\n<p>DDR3 (3rd Generation) - Focused on power efficiency with lower voltage (1.5V/1.35V), higher clock speeds (800-2133 MHz), and a larger 8n prefetch buffer, released around 2007.</p>",
+        "fileName": null,
+        "contentLayout": "text"
+      },
+      {
         "id": 1776123188307,
         "file": null,
         "type": "video",
-        "order": 38,
+        "order": 15,
         "title": "",
         "caption": "Lesson 3 RAM Video",
         "content": "https://www.dropbox.com/scl/fi/xi1pkxtei70e1m3groiqw/Lesson-3-Topic-1-RAM.mp4?rlkey=628yw9mbwzr23yxcx4irdrb2c&st=et28s5h0&dl=0",
         "fileName": null
       },
       {
-        "id": 1776123188220,
-        "file": null,
-        "type": "paragraph",
-        "order": 39,
-        "title": "",
-        "caption": "",
-        "content": "<p>Every time you open an app, browse the web, or run a program, the Random Access Memory (RAM) is working behind the scenes to keep everything fast and smooth. </p><p>Think of RAM as your computer’s short-term brain—the more brain power it has, the better it can think, remember, and multitask!</p><h4><a id=\"_rj3zdsac4qtt\"></a><strong>A. What is a RAM?</strong></h4><p><strong>Random Access Memory (RAM)</strong> is one of the most important components in Computer Hardware Servicing (CHS) because it directly affects a computer’s speed and overall performance. RAM serves as the computer’s temporary working memory, where data and programs that are currently in use are stored, so the processor can access them quickly. When a computer is powered on, the operating system and active applications are loaded into RAM, allowing tasks such as opening files, browsing the internet, and running software to be performed smoothly. However, once the computer is shut down, all data stored in RAM is erased, which is why it is referred to as <strong>volatile memory</strong>.<sup>[7]</sup></p><p>In practical terms, RAM can be compared to a study desk: the larger the desk, the more books and materials can be opened at the same time without clutter. Similarly, a computer with higher RAM capacity can run multiple applications simultaneously with less lag or freezing. RAM works much faster than storage devices such as <strong>hard disk drives (HDDs)</strong> or <strong>solid-state drives (SSDs)</strong>, which are used for long-term data storage. While storage keeps files permanently, RAM focuses on speed and efficiency, ensuring that the CPU can quickly retrieve the information it needs to perform tasks.<sup>[7]</sup></p><h4><a id=\"_93236k41xwlw\"></a><strong>B. Types of RAM</strong></h4><ol style=\"list-style-type: decimal;\"><li><strong>Dynamic Random Access Memory (DRAM)</strong> - is typically used for a computer’s main memory. It needs continuous power to retain stored data. DRAM is cheaper than Static Random Access Memory (SRAM), has a higher density, but it produces more heat, consumes more power and is not as fast as SRAM. Each DRAM cell stores a positive or negative charge held in an electrical capacitor. This data must be constantly refreshed with an electronic charge every few milliseconds to compensate for leaks from the capacitor. A transistor serves as a gate, determining whether a capacitor’s value can be read or written.</li></ol><h5><a id=\"_78cn0di676dz\"></a><strong>C. Common forms of DRAM:</strong></h5><ol style=\"list-style-type: decimal;\"><li><strong>Double Data Rate (DDR) </strong>- The first generation, released around 2000, offering twice the bandwidth of SDRAM by transferring data on both clock edges, operating at ~2.5V.</li><li><strong>DDR2 (2nd Generation) - </strong>Faster bus speeds than DDR1, lower voltage (1.8V), and a 4n prefetch buffer, released around 2003.</li><li><strong>DDR3 (3rd Generation) </strong>- Focused on power efficiency with lower voltage (1.5V/1.35V), higher clock speeds (800-2133 MHz), and a larger 8n prefetch buffer, released around 2007.</li><li><strong>DDR4 (4th Generation)</strong> - Even lower voltage (1.2V), higher densities, and a faster speed (2133-3200+ MHz), released around 2014, with DDRS following in 2021.<sup>[10]</sup></li><li><strong>Static Random Access Memory (SRAM)</strong> - this type of RAM is typically used for the system’s high speed cache. Like DRAM, SRAM also needs constant power to hold on to data, but it doesn’t need to be continually refreshed the way DRAM does. SRAM is more expensive than DRAM and has a lower density, but it produces less heat, consumes less power and offers better performance.<sup>[8]</sup></li><li><strong>Synchronous DRAM (SDRAM) </strong>- this type of computer memory that synchronizes with the computer’s system clock for faster, more efficient data transfer with the CPU, making it a significant improvement over older, asynchronous DRAM. It uses pipelining and bank interleaving to allow for higher data rates, becoming the standard for PCs and servers and evolving into modem types of DDR SDRAM.<sup>[9]</sup></li></ol><p>Understanding these types of RAM helps you to choose compatible memory modules, perform upgrades, and troubleshoot memory-related problems effectively in real-world servicing tasks.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
         "id": 1776123188222,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 40,
+        "order": 16,
         "title": "",
         "caption": "",
         "content": "",
@@ -654,105 +311,38 @@
         "id": 1776123188223,
         "file": null,
         "type": "topic",
-        "order": 41,
+        "order": 17,
         "title": "Topic 5: Storage Devices",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
+        "id": 1777220247006,
+        "file": null,
+        "type": "paragraph",
+        "order": 18,
+        "title": "",
+        "caption": "",
+        "content": "<p>Where does a computer save files? The answer is storage devices. These components store the operating system, applications, and user data, making them essential to computer operations. You will learn different types of storage devices, how they work, and their role in Computer Hardware Servicing.[11] You will also gain basic skills in identifying, installing, and maintaining storage devices–important tasks.</p>\n<p>Computer storage devices, classified as primary (temporary) or secondary (persistent), are essential hardware components that retain data, instructions, and information. The primary, most common devices are Hard Disk Drives (HDDs) for large capacity and Solid-State Drives (SSDs) for high-speed, durable storage. Other forms include USB flash drives, memory cards, optical discs (CD/DVD), and cloud storage.[12][13]</p>\n<p>While it may at first seem like the range of storage options available to you is vast, they largely fall under three main categories:</p>\n<p>Internal physical storage on your computer—your computer’s built-in storage space, often referred to as its hard drive.</p>\n<p>External physical storage devices—similar to the memory built into your computer, only you can remove it and connect it to another device.</p>\n<p>Cloud storage—platforms like Google Drive allow you to store files over the internet, rather than on physical storage, meaning any compatible device with an internet connection can access the files.[13]</p>\n<p>To help you to understand which type of storage is right for your needs, let’s dive into each in a little more detail and walk through some examples.</p>\n<p>This ultimately refers to your device’s built-in memory. Most computers and handheld devices will come with some degree of internal storage. It’s also common to be able to choose how much internal storage you want when buying a laptop, for example.</p>",
+        "fileName": null,
+        "contentLayout": "text"
+      },
+      {
         "id": 1776123188306,
         "file": null,
         "type": "video",
-        "order": 42,
+        "order": 19,
         "title": "",
         "caption": "Lesson 3 Storage Video",
         "content": "https://www.dropbox.com/scl/fi/4fcxtt2ddpw8oc5k5mgcb/Lesson-3-Topic-1-Storage.mp4?rlkey=hewjpgu1k8etnnfvfnrzx3plu&st=21rtv163&dl=0",
         "fileName": null
       },
       {
-        "id": 1776123188224,
-        "file": null,
-        "type": "paragraph",
-        "order": 43,
-        "title": "",
-        "caption": "",
-        "content": "<h4><a id=\"_lokeq3op3dsr\"></a><strong>A. What are storage devices for?</strong></h4><p>Where does a computer save files? The answer is storage devices. These components store the operating system, applications, and user data, making them essential to computer operations. You will learn different types of storage devices, how they work, and their role in Computer Hardware Servicing.<sup>[11] </sup>You will also gain basic skills in identifying, installing, and maintaining storage devices–important tasks.</p><p>Computer storage devices, classified as primary (temporary) or secondary (persistent), are essential hardware components that retain data, instructions, and information. The primary, most common devices are Hard Disk Drives (HDDs) for large capacity and Solid-State Drives (SSDs) for high-speed, durable storage. Other forms include USB flash drives, memory cards, optical discs (CD/DVD), and cloud storage.<sup>[12][13]</sup></p><h4><a id=\"_j6eydtwoo5ny\"></a><strong>B. Main Types of Storage Devices</strong></h4><p>While it may at first seem like the range of storage options available to you is vast, they largely fall under three main categories:</p><ul style=\"list-style-type: disc;\"><li><strong>Internal physical storage</strong> on your computer—your computer’s built-in storage space, often referred to as its hard drive.</li><li><strong>External physical storage</strong> devices—similar to the memory built into your computer, only you can remove it and connect it to another device.</li><li><strong>Cloud storage</strong>—platforms like Google Drive allow you to store files over the internet, rather than on physical storage, meaning any compatible device with an internet connection can access the files.<sup>[13]</sup></li></ul><p>To help you to understand which type of storage is right for your needs, let’s dive into each in a little more detail and walk through some examples.</p><h4><a id=\"_mivhcaebudww\"></a><strong>C. Internal Physical Storage</strong></h4><p>This ultimately refers to your device’s built-in memory. Most computers and handheld devices will come with some degree of internal storage. It’s also common to be able to choose how much internal storage you want when buying a laptop, for example.</p><p>While there are two main types of internal storage—hard disk drives and solid-state drives—some devices offer a combination of both. Unlike cloud storage, which you can add later, this choice is an important factor to consider when selecting a device.<sup>[13]</sup></p><ol style=\"list-style-type: decimal;\"><li><strong>Hard Disk Drive (HDD)</strong> - A hard disk drive is the storage built into your computer. If you’ve been using that device, you’ve likely already stored some files on its HDD. Being the more traditional type of storage, a hard disk uses spinning disks to read and write data. An HDD is generally suitable for extensive storage needs like TV recorders and servers. While it may not be as fast or as reliable as more modern solutions, an HDD has the benefit of being cheaper and typically much larger in storage capacity.</li><li><strong>Solid-state drive (SSD)</strong> - Solid-state technology is, in many ways, the evolution of the traditional HDD. Rather than spinning disks that are prone to malfunctioning, a solid-state drive uses flash memory for faster, more reliable performance without moving parts. This means an SSD can run faster and is less likely to break than an HDD. They are typically found in modern PCs, smartphones, and tablets. While they are faster and more reliable, this comes at a cost. Compared to an HDD, an SSD will be more expensive and will generally have less storage space available than an HDD.<sup>[13]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188225,
-        "file": null,
-        "type": "subtopic",
-        "order": 44,
-        "title": "HDD vs. SSD",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123188226,
-        "file": null,
-        "type": "paragraph",
-        "order": 45,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>Solid State Drives (SSDs) and Hard Disk Drives (HDDs) are both storage devices, but they differ significantly in how they store and access data: SSDs use non-volatile flash memory with no moving parts, which results in much faster read/write speeds, greater energy efficiency, and better durability, while HDDs rely on spinning magnetic platters and mechanical read/write heads, making them slower and more prone to physical wear yet more cost-effective per gigabyte and available in larger capacities. Because of these differences, SSDs are ideal for workloads requiring high performance and frequent data access, whereas HDDs are often chosen for large-volume storage where access speed is less critical and cost matters more.<sup>[14]</sup></li></ul><h4><a id=\"_j00sh5uqlyr7\"></a><strong>D. External Physical Storage</strong></h4><p>You can get both HDD and SSD devices as external hard drives. These generally offer the largest storage capacity among the external options available to you. External HDDs and SSDs serve the same purpose as their internal counterparts—storing data—but they work very differently inside, and that’s what makes SSDs faster and more reliable than HDDs. SSDs are much faster than HDDs, which makes them popular when you require quick file access and data transfer. Most external hard drives can connect to any computer; they’re not tied to one device, so they’re a decent solution for transferring files across devices.<sup>[13]</sup></p><ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Flash Memory Devices</strong> - Flash memory devices, such as USB flash drives and memory cards, provide a reliable means of transporting smaller files. They're widely compatible with devices featuring USB ports, though newer computers might require an adapter. Despite being surpassed by other options in many ways, they remain a popular choice for their ease of use and portability.<sup>[13]</sup></li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Legacy Storage</strong> - It’s unlikely you’ll be using these day to day, but there are a number of older external storage methods that you may be able to use, depending on what you are trying to store and the devices you’re using.</li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188227,
-        "file": null,
-        "type": "subtopic",
-        "order": 46,
-        "title": "Examples of these legacy external storage formats include",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123188228,
-        "file": null,
-        "type": "paragraph",
-        "order": 47,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Optical media</strong> – such as CDs, DVDs,  and Blu-ray discs. Most devices no longer include a disk drive, so you would need an external device to use them.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Floppy discs</strong> – largely obsolete, these were once a common method of file storage before CDs took over as the default external storage for PCs in the late 1990s.<sup>[13]</sup></li></ul><p>Generally speaking you won’t be looking to use legacy external storage media. However, if you are working with older technology, you may be required to use one of these formats.\t</p><h4><a id=\"_2z0hragx3c0q\"></a><strong>E. Cloud storage</strong></h4><p>Cloud storage is a service that allows users to store files and data on remote servers (powerful computers that store and manage data) accessed through the internet instead of saving them only on a local device. This allows users to access, upload, download, and share their files from different devices as long as they have an internet connection. When cloud storage first emerged, it revolutionized the way we work with files and data. “The cloud” is not a single place or object, but rather a huge collection of servers housed in data centers around the world. When you save a document to the cloud, you’re storing it on these servers.</p><p>Because cloud storage stores everything online, it doesn’t use any of your computer’s built in storage, allowing you to save space.</p><p>Cloud storage provides much larger storage capacity compared to USB flash drives and other physical options. It saves you the hassle of searching through multiple devices for the right file, as everything is accessible in one place. Plus, when you need more space, you don’t have to buy a new drive—you can simply upgrade your cloud storage plan.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188229,
-        "file": null,
-        "type": "subtopic",
-        "order": 48,
-        "title": "Advantages of cloud storage",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123188230,
-        "file": null,
-        "type": "paragraph",
-        "order": 49,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Space efficiency</strong>—frees up your computer’s storage.</li><li><strong>High capacity</strong>—offers significantly higher storage capacities than USB flash drives and other physical options.</li><li><strong>Portability</strong>—accessible from any device with an internet connection, perfect for on-the-go users. You can also make files available offline.</li><li><strong>Security and backup</strong>—your data is backed up and accessible whenever and wherever you are, as long as you have internet access.<sup>[15]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
         "id": 1776123188233,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 50,
+        "order": 20,
         "title": "",
         "caption": "",
         "content": "",
@@ -790,39 +380,38 @@
         "id": 1776123188234,
         "file": null,
         "type": "topic",
-        "order": 51,
+        "order": 21,
         "title": "Topic 6: GPU",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
+        "id": 1777220247007,
+        "file": null,
+        "type": "paragraph",
+        "order": 22,
+        "title": "",
+        "caption": "",
+        "content": "<p>A Graphics Processing Unit (GPU) is a specialized electronic circuit designed to rapidly process and render images, videos, and 3D animations by executing parallel mathematical calculations. Often referred to as a graphics card, video card, or visual processing unit, it offloads tasks from the CPU to accelerate gaming, video editing, and AI workloads. It is important because it enhances display performance, supports high-resolution monitors, and accelerates demanding applications such as simulations, multimedia editing, and even modern tasks like artificial intelligence and data processing.[16][17]</p>\n<p>A GPU has its own random access memory (RAM), an electronic memory used to store code and data that the chip can access and alter as needed. Advanced GPUs typically have RAM that has been built to hold the large data volumes required for compute-intensive tasks such as graphics editing, gaming or AI/ML use cases.</p>\n<p>Discrete GPUs - Discrete GPUs, or dGPUs, are graphics processors that are separate from a device's CPU, where information is taken in and processed, allowing a computer to function. Discrete GPUs are typically used in advanced applications with special requirements, such as editing, content creation or high-end gaming. They are distinct chips with connectors to separate circuit boards and attached to the CPU by using an express slot.</p>\n<p>One of the most widely used discrete GPUs is the Intel Arc brand, built for the PC gaming industry.</p>\n<p>Integrated GPUs - An integrated GPU, or iGPU, is built into a computer or device's infrastructure and typically slotted in next to the CPU. Designed in the 2010s by Intel, integrated GPUs became more popular as manufacturers such as MSI, ASUS and Nvidia noticed the power of combining GPUs with CPUs rather than requiring users to add GPUs by a PCI express slot themselves. They remain a popular choice for laptop users, gamers and others who are running compute-intensive programs on their PCs.</p>\n<p>Virtual GPUs - Virtual GPUs, or vGPUs, have the same capabilities as discrete or integrated GPUs but without the hardware. They are software-based versions of GPUs built for cloud instances and can be used to run the same workloads. Also, because they have no hardware, they are simpler and cheaper to maintain than their physical counterparts.[17]</p>\n<p>What problem in a computer usually causes poor graphics performance in games?</p>\n<p>a. Storage issue</p>",
+        "fileName": null,
+        "contentLayout": "text"
+      },
+      {
         "id": 1776123188310,
         "file": null,
         "type": "video",
-        "order": 52,
+        "order": 23,
         "title": "",
         "caption": "Lesson 3 GPU Video",
         "content": "https://www.dropbox.com/scl/fi/wey9a8q3bx12llq5gcvn4/Lesson-3-Topic-1-GPU.mp4?rlkey=o4tfq4j89bs4u42ol6y85vhg2&st=59hbppsb&dl=0",
         "fileName": null
       },
       {
-        "id": 1776123188235,
-        "file": null,
-        "type": "paragraph",
-        "order": 53,
-        "title": "",
-        "caption": "",
-        "content": "<h4><a id=\"_lihx4u4yl8zf\"></a><strong>A. What is a GPU?</strong></h4><p>A <strong>Graphics Processing Unit (GPU)</strong> is a specialized electronic circuit designed to rapidly process and render images, videos, and 3D animations by executing parallel mathematical calculations. Often referred to as a graphics card, video card, or visual processing unit, it offloads tasks from the CPU to accelerate gaming, video editing, and AI workloads.<sup> </sup>It is important because it enhances display performance, supports high-resolution monitors, and accelerates demanding applications such as simulations, multimedia editing, and even modern tasks like artificial intelligence and data processing.<sup>[16][17]</sup></p><h4><a id=\"_47oxuibq775s\"></a><strong>B. How does a GPU work?</strong></h4><p>\tA GPU has its own random access memory (RAM), an electronic memory used to store code and data that the chip can access and alter as needed. Advanced GPUs typically have RAM that has been built to hold the large data volumes required for compute-intensive tasks such as graphics editing, gaming or AI/ML use cases.</p><h4><a id=\"_r4oo9pok2rml\"></a><strong>C. Difference Types of GPU</strong></h4><ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Discrete GPUs</strong> - Discrete GPUs, or dGPUs, are graphics processors that are separate from a device's CPU, where information is taken in and processed, allowing a computer to function. Discrete GPUs are typically used in advanced applications with special requirements, such as editing, content creation or high-end gaming. They are distinct chips with connectors to separate circuit boards and attached to the CPU by using an express slot.</li></ul><p>One of the most widely used discrete GPUs is the Intel Arc brand, built for the PC gaming industry.</p><ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Integrated GPUs</strong> - An integrated GPU, or iGPU, is built into a computer or device's infrastructure and typically slotted in next to the CPU. Designed in the 2010s by Intel, integrated GPUs became more popular as manufacturers such as MSI, ASUS and Nvidia noticed the power of combining GPUs with CPUs rather than requiring users to add GPUs by a PCI express slot themselves. They remain a popular choice for laptop users, gamers and others who are running compute-intensive programs on their PCs.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Virtual GPUs</strong> - Virtual GPUs, or vGPUs, have the same capabilities as discrete or integrated GPUs but without the hardware. They are software-based versions of GPUs built for cloud instances and can be used to run the same workloads. Also, because they have no hardware, they are simpler and cheaper to maintain than their physical counterparts.<sup>[17]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
         "id": 1776123188238,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 54,
+        "order": 24,
         "title": "",
         "caption": "",
         "content": "",
@@ -860,39 +449,38 @@
         "id": 1776123188239,
         "file": null,
         "type": "topic",
-        "order": 55,
+        "order": 25,
         "title": "Topic 7: Power Supply",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
+        "id": 1777220247008,
+        "file": null,
+        "type": "paragraph",
+        "order": 26,
+        "title": "",
+        "caption": "",
+        "content": "<p>In the world of building and upgrading PCs, one component that often doesn't get the spotlight it deserves is the PSU. In fact, when people think of powerful PCs, they often focus on the GPU or CPU. However, without a reliable PSU, even the best PC components can fail. The PSU is like the heart of your computer, pumping power to every component. A bad PSU can lead to system instability, crashes, and even hardware damage.</p>\n<p>A computer power supply unit (PSU) is an internal hardware component that converts high-voltage alternating current (AC) from a wall outlet into low-voltage direct current (DC) necessary for components like the motherboard, CPU, and graphics card. It acts as the heart of the computer, providing stable, regulated power to ensure safe and reliable operation.[18][19]</p>\n<p>AC to DC Conversion: at first step PSU intake the alternating current (AC) from the standard electrical outlet which is different for different. The standard electrical voltage in the Philippines is 220 volts (V) with a frequency of 60 hertz (Hz), then further, this alternating current (AC) is passed through a transformer to step it up or down according to the requirement, transformer make the current ready for the upcoming step.</p>\n<p>Rectification: The process of rectification is based on the concept that current flows only in positive direction in a diode, in the process power supply uses the rectifiers (diodes) to convert the alternating current into vibrating direct current. The whole process is called rectification.</p>\n<p>Smoothing: The current prepared by rectification is a vibrating direct current , which is not suitable for directly powering the computer components. Capacitors are used for making the vibrating direct current smooth which make the direct current even more suitable for the powering of the computer components.</p>\n<p>Voltage Regulation: Despite passing through the process of smoothing, there may still have some fluctuations. Voltage regulators are installed to ensure a steady and precise output voltage. The function of this circuit is to adjust the voltage in order to meet the specifications required by the electronic components. The voltage is basically around 3v -12v depending on specific requirements of electronic components.</p>\n<p>Output: At last, the regulated direct current (DC) voltage is then supplied according to the requirement to all components of the electronic device like motherboard, hard drives, graphics cards and so on, the output voltage or power is provided to different parts of the device using different connectors and cables.[19]</p>\n<p>Linear Power Supply - it regulates the output voltage by dissipating the excess electrical energy as heat using simple electronic components. Because it does not use complex switching, its design is straightforward, making it reliable and easy to maintain. However, this simplicity comes at the cost of efficiency–linear PSUs tend to waste more energy and generate more heat compared to other designs. They are typically found in low-powered or specialized systems where stable, low-noise power is more important than efficiency.[18]</p>",
+        "fileName": null,
+        "contentLayout": "text"
+      },
+      {
         "id": 1776123188308,
         "file": null,
         "type": "video",
-        "order": 56,
+        "order": 27,
         "title": "",
         "caption": "Lesson 3 PSU Video",
         "content": "https://www.dropbox.com/scl/fi/79gttebuedkew38twuj72/Lesson-3-Topic-1-PSU.mp4?rlkey=66t6wqdjuhx8h5eq13s2bbj28&st=kkd5neqf&dl=0",
         "fileName": null
       },
       {
-        "id": 1776123188240,
-        "file": null,
-        "type": "paragraph",
-        "order": 57,
-        "title": "",
-        "caption": "",
-        "content": "<h4><a id=\"_3skhh8smmoxj\"></a><strong>A. What is power supply for?</strong></h4><p>In the world of building and upgrading PCs, one component that often doesn't get the spotlight it deserves is the PSU. In fact, when people think of powerful PCs, they often focus on the GPU or CPU. However, without a reliable PSU, even the best PC components can fail. The PSU is like the heart of your computer, pumping power to every component. A bad PSU can lead to system instability, crashes, and even hardware damage. </p><p>A computer <strong>power supply unit (PSU)</strong> is an internal hardware component that converts high-voltage alternating current (AC) from a wall outlet into low-voltage direct current (DC) necessary for components like the motherboard, CPU, and graphics card. It acts as the heart of the computer, providing stable, regulated power to ensure safe and reliable operation.<sup>[18][19]</sup></p><h4><a id=\"_ye458ewlmphx\"></a><strong>B. How Does a Power Supply Unit (PSU) Work?</strong></h4><ul style=\"list-style-type: disc;\"><li><strong>AC to DC Conversion</strong>: at first step PSU intake the alternating current (AC) from the standard electrical outlet which is different for different. The standard electrical voltage in the Philippines is 220 volts (V) with a frequency of 60 hertz (Hz), then further, this alternating current (AC) is passed through a transformer to step it up or down according to the requirement, transformer make the current ready for the upcoming step.</li><li><strong>Rectification</strong>: The process of rectification is based on the concept that current flows only in positive direction in a diode, in the process power supply uses the rectifiers (diodes) to convert the alternating current into vibrating direct current. The whole process is called rectification.</li><li><strong>Smoothing</strong>: The current prepared by rectification is a vibrating direct current , which is not suitable for directly powering the computer components. Capacitors are used for making the vibrating direct current smooth which make the direct current even more suitable for the powering of the computer components.</li><li><strong>Voltage Regulation</strong>: Despite passing through the process of smoothing, there may still have some fluctuations. Voltage regulators are installed to ensure a steady and precise output voltage. The function of this circuit is to adjust the voltage in order to meet the specifications required by the electronic components. The voltage is basically around 3v -12v depending on specific requirements of electronic components.</li><li><strong>Output</strong>: At last, the regulated direct current (DC) voltage is then supplied according to the requirement to all components of the electronic device like motherboard, hard drives, graphics cards and so on, the output voltage or power is provided to different parts of the device using different connectors and cables.<sup>[19]</sup></li></ul><h4><a id=\"_f8lp9j68q4pm\"></a><strong>C. Types of Power Supply Units</strong></h4><ol style=\"list-style-type: decimal;\"><li><strong>Linear Power Supply</strong> - it regulates the output voltage by dissipating the excess electrical energy as heat using simple electronic components. Because it does not use complex switching, its design is straightforward, making it reliable and easy to maintain. However, this simplicity comes at the cost of efficiency–linear PSUs tend to waste more energy and generate more heat compared to other designs. They are typically found in low-powered or specialized systems where stable, low-noise power is more important than efficiency.<sup>[18]</sup></li><li><strong>Switching Power Supply</strong> - this is commonly used in modern computers because it uses high frequency electronic switches to regulate voltage more efficiently, less heat production, and lighter weight compared with linear PSUs. These are widely deployed in desktop computers, laptops, and most electronic devices because they can deliver power more effectively and adapt to different power requirements without becoming bulky.<sup>[18]</sup></li></ol><h4><a id=\"_otw2v0xc35ku\"></a><strong>\tD. PSU Design: Modular vs. Non-Modular</strong></h4><ol style=\"list-style-type: decimal;\"><li><strong>Non-Modular Power Supply</strong> - all the power cables are permanently attached to the unit. This makes them simpler and generally cheaper, but unused cables cannot be removed, leading to more clutter inside the computer case, which can impact airflow and make cable management difficult.<sup>[18]</sup></li><li><strong>Modular Power Supply</strong> - it lets users attach only the cables they need for their particular system build. This improves cable management, enhances airflow, and makes the inside of the system neater. This flexibility is especially useful for custom builds and upgrades, though modular designs are typically more expensive than non-modular ones.<sup>[18]</sup></li></ol><p>PSU is the power house of the computer system, responsible for providing power for proper functioning of computer components. With the advancement of technology PSUs also keep upgrading and evolving.<sup>18]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
         "id": 1776123188243,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 58,
+        "order": 28,
         "title": "",
         "caption": "",
         "content": "",
@@ -930,39 +518,38 @@
         "id": 1776123188244,
         "file": null,
         "type": "topic",
-        "order": 59,
+        "order": 29,
         "title": "Topic 8: Cooling System",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
+        "id": 1777220247009,
+        "file": null,
+        "type": "paragraph",
+        "order": 30,
+        "title": "",
+        "caption": "",
+        "content": "<p>A cooling system in a computer is a set of hardware components designed to control and reduce the heat generated by internal parts such as the CPU, GPU, power supply, and motherboard during operation. As these components work, they produce heat, and without proper cooling, excessive temperatures can cause performance throttling, system instability, or permanent hardware damage. The cooling system helps maintain safe operating temperatures so the computer can run efficiently and reliably.[20]</p>\n<p>Fans - The most popular type of cooling for computers is spinning fans that blow hot air away from the PC’s components and draw in cool air. Fans are extremely popular for consumer-grade PCs, but they have several disadvantages. They can easily spread dust and microbes in their operating environment. This makes them unsuitable for any workspace that requires cleanliness, such as hospitals or clean rooms. Additionally, the constant spinning of their fans can cause reliability issues; a broken fan can easily lead to the overheating issues we’ve previously discussed. Lastly, the continuous noise of their spinning can be distracting or uncomfortable for people nearby, such as patients trying to sleep. For these reasons, cooling fans are not an ideal solution in the medical or industrial sector.[21]</p>\n<p>Liquid cooling - It works on a similar principle to air cooling, but with liquid as the medium. A liquid cooling system mounts directly onto the heat source, such as the CPU, and uses a heatsink to transfer heat from the processor to the liquid. The liquid is then pumped away from the heatsink, cooled, and pumped back to the heatsink in a continuous cycle. While extremely effective, liquid cooling has several notable downsides. First, it is the most expensive of all cooling options. Second, it requires very specialized equipment that takes up lots of space inside the PC, which is a serious issue for roles that require a smaller form factor. Lastly, liquid cooling systems require periodic maintenance for their numerous moving parts and can be very delicate, which makes them a poor fit for any application requiring ruggedness. For these reasons, liquid cooling is typically only seen in dedicated computing roles, such as for dedicated servers or high-end gaming PCs.[20][21]</p>\n<p>Fanless cooling - Also known as radiative cooling, fanless cooling relies on heatsinks and radiation fans to disperse heat from the processors and into the air. A heatsink is attached to the heat source, draws heat from it, and radiates it into the surrounding air. These heatsinks are designed with as much surface area as possible and can radiate large amounts of heat despite being comparatively small. The greatest advantage of fanless cooling over other options is that it requires no moving parts and doesn’t consume electricity to do its job. For these reasons, fanless cooling is extremely popular for industrial-grade computers that need to be as rugged and simple as possible to work on or near heavy machinery. Their lack of moving parts also makes computers with fanless cooling nearly silent during operations, meaning they’re more comfortable to be around for long periods of time. Fanless cooling systems also don’t need holes in the computer’s casing to vent air through, meaning that it’s easier to make the case watertight. These factors are invaluable for medical computers, which operate for hours on end next to patients and must be frequently cleaned and disinfected.[21]</p>\n<p>Airflow within a computer case is essential for maintaining an optimal operating environment for the system’s components. Properly managed airflow not only helps in keeping components cool but also enhances the longevity and performance of the system.</p>\n<p>Temperature Control: Modern computer components, especially CPUs and GPUs, generate significant amounts of heat. Without effective airflow, this heat can accumulate, causing components to throttle or even fail.</p>\n<p>System Longevity: Excessive temperatures can shorten the lifespan of computer parts. Maintaining a cooler internal environment can prolong the operational life of these components.</p>\n<p>Performance: Many computer components will throttle, or reduce their performance, when they get too hot. Efficient airflow ensures that components stay cool and can operate at their maximum capability.[32]</p>",
+        "fileName": null,
+        "contentLayout": "text"
+      },
+      {
         "id": 1776123188312,
         "file": null,
         "type": "video",
-        "order": 60,
+        "order": 31,
         "title": "",
         "caption": "Lesson 3 Cooling Video",
         "content": "https://www.dropbox.com/scl/fi/imcz9hagea0aokee9nctx/Lesson-3-Topic-1-Cooling.mp4?rlkey=nddqtbc0e1d7rp2pydt00s9zs&st=vlyyhq0c&dl=0",
         "fileName": null
       },
       {
-        "id": 1776123188245,
-        "file": null,
-        "type": "paragraph",
-        "order": 61,
-        "title": "",
-        "caption": "",
-        "content": "<h4><a id=\"_lx0c4k690nni\"></a><strong>A. What is a cooling system for?</strong></h4><p>A <strong>cooling system</strong> in a computer is a set of hardware components designed to control and reduce the heat generated by internal parts such as the CPU, GPU, power supply, and motherboard during operation. As these components work, they produce heat, and without proper cooling, excessive temperatures can cause performance throttling, system instability, or permanent hardware damage. The cooling system helps maintain safe operating temperatures so the computer can run efficiently and reliably.<sup>[20]</sup></p><h4><a id=\"_f4bhcfexywtg\"></a><strong>B. Types of Cooling System</strong></h4><ol style=\"list-style-type: decimal;\"><li><strong>Fans </strong>- The most popular type of cooling for computers is spinning fans that blow hot air away from the PC’s components and draw in cool air. Fans are extremely popular for consumer-grade PCs, but they have several disadvantages. They can easily spread dust and microbes in their operating environment. This makes them unsuitable for any workspace that requires cleanliness, such as hospitals or clean rooms. Additionally, the constant spinning of their fans can cause reliability issues; a broken fan can easily lead to the overheating issues we’ve previously discussed. Lastly, the continuous noise of their spinning can be distracting or uncomfortable for people nearby, such as patients trying to sleep. For these reasons, cooling fans are not an ideal solution in the medical or industrial sector.<sup>[21]</sup></li><li><strong>Liquid cooling</strong> - It works on a similar principle to air cooling, but with liquid as the medium. A liquid cooling system mounts directly onto the heat source, such as the CPU, and uses a heatsink to transfer heat from the processor to the liquid. The liquid is then pumped away from the heatsink, cooled, and pumped back to the heatsink in a continuous cycle. While extremely effective, liquid cooling has several notable downsides. First, it is the most expensive of all cooling options. Second, it requires very specialized equipment that takes up lots of space inside the PC, which is a serious issue for roles that require a smaller form factor. Lastly, liquid cooling systems require periodic maintenance for their numerous moving parts and can be very delicate, which makes them a poor fit for any application requiring ruggedness. For these reasons, liquid cooling is typically only seen in dedicated computing roles, such as for dedicated servers or high-end gaming PCs.<sup>[20][21]</sup></li><li><strong>Fanless cooling</strong> - Also known as radiative cooling, fanless cooling relies on heatsinks and radiation fans to disperse heat from the processors and into the air. A heatsink is attached to the heat source, draws heat from it, and radiates it into the surrounding air. These heatsinks are designed with as much surface area as possible and can radiate large amounts of heat despite being comparatively small. The greatest advantage of fanless cooling over other options is that it requires no moving parts and doesn’t consume electricity to do its job. For these reasons, fanless cooling is extremely popular for industrial-grade computers that need to be as rugged and simple as possible to work on or near heavy machinery. Their lack of moving parts also makes computers with fanless cooling nearly silent during operations, meaning they’re more comfortable to be around for long periods of time. Fanless cooling systems also don’t need holes in the computer’s casing to vent air through, meaning that it’s easier to make the case watertight. These factors are invaluable for medical computers, which operate for hours on end next to patients and must be frequently cleaned and disinfected.<sup>[21]</sup></li></ol><h4><a id=\"_d99lrzszjy7i\"></a><strong>\tC. Importance of Airflow</strong></h4><p>Airflow within a computer case is essential for maintaining an optimal operating environment for the system’s components. Properly managed airflow not only helps in keeping components cool but also enhances the longevity and performance of the system.</p><ol style=\"list-style-type: decimal;\"><li><strong>Temperature Control</strong>: Modern computer components, especially CPUs and GPUs, generate significant amounts of heat. Without effective airflow, this heat can accumulate, causing components to throttle or even fail.</li><li><strong>System Longevity</strong>: Excessive temperatures can shorten the lifespan of computer parts. Maintaining a cooler internal environment can prolong the operational life of these components.</li><li><strong>Performance</strong>: Many computer components will throttle, or reduce their performance, when they get too hot. Efficient airflow ensures that components stay cool and can operate at their maximum capability.<sup>[32]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
         "id": 1776123188248,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 62,
+        "order": 32,
         "title": "",
         "caption": "",
         "content": "",
@@ -1000,248 +587,211 @@
         "id": 1776123188249,
         "file": null,
         "type": "topic",
-        "order": 63,
+        "order": 33,
         "title": "Topic 9: Input Devices",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776123188250,
+        "id": 1777220247010,
         "file": null,
         "type": "paragraph",
-        "order": 64,
+        "order": 34,
         "title": "",
         "caption": "",
-        "content": "<h4><a id=\"_oq69t5niru2c\"></a><strong>A. What is an input device?</strong></h4><p><strong>Input devices</strong> are hardware peripherals that send data, commands, and control signals to a computer, allowing users to interact with and operate it. They convert physical input (keystrokes, mouse clicks, voice) into machine-readable digital signals.<sup>[23]</sup></p><p>The main purpose of an input device is to serve as a bridge between the user and the computer, which it achieves through several key functions:</p><ul style=\"list-style-type: disc;\"><li><strong>Data Input</strong>: Input devices transform real-world input, like keystrokes or scanned images, into digital data that a computer can process.</li><li><strong>Command Execution</strong>: They let users control the computer, such as opening applications, selecting options, or navigating menus.</li><li><strong>User Interface Interaction</strong>: Input devices enable engagement with graphical interfaces, allowing users to point, click, type, or gesture to interact with software effectively.<sup>[22][23]</sup></li></ul>",
+        "content": "<p>Input devices are hardware peripherals that send data, commands, and control signals to a computer, allowing users to interact with and operate it. They convert physical input (keystrokes, mouse clicks, voice) into machine-readable digital signals.[23]</p>\n<p>The main purpose of an input device is to serve as a bridge between the user and the computer, which it achieves through several key functions:</p>\n<p>Data Input: Input devices transform real-world input, like keystrokes or scanned images, into digital data that a computer can process.</p>\n<p>Command Execution: They let users control the computer, such as opening applications, selecting options, or navigating menus.</p>\n<p>User Interface Interaction: Input devices enable engagement with graphical interfaces, allowing users to point, click, type, or gesture to interact with software effectively.[22][23]</p>\n<p>Keyboard - The most widely used input device, designed for entering text, numbers, and commands. It includes alphanumeric keys, function keys, control keys, and special keys.[image-46]</p>\n<p>Mouse - A pointing device that allows users to move the cursor, select items, click buttons, and navigate graphical user interfaces (GUI) efficiently.[image-47]</p>\n<p>Joystick - Used mainly for gaming and simulations, allowing directional control of objects or characters on the screen.[image-48]</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
-        "id": 1776123188251,
+        "id": 1777220247011,
         "file": null,
         "type": "image",
-        "order": 65,
-        "title": "",
+        "order": 35,
+        "title": "Image 64",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123203375-14.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123203375-14.png"
+            "url": "/uploads/lessons/064_image_approx.webp",
+            "file": null,
+            "fileName": "064_image_approx.webp",
+            "caption": "Image 64"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123203375-14.png",
-        "fileName": "docx-lesson-3-1776123203375-14.png",
+        "content": "/uploads/lessons/064_image_approx.webp",
+        "fileName": "064_image_approx.webp",
         "sideTexts": [
-          "<h4><a id=\"_7gcua0axbtox\"></a><strong>B. Common Types of Input Devices</strong></h4>"
+          "<p><strong>Image 64</strong></p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-3-1776123203375-14.png",
-              "caption": "",
-              "fileName": "docx-lesson-3-1776123203375-14.png"
+              "url": "/uploads/lessons/064_image_approx.webp",
+              "file": null,
+              "fileName": "064_image_approx.webp",
+              "caption": "Image 64"
             }
           ]
         ]
       },
       {
-        "id": 1776123188252,
+        "id": 1777220247012,
         "file": null,
         "type": "image",
-        "order": 66,
-        "title": "",
+        "order": 36,
+        "title": "Keyboard",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123203383-15.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123203383-15.png"
+            "url": "/uploads/lessons/065_keyboard_the_most_widely_used_input_devi.webp",
+            "file": null,
+            "fileName": "065_keyboard_the_most_widely_used_input_devi.webp",
+            "caption": "Keyboard"
           }
         ],
-        "layout": "text-right",
+        "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123203383-15.png",
-        "fileName": "docx-lesson-3-1776123203383-15.png",
+        "content": "/uploads/lessons/065_keyboard_the_most_widely_used_input_devi.webp",
+        "fileName": "065_keyboard_the_most_widely_used_input_devi.webp",
         "sideTexts": [
-          "<ol style=\"list-style-type: decimal;\"><li><strong>Keyboard</strong> - The most widely used input device, designed for entering text, numbers, and commands. It includes alphanumeric keys, function keys, control keys, and special keys.<sup>[image-46]</sup></li><li><strong>Mouse</strong> - A pointing device that allows users to move the cursor, select items, click buttons, and navigate graphical user interfaces (GUI) efficiently.<sup>[image-47]</sup></li></ol>"
+          "<p><strong>Keyboard</strong></p><p>Keyboard - The most widely used input device, designed for entering text,…</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-3-1776123203383-15.png",
-              "caption": "",
-              "fileName": "docx-lesson-3-1776123203383-15.png"
+              "url": "/uploads/lessons/065_keyboard_the_most_widely_used_input_devi.webp",
+              "file": null,
+              "fileName": "065_keyboard_the_most_widely_used_input_devi.webp",
+              "caption": "Keyboard"
             }
           ]
         ]
       },
       {
-        "id": 1776123188253,
+        "id": 1777220247013,
         "file": null,
         "type": "image",
-        "order": 67,
-        "title": "",
+        "order": 37,
+        "title": "Mouse",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123203392-16.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123203392-16.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123203392-16.png",
-        "fileName": "docx-lesson-3-1776123203392-16.png"
-      },
-      {
-        "id": 1776123188254,
-        "file": null,
-        "type": "paragraph",
-        "order": 68,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Joystick </strong>- Used mainly for gaming and simulations, allowing directional control of objects or characters on the screen.<sup>[image-48]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188255,
-        "file": null,
-        "type": "image",
-        "order": 69,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123203396-17.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123203396-17.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123203396-17.png",
-        "fileName": "docx-lesson-3-1776123203396-17.png"
-      },
-      {
-        "id": 1776123188256,
-        "file": null,
-        "type": "paragraph",
-        "order": 70,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Light Pen </strong>- A pen-shaped input device that enables the user to select or draw directly on the monitor screen, commonly used in design and CAD applications.<sup>[image-49]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188257,
-        "file": null,
-        "type": "image",
-        "order": 71,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123203405-18.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123203405-18.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123203405-18.png",
-        "fileName": "docx-lesson-3-1776123203405-18.png"
-      },
-      {
-        "id": 1776123188258,
-        "file": null,
-        "type": "paragraph",
-        "order": 72,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Trackball</strong> - A stationary pointing device where users rotate a ball to move the cursor, useful in environments with limited desk space.<sup>[image-50]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188259,
-        "file": null,
-        "type": "image",
-        "order": 73,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123203425-19.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123203425-19.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123203425-19.png",
-        "fileName": "docx-lesson-3-1776123203425-19.png"
-      },
-      {
-        "id": 1776123188260,
-        "file": null,
-        "type": "paragraph",
-        "order": 74,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Scanner</strong> - Converts printed documents, images, and photos into digital format, making them editable and storable on a computer.<sup>[image-51]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188261,
-        "file": null,
-        "type": "image",
-        "order": 75,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123203439-20.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123203439-20.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123203439-20.png",
-        "fileName": "docx-lesson-3-1776123203439-20.png"
-      },
-      {
-        "id": 1776123188262,
-        "file": null,
-        "type": "image",
-        "order": 76,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123199356-11.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123199356-11.png"
+            "url": "/uploads/lessons/066_mouse_a_pointing_device_that_allows_user_approx.webp",
+            "file": null,
+            "fileName": "066_mouse_a_pointing_device_that_allows_user_approx.webp",
+            "caption": "Mouse"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123199356-11.png",
-        "fileName": "docx-lesson-3-1776123199356-11.png",
+        "content": "/uploads/lessons/066_mouse_a_pointing_device_that_allows_user_approx.webp",
+        "fileName": "066_mouse_a_pointing_device_that_allows_user_approx.webp",
         "sideTexts": [
-          "<ol style=\"list-style-type: decimal;\"><li><strong>Graphics Tablet (Digitizer)</strong> - Allows artists and designers to draw or write digitally using a stylus, commonly used in graphic design and animation.<sup>[image-52]</sup></li><li><strong>Microphone</strong> - Captures audio input, converting sound into digital data for voice commands, communication, and audio recording.<sup>[22] [image-53, 54]</sup></li></ol>"
+          "<p><strong>Mouse</strong></p><p>Mouse - A pointing device that allows users to move the cursor, select items,…</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-3-1776123199356-11.png",
-              "caption": "",
-              "fileName": "docx-lesson-3-1776123199356-11.png"
+              "url": "/uploads/lessons/066_mouse_a_pointing_device_that_allows_user_approx.webp",
+              "file": null,
+              "fileName": "066_mouse_a_pointing_device_that_allows_user_approx.webp",
+              "caption": "Mouse"
+            }
+          ]
+        ]
+      },
+      {
+        "id": 1777220247014,
+        "file": null,
+        "type": "image",
+        "order": 38,
+        "title": "Joystick",
+        "images": [
+          {
+            "url": "/uploads/lessons/067_joystick_used_mainly_for_gaming_and_simu_approx.webp",
+            "file": null,
+            "fileName": "067_joystick_used_mainly_for_gaming_and_simu_approx.webp",
+            "caption": "Joystick"
+          }
+        ],
+        "layout": "text-left",
+        "caption": "",
+        "content": "/uploads/lessons/067_joystick_used_mainly_for_gaming_and_simu_approx.webp",
+        "fileName": "067_joystick_used_mainly_for_gaming_and_simu_approx.webp",
+        "sideTexts": [
+          "<p><strong>Joystick</strong></p><p>Joystick - Used mainly for gaming and simulations, allowing directional control…</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/067_joystick_used_mainly_for_gaming_and_simu_approx.webp",
+              "file": null,
+              "fileName": "067_joystick_used_mainly_for_gaming_and_simu_approx.webp",
+              "caption": "Joystick"
+            }
+          ]
+        ]
+      },
+      {
+        "id": 1777220247015,
+        "file": null,
+        "type": "image",
+        "order": 39,
+        "title": "Light Pen",
+        "images": [
+          {
+            "url": "/uploads/lessons/068_light_pen_a_pen_shaped_input_device_that_approx.webp",
+            "file": null,
+            "fileName": "068_light_pen_a_pen_shaped_input_device_that_approx.webp",
+            "caption": "Light Pen"
+          }
+        ],
+        "layout": "text-left",
+        "caption": "",
+        "content": "/uploads/lessons/068_light_pen_a_pen_shaped_input_device_that_approx.webp",
+        "fileName": "068_light_pen_a_pen_shaped_input_device_that_approx.webp",
+        "sideTexts": [
+          "<p><strong>Light Pen</strong></p><p>Light Pen - A pen-shaped input device that enables the user to select or draw…</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/068_light_pen_a_pen_shaped_input_device_that_approx.webp",
+              "file": null,
+              "fileName": "068_light_pen_a_pen_shaped_input_device_that_approx.webp",
+              "caption": "Light Pen"
+            }
+          ]
+        ]
+      },
+      {
+        "id": 1777220247016,
+        "file": null,
+        "type": "image",
+        "order": 40,
+        "title": "Scanner",
+        "images": [
+          {
+            "url": "/uploads/lessons/070_scanner_converts_printed_documents_image_approx.webp",
+            "file": null,
+            "fileName": "070_scanner_converts_printed_documents_image_approx.webp",
+            "caption": "Scanner"
+          }
+        ],
+        "layout": "text-left",
+        "caption": "",
+        "content": "/uploads/lessons/070_scanner_converts_printed_documents_image_approx.webp",
+        "fileName": "070_scanner_converts_printed_documents_image_approx.webp",
+        "sideTexts": [
+          "<p><strong>Scanner</strong></p><p>Scanner - Converts printed documents, images, and photos into digital format,…</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/070_scanner_converts_printed_documents_image_approx.webp",
+              "file": null,
+              "fileName": "070_scanner_converts_printed_documents_image_approx.webp",
+              "caption": "Scanner"
             }
           ]
         ]
@@ -1250,7 +800,7 @@
         "id": 1776123188265,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 77,
+        "order": 41,
         "title": "",
         "caption": "",
         "content": "",
@@ -1288,119 +838,124 @@
         "id": 1776123188266,
         "file": null,
         "type": "topic",
-        "order": 78,
+        "order": 42,
         "title": "Topic 10: Output Devices",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776123188267,
+        "id": 1777220247017,
         "file": null,
         "type": "paragraph",
-        "order": 79,
+        "order": 43,
         "title": "",
         "caption": "",
-        "content": "<h4><a id=\"_iqpd8ernov7q\"></a><strong>A. What is an output device?</strong></h4><p>An <strong>output device</strong> is any computer hardware component that receives processed data from a computer and translates it into a form that is perceivable by humans, such as visual (screens), auditory (speakers), or physical (printed). These devices represent the final step in the information processing cycle, converting digital information into user-readable output.</p><p>Output devices are essential components of a computer system that deliver processed data to the user in a human-readable form—be it visual, auditory, or physical. If input devices are how a computer receives information (like typing or clicking), output devices are how it responds or communicates back.<sup>[24]</sup></p><h4><a id=\"_z7vg80ppzgpb\"></a><strong>B. How Does An Output Device Work?</strong></h4><p>\tAn output device is hardware that takes processed digital data from a computer and converts it into a form humans can perceive or use.</p><ul style=\"list-style-type: disc;\"><li><strong>Data Processing</strong> – The computer’s CPU processes information and prepares it for output.</li><li><strong>Signal Transmission</strong> – The processed data is sent as digital signals to the output device through an interface.</li><li><strong>Conversion</strong> – The output device converts these digital signals into a human-perceivable form.</li><li>Presentation – The information is presented so the user can interpret or use it.<sup>[25]</sup></li></ul><table><thead><tr><th><p>Input (data entry) → Processing (CPU) → Output (results via output devices)</p></th></tr></thead></table><p>\t<strong>C. Common Types of Output Devices</strong></p>",
+        "content": "<p>An output device is any computer hardware component that receives processed data from a computer and translates it into a form that is perceivable by humans, such as visual (screens), auditory (speakers), or physical (printed). These devices represent the final step in the information processing cycle, converting digital information into user-readable output.</p>\n<p>Output devices are essential components of a computer system that deliver processed data to the user in a human-readable form—be it visual, auditory, or physical. If input devices are how a computer receives information (like typing or clicking), output devices are how it responds or communicates back.[24]</p>\n<p>An output device is hardware that takes processed digital data from a computer and converts it into a form humans can perceive or use.</p>\n<p>Data Processing – The computer’s CPU processes information and prepares it for output.</p>\n<p>Signal Transmission – The processed data is sent as digital signals to the output device through an interface.</p>\n<p>Conversion – The output device converts these digital signals into a human-perceivable form.</p>\n<p>Presentation – The information is presented so the user can interpret or use it.[25]</p>\n<p>Input (data entry) → Processing (CPU) → Output (results via output devices)</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
-        "id": 1776123188268,
+        "id": 1777220247018,
         "file": null,
         "type": "image",
-        "order": 80,
-        "title": "",
+        "order": 44,
+        "title": "Monitor",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123206929-21.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123206929-21.png"
+            "url": "/uploads/lessons/072_monitor_a_device_that_displays_visual_in.webp",
+            "file": null,
+            "fileName": "072_monitor_a_device_that_displays_visual_in.webp",
+            "caption": "Monitor"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123206929-21.png",
-        "fileName": "docx-lesson-3-1776123206929-21.png",
+        "content": "/uploads/lessons/072_monitor_a_device_that_displays_visual_in.webp",
+        "fileName": "072_monitor_a_device_that_displays_visual_in.webp",
         "sideTexts": [
-          "<ol style=\"list-style-type: decimal;\"><li><strong>Monitor</strong> - A device that displays visual information such as text and graphics that the computer processes.</li><li><strong>Printer</strong> - A device that produces physical copies of processed digital information (e.g., text or images) on paper.</li><li><strong>Speaker</strong> - A device that converts digital audio signals from the computer into sound that can be heard.<sup>[image-55]</sup></li></ol>"
+          "<p><strong>Monitor</strong></p><p>Monitor - A device that displays visual information such as text and graphics…</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-3-1776123206929-21.png",
-              "caption": "",
-              "fileName": "docx-lesson-3-1776123206929-21.png"
+              "url": "/uploads/lessons/072_monitor_a_device_that_displays_visual_in.webp",
+              "file": null,
+              "fileName": "072_monitor_a_device_that_displays_visual_in.webp",
+              "caption": "Monitor"
             }
           ]
         ]
       },
       {
-        "id": 1776123188269,
+        "id": 1777220247019,
         "file": null,
         "type": "image",
-        "order": 81,
-        "title": "",
+        "order": 45,
+        "title": "Speaker",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123206943-22.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123206943-22.png"
+            "url": "/uploads/lessons/073_speaker_a_device_that_converts_digital_a_approx.webp",
+            "file": null,
+            "fileName": "073_speaker_a_device_that_converts_digital_a_approx.webp",
+            "caption": "Speaker"
           }
         ],
-        "layout": "single",
+        "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123206943-22.png",
-        "fileName": "docx-lesson-3-1776123206943-22.png"
+        "content": "/uploads/lessons/073_speaker_a_device_that_converts_digital_a_approx.webp",
+        "fileName": "073_speaker_a_device_that_converts_digital_a_approx.webp",
+        "sideTexts": [
+          "<p><strong>Speaker</strong></p><p>Speaker - A device that converts digital audio signals from the computer into…</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/073_speaker_a_device_that_converts_digital_a_approx.webp",
+              "file": null,
+              "fileName": "073_speaker_a_device_that_converts_digital_a_approx.webp",
+              "caption": "Speaker"
+            }
+          ]
+        ]
       },
       {
-        "id": 1776123188270,
-        "file": null,
-        "type": "paragraph",
-        "order": 82,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Projector</strong> - A device that takes visual information from a computer and displays it on a larger surface for viewing.<sup>[image-56]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188271,
+        "id": 1777220247020,
         "file": null,
         "type": "image",
-        "order": 83,
-        "title": "",
+        "order": 46,
+        "title": "Projector",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123206953-23.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123206953-23.png"
+            "url": "/uploads/lessons/074_projector_a_device_that_takes_visual_inf_approx.webp",
+            "file": null,
+            "fileName": "074_projector_a_device_that_takes_visual_inf_approx.webp",
+            "caption": "Projector"
           }
         ],
-        "layout": "single",
+        "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123206953-23.png",
-        "fileName": "docx-lesson-3-1776123206953-23.png"
-      },
-      {
-        "id": 1776123188272,
-        "file": null,
-        "type": "paragraph",
-        "order": 84,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Headphones</strong> - Personal audio output devices that deliver sound from the computer directly to the user’s ear.<sup>[26] [image-57]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
+        "content": "/uploads/lessons/074_projector_a_device_that_takes_visual_inf_approx.webp",
+        "fileName": "074_projector_a_device_that_takes_visual_inf_approx.webp",
+        "sideTexts": [
+          "<p><strong>Projector</strong></p><p>Projector - A device that takes visual information from a computer and displays…</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/074_projector_a_device_that_takes_visual_inf_approx.webp",
+              "file": null,
+              "fileName": "074_projector_a_device_that_takes_visual_inf_approx.webp",
+              "caption": "Projector"
+            }
+          ]
+        ]
       },
       {
         "id": 1776123188275,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 85,
+        "order": 47,
         "title": "",
         "caption": "",
         "content": "",
@@ -1438,491 +993,284 @@
         "id": 1776123188276,
         "file": null,
         "type": "topic",
-        "order": 86,
+        "order": 48,
         "title": "Topic 11: Peripheral Devices",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776123188277,
+        "id": 1777220247021,
         "file": null,
         "type": "paragraph",
-        "order": 87,
+        "order": 49,
         "title": "",
         "caption": "",
-        "content": "<h4><a id=\"_tl8dwq3e25e4\"></a><strong>A. What is a peripheral device?</strong></h4><p><br>\tA <strong>peripheral device</strong> is defined as a computer device, such as a keyboard or printer, that is not part of the essential computer (i.e., the memory and microprocessor). These auxiliary devices are intended to be connected to the computer and used. Any various devices (including sensors) used to enter information and instructions into a computer for storage or processing and to deliver the processed data to a human operator or, in some cases, a machine controlled by the computer. Such devices make up the peripheral equipment of modern digital computer systems.<sup>[27][28]</sup></p><h4><a id=\"_kfsiwcnxldnd\"></a><strong>B. Importance of Peripheral Devices</strong></h4><p>\tPeripheral devices are important for enhancing functionality of a computer. Here's why peripheral devices are so important:</p><ul style=\"list-style-type: disc;\"><li><strong>Enhanced Functionality</strong>: Peripheral devices expand a computer's capabilities, enabling it to perform various tasks.</li><li><strong>User Interaction</strong>: Input devices like keyboards and mice allow users to control and interact with the system.</li><li><strong>Data Output</strong>: Output devices such as monitors and printers display or present processed data.</li><li><strong>Data Storage</strong>: Storage devices ensure important data is saved and can be accessed or backed up when needed.</li><li><strong>Communication</strong>: Communication devices enable network connectivity, allowing the computer to communicate with other systems or networks.</li><li><strong>Increased Efficiency</strong>: Peripherals improve the overall efficiency and usability of the computer by adding specialized functions.<sup>[29]</sup></li></ul><h4><a id=\"_my0ea7gry8nu\"></a><strong>C. Peripheral Devices Connecting Options</strong></h4><p>Peripheral devices can connect to a computer through various methods. Each offers different speeds, ranges, and compatibility. Common connecting options include:</p>",
+        "content": "<p>A peripheral device is defined as a computer device, such as a keyboard or printer, that is not part of the essential computer (i.e., the memory and microprocessor). These auxiliary devices are intended to be connected to the computer and used. Any various devices (including sensors) used to enter information and instructions into a computer for storage or processing and to deliver the processed data to a human operator or, in some cases, a machine controlled by the computer. Such devices make up the peripheral equipment of modern digital computer systems.[27][28]</p>\n<p>Peripheral devices are important for enhancing functionality of a computer. Here's why peripheral devices are so important:</p>\n<p>Enhanced Functionality: Peripheral devices expand a computer's capabilities, enabling it to perform various tasks.</p>\n<p>User Interaction: Input devices like keyboards and mice allow users to control and interact with the system.</p>\n<p>Data Output: Output devices such as monitors and printers display or present processed data.</p>\n<p>Data Storage: Storage devices ensure important data is saved and can be accessed or backed up when needed.</p>\n<p>Communication: Communication devices enable network connectivity, allowing the computer to communicate with other systems or networks.</p>\n<p>Increased Efficiency: Peripherals improve the overall efficiency and usability of the computer by adding specialized functions.[29]</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
-        "id": 1776123188278,
+        "id": 1777220247022,
         "file": null,
         "type": "image",
-        "order": 88,
-        "title": "",
+        "order": 50,
+        "title": "Peripheral devices can connect to a computer through various",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123207905-24.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123207905-24.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123207905-24.png",
-        "fileName": "docx-lesson-3-1776123207905-24.png"
-      },
-      {
-        "id": 1776123188279,
-        "file": null,
-        "type": "image",
-        "order": 89,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123207911-25.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123207911-25.png"
+            "url": "/uploads/lessons/075_peripheral_devices_can_connect_to_a_comp_approx.webp",
+            "file": null,
+            "fileName": "075_peripheral_devices_can_connect_to_a_comp_approx.webp",
+            "caption": "Peripheral devices can connect to a computer through various"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123207911-25.png",
-        "fileName": "docx-lesson-3-1776123207911-25.png",
+        "content": "/uploads/lessons/075_peripheral_devices_can_connect_to_a_comp_approx.webp",
+        "fileName": "075_peripheral_devices_can_connect_to_a_comp_approx.webp",
         "sideTexts": [
-          "<ul style=\"list-style-type: disc;\"><li><strong>USB (Universal Serial Bus)</strong>: USB is common for keyboards, mice, printers, and external storage devices; supports both wired and wireless connections.<sup>[image-58]</sup></li><li><strong>Bluetooth</strong>: Bluetooth is wireless connection for devices like headphones, speakers, and mice.</li><li><strong>Wi-Fi</strong>: Wi-Fi is used for wireless networked devices like printers and cameras.</li><li><strong>HDMI</strong>: HDMI connects monitors, projectors, and TVs for high-definition video and audio.<sup>[image-59]</sup></li></ul>"
+          "<p><strong>Peripheral devices can connect to a computer through various</strong></p><p>Peripheral devices can connect to a computer through various methods. Each…</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-3-1776123207911-25.png",
-              "caption": "",
-              "fileName": "docx-lesson-3-1776123207911-25.png"
+              "url": "/uploads/lessons/075_peripheral_devices_can_connect_to_a_comp_approx.webp",
+              "file": null,
+              "fileName": "075_peripheral_devices_can_connect_to_a_comp_approx.webp",
+              "caption": "Peripheral devices can connect to a computer through various"
             }
           ]
         ]
       },
       {
-        "id": 1776123188280,
+        "id": 1777220247023,
         "file": null,
         "type": "image",
-        "order": 90,
-        "title": "",
+        "order": 51,
+        "title": "Wi-Fi: Wi-Fi is used for wireless networked devices like pri",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123207921-26.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123207921-26.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123207921-26.png",
-        "fileName": "docx-lesson-3-1776123207921-26.png"
-      },
-      {
-        "id": 1776123188281,
-        "file": null,
-        "type": "image",
-        "order": 91,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123207926-27.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123207926-27.png"
+            "url": "/uploads/lessons/076_wi_fi_wi_fi_is_used_for_wireless_network_approx.webp",
+            "file": null,
+            "fileName": "076_wi_fi_wi_fi_is_used_for_wireless_network_approx.webp",
+            "caption": "Wi-Fi: Wi-Fi is used for wireless networked devices like pri"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123207926-27.png",
-        "fileName": "docx-lesson-3-1776123207926-27.png",
+        "content": "/uploads/lessons/076_wi_fi_wi_fi_is_used_for_wireless_network_approx.webp",
+        "fileName": "076_wi_fi_wi_fi_is_used_for_wireless_network_approx.webp",
         "sideTexts": [
-          "<ul style=\"list-style-type: disc;\"><li><strong>Ethernet</strong>: Wired connection for network communication, often for internet or LAN access.<sup>[image-60]</sup></li><li><strong>Thunderbolt</strong>: High-speed connection for external devices like storage drives and monitors.</li><li><strong>VGA</strong>: VGA is an older connection for monitors or projectors, supports lower video resolutions.<sup>[image-61]</sup></li></ul>"
+          "<p><strong>Wi-Fi: Wi-Fi is used for wireless networked devices like pri</strong></p><p>Wi-Fi: Wi-Fi is used for wireless networked devices like printers and cameras.</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-3-1776123207926-27.png",
-              "caption": "",
-              "fileName": "docx-lesson-3-1776123207926-27.png"
+              "url": "/uploads/lessons/076_wi_fi_wi_fi_is_used_for_wireless_network_approx.webp",
+              "file": null,
+              "fileName": "076_wi_fi_wi_fi_is_used_for_wireless_network_approx.webp",
+              "caption": "Wi-Fi: Wi-Fi is used for wireless networked devices like pri"
             }
           ]
         ]
       },
       {
-        "id": 1776123188282,
+        "id": 1777220247024,
         "file": null,
         "type": "image",
-        "order": 92,
-        "title": "",
+        "order": 52,
+        "title": "HDMI: HDMI connects monitors",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123207931-28.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123207931-28.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123207931-28.png",
-        "fileName": "docx-lesson-3-1776123207931-28.png"
-      },
-      {
-        "id": 1776123188283,
-        "file": null,
-        "type": "paragraph",
-        "order": 93,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Display Port</strong>: Similar to HDMI, used for connecting high-definition monitors.<sup>[29] [image-62]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188284,
-        "file": null,
-        "type": "paragraph",
-        "order": 94,
-        "title": "",
-        "caption": "",
-        "content": "<h4><a id=\"_rrlhovdfyj77\"></a><strong>D. What is a computer port or connector?</strong></h4><p><strong>Computer ports</strong> are connection points on a desktop that allow you to interface with external devices, such as peripherals devices. These physical connectors serve as gateways for data transfer, power delivery, and communication between your computer and peripherals like monitors, keyboards, printers, and external storage devices.<sup>[30] </sup></p><h4><a id=\"_v34ti0rn3ntp\"></a>\t<strong>E. Importance of Computer Ports</strong></h4><ul style=\"list-style-type: disc;\"><li><strong>Connectivity</strong>: They allow you to connect a wide range of external devices to your computer.</li><li><strong>Expandability</strong>: Ports enable you to add functionality to your computer system as needed.</li><li><strong>Data transfer</strong>: Many ports facilitate high-speed data transfer between devices.</li><li><strong>Multimedia capabilities</strong>: Video and audio ports allow you to connect to external displays and sound systems.</li><li><strong>Networking</strong>: Ethernet ports provide fast, reliable internet connections.<sup>[30] </sup></li></ul><h4><a id=\"_vmc2ns6xhz7\"></a><strong>\tF. Types of Computer Ports</strong></h4><ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Internal port</strong> - Internal ports are used to connect internal devices like disk drives, CD drives, and other internal devices with the motherboard.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>External port</strong> - External ports are used to connect external devices: modem, mouse, printer, flash drives, etc with the motherboard.<sup>[31] </sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188285,
-        "file": null,
-        "type": "image",
-        "order": 95,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123209379-29.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123209379-29.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123209379-29.png",
-        "fileName": "docx-lesson-3-1776123209379-29.png"
-      },
-      {
-        "id": 1776123188286,
-        "file": null,
-        "type": "image",
-        "order": 96,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123209379-29.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123209379-29.png"
-          }
-        ],
-        "layout": "text-right",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123209379-29.png",
-        "fileName": "docx-lesson-3-1776123209379-29.png",
-        "sideTexts": [
-          "<ol style=\"list-style-type: decimal;\"><li><strong>Serial Port (COM Port)</strong> - A communication port for connecting older external devices. It transmits data one bit at a time and comes in 9‑pin or 25‑pin models.<sup>[image-63]</sup></li></ol>"
-        ],
-        "layerImages": [
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-3-1776123209379-29.png",
-              "caption": "",
-              "fileName": "docx-lesson-3-1776123209379-29.png"
-            }
-          ]
-        ]
-      },
-      {
-        "id": 1776123188287,
-        "file": null,
-        "type": "image",
-        "order": 97,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123209379-29.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123209379-29.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123209379-29.png",
-        "fileName": "docx-lesson-3-1776123209379-29.png"
-      },
-      {
-        "id": 1776123188288,
-        "file": null,
-        "type": "paragraph",
-        "order": 98,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Parallel Port</strong> - Transfers multiple bits of data simultaneously. Often used for attaching older devices with a 25‑pin connector.<sup>[image-63]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188289,
-        "file": null,
-        "type": "image",
-        "order": 99,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123209379-29.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123209379-29.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123209379-29.png",
-        "fileName": "docx-lesson-3-1776123209379-29.png"
-      },
-      {
-        "id": 1776123188290,
-        "file": null,
-        "type": "paragraph",
-        "order": 100,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>USB (Universal Serial Bus) Port</strong> - A versatile port that supports many external devices and enables plug‑and‑play connections with high‑speed transfer.<sup>[image-63]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188291,
-        "file": null,
-        "type": "image",
-        "order": 101,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123209379-29.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123209379-29.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123209379-29.png",
-        "fileName": "docx-lesson-3-1776123209379-29.png"
-      },
-      {
-        "id": 1776123188292,
-        "file": null,
-        "type": "paragraph",
-        "order": 102,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>PS/2 Port</strong> - A 6‑pin port originally used for connecting keyboards and mice on older computers.<sup>[image-63]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188293,
-        "file": null,
-        "type": "image",
-        "order": 103,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123209379-29.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123209379-29.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123209379-29.png",
-        "fileName": "docx-lesson-3-1776123209379-29.png"
-      },
-      {
-        "id": 1776123188294,
-        "file": null,
-        "type": "paragraph",
-        "order": 104,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>VGA Port </strong>- A video port with 15 holes used to connect a display device to the computer’s video card.<sup>[image-63]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188295,
-        "file": null,
-        "type": "image",
-        "order": 105,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123209379-29.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123209379-29.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123209379-29.png",
-        "fileName": "docx-lesson-3-1776123209379-29.png"
-      },
-      {
-        "id": 1776123188296,
-        "file": null,
-        "type": "paragraph",
-        "order": 106,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Sockets</strong> - Interface points used to connect audio devices like microphones or speakers to the computer’s sound card.<sup>[image-63]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188297,
-        "file": null,
-        "type": "image",
-        "order": 107,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123199356-11.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123199356-11.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123199356-11.png",
-        "fileName": "docx-lesson-3-1776123199356-11.png"
-      },
-      {
-        "id": 1776123188298,
-        "file": null,
-        "type": "image",
-        "order": 108,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-3-1776123209450-30.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123209450-30.png"
+            "url": "/uploads/lessons/077_hdmi_hdmi_connects_monitors_projectors_a_approx.webp",
+            "file": null,
+            "fileName": "077_hdmi_hdmi_connects_monitors_projectors_a_approx.webp",
+            "caption": "HDMI: HDMI connects monitors"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123209450-30.png",
-        "fileName": "docx-lesson-3-1776123209450-30.png",
+        "content": "/uploads/lessons/077_hdmi_hdmi_connects_monitors_projectors_a_approx.webp",
+        "fileName": "077_hdmi_hdmi_connects_monitors_projectors_a_approx.webp",
         "sideTexts": [
-          "<ol style=\"list-style-type: decimal;\"><li><strong>FireWire Port (IEEE 1394)</strong> - A high‑speed port for transferring large amounts of data, often used for video equipment.<sup>[image-64]</sup></li><li><strong>Infrared Port</strong> - A wireless communication port that sends and receives infrared signals within short range without cables.</li><li><strong>Game Port</strong> - Used in the past to connect gaming controllers; now largely replaced by USB.<sup>[image-65]</sup></li><li><strong>Modem Port</strong> - Connects a computer’s modem to a telephone network for dial‑up communication.<sup>[image-66]</sup></li></ol>"
+          "<p><strong>HDMI: HDMI connects monitors</strong></p><p>HDMI: HDMI connects monitors, projectors, and TVs for high-definition video and…</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-3-1776123209450-30.png",
-              "caption": "",
-              "fileName": "docx-lesson-3-1776123209450-30.png"
+              "url": "/uploads/lessons/077_hdmi_hdmi_connects_monitors_projectors_a_approx.webp",
+              "file": null,
+              "fileName": "077_hdmi_hdmi_connects_monitors_projectors_a_approx.webp",
+              "caption": "HDMI: HDMI connects monitors"
             }
           ]
         ]
       },
       {
-        "id": 1776123188299,
+        "id": 1777220247025,
         "file": null,
         "type": "image",
-        "order": 109,
-        "title": "",
+        "order": 53,
+        "title": "Ethernet: Wired connection for network communication",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123209465-31.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123209465-31.png"
+            "url": "/uploads/lessons/078_ethernet_wired_connection_for_network_co_approx.webp",
+            "file": null,
+            "fileName": "078_ethernet_wired_connection_for_network_co_approx.webp",
+            "caption": "Ethernet: Wired connection for network communication"
           }
         ],
-        "layout": "single",
+        "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123209465-31.png",
-        "fileName": "docx-lesson-3-1776123209465-31.png"
+        "content": "/uploads/lessons/078_ethernet_wired_connection_for_network_co_approx.webp",
+        "fileName": "078_ethernet_wired_connection_for_network_co_approx.webp",
+        "sideTexts": [
+          "<p><strong>Ethernet: Wired connection for network communication</strong></p><p>Ethernet: Wired connection for network communication, often for internet or LAN…</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/078_ethernet_wired_connection_for_network_co_approx.webp",
+              "file": null,
+              "fileName": "078_ethernet_wired_connection_for_network_co_approx.webp",
+              "caption": "Ethernet: Wired connection for network communication"
+            }
+          ]
+        ]
       },
       {
-        "id": 1776123188300,
+        "id": 1777220247026,
         "file": null,
         "type": "image",
-        "order": 110,
-        "title": "",
+        "order": 54,
+        "title": "External port",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123209379-29.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123209379-29.png"
+            "url": "/uploads/lessons/080_parallel_port_crop.webp",
+            "file": null,
+            "fileName": "080_parallel_port_crop.webp",
+            "caption": "External port"
           }
         ],
-        "layout": "single",
+        "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123209379-29.png",
-        "fileName": "docx-lesson-3-1776123209379-29.png"
+        "content": "/uploads/lessons/080_parallel_port_crop.webp",
+        "fileName": "080_parallel_port_crop.webp",
+        "sideTexts": [
+          "<p><strong>External port</strong></p><p>External port - External ports are used to connect external devices: modem,…</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/080_parallel_port_crop.webp",
+              "file": null,
+              "fileName": "080_parallel_port_crop.webp",
+              "caption": "External port"
+            }
+          ]
+        ]
       },
       {
-        "id": 1776123188301,
-        "file": null,
-        "type": "paragraph",
-        "order": 111,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>DVI (Digital Video Interface) Port</strong> - A video port commonly used to connect flat‑panel monitors to a computer’s graphics card.<sup>[image-63]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123188302,
+        "id": 1777220247027,
         "file": null,
         "type": "image",
-        "order": 112,
-        "title": "",
+        "order": 55,
+        "title": "Sockets",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-3-1776123209379-29.png",
-            "caption": "",
-            "fileName": "docx-lesson-3-1776123209379-29.png"
+            "url": "/uploads/lessons/087_sockets_interface_points_used_to_connect_approx.webp",
+            "file": null,
+            "fileName": "087_sockets_interface_points_used_to_connect_approx.webp",
+            "caption": "Sockets"
           }
         ],
-        "layout": "single",
+        "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-3-1776123209379-29.png",
-        "fileName": "docx-lesson-3-1776123209379-29.png"
+        "content": "/uploads/lessons/087_sockets_interface_points_used_to_connect_approx.webp",
+        "fileName": "087_sockets_interface_points_used_to_connect_approx.webp",
+        "sideTexts": [
+          "<p><strong>Sockets</strong></p><p>Sockets - Interface points used to connect audio devices like microphones or…</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/087_sockets_interface_points_used_to_connect_approx.webp",
+              "file": null,
+              "fileName": "087_sockets_interface_points_used_to_connect_approx.webp",
+              "caption": "Sockets"
+            }
+          ]
+        ]
       },
       {
-        "id": 1776123188303,
+        "id": 1777220247028,
         "file": null,
-        "type": "paragraph",
-        "order": 113,
-        "title": "",
+        "type": "image",
+        "order": 56,
+        "title": "FireWire Port (IEEE 1394)",
+        "images": [
+          {
+            "url": "/uploads/lessons/088_firewire_port_ieee_1394_a_high_speed_por.webp",
+            "file": null,
+            "fileName": "088_firewire_port_ieee_1394_a_high_speed_por.webp",
+            "caption": "FireWire Port (IEEE 1394)"
+          }
+        ],
+        "layout": "text-left",
         "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Ethernet Port</strong> - A network port that connects the computer to LAN or Internet via cable at speeds from 10 to 1000 Mbps.<sup>[31] [image-63]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
+        "content": "/uploads/lessons/088_firewire_port_ieee_1394_a_high_speed_por.webp",
+        "fileName": "088_firewire_port_ieee_1394_a_high_speed_por.webp",
+        "sideTexts": [
+          "<p><strong>FireWire Port (IEEE 1394)</strong></p><p>FireWire Port (IEEE 1394) - A high‑speed port for transferring large amounts of…</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/088_firewire_port_ieee_1394_a_high_speed_por.webp",
+              "file": null,
+              "fileName": "088_firewire_port_ieee_1394_a_high_speed_por.webp",
+              "caption": "FireWire Port (IEEE 1394)"
+            }
+          ]
+        ]
+      },
+      {
+        "id": 1777220247029,
+        "file": null,
+        "type": "image",
+        "order": 57,
+        "title": "Modem Port",
+        "images": [
+          {
+            "url": "/uploads/lessons/089_modem_port_connects_a_computer_s_modem_t.webp",
+            "file": null,
+            "fileName": "089_modem_port_connects_a_computer_s_modem_t.webp",
+            "caption": "Modem Port"
+          }
+        ],
+        "layout": "text-left",
+        "caption": "",
+        "content": "/uploads/lessons/089_modem_port_connects_a_computer_s_modem_t.webp",
+        "fileName": "089_modem_port_connects_a_computer_s_modem_t.webp",
+        "sideTexts": [
+          "<p><strong>Modem Port</strong></p><p>Modem Port - Connects a computer’s modem to a telephone network for dial‑up…</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/089_modem_port_connects_a_computer_s_modem_t.webp",
+              "file": null,
+              "fileName": "089_modem_port_connects_a_computer_s_modem_t.webp",
+              "caption": "Modem Port"
+            }
+          ]
+        ]
       },
       {
         "id": 1776123188305,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 114,
+        "order": 58,
         "title": "",
         "caption": "",
         "content": "",
@@ -1942,16 +1290,6 @@
             "correctAnswer": 2
           }
         ]
-      },
-      {
-        "id": 1776123188313,
-        "file": null,
-        "type": "references",
-        "order": 115,
-        "title": "",
-        "caption": "",
-        "content": "https://www.geeksforgeeks.org/computer-organization-architecture/computer-and-its-components/\nhttps://www.indeed.com/career-advice/career-development/what-are-basic-components-of-computer-hardware\nhttps://www.ibm.com/think/topics/central-processing-unit\nhttps://www.britannica.com/technology/central-processing-unit\nhttps://www.spiceworks.com/it-hardware/what-is-motherboard/#:~:text=A%20computer's%20motherboard%20is%20typically,and%20size%20of%20the%20computer\nhttps://www.britannica.com/technology/motherboard\nhttps://www.techtarget.com/searchstorage/definition/RAM-random-access-memory\nhttps://ph.rs-online.com/web/c/semiconductors/memory-chips/sram/\nhttps://techterms.com/definition/sdram\nhttps://www.quora.com/Which-RAM-is-best-DDR1-DDR2-DDR3-or-DDR4\nhttps://www.dropbox.com/resources/storage-devices\nhttps://www.computerhope.com/jargon/s/stordevi.htm\nhttps://aws.amazon.com/compare/the-difference-between-ssd-hard-drive/\nhttps://www.securestorageservices.co.uk/article/11/pros-and-cons-of-cloud-storage\nhttps://rog.asus.com/in/articles/guides/graphics-processing-unit-gpu/\nhttps://www.ibm.com/think/topics/gpu\nhttps://www.geeksforgeeks.org/computer-science-fundamentals/what-is-power-supply-unit-psu/\nhttps://www.corsair.com/us/en/explorer/diy-builder/power-supply-units/what-is-a-psu-power-supply-units-explained/#:~:text=In%20the%20world%20of%20building,crucial%20for%20performance%20and%20longevity\nhttps://www.coolerguys.com/blogs/news/what-are-the-types-of-cooling-system-in-computer?srsltid=AfmBOopddwusohPrV_BpDRCQzg4mFOR9aJUfoEd3bFu8MxLNPmYVdnZ8\nhttps://www.cybernetman.com/blog/pc-cooling-solutions/?srsltid=AfmBOoqCosdhD74IP2nkP446NolUesysHlBylGvUQh0artCAybc8ME8M\nhttps://www.tutorialspoint.com/computer_fundamentals/computer_input_devices.htm#:~:text=The%20devices%20which%20are%20used,interact%20with%20the%20computer%20system\nhttps://superops.com/tech-hub/what-is-an-input-device\nhttps://unstop.com/blog/output-devices-of-computer#:~:text=Output%20devices%20are%20essential%20components,we'll%20dive%20deeper%20into\nhttps://www.computerhope.com/jargon/o/outputde.htm#:~:text=An%20output%20device%20is%20any,most%20commonly%20used%20output%20devices\nhttps://www.geeksforgeeks.org/computer-science-fundamentals/what-are-different-output-devices/\nhttps://www.webopedia.com/definitions/peripheral-device/?utm_source=chatgpt.com\nhttps://www.britannica.com/technology/input-output-device\nhttps://www.geeksforgeeks.org/computer-organization-architecture/peripherals-devices-in-computer-organization/?utm_source=chatgpt.com\nhttps://www.hp.com/us-en/shop/tech-takes/what-desktop-computer-ports-are-available#:~:text=Computer%20ports%20are%20connection%20points,printers%2C%20and%20external%20storage%20devices\nhttps://www.geeksforgeeks.org/computer-organization-architecture/types-of-computer-ports/\nhttps://mrpcss.com/understanding-computer-airflow-importance-mechanisms-and-optimization/#:~:text=Introduction,operate%20at%20their%20maximum%20capability\nhttps://static.vecteezy.com/system/resources/previews/011/548/382/large_2x/cpu-central-processor-unit-chip-chip-on-circuit-board-in-pc-and-laptop-computer-technology-photo.jpg\nhttps://news-cdn.softpedia.com/images/news2/Tyan-Announces-Two-New-Dual-CPU-AMD-Opteron-Motherboards-2.jpg\nhttps://thumbs.dreamstime.com/z/synchronous-dynamic-random-access-memory-5183723.jpg\nhttps://classnotes.ng/wp-content/uploads/2020/04/computer-storage-devices-computer-science-classnotesng.jpg\nhttps://c8.alamy.com/comp/2F6RY96/graphics-cards-modern-gaming-gpu-graphics-processing-units-isolated-on-white-3d-illustration-2F6RY96.jpg\nhttps://5.imimg.com/data5/SELLER/Default/2024/6/424278329/FW/HT/YR/151729919/computer-power-supply-1000x1000.jpg\nhttps://static1.thegamerimages.com/wordpress/wp-content/uploads/2024/01/fi_aio.jpg\nhttps://th.bing.com/th/id/R.59679dc05432696590e1c974cb6d4c6a?rik=C60nlW%2br55i5jw&riu=http%3a%2f%2f1.bp.blogspot.com%2f-3uFMLs4c9rU%2fT2dOLADWgHI%2fAAAAAAAAAWA%2fGZIpvVDQ5pk%2fs1600%2fbloooooog%2bcopy.JPG&ehk=sX5s%2fUnUMCHh3tbKVRrC8LafGKKJg0kW7S8UKpqlQ9o%3d&risl=&pid=ImgRaw&r=0\nhttps://i.pinimg.com/originals/44/01/19/440119dd36aa51fc2dd473d08103b273.jpg\nhttps://static.vecteezy.com/system/resources/previews/056/811/084/non_2x/high-resolution-of-a-computer-hard-disk-drive-showing-internal-components-free-photo.jpg\nhttps://th.bing.com/th/id/R.f4d738002145344d0c5291943baaab25?rik=Mv6ukxrZtsIL2Q&riu=http%3a%2f%2fwww.publicdomainpictures.net%2fpictures%2f20000%2fvelka%2fcomputer-monitor-isolated-113001152897GC.jpg&ehk=ftlPrtoYoTbSMjm9Jkz1Njji9mV6mRj16QWQUYPtYnc%3d&risl=&pid=ImgRaw&r=0\nhttps://cdn.mos.cms.futurecdn.net/91dec10de6e77c56745005982c842614.jpg\nhttps://static.vecteezy.com/system/resources/previews/017/351/676/original/desktop-keyboard-3d-realistic-classic-computer-keyboard-mockup-isolated-on-white-illustration-vector.jpg\nhttps://5.imimg.com/data5/JB/IH/HH/SELLER-32247283/wired-mouse.jpg\nhttps://m.media-amazon.com/images/I/61ZB1f7oODL.jpg\nhttps://www.c64-wiki.com/images/thumb/e/e3/TurboComputerLightPen.jpg/400px-TurboComputerLightPen.jpg\nhttps://static.bhphotovideo.com/explora/sites/default/files/Kensington-Orbit-Optical-Trackball.png\nhttps://i0.wp.com/pngimg.com/uploads/scanner/scanner_PNG11351.png\nhttps://www.globalspec.com/ImageRepository/LearnMore/20175/Lenovo-X61-Tablet-Mode4dbcbf135820479cbd9b0730f67dd6cb.png\nhttps://m.media-amazon.com/images/I/61iq76RSYbL._AC_.jpg\nhttps://cdn.mos.cms.futurecdn.net/N2S8Jxu3dASZ3vwZgYkNHQ.jpg\nhttps://4.bp.blogspot.com/-7IWFRCpyz_Q/Ub7_OwxZ9_I/AAAAAAAAAN0/eVVbGajHOu0/s1600/video-projector.jpg\nhttps://m.media-amazon.com/images/I/61Q-JroRTkS._AC_SL1500_.jpg\nhttps://cabletimetech.com/cdn/shop/articles/01_CABLETIME_CT-AMCM5A-AG0.5_USBA_AND_CT-C160-U3-AMBM-BL1_USB_B_AND_CT-AMCMG2-AG1_USB_C_0e5cb59b-633f-45c4-a744-4b61062089cf.jpg?v=1739934504&width=800\nhttps://images-na.ssl-images-amazon.com/images/I/61jA-221UVL._AC_SL1001_.jpg\nhttps://m.media-amazon.com/images/I/61Rnii+D8rL._AC_.jpg\nhttps://pchome.ge/wp-content/uploads/2021/05/vga.jpg\nhttps://cdn.prod.website-files.com/654c1a21d7927473aecf5875/65bd8b04c34a1734a4a858c2_10967-15566.png\nhttps://img.baba-blog.com/2025/02/computer-ports-type-vector-illustration.jpg?x-oss-process=style%2Ffull\nhttps://3.bp.blogspot.com/-9Fk5ruijV2Y/Uu3YWQNLVUI/AAAAAAAAAMs/gaS8Vuf9MHA/s1600/firewire2.png\nhttps://media.istockphoto.com/id/155324775/photo/computer-serial-port-connector-on-white-background.jpg?s=612x612&w=0&k=20&c=hv2NT3e57Y82jtLBo5WC2a8UHUuJ9coMuVZ6mREUkbQ=\nhttps://www.spintel.net.au/storage/files/shares/articles-images/223710516.png",
-        "fileName": null
       }
     ],
     "diagnosticQuestions": [

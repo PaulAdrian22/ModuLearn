@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../App';
 import Navbar from '../components/Navbar';
 import { normalizeSimulationSkill } from '../utils/simulationFlow';
+import { simulationsApi } from '../services/api';
+import { useAsyncData } from '../hooks/useAsyncData';
 
 const getCompletionPercent = (simulation) => {
   const score = Number(simulation?.Score || 0);
@@ -138,28 +139,14 @@ const getSkillTheme = (rawSkillType) => {
 const Simulations = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [simulations, setSimulations] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    if (!user?.userId) return;
-    fetchSimulations();
-  }, [user?.userId]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const fetchSimulations = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`/simulations?userId=${user.userId}`);
-      const data = Array.isArray(response.data) ? response.data : [];
-      setSimulations(data);
-      setLoading(false);
-    } catch (err) {
-      console.error('Error fetching simulations:', err);
-      setSimulations([]);
-      setLoading(false);
-    }
-  };
+  const { data: simulationsData, loading } = useAsyncData(
+    () => simulationsApi.list(),
+    [user?.userId],
+    { initial: [] },
+  );
+  const simulations = Array.isArray(simulationsData) ? simulationsData : [];
 
   const handleOpenSimulation = (simulation) => {
     navigate(`/simulation/${simulation.SimulationID}`);

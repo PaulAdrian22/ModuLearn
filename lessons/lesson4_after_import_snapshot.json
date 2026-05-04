@@ -17,15 +17,14 @@
         "fileName": null
       },
       {
-        "id": 1776121460374,
+        "id": 1777220247030,
         "file": null,
         "type": "paragraph",
         "order": 2,
         "title": "",
         "caption": "",
-        "content": "<p>Before assembling a computer system, technicians must ensure that the work environment, tools, and components are properly prepared. Pre-assembly preparation minimizes hardware damage, ensures safety, and improves assembly efficiency. Proper preparation includes gathering the correct tools, observing safety precautions (especially electrostatic discharge protection), and verifying that all necessary components are available before installation.</p><h4><a id=\"_o4o9mm96y66u\"></a><strong>A. Tools and Equipment:</strong></h4><p>Computer assembly requires specialized tools designed to handle delicate electronic components safely and accurately. The most commonly used tool is the Phillips screwdriver, which is needed for installing motherboard screws, power supply units, storage drives, and expansion cards. Additional tools include anti-static wrist straps, tweezers for handling small connectors, thermal paste for proper heat transfer between the CPU and heatsink, cable ties for cable management, and cleaning tools such as compressed air or soft brushes.</p><p>Using the correct tools prevents accidental damage to components and improves the accuracy and speed of installation. Proper cable organization using cable ties also enhances airflow inside the computer case, which contributes to better cooling and longer component lifespan. In addition, insulated tools and proper handling practices reduce the risk of electrical hazards during installation.<sup>[1][2]</sup></p><h4><a id=\"_4parq5l7ztd1\"></a><strong>B. Safety and ESD Precautions:</strong></h4><p>Electrostatic discharge (ESD) is one of the most common causes of hidden hardware damage during computer assembly. Static electricity stored in the human body can transfer to sensitive components such as RAM, CPUs, and motherboards, potentially causing immediate or long-term failure. Therefore, technicians must follow grounding procedures before touching any electronic parts.</p><p>Common ESD protection methods include wearing an anti-static wrist strap connected to a grounded surface, touching an unpainted metal surface to discharge static electricity, working on non-carpeted or anti-static surfaces, and handling components only by their edges without touching circuitry or connector pins. Components should remain inside anti-static packaging until installation to prevent static exposure.<sup>[3]</sup></p><p>Grounding devices such as wrist straps maintain the technician at the same electrical potential as the equipment, preventing sudden discharge between the body and components. This practice significantly reduces the risk of damaging sensitive electronics during installation or servicing.<sup>[4]</sup></p><h4><a id=\"_9g9p3stpvzec\"></a><strong>C. Identification of Parts:</strong></h4><p>Before starting assembly, technicians must check whether all required components are available and compatible with each other. Essential components include the motherboard, central processing unit (CPU), random access memory (RAM), storage devices (SSD or HDD), power supply unit (PSU), cooling system, computer casing, and expansion cards such as graphics cards or network adapters.</p><p>Part verification ensures compatibility between the motherboard and processor socket, RAM type and speed, and power requirements of installed devices. Confirming the availability of all parts before assembly prevents delays, reduces the need for reassembly, and ensures a smooth workflow. Careful inspection also helps detect damaged connectors, missing accessories, or incorrect components before installation begins.<sup>[5]</sup></p>",
+        "content": "<p>Before assembling a computer system, technicians must ensure that the work environment, tools, and components are properly prepared. Pre-assembly preparation minimizes hardware damage, ensures safety, and improves assembly efficiency. Proper preparation includes gathering the correct tools, observing safety precautions (especially electrostatic discharge protection), and verifying that all necessary components are available before installation.</p>\n<p>Computer assembly requires specialized tools designed to handle delicate electronic components safely and accurately. The most commonly used tool is the Phillips screwdriver, which is needed for installing motherboard screws, power supply units, storage drives, and expansion cards. Additional tools include anti-static wrist straps, tweezers for handling small connectors, thermal paste for proper heat transfer between the CPU and heatsink, cable ties for cable management, and cleaning tools such as compressed air or soft brushes.</p>\n<p>Using the correct tools prevents accidental damage to components and improves the accuracy and speed of installation. Proper cable organization using cable ties also enhances airflow inside the computer case, which contributes to better cooling and longer component lifespan. In addition, insulated tools and proper handling practices reduce the risk of electrical hazards during installation.[1][2]</p>\n<p>Electrostatic discharge (ESD) is one of the most common causes of hidden hardware damage during computer assembly. Static electricity stored in the human body can transfer to sensitive components such as RAM, CPUs, and motherboards, potentially causing immediate or long-term failure. Therefore, technicians must follow grounding procedures before touching any electronic parts.</p>\n<p>Common ESD protection methods include wearing an anti-static wrist strap connected to a grounded surface, touching an unpainted metal surface to discharge static electricity, working on non-carpeted or anti-static surfaces, and handling components only by their edges without touching circuitry or connector pins. Components should remain inside anti-static packaging until installation to prevent static exposure.[3]</p>\n<p>Grounding devices such as wrist straps maintain the technician at the same electrical potential as the equipment, preventing sudden discharge between the body and components. This practice significantly reduces the risk of damaging sensitive electronics during installation or servicing.[4]</p>\n<p>Before starting assembly, technicians must check whether all required components are available and compatible with each other. Essential components include the motherboard, central processing unit (CPU), random access memory (RAM), storage devices (SSD or HDD), power supply unit (PSU), cooling system, computer casing, and expansion cards such as graphics cards or network adapters.</p>\n<p>Part verification ensures compatibility between the motherboard and processor socket, RAM type and speed, and power requirements of installed devices. Confirming the availability of all parts before assembly prevents delays, reduces the need for reassembly, and ensures a smooth workflow. Careful inspection also helps detect damaged connectors, missing accessories, or incorrect components before installation begins.[5]</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
@@ -90,554 +89,112 @@
         "fileName": null
       },
       {
-        "id": 1776121460380,
+        "id": 1777220247031,
         "file": null,
         "type": "paragraph",
         "order": 5,
         "title": "",
         "caption": "",
-        "content": "<p>Computer assembly requires installing hardware components in the proper order to ensure compatibility, safety, and system functionality. Following a structured installation sequence helps technicians avoid damage, simplifies cable routing, and ensures that each component is properly recognized by the system during startup.</p><h4><a id=\"_z47s9fjr9pu8\"></a><strong>A. Installing the Motherboard:</strong></h4><p>Installing a motherboard can seem like a daunting task, but it's easier than you might think if you follow steps. Installing a motherboard is one of the most critical steps in building a computer. The motherboard is the backbone of your system, connecting to and powering all the other components. Some of the best motherboards may offer advanced features, but a well-installed motherboard should lead to stability, proper functionality, and efficient cooling.<sup>[6][7]</sup></p>",
+        "content": "<p>Computer assembly requires installing hardware components in the proper order to ensure compatibility, safety, and system functionality. Following a structured installation sequence helps technicians avoid damage, simplifies cable routing, and ensures that each component is properly recognized by the system during startup.</p>\n<p>Installing a motherboard can seem like a daunting task, but it's easier than you might think if you follow steps. Installing a motherboard is one of the most critical steps in building a computer. The motherboard is the backbone of your system, connecting to and powering all the other components. Some of the best motherboards may offer advanced features, but a well-installed motherboard should lead to stability, proper functionality, and efficient cooling.[6][7]</p>\n<p>Preparation: Setting the stage</p>\n<p>Clear a clean, flat workspace and gather tools like a Philips-head screwdriver and manuals.</p>\n<p>Wear an anti-static wrist strap or use an anti-static mat to protect components.</p>\n<p>(Optional) Install key parts on the motherboard before putting it in the case:</p>\n<p>CPU cooler</p>\n<p>M.2 storage (if applicable)</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
-        "id": 1776121460381,
+        "id": 1777220247032,
         "file": null,
         "type": "image",
         "order": 6,
-        "title": "",
+        "title": "Step-by-Step Installation of Components",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-4-1776121460902-1.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121460902-1.png"
+            "url": "/uploads/lessons/093_preparation_setting_the_stage.webp",
+            "file": null,
+            "fileName": "093_preparation_setting_the_stage.webp",
+            "caption": "Preparation: Setting the stage"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-4-1776121460904-2.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121460904-2.png"
+            "url": "/uploads/lessons/094_remove_case_panels.webp",
+            "file": null,
+            "fileName": "094_remove_case_panels.webp",
+            "caption": "Remove Case Panels"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-4-1776121460906-3.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121460906-3.png"
+            "url": "/uploads/lessons/095_install_the_i_o_shield.webp",
+            "file": null,
+            "fileName": "095_install_the_i_o_shield.webp",
+            "caption": "Install the I/O Shield"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-4-1776121460907-4.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121460907-4.png"
+            "url": "/uploads/lessons/096_make_sure_the_ports_line_up_with_the_shi.webp",
+            "file": null,
+            "fileName": "096_make_sure_the_ports_line_up_with_the_shi.webp",
+            "caption": "Make sure the ports line up with the shield cutouts"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-4-1776121460909-5.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121460909-5.png"
+            "url": "/uploads/lessons/097_add_or_adjust_standoffs_if_needed_remove.webp",
+            "file": null,
+            "fileName": "097_add_or_adjust_standoffs_if_needed_remove.webp",
+            "caption": "Add or adjust standoffs if needed"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-4-1776121460911-6.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121460911-6.png"
+            "url": "/uploads/lessons/098_make_sure_it_sits_flat_and_straight.webp",
+            "file": null,
+            "fileName": "098_make_sure_it_sits_flat_and_straight.webp",
+            "caption": "Make sure it sits flat and straight"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-4-1776121460912-7.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121460912-7.png"
+            "url": "/uploads/lessons/099_tighten_just_enough_so_the_board_doesn_t.webp",
+            "file": null,
+            "fileName": "099_tighten_just_enough_so_the_board_doesn_t.webp",
+            "caption": "Tighten just enough so the board doesn’t shift"
+          },
+          {
+            "url": "/uploads/lessons/100_locate_the_alignment_keys_on_the_motherb.webp",
+            "file": null,
+            "fileName": "100_locate_the_alignment_keys_on_the_motherb.webp",
+            "caption": "Locate the alignment keys on the motherboard CPU socket and"
+          },
+          {
+            "url": "/uploads/lessons/101_do_not_touch_socket_contacts_to_protect_.webp",
+            "file": null,
+            "fileName": "101_do_not_touch_socket_contacts_to_protect_.webp",
+            "caption": "DO NOT touch socket contacts"
+          },
+          {
+            "url": "/uploads/lessons/102_lift_the_cpu_socket_lever_and_the_metal_.webp",
+            "file": null,
+            "fileName": "102_lift_the_cpu_socket_lever_and_the_metal_.webp",
+            "caption": "Lift the CPU socket lever and the metal load plate will be l"
+          },
+          {
+            "url": "/uploads/lessons/104_before_installing_the_cpu_cooler_please_.webp",
+            "file": null,
+            "fileName": "104_before_installing_the_cpu_cooler_please_.webp",
+            "caption": "Before installing the CPU cooler"
+          },
+          {
+            "url": "/uploads/lessons/106_finally_tidy_up_your_cables_one_last_tim.webp",
+            "file": null,
+            "fileName": "106_finally_tidy_up_your_cables_one_last_tim.webp",
+            "caption": "Finally"
+          },
+          {
+            "url": "/uploads/lessons/107_ideally_as_you_press_the_power_button_th.webp",
+            "file": null,
+            "fileName": "107_ideally_as_you_press_the_power_button_th.webp",
+            "caption": "Ideally as you press the power button"
           }
         ],
-        "layout": "text-right",
+        "layout": "grid-3",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-4-1776121460902-1.png",
-        "fileName": "docx-lesson-4-1776121460902-1.png",
-        "sideTexts": [
-          "<ul style=\"list-style-type: disc;\"><li>Preparation: Setting the stage</li></ul><p></p><ul style=\"list-style-type: disc;\"><li>Clear a clean, flat workspace and gather tools like a Philips-head screwdriver and manuals.</li><li>Wear an anti-static wrist strap or use an anti-static mat to protect components.</li><li>(Optional) Install key parts on the motherboard before putting it in the case:<ul style=\"list-style-type: circle;\"><li>CPU</li><li>CPU cooler</li><li>RAM</li><li>M.2 storage (if applicable)</li></ul></li></ul><p>(Refer to your motherboard manual for compatibility and proper installation.)</p>",
-          "<ul style=\"list-style-type: disc;\"><li>Remove Case Panels</li></ul><p></p><ul style=\"list-style-type: disc;\"><li>Take off the side panels of the PC case to expose the interior.</li><li>Locate the large flat surface where the motherboard will be mounted.</li></ul>",
-          "<ul style=\"list-style-type: disc;\"><li>Install the I/O Shield</li></ul><p></p><ul style=\"list-style-type: disc;\"><li>If your motherboard comes with a separate I/O shield, push it into the rectangular cutout at the back of the case.</li><li>Make sure the ports line up with the shield cutouts.\t\t\t\t</li></ul>",
-          "<ul style=\"list-style-type: disc;\"><li>Install or Check Standoffs</li></ul><ul style=\"list-style-type: disc;\"><li>Standoffs are spacers that keep the motherboard off the case metal.</li><li>Ensure standoffs match the screw hole layout of your motherboard (ATX, Micro-ATX, Mini-ATX).</li><li>Add or adjust standoffs if needed. Remove any extras that don’t align.</li></ul>",
-          "<ul style=\"list-style-type: disc;\"><li>Position the Motherboard</li></ul><ul style=\"list-style-type: disc;\"><li>Carefully lower the motherboard into the case, aligning:<ul style=\"list-style-type: circle;\"><li>Ports with the I/O shield</li><li>Screw holes with the standoffs</li></ul></li><li>Make sure it sits flat and straight.</li></ul>",
-          "<ul style=\"list-style-type: disc;\"><li>Secure the Motherboard</li></ul><ul style=\"list-style-type: disc;\"><li>Insert screws into each mounting hole, starting from the center and working outward.</li><li>Tighten just enough so the board doesn’t shift; don’t overtighten.</li></ul>",
-          "<ul style=\"list-style-type: disc;\"><li>Connect Power Cables</li></ul><ul style=\"list-style-type: disc;\"><li>24-pin ATX power connector (main motherboard power)</li><li>8-pin CPU power connector (near the top of the board)</li><li>Optional second 8-pin if your board has one (for higher power/overclocking)</li></ul>"
-        ],
-        "layerImages": [
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121460902-1.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121460902-1.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121460904-2.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121460904-2.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121460906-3.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121460906-3.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121460907-4.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121460907-4.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121460909-5.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121460909-5.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121460911-6.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121460911-6.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121460912-7.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121460912-7.png"
-            }
-          ]
-        ]
-      },
-      {
-        "id": 1776121460382,
-        "file": null,
-        "type": "paragraph",
-        "order": 7,
-        "title": "",
-        "caption": "",
-        "content": "<table><thead><tr><th><h5><a id=\"_mii1ffgxa0hg\"></a><strong>Insert Simulation # 1</strong></h5></th></tr></thead></table><h4><a id=\"_vszhqr1tjm2m\"></a><strong>B. CPU and Cooling Installation:</strong></h4><p>The Central Processing Unit (CPU) is often called the “brain of the computer” because it performs calculations, executes instructions, and processes data. Without a properly installed CPU, a computer system cannot operate.</p><p>However, the CPU generates heat while working. If this heat is not properly managed, it can cause system instability, reduced performance, or even permanent damage. That is why installing a CPU cooler is equally important. The cooler helps regulate temperature and maintain optimal system performance.<sup>[8]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460383,
-        "file": null,
-        "type": "image",
-        "order": 8,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121461756-8.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121461756-8.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121461770-9.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121461770-9.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121461772-10.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121461772-10.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121461773-11.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121461773-11.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121461775-12.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121461775-12.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121461777-13.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121461777-13.png"
-          }
-        ],
-        "layout": "text-right",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-4-1776121461756-8.png",
-        "fileName": "docx-lesson-4-1776121461756-8.png",
-        "sideTexts": [
-          "<ol style=\"list-style-type: decimal;\"><li>Locate the alignment keys on the motherboard CPU socket and the notches on the CPU.<sup>[8]</sup></li></ol><p></p><ul style=\"list-style-type: disc;\"><li>Do not force the CPU into the CPU socket. The CPU cannot fit in if oriented incorrectly. Adjust the CPU orientation if this occurs. <sup>[8]</sup></li><li>DO NOT touch socket contacts. To protect the CPU socket, always replace the protective socket cover when the CPU is not installed.<sup>[8]</sup></li></ul>",
-          "<ol style=\"list-style-type: decimal;\"><li>Lift the CPU socket lever and the metal load plate will be lifted as well. If the protective socket cover is fastened on the CPU socket, remove it first.<sup>[8]</sup></li></ol>",
-          "<ol style=\"list-style-type: decimal;\"><li>If the protective socket cover is fastened on the metal load plate, do not remove it at this stage. The socket cover may pop off from the load plate automatically during the process of re-engaging the lever after you insert the CPU.<sup>[8]</sup></li></ol>",
-          "<ol style=\"list-style-type: decimal;\"><li>Before installing the CPU cooler, please first add a thin layer of heat sink paste on the surface of the CPU. Then install the cooler (refer to the installation manual for your CPU cooler).<sup>[8]</sup></li></ol><p></p>"
-        ],
-        "layerImages": [
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121461756-8.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121461756-8.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121461770-9.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121461770-9.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121461772-10.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121461772-10.png"
-            },
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121461773-11.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121461773-11.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121461775-12.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121461775-12.png"
-            },
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121461777-13.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121461777-13.png"
-            }
-          ]
-        ]
-      },
-      {
-        "id": 1776121460384,
-        "file": null,
-        "type": "paragraph",
-        "order": 9,
-        "title": "",
-        "caption": "",
-        "content": "<h4><a id=\"_niv7hszarv93\"></a><strong>C. Memory and Storage Installation:</strong></h4><p>Memory and storage devices are essential components of a computer system because they allow the system to temporarily and permanently store data. Proper installation ensures stable performance, faster processing, and reliable data storage.</p><p>Memory (RAM) provides temporary working space for running programs, while storage devices such as hard drives and solid-state drives store operating systems, applications, and user files. Understanding how to correctly install these components is an important skill in computer assembly.<sup>[9]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460385,
-        "file": null,
-        "type": "subtopic",
-        "order": 10,
-        "title": "What you’ll need",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776121460386,
-        "file": null,
-        "type": "paragraph",
-        "order": 11,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>A compatible internal storage drive like a high-performance SSD</li><li>Screwdriver</li><li>SATA data cable (if not included with the SSD)</li><li>Available SATA power cable from the power supply</li><li>Mounting screws (if required)</li><li>Your computer’s manual</li><li>Anti-static protection</li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460387,
-        "file": null,
-        "type": "paragraph",
-        "order": 12,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ol style=\"list-style-type: decimal;\"><li>Locate drive bays</li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>Find an available 2.5-inch drive bay or 3.5-inch bay with an adapter</li></ul>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li>Mount the SSD</li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>Secure the SSD in the drive bay using the appropriate screws</li></ul>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li>Connect the SATA data cable</li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>Attach one end of the SATA data cable to the SSD</li><li>Connect the other end to an available SATA port on the motherboard</li></ul>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li>Connect the SATA power cable</li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>Locate an available SATA power cable from your power supply</li><li>Connect it to the SSD</li></ul>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li>Double-check connections</li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>Ensure all cables are securely connected</li></ul>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li>Locate the RAM slots</li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>RAM slot configuration varies depending on the motherboard type and form factor, with larger boards like ATX typically providing four or more RAM slots, while smaller boards such as Micro-ATX and Mini-ITX often include two slots due to space limitations. </li><li>Depending on the amount of RAM you will install, the configurations should follow:<br><ul style=\"list-style-type: circle;\"><li>1 RAM stick: Installed in the primary slot, usually labeled A2</li><li>2 RAM sticks: Installed in A2 and B2 </li><li>3 RAM sticks: Installed in A2, B2, then A1 </li><li>4 RAM sticks: Installed in all slots (A1, A2, B1, B2) for full capacity and dual-channel operation.</li></ul></li><li>Align the RAM notch properly into the socket. The notch is located in the middle of the RAM stick.  </li></ul>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li>Install the RAM</li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>Push the RAM stick until the lock on both sides clicks in place. Check if the locks are pinned securely to prevent any issues later on.</li></ul>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li>Close the case</li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>Replace the case cover and reconnect all external cables</li></ul>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li>Power on and set up</li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>Turn on your PC and enter the BIOS/UEFI to ensure the new SSD is detected</li><li>If installing an operating system, follow the OS installation process</li><li>If cloning your existing drive, use cloning software to transfer your data<sup>[9]</sup></li></ul>"
-            ]
-          ],
-          "headers": [
-            "<ol style=\"list-style-type: decimal;\"><li>Prepare your workspace and PC</li></ol>",
-            "<ul style=\"list-style-type: disc;\"><li>Power down your PC and unplug all cables</li><li>Open the computer case</li><li>Ground yourself by touching a metal part of the case to prevent static discharge</li></ul>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776121460388,
-        "file": null,
-        "type": "paragraph",
-        "order": 13,
-        "title": "",
-        "caption": "",
-        "content": "<table><thead><tr><th><h5><a id=\"_ezr8wwlgtp6g\"></a><strong>Insert Simulation # 3 and #4</strong></h5></th></tr></thead></table><h4><a id=\"_gjo75x5wegkw\"></a><strong>D. Power Supply and Cable Management:</strong></h4><p>The Power Supply Unit (PSU) is responsible for converting electrical power from an outlet into usable energy for computer components. Every internal device—including the motherboard, processor, storage drives, and graphics card—relies on the PSU for stable and continuous power.<sup>[10]</sup></p><p>Proper installation of the power supply, along with effective cable management, ensures safe operation, efficient airflow, easier maintenance, and a clean system layout.<sup>[10]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460389,
-        "file": null,
-        "type": "paragraph",
-        "order": 14,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ol style=\"list-style-type: decimal;\"><li><strong>Open the computer case<br></strong> </li></ol>",
-              "<p>Remove the side panel (usually the left panel) using screws or thumbscrews to access the inside of the case.</p>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li><strong>Locate the PSU mounting area<br></strong></li></ol>",
-              "<p> The PSU is typically installed at the <strong>top rear</strong> or <strong>bottom rear</strong> of the case depending on the case design.</p>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li><strong>Position the PSU correctly<br></strong></li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li> Place the PSU into the slot with the <strong>fan facing ventilation</strong>:</li><li>Fan <strong>downward</strong> if there is a bottom dust filter</li><li>Fan <strong>upward</strong> if there is no bottom ventilation</li></ul>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li><strong>Align the screw holes<br></strong></li></ol>",
-              "<p> Slide the PSU into place until the screw holes on the PSU match the holes at the back of the case.</p>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li><strong>Secure the PSU with screws<br></strong></li></ol>",
-              "<p> Use the four PSU screws at the rear of the case to firmly mount the power supply.</p>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li><strong>Route the PSU cables<br></strong></li></ol>",
-              "<p> Guide the cables toward their components (motherboard, CPU, GPU, storage devices) without blocking airflow.</p>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li><strong>Connect the main power cables<br></strong></li></ol>",
-              "<p>Attach:</p><ul style=\"list-style-type: disc;\"><li>24-pin connector → Motherboard</li><li>4/8-pin CPU power → Near processor socket</li><li>PCIe cable → Graphics card (if present)</li><li>SATA/Molex → Storage drives and accessories</li></ul>"
-            ],
-            [
-              "<ol style=\"list-style-type: decimal;\"><li><strong>Test the build</strong></li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>Plug the power supply into mains power and switch it on.</li><li>Turn on the PC and check for:<ul style=\"list-style-type: circle;\"><li>Fans spinning</li><li>LEDs lighting up</li><li>Video output to monitor</li></ul></li><li>Enter BIOS/UEFI to verify that CPU, RAM, and storage are detected.</li></ul>"
-            ]
-          ],
-          "headers": [
-            "<ol style=\"list-style-type: decimal;\"><li><strong>Turn off and unplug the computer<br></strong></li></ol>",
-            "<p> Disconnect the power cable and press the power button for a few seconds to discharge remaining electricity.</p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776121460390,
-        "file": null,
-        "type": "paragraph",
-        "order": 15,
-        "title": "",
-        "caption": "",
-        "content": "<table><thead><tr><th><h5><a id=\"_g4hk003jg2dg\"></a><strong>Insert Simulation # 5</strong></h5></th></tr></thead></table><h4><a id=\"_1awqqgd8yzv2\"></a><strong>E. Final Assembly and Boot Testing:</strong></h4><p>Final assembly and boot testing is the last stage of computer hardware installation. After all components—motherboard, processor, memory, storage devices, cooling system, and power supply—have been installed, the system must be checked to ensure that every connection is secure and functioning properly.</p><p>Boot testing verifies whether the computer can power on successfully, detect installed components, and proceed to the system setup screen. This step confirms that the assembly process was completed correctly before installing the operating system.<sup>[11]</sup></p><ul style=\"list-style-type: disc;\"><li><strong>The Final Check</strong></li></ul><p>\tBefore you plug in the power cord, perform one last visual inspection of your work. This step can save you from a major headache by catching a simple mistake before it causes a problem.<sup>[6]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460391,
-        "file": null,
-        "type": "paragraph",
-        "order": 16,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ol style=\"list-style-type: decimal;\"><li>Are all components seated in their slots? </li></ol>",
-              "<ul style=\"list-style-type: disc;\"><li>Give the RAM and GPU a gentle push to be sure.</li></ul>"
-            ],
-            [
-              "<p>2. Are all power cables plugged in snugly? </p>",
-              "<ul style=\"list-style-type: disc;\"><li>Check the 24-pin and 8-pin motherboard connectors, GPU power, and storage power.</li></ul>"
-            ],
-            [
-              "<p>3. Are there any loose screws rattling around in the case?</p>",
-              "<p>Note: A stray screw can cause a catastrophic short circuit.</p>"
-            ],
-            [
-              "<p>4. Do all fans have clearance to spin freely?</p>",
-              ""
-            ]
-          ],
-          "headers": [
-            "<p><strong>Run through this checklist:</strong></p>",
-            "<p><strong>What to do:</strong></p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776121460392,
-        "file": null,
-        "type": "paragraph",
-        "order": 17,
-        "title": "",
-        "caption": "",
-        "content": "<p>\tFinally, tidy up your cables one last time. Tuck them away and use zip ties to secure them. This isn’t just for looks; it improves airflow, which helps keep your components  cool.<sup>[11]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460393,
-        "file": null,
-        "type": "image",
-        "order": 18,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121462251-14.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121462251-14.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-4-1776121462251-14.png",
-        "fileName": "docx-lesson-4-1776121462251-14.png"
-      },
-      {
-        "id": 1776121460394,
-        "file": null,
-        "type": "paragraph",
-        "order": 19,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>The First Boot</strong></li></ul><p>Now for the moment of truth. Connect your monitor, keyboard, and mouse. Plug the power cord into the PSU and a wall outlet. Make sure the switch on the back of the PSU is flipped to the ‘on’ position (usually marked with an ‘I’)<sup>[11]</sup></p><p>Ideally as you press the power button, the computer’s fans will spin up, lights will turn on, and after a few seconds, you’ll see the manufacturer’s logo or system information appear on the monitor. This screen is often called the POST screen.<sup>[11]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460395,
-        "file": null,
-        "type": "image",
-        "order": 20,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121462256-15.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121462256-15.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-4-1776121462256-15.png",
-        "fileName": "docx-lesson-4-1776121462256-15.png"
-      },
-      {
-        "id": 1776121460396,
-        "file": null,
-        "type": "paragraph",
-        "order": 21,
-        "title": "",
-        "caption": "",
-        "content": "<p>POST stands for Power-On Self-Test. It’s a basic diagnostic the computer runs every time it starts to make sure the essential hardware is working. Seeing this screen is a huge milestone. It means your hardware assembly was successful. From here, you can enter the BIOS/ UEFI to configure settings or proceed to install an operating system.<sup>[11]</sup></p><ul style=\"list-style-type: disc;\"><li>Troubleshooting</li></ul><p>But what if nothing happens? Or what if the fans spin, but the screen stays black? Don’t panic. Most first-boot issues are caused by simple, fixable problems.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460397,
-        "file": null,
-        "type": "paragraph",
-        "order": 22,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<p>Nothing happens at all</p>",
-              "<p>PSU switch is off, or a main power cable is loose.</p>",
-              "<p>Check the switch on the back of the PSU. Reseat the 24-pin and 8-pin motherboard power cables.</p>"
-            ],
-            [
-              "<p>Fans spin, no display</p>",
-              "<p>RAM is not seated correctly, or the monitor is on the wrong input.</p>",
-              "<p>Power down and reseat the RAM modules, making sure they click into place. Check that the monitor is plugged into the GPU, not the motherboard.</p>"
-            ],
-            [
-              "<p>Turns on and then immediately off</p>",
-              "<p>CPU overheating due to improper cooler installation, or a short circuit.</p>",
-              "<p>Power down immediately. Check the CPU cooler’s mounting and thermal paste. Look for any loose screws or cables touching the motherboard.</p>"
-            ],
-            [
-              "<p>Error codes or beeps</p>",
-              "<p>Specific hardware issue.</p>",
-              "<p>Consult your motherboard manual. It will list what different beep codes or on-board LED codes mean.</p>"
-            ]
-          ],
-          "headers": [
-            "<p>Symptom</p>",
-            "<p>Common Cause</p>",
-            "<p>Solution</p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776121460398,
-        "file": null,
-        "type": "paragraph",
-        "order": 23,
-        "title": "",
-        "caption": "",
-        "content": "<p>\tTroubleshooting is a process of elimination. Start with the simplest checks and work your way up to more complex ones. The vast majority of the time, a loose cable or improperly seated component is the culprit.<sup>[11]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
+        "content": "/uploads/lessons/093_preparation_setting_the_stage.webp",
+        "fileName": "093_preparation_setting_the_stage.webp"
       },
       {
         "id": 1776121460402,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 24,
+        "order": 7,
         "title": "",
         "caption": "",
         "content": "",
@@ -688,151 +245,87 @@
         "id": 1776121460403,
         "file": null,
         "type": "topic",
-        "order": 25,
+        "order": 8,
         "title": "Topic 3: The Software Components of a Computer",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
+        "id": 1777220247033,
+        "file": null,
+        "type": "paragraph",
+        "order": 9,
+        "title": "",
+        "caption": "",
+        "content": "<p>While hardware represents the physical parts of a computer, software components provide the instructions that allow hardware to function. Software controls system operations, enables user interaction, and allows computers to perform specific tasks. In Computer Hardware Servicing, understanding software is essential because hardware cannot operate effectively without proper software support.[12][13]</p>\n<p>Software components are commonly classified into operating system, application software, programming software, and firmware. These components work together to manage hardware resources, execute user commands, and support computing tasks. A technician must recognize how these software layers interact to properly diagnose, install, and maintain computer systems.[14]</p>\n<p>An operating system (OS) is a collection of software that manages a computer’s hardware and applications by allocating resources, including memory, CPU, input/output devices and file storage.[15]</p>\n<p>A user interacts with an operating system through a user interface (UI), which issues commands in a language the OS can understand. The UI can be either a graphical user interface (GUI) or a command-line interface (CLI). Billions of people rely on operating systems as the underlying management system for tasks like sending emails, browsing the internet, playing video games and more.[15]</p>\n<p>Hardware Management - Controls peripheral devices like printers, monitors, and disk drivers.</p>\n<p>Resource Allocation - Manages CPU usage, memory, and storage to ensure multiple programs can run efficiently without interfering with each other.</p>\n<p>User Interface (UI) - Provides a way for users to interact with the computer, such as a Graphical User Interface (GUI) or Command-Line Interface (CLI).</p>\n<p>File System Management - Organizes data on storage devices.</p>",
+        "fileName": null,
+        "contentLayout": "text"
+      },
+      {
+        "id": 1777220247034,
+        "file": null,
+        "type": "image",
+        "order": 10,
+        "title": "The Software Components of a Computer",
+        "images": [
+          {
+            "url": "/uploads/lessons/108_a_user_interacts_with_an_operating_syste.webp",
+            "file": null,
+            "fileName": "108_a_user_interacts_with_an_operating_syste.webp",
+            "caption": "A user interacts with an operating system through a user int"
+          },
+          {
+            "url": "/uploads/lessons/109_microsoft_windows.webp",
+            "file": null,
+            "fileName": "109_microsoft_windows.webp",
+            "caption": "Microsoft Windows"
+          },
+          {
+            "url": "/uploads/lessons/110_apple_ios.webp",
+            "file": null,
+            "fileName": "110_apple_ios.webp",
+            "caption": "Apple iOS"
+          },
+          {
+            "url": "/uploads/lessons/111_google_android.webp",
+            "file": null,
+            "fileName": "111_google_android.webp",
+            "caption": "Google Android"
+          },
+          {
+            "url": "/uploads/lessons/112_apple_macos.webp",
+            "file": null,
+            "fileName": "112_apple_macos.webp",
+            "caption": "Apple macOS"
+          },
+          {
+            "url": "/uploads/lessons/113_linux.webp",
+            "file": null,
+            "fileName": "113_linux.webp",
+            "caption": "Linux"
+          }
+        ],
+        "layout": "grid-3",
+        "caption": "",
+        "content": "/uploads/lessons/108_a_user_interacts_with_an_operating_syste.webp",
+        "fileName": "108_a_user_interacts_with_an_operating_syste.webp"
+      },
+      {
         "id": 1776121460475,
         "file": null,
         "type": "video",
-        "order": 26,
+        "order": 11,
         "title": "",
         "caption": "Lesson 4 Topic 3 Video",
         "content": "https://www.dropbox.com/scl/fi/q4svlqak2yu7zbzesfkry/Lesson-4-Topic-3.mp4?rlkey=u93nfxhvf0zjq38j0qfpkp16i&st=xtmw84m1&dl=0",
         "fileName": null
       },
       {
-        "id": 1776121460404,
-        "file": null,
-        "type": "paragraph",
-        "order": 27,
-        "title": "",
-        "caption": "",
-        "content": "<p>While hardware represents the physical parts of a computer, software components provide the instructions that allow hardware to function. Software controls system operations, enables user interaction, and allows computers to perform specific tasks. In Computer Hardware Servicing, understanding software is essential because hardware cannot operate effectively without proper software support.<sup>[12][13]</sup></p><p>Software components are commonly classified into operating system, application software, programming software, and firmware. These components work together to manage hardware resources, execute user commands, and support computing tasks. A technician must recognize how these software layers interact to properly diagnose, install, and maintain computer systems.<sup>[14]</sup></p><h4><a id=\"_32h5d3afq3wi\"></a><strong>A. Operating systems</strong></h4><p>\tAn operating system (OS) is a collection of software that manages a computer’s hardware and applications by allocating resources, including memory, CPU, input/output devices and file storage.<sup>[15]</sup></p><p>A user interacts with an operating system through a user interface (UI), which issues commands in a language the OS can understand. The UI can be either a graphical user interface (GUI) or a command-line interface (CLI). Billions of people rely on operating systems as the underlying management system for tasks like sending emails, browsing the internet, playing video games and more.<sup>[15]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460405,
-        "file": null,
-        "type": "image",
-        "order": 28,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121462282-16.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121462282-16.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-4-1776121462282-16.png",
-        "fileName": "docx-lesson-4-1776121462282-16.png"
-      },
-      {
-        "id": 1776121460406,
-        "file": null,
-        "type": "paragraph",
-        "order": 29,
-        "title": "",
-        "caption": "",
-        "content": "<h4><a id=\"_ek4z9ruizp2g\"></a>i.  <strong>Functions of Operating System </strong></h4><ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Hardware Management</strong> - Controls peripheral devices like printers, monitors, and disk drivers.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Resource Allocation</strong> - Manages CPU usage, memory, and storage to ensure multiple programs can run efficiently without interfering with each other.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>User Interface (UI)</strong> - Provides a way for users to interact with the computer, such as a Graphical User Interface (GUI) or Command-Line Interface (CLI).</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>File System Management</strong> - Organizes data on storage devices.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Application Support</strong> - Provides APIs (Application Programming Interface) for software to request services such as saving files.<sup>[16]</sup></li></ul><p>Here are some of the most common types of operating systems.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460407,
-        "file": null,
-        "type": "image",
-        "order": 30,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121462308-17.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121462308-17.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121462309-18.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121462309-18.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121462310-19.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121462310-19.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121462310-20.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121462310-20.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121462312-21.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121462312-21.png"
-          }
-        ],
-        "layout": "text-right",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-4-1776121462308-17.png",
-        "fileName": "docx-lesson-4-1776121462308-17.png",
-        "sideTexts": [
-          "<ul style=\"list-style-type: disc;\"><li>Microsoft Windows</li></ul><p></p><p>Created by Microsoft, Microsoft Windows is one of the most popular proprietary operating systems for computers in the world. Most personal computers come preloaded with a version of Microsoft Windows. One downside of Windows is that compatibility with mobile phones has been problematic.<sup>[19][27]</sup></p>",
-          "<ul style=\"list-style-type: disc;\"><li>Apple iOS</li></ul><p></p><p>Apple iOS from Apple is used on smartphones and tablets manufactured by the same company. Users of this system have access to hundreds of applications. The operating system offers strong encryption capabilities to control unauthorized access to users' private data.<sup>[19][28]</sup></p>",
-          "<ul style=\"list-style-type: disc;\"><li>Google Android</li></ul><p>      </p><p>Android from Google is the most popular operating system in the world. It's mainly used on tablets and smartphones. It also runs on devices made by other manufacturers. Users have access to numerous mobile applications available on the Google Play Store.<sup>[19][29]</sup></p>",
-          "<ul style=\"list-style-type: disc;\"><li>Apple macOS</li></ul><p>      </p><p>Developed by Apple, this proprietary operating system, known as macOS (formerly OS X), runs on Apple’s personal computers and desktops. All Apple and Macintosh computers come with the latest version of macOS pre-installed. Its reputation for minimizing bugs and defending against hackers contributes to its popularity among users.<sup>[19][30]</sup></p>",
-          "<ul style=\"list-style-type: disc;\"><li>Linux</li></ul><p></p><p>Created by Finnish programmer Linus Torvalds, Linux is now developed collaboratively by programmers worldwide who contribute updates to the central kernel software. It is widely used by programmers and corporate servers and is available for free online.<sup>[19][31]</sup></p>"
-        ],
-        "layerImages": [
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121462308-17.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121462308-17.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121462309-18.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121462309-18.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121462310-19.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121462310-19.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121462310-20.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121462310-20.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121462312-21.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121462312-21.png"
-            }
-          ]
-        ]
-      },
-      {
         "id": 1776121460411,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 31,
+        "order": 12,
         "title": "",
         "caption": "",
         "content": "",
@@ -883,141 +376,71 @@
         "id": 1776121460412,
         "file": null,
         "type": "topic",
-        "order": 32,
+        "order": 13,
         "title": "Topic 4: Device Drivers",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776121460413,
+        "id": 1777220247035,
         "file": null,
         "type": "paragraph",
-        "order": 33,
+        "order": 14,
         "title": "",
         "caption": "",
-        "content": "<h4><a id=\"_hpuu4ao1lvut\"></a><strong>A. Purpose and Importance of Drivers</strong></h4><p>Device drivers are specialized software programs that allow the operating system to communicate with hardware devices. Without proper drivers, hardware components such as printers, graphics cards, network adapters, and sound cards may not function correctly or at all. </p><p>In Computer Hardware Servicing, technicians are responsible for installing, updating, and troubleshooting device drivers. Drivers act as translators between the operating system and the hardware, ensuring compatibility, performance optimization, and system stability. Incorrect or outdated drivers may cause system errors, hardware malfunctions, or performance issues.<sup>[32]</sup></p><h4><a id=\"_13xxcocxpcyw\"></a><strong>B. Types of Device Drivers</strong></h4><ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Generic device drivers</strong> – As mentioned before, these are pre-installed drivers for general purposes and many devices.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Specific device drivers</strong> – Installed by the user, they are prepared for a particular device (or a particular class of devices: see point 8 on this list)</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Kernel device drivers</strong> – These are the most generic drivers possible loaded along with the OS. They access RAM to function, hence the minimal requirements for every operating system.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>User-mode device drivers</strong> – These drivers are loaded in user mode and may be saved on the computer. This means that they are not as heavy for the system. They include the drivers for your typical external devices.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Character device drivers</strong> – These deal with data in a stream of characters, where each character is treated independently. Examples of character devices include keyboards, mice, serial ports, and terminals – devices that typically handle input or output one character at a time.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Block device drivers</strong> – This type handles file system requests, employing the strategy(9E) routine to execute disk I/O operations. They can also offer a character driver interface, enabling direct device access (raw interface).</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Original equipment manufacturer (OEM) drivers</strong> – OEM drivers, or Original Equipment Manufacturer drivers, are specific device drivers developed by the original hardware manufacturer for seamless integration and optimal performance with their products. These drivers ensure compatibility and functionality between the hardware and the operating system. Therefore, like kernel drivers, they are among the generic ones.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Class drivers</strong> – These drivers are more general. They work for a particular class of similar hardware rather than for all or only one type. Most commonly, they are used for USB-connected devices. What is an example of such a device driver? A driver for printers that enables you to use several different lines of printers from the same manufacturer.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Open-source drivers</strong> – Yes, open-source drivers got their separate category! This is because drivers are usually provided by the hardware (or software) manufacturer. It’s worth noting that these drivers offer more privacy, as it’s easy to eliminate the tracking code (if it’s included in the first place) from them.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Virtual device drivers</strong> – These drivers are used to emulate the hardware of the host device that is running on a virtual machine.<sup>[33]</sup></li></ul><h4><a id=\"_gamrh1xqku9v\"></a><strong>C. Examples of Device Drivers</strong></h4>",
+        "content": "<p>Device drivers are specialized software programs that allow the operating system to communicate with hardware devices. Without proper drivers, hardware components such as printers, graphics cards, network adapters, and sound cards may not function correctly or at all.</p>\n<p>In Computer Hardware Servicing, technicians are responsible for installing, updating, and troubleshooting device drivers. Drivers act as translators between the operating system and the hardware, ensuring compatibility, performance optimization, and system stability. Incorrect or outdated drivers may cause system errors, hardware malfunctions, or performance issues.[32]</p>\n<p>Generic device drivers – As mentioned before, these are pre-installed drivers for general purposes and many devices.</p>\n<p>Specific device drivers – Installed by the user, they are prepared for a particular device (or a particular class of devices: see point 8 on this list)</p>\n<p>Kernel device drivers – These are the most generic drivers possible loaded along with the OS. They access RAM to function, hence the minimal requirements for every operating system.</p>\n<p>User-mode device drivers – These drivers are loaded in user mode and may be saved on the computer. This means that they are not as heavy for the system. They include the drivers for your typical external devices.</p>\n<p>Character device drivers – These deal with data in a stream of characters, where each character is treated independently. Examples of character devices include keyboards, mice, serial ports, and terminals – devices that typically handle input or output one character at a time.</p>\n<p>Block device drivers – This type handles file system requests, employing the strategy(9E) routine to execute disk I/O operations. They can also offer a character driver interface, enabling direct device access (raw interface).</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
-        "id": 1776121460414,
+        "id": 1777220247036,
         "file": null,
         "type": "image",
-        "order": 34,
-        "title": "",
+        "order": 15,
+        "title": "Device Drivers",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-4-1776121462928-22.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121462928-22.png"
+            "url": "/uploads/lessons/114_i_o_devices_keyboards_mice_cd_dvd_drives.webp",
+            "file": null,
+            "fileName": "114_i_o_devices_keyboards_mice_cd_dvd_drives.webp",
+            "caption": "I/O devices (keyboards"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-4-1776121462930-23.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121462930-23.png"
+            "url": "/uploads/lessons/118_communication_interfaces_in_embedded_sys.webp",
+            "file": null,
+            "fileName": "118_communication_interfaces_in_embedded_sys.webp",
+            "caption": "Communication interfaces in embedded systems (UART"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-4-1776121462932-24.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121462932-24.png"
+            "url": "/uploads/lessons/119_display_devices_lcds_or_leds_39.webp",
+            "file": null,
+            "fileName": "119_display_devices_lcds_or_leds_39.webp",
+            "caption": "Display devices (LCDs or LEDs)"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-4-1776121462945-25.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121462945-25.png"
+            "url": "/uploads/lessons/120_wireless_modules_40.webp",
+            "file": null,
+            "fileName": "120_wireless_modules_40.webp",
+            "caption": "Wireless modules"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-4-1776121462947-26.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121462947-26.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121462949-27.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121462949-27.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121462950-28.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121462950-28.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121462952-29.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121462952-29.png"
+            "url": "/uploads/lessons/121_usb_controllers_41.webp",
+            "file": null,
+            "fileName": "121_usb_controllers_41.webp",
+            "caption": "USB controllers"
           }
         ],
-        "layout": "text-left",
+        "layout": "grid-3",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-4-1776121462928-22.png",
-        "fileName": "docx-lesson-4-1776121462928-22.png",
-        "sideTexts": [
-          "<ul style=\"list-style-type: disc;\"><li>I/O devices (keyboards, mice, CD/DVD drives, printers, etc.)<sup>[34][35][36][37]</sup></li></ul>",
-          "<ul style=\"list-style-type: disc;\"><li>Communication interfaces in embedded systems (UART, SPI)<sup>[38]</sup></li></ul>",
-          "<ul style=\"list-style-type: disc;\"><li>Display devices (LCDs or LEDs)<sup>[39]</sup></li></ul>",
-          "<ul style=\"list-style-type: disc;\"><li>Wireless modules<sup>[40]</sup></li></ul>",
-          "<ul style=\"list-style-type: disc;\"><li>USB controllers<sup>[41]</sup></li></ul>"
-        ],
-        "layerImages": [
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121462928-22.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121462928-22.png"
-            },
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121462930-23.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121462930-23.png"
-            },
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121462932-24.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121462932-24.png"
-            },
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121462945-25.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121462945-25.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121462947-26.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121462947-26.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121462949-27.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121462949-27.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121462950-28.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121462950-28.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121462952-29.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121462952-29.png"
-            }
-          ]
-        ]
+        "content": "/uploads/lessons/114_i_o_devices_keyboards_mice_cd_dvd_drives.webp",
+        "fileName": "114_i_o_devices_keyboards_mice_cd_dvd_drives.webp"
       },
       {
         "id": 1776121460418,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 35,
+        "order": 16,
         "title": "",
         "caption": "",
         "content": "",
@@ -1068,131 +491,53 @@
         "id": 1776121460419,
         "file": null,
         "type": "topic",
-        "order": 36,
+        "order": 17,
         "title": "Topic 5: Firmware",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776121460420,
+        "id": 1777220247037,
         "file": null,
         "type": "paragraph",
-        "order": 37,
+        "order": 18,
         "title": "",
         "caption": "",
-        "content": "<h4><a id=\"_c7vdgfdy64aj\"></a><strong>A. Definition and Key Functions</strong></h4><p>Firmware is a type of software embedded directly into hardware components. It provides low-level control and instructions that allow hardware to initialize and operate correctly. Unlike application software, firmware is stored in non-volatile memory, meaning it remains even when the computer is powered off.<sup>[42]</sup></p><p>Many devices rely on firmware to function, including TVs, cameras, mobile phones, printers, drives and more. Firmware is located in a device’s nonvolatile memory, where content can be stored when a device is off. Firmware can be written to different memory types including, random access memory (RAM), read-only memory (ROM), erasable programmable read-only memory (EPROM) and flash memory.<sup>[42]</sup>  </p><p>Firmware helps devices perform their intended functions in several important ways, including delivering the instructions for how the device should start up, how it should interact with other devices—such as Internet routers or remote controls—and how it should perform critical input/output(I/O) tasks.<sup>[42]</sup></p><h4><a id=\"_hio8uhnua1w7\"></a><strong>B. Types of Firmware</strong></h4><p>\tIn addition to changes in the way firmware uses and stores memory, there have been advancements in the types of firmware available to users as well. Today, firmware can be categorized into three basic groups defined by its architecture:</p><ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Low-level firmware</strong> - intrinsic to a device’s hardware and stored on nonvolatile, read-only chips, like ROM, which can’t be updated. Devices that rely on low-level firmware use memory that can only be written once and never reprogrammed.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>High-level firmware</strong> - firmware that can’t be updated because of the complexity of its hardware. In a computer, high-level firmware is contained in flash memory chips and is responsible for more advanced tasks than low-level firmware. High-level firmware contains important instructions for how a device functions and various components interact.</li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Subsystem firmware</strong> - is contained in what’s known as an ‘‘embedded system,’’ a specific combination of hardware and software designed for a purpose or task. Subsystem firmware is similar to high-level firmware in its complexity and adaptability. Like high-level firmware, subsystem firmware can be easily updated.<sup>[42]</sup></li></ul><h4><a id=\"_qpmgrub36jph\"></a><strong>i. BIOS (Basic Input/Output System) </strong></h4><p>An essential firmware stored on a motherboard chip that initializes hardware, performs a Power-On Self-Test (POST), and loads the operating system when a computer powers on. It acts as the initial, low-level interface between the hardware and the OS.<sup>[43]</sup></p>",
+        "content": "<p>Firmware is a type of software embedded directly into hardware components. It provides low-level control and instructions that allow hardware to initialize and operate correctly. Unlike application software, firmware is stored in non-volatile memory, meaning it remains even when the computer is powered off.[42]</p>\n<p>Many devices rely on firmware to function, including TVs, cameras, mobile phones, printers, drives and more. Firmware is located in a device’s nonvolatile memory, where content can be stored when a device is off. Firmware can be written to different memory types including, random access memory (RAM), read-only memory (ROM), erasable programmable read-only memory (EPROM) and flash memory.[42]</p>\n<p>Firmware helps devices perform their intended functions in several important ways, including delivering the instructions for how the device should start up, how it should interact with other devices—such as Internet routers or remote controls—and how it should perform critical input/output(I/O) tasks.[42]</p>\n<p>In addition to changes in the way firmware uses and stores memory, there have been advancements in the types of firmware available to users as well. Today, firmware can be categorized into three basic groups defined by its architecture:</p>\n<p>Low-level firmware - intrinsic to a device’s hardware and stored on nonvolatile, read-only chips, like ROM, which can’t be updated. Devices that rely on low-level firmware use memory that can only be written once and never reprogrammed.</p>\n<p>High-level firmware - firmware that can’t be updated because of the complexity of its hardware. In a computer, high-level firmware is contained in flash memory chips and is responsible for more advanced tasks than low-level firmware. High-level firmware contains important instructions for how a device functions and various components interact.</p>\n<p>Subsystem firmware - is contained in what’s known as an ‘‘embedded system,’’ a specific combination of hardware and software designed for a purpose or task. Subsystem firmware is similar to high-level firmware in its complexity and adaptability. Like high-level firmware, subsystem firmware can be easily updated.[42]</p>\n<p>An essential firmware stored on a motherboard chip that initializes hardware, performs a Power-On Self-Test (POST), and loads the operating system when a computer powers on. It acts as the initial, low-level interface between the hardware and the OS.[43]</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
-        "id": 1776121460421,
+        "id": 1777220247038,
         "file": null,
         "type": "image",
-        "order": 38,
-        "title": "",
+        "order": 19,
+        "title": "Firmware",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-4-1776121463000-30.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121463000-30.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-4-1776121463000-30.png",
-        "fileName": "docx-lesson-4-1776121463000-30.png"
-      },
-      {
-        "id": 1776121460422,
-        "file": null,
-        "type": "subtopic",
-        "order": 39,
-        "title": "ii. UEFI",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776121460423,
-        "file": null,
-        "type": "paragraph",
-        "order": 40,
-        "title": "",
-        "caption": "",
-        "content": "<p>UEFI is a modern replacement for the traditional basic input/output system (BIOS) firmware found in computers. UEFI provides a standardized interface between the operating system and the platform firmware, enabling various features and functionalities during the boot process.<sup>[44][45]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460424,
-        "file": null,
-        "type": "image",
-        "order": 41,
-        "title": "",
-        "images": [
+            "url": "/uploads/lessons/122_an_essential_firmware_stored_on_a_mother.webp",
+            "file": null,
+            "fileName": "122_an_essential_firmware_stored_on_a_mother.webp",
+            "caption": "An essential firmware stored on a motherboard chip that init"
+          },
           {
-            "url": "/uploads/lessons/docx-lesson-4-1776121463069-31.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121463069-31.png"
+            "url": "/uploads/lessons/123_uefi_is_a_modern_replacement_for_the_tra.webp",
+            "file": null,
+            "fileName": "123_uefi_is_a_modern_replacement_for_the_tra.webp",
+            "caption": "UEFI is a modern replacement for the traditional basic input"
           }
         ],
-        "layout": "single",
+        "layout": "side-by-side",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-4-1776121463069-31.png",
-        "fileName": "docx-lesson-4-1776121463069-31.png"
-      },
-      {
-        "id": 1776121460425,
-        "file": null,
-        "type": "subtopic",
-        "order": 42,
-        "title": "iii. Peripheral Firmware",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776121460426,
-        "file": null,
-        "type": "paragraph",
-        "order": 43,
-        "title": "",
-        "caption": "",
-        "content": "<p>Found in peripherals such as keyboards, mice, and printers, this firmware helps these devices communicate with the computer and other main network systems.<sup>[46]</sup></p><h4><a id=\"_qkoawcw96d74\"></a><strong>C. Updating Firmware</strong></h4><p>A firmware update is the process of upgrading the firmware installed on a device by altering its code. Firmware updates typically come from the device manufacturer and are designed to fix bugs, improve performance, enhance security, and introduce new features.</p><p>How to update firmware depends on the device, and updates can be delivered through various channels, such as through Wi-Fi, USB connections, or through computer software provided by the manufacturer.<sup>[47]</sup></p><h4><a id=\"_j7r68lcn102i\"></a><strong>i. Importance of Updating Firmware</strong></h4><p>Keeping firmware up to date improves the functionality and overall user experience of your devices through the following benefits:</p><ul style=\"list-style-type: disc;\"><li><strong>Security enhancements</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Firmware updates often include security patches that address vulnerabilities and protect your device from potential cyber threats. Failing to update your firmware leaves your device vulnerable to attacks and compromises your personal data.</li></ul></li><li><strong>Bug fixes</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Just like any software, firmware can have bugs or glitches that impact the performance of your device. Firmware updates frequently address these bugs, resulting in a smoother and more stable operation.</li></ul></li><li><strong>Improved compatibility</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">As technology advances, firmware updates ensure that your device remains compatible with the latest software and hardware developments, allowing you to take advantage of new features and functionalities.</li></ul></li><li><strong>Optimized performance</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Firmware updates often include performance optimizations that enhance the speed and efficiency of your device. These improvements can lead to faster boot times, smoother multitasking, and improved overall performance. Keeping your devices up to date with the latest firmware versions ensures that your devices are secure and benefit from improved performance and compatibility.<sup>[47]</sup></li></ul></li></ul><h4><a id=\"_d7itkcqf9acq\"></a><strong>D. Best Practices in Firmware updates</strong></h4>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460427,
-        "file": null,
-        "type": "subtopic",
-        "order": 44,
-        "title": "To ensure smooth and successful firmware upgrades, several best practices are followed",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776121460428,
-        "file": null,
-        "type": "paragraph",
-        "order": 45,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Thorough Testing</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Before deploying firmware updates, extensive testing is conducted to identify and address any potential issues. This includes functional testing to ensure that new features work as intended and regression testing to verify that existing functionality remains unaffected.</li></ul></li><li><strong>Backup and Rollback Procedures</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Before initiating an upgrade, it's essential to backup critical data and configurations. Additionally, having rollback procedures in place allows for reverting to the previous firmware version in case of any unforeseen issues during the upgrade process.</li></ul></li><li><strong>Gradual Deployment</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Instead of rolling out firmware updates to all devices simultaneously, a gradual deployment approach is often employed. This allows for monitoring and addressing any issues that may arise in a smaller subset of devices before expanding the update to the entire fleet.</li></ul></li><li><strong>Clear Communication</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Effective communication with end-users about the purpose, benefits, and potential impact of firmware upgrades is crucial. Providing clear instructions and guidance on how to perform the upgrade helps minimize confusion and ensures user participation.</li></ul></li><li><strong>Security Measures</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Implementing security measures, such as code signing and encryption, helps prevent unauthorized modifications to firmware and ensures the integrity of the update process.</li></ul></li><li><strong>Version Control and Documentation</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Maintaining version control of firmware releases and documenting changes and updates enables better tracking and management of firmware across different devices and versions.<sup>[48]</sup></li></ul></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
+        "content": "/uploads/lessons/122_an_essential_firmware_stored_on_a_mother.webp",
+        "fileName": "122_an_essential_firmware_stored_on_a_mother.webp"
       },
       {
         "id": 1776121460432,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 46,
+        "order": 20,
         "title": "",
         "caption": "",
         "content": "",
@@ -1243,160 +588,71 @@
         "id": 1776121460433,
         "file": null,
         "type": "topic",
-        "order": 47,
+        "order": 21,
         "title": "Topic 6: Application Software",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776121460434,
+        "id": 1777220247039,
         "file": null,
         "type": "paragraph",
-        "order": 48,
+        "order": 22,
         "title": "",
         "caption": "",
-        "content": "<h4><a id=\"_nsjbx1glcqtw\"></a><strong>A. Definition and Role in User Productivity</strong></h4><p>Application software consists of programs designed to help users perform specific tasks such as word processing, graphic design, data analysis, communication, and entertainment. These applications rely on system software and hardware resources to function effectively.<sup>[49]</sup></p><p>From a Computer Hardware Servicing perspective, technicians may be required to install, configure, troubleshoot, and update application software based on user requirements. Understanding compatibility, system requirements, and licensing is important to ensure optimal system performance and user satisfaction.<sup>[49]</sup></p><ul style=\"list-style-type: disc;\"><li><strong>Creating documents and spreadsheets</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Word processing and spreadsheet programs are application software. These programs allow you to create, edit and store documents. Word processing systems are useful for creating and printing documents like handouts or manuscripts, while spreadsheet programs allow you to track data and create spreadsheet systems. You can use spreadsheet programs to track productivity or create budgets.<sup>[49]</sup></li></ul></li><li><strong>Sending and receiving communication</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Communication applications can include those for direct messaging, message boards and collaborative spaces. This can include written communication, like emailing or instant messaging, but can also include voice and video calls. Many communication applications are vital for remote jobs with digital workspaces, as they allow team members in different locations or time zones to communicate regarding projects.<sup>[49]</sup></li></ul></li><li><strong>Storing, processing and analyzing data</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Databases can be useful for companies because they allow them to track and analyze information about customer relationships, inventory, payroll and performance. Customer relationship management applications allow businesses to record and act upon potential and current customers. They also allow businesses to record client information. Payroll and scheduling applications support staff scheduling and business tax information tracking.<sup>[49]</sup></li></ul></li><li><strong>Facilitating project and process management</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Some application software assists project managers and team leaders with project management, allowing them to see task timelines and individual assignments. This software also helps account for project budgets and may generate automated reports.<sup>[49]</sup></li></ul></li></ul><h4><a id=\"_bgsdbuem2ttf\"></a><strong>B. Types of Application Software</strong></h4><p>Application software consists of programs designed for end-users to perform specific tasks, ranging from word processing and web browsing to specialized business operations.</p><h4><a id=\"_6k9na4udtqdr\"></a><strong>i. Office Suite </strong></h4><ul style=\"list-style-type: disc;\"><li>Office suite software is a collection of commonly used applications designed to work together. A typical office suite includes word processing, spreadsheet, presentation, and database software. These integrated applications share similar interfaces, making them easier to learn and use together.<ul style=\"list-style-type: circle;\"><li>Benefits of using office suites include:</li></ul></li><li>Seamless document sharing and editing between applications</li><li>Cost savings compared to purchasing individual applications</li><li>Consistent user experience across different tools.</li><li>Popular office suites include Microsoft Office (Word, Excel, PowerPoint, Access), OpenOffice/LibreOffice (Writer, Calc, Impress, Base), and Google Docs.<sup>[50][51]</sup></li></ul>",
+        "content": "<p>Application software consists of programs designed to help users perform specific tasks such as word processing, graphic design, data analysis, communication, and entertainment. These applications rely on system software and hardware resources to function effectively.[49]</p>\n<p>From a Computer Hardware Servicing perspective, technicians may be required to install, configure, troubleshoot, and update application software based on user requirements. Understanding compatibility, system requirements, and licensing is important to ensure optimal system performance and user satisfaction.[49]</p>\n<p>Creating documents and spreadsheets</p>\n<p>Word processing and spreadsheet programs are application software. These programs allow you to create, edit and store documents. Word processing systems are useful for creating and printing documents like handouts or manuscripts, while spreadsheet programs allow you to track data and create spreadsheet systems. You can use spreadsheet programs to track productivity or create budgets.[49]</p>\n<p>Sending and receiving communication</p>\n<p>Communication applications can include those for direct messaging, message boards and collaborative spaces. This can include written communication, like emailing or instant messaging, but can also include voice and video calls. Many communication applications are vital for remote jobs with digital workspaces, as they allow team members in different locations or time zones to communicate regarding projects.[49]</p>\n<p>Storing, processing and analyzing data</p>\n<p>Databases can be useful for companies because they allow them to track and analyze information about customer relationships, inventory, payroll and performance. Customer relationship management applications allow businesses to record and act upon potential and current customers. They also allow businesses to record client information. Payroll and scheduling applications support staff scheduling and business tax information tracking.[49]</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
-        "id": 1776121460435,
+        "id": 1777220247040,
         "file": null,
         "type": "image",
-        "order": 49,
-        "title": "",
+        "order": 23,
+        "title": "Application Software",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-4-1776121463155-32.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121463155-32.png"
+            "url": "/uploads/lessons/124_popular_office_suites_include_microsoft_.webp",
+            "file": null,
+            "fileName": "124_popular_office_suites_include_microsoft_.webp",
+            "caption": "Popular office suites include Microsoft Office (Word"
+          },
+          {
+            "url": "/uploads/lessons/125_google_chrome.webp",
+            "file": null,
+            "fileName": "125_google_chrome.webp",
+            "caption": "Google Chrome"
+          },
+          {
+            "url": "/uploads/lessons/126_safari.webp",
+            "file": null,
+            "fileName": "126_safari.webp",
+            "caption": "Safari"
+          },
+          {
+            "url": "/uploads/lessons/127_microsoft_edge.webp",
+            "file": null,
+            "fileName": "127_microsoft_edge.webp",
+            "caption": "Microsoft Edge"
+          },
+          {
+            "url": "/uploads/lessons/128_mozilla_firefox_crop_2.webp",
+            "file": null,
+            "fileName": "128_mozilla_firefox_crop_2.webp",
+            "caption": "Mozilla Firefox"
           }
         ],
-        "layout": "single",
+        "layout": "grid-3",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-4-1776121463155-32.png",
-        "fileName": "docx-lesson-4-1776121463155-32.png"
-      },
-      {
-        "id": 1776121460436,
-        "file": null,
-        "type": "subtopic",
-        "order": 50,
-        "title": "ii. Browsers",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776121460437,
-        "file": null,
-        "type": "paragraph",
-        "order": 51,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>Our web browser is no longer just another app on our computers. It's where we spend most of our time, from collaborating on productivity tools to shopping to streaming movies. And yet we tend to default to whatever's there or popular without really thinking about our workflows.<sup>[52]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460438,
-        "file": null,
-        "type": "image",
-        "order": 52,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121463398-33.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121463398-33.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121463417-34.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121463417-34.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121463420-35.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121463420-35.png"
-          },
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121463428-36.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121463428-36.png"
-          }
-        ],
-        "layout": "text-right",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-4-1776121463398-33.png",
-        "fileName": "docx-lesson-4-1776121463398-33.png",
-        "sideTexts": [
-          "<ul style=\"list-style-type: disc;\"><li>Google Chrome</li></ul><p></p><p>Google Chrome masters all the fundamentals of a web browser: it's snappy to use even on older hardware, is compatible with tens of thousands of third-party extensions, supports all kinds of websites, offers cross-platform sync, and its minimalist layout ensures there's basically no learning curve.<sup>[52]</sup></p>",
-          "<ul style=\"list-style-type: disc;\"><li>Safari</li></ul><p></p><p>Safari is the browser Apple pre-loads on its phones, tablets, and computers. It's optimized for Apple's hardware and integrates seamlessly with the rest of the software for continuity. You can begin a browsing session on an iPhone, for example, and resume it on your Mac. Similarly, it lets you copy an image or text on an iPad and paste it on your iPhone. More importantly, Safari is the most efficient browser for a Mac. It delivers a smooth and consistent web performance while utilizing less battery and power.<sup>[52]</sup></p>",
-          "<ul style=\"list-style-type: disc;\"><li>Microsoft Edge</li></ul><p></p><p>Microsoft's default browser for Windows PCs, Edge, puts an AI-focused spin on Google Chrome. It features a dedicated panel for Microsoft's chatbot, Copilot: you can ask questions about the web page you're currently browsing and produce AI-generated visuals—among the many other things you might do with an AI chatbot. And the panel lets you filter Copilot's knowledge so that it focuses exclusively on a single web page, the entire website, or the complete internet.<sup>[52]</sup></p>",
-          "<ul style=\"list-style-type: disc;\"><li>Mozilla Firefox</li></ul><p></p><p>Mozilla Firefox is the oldest web browser on this list, and it still stands out for the same reasons it did decades ago: it offers an experience free of tech giant influence. While most web browsers are built on top of Google Chrome's tech, Firefox runs on its own open source engine. In doing so, Mozilla ensures its browser is secure by design and not dictated by alternate interests, like advertising.<sup>[52]</sup></p>"
-        ],
-        "layerImages": [
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121463398-33.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121463398-33.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121463417-34.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121463417-34.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121463420-35.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121463420-35.png"
-            }
-          ],
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-4-1776121463428-36.png",
-              "caption": "",
-              "fileName": "docx-lesson-4-1776121463428-36.png"
-            }
-          ]
-        ]
-      },
-      {
-        "id": 1776121460439,
-        "file": null,
-        "type": "subtopic",
-        "order": 53,
-        "title": "iii. Media Players",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776121460440,
-        "file": null,
-        "type": "paragraph",
-        "order": 54,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>A media player is software or hardware designed to play multimedia content such as audio, video, or live-streamed content. Whether you’re watching a movie, streaming a live sports event, or reviewing surveillance footage, media players are essential tools across multiple industries, from consumer entertainment to professional broadcasting.<sup>[53]</sup></li><li><strong>Hardware Media Players:</strong> Physical devices like Roku, Apple TV, or Chromecast that connect to your television or monitor.<sup>[53]</sup><ul style=\"list-style-type: circle;\"><li>Roku</li><li>Apple TV</li><li>Chromecast (Google TV)</li><li>Smart TVs</li></ul></li><li><strong>Software Media Players:</strong> Applications such as VLC or QuickTime, installed directly on your computer, smartphone, or smart TV.<sup>[53]</sup><ul style=\"list-style-type: circle;\"><li>VLC Media Player</li><li>Windows Media Player</li><li>QuickTime Player</li><li>Kodi</li><li>RealPlayer</li></ul></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
+        "content": "/uploads/lessons/124_popular_office_suites_include_microsoft_.webp",
+        "fileName": "124_popular_office_suites_include_microsoft_.webp"
       },
       {
         "id": 1776121460444,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 55,
+        "order": 24,
         "title": "",
         "caption": "",
         "content": "",
@@ -1447,449 +703,89 @@
         "id": 1776121460445,
         "file": null,
         "type": "topic",
-        "order": 56,
+        "order": 25,
         "title": "Topic 7: Software Installation and Configuration",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776121460446,
+        "id": 1777220247041,
         "file": null,
         "type": "paragraph",
-        "order": 57,
+        "order": 26,
         "title": "",
         "caption": "",
-        "content": "<p>Software installation and configuration is an important skill to have in terms of CHS. Applications must be installed correctly, licensed properly, and configured to meet business and security requirements. Incorrect installations or misconfigurations can lead to application failures, security gaps, and inconsistent user experiences. Software installation and configuration involves setting up system software, drivers, and applications to ensure correct functionality and performance. This process includes verifying system requirements, configuring settings, applying updates, and testing software after installation.<sup>[70]</sup></p><p>Challenges commonly occur when dealing with multiple software versions, compatibility with different operating systems, licensing and activation issues, dependency conflicts, and user-specific configuration requirements. Inconsistent manual installations often result in configuration drift across devices.</p><p>Without standardization, software environments become difficult to support and secure.</p><h4><a id=\"_7f6pdcwl843d\"></a><strong>A. Preparing System Requirements</strong></h4><p>\tSystem requirements are the minimum hardware and software conditions that must be met before installing or running a software application. This includes CPU speed, RAM, disk space, operating system version, and sometimes specific privileges like administrator access.<sup>[71]</sup></p>",
+        "content": "<p>Software installation and configuration is an important skill to have in terms of CHS. Applications must be installed correctly, licensed properly, and configured to meet business and security requirements. Incorrect installations or misconfigurations can lead to application failures, security gaps, and inconsistent user experiences. Software installation and configuration involves setting up system software, drivers, and applications to ensure correct functionality and performance. This process includes verifying system requirements, configuring settings, applying updates, and testing software after installation.[70]</p>\n<p>Challenges commonly occur when dealing with multiple software versions, compatibility with different operating systems, licensing and activation issues, dependency conflicts, and user-specific configuration requirements. Inconsistent manual installations often result in configuration drift across devices.</p>\n<p>Without standardization, software environments become difficult to support and secure.</p>\n<p>System requirements are the minimum hardware and software conditions that must be met before installing or running a software application. This includes CPU speed, RAM, disk space, operating system version, and sometimes specific privileges like administrator access.[71]</p>\n<p>Examples of common requirements:</p>\n<p>Minimum processor speed</p>\n<p>Minimum RAM (e.g., 1–2 GB or more)</p>\n<p>Available disk space</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
-        "id": 1776121460447,
-        "file": null,
-        "type": "subtopic",
-        "order": 58,
-        "title": "Examples of common requirements",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776121460448,
-        "file": null,
-        "type": "paragraph",
-        "order": 59,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>Minimum processor speed</li><li>Minimum RAM (e.g., 1–2 GB or more)</li><li>Available disk space</li><li>Compatible Operating System</li><li>Required software dependencies (like Java, .NET, or database servers)<sup>[71]</sup></li></ul><p>If system requirements aren’t checked, installation may fail or the software might not run properly, leading to errors, crashes, or poor performance.</p><h4><a id=\"_l1v42xk2bzou\"></a><strong>B. Installation Methods</strong></h4><p>The types of OS installations refer to the various methods by which an operating system can be set up on a device. These methods differ in approach, purpose, and use case, allowing users to choose the most effective way to install an OS, depending on the requirements of the hardware and the intended usage. Common types include clean installation, upgrade installation, network installation, and more, each serving specific scenarios from fresh setups to distributed enterprise deployments.</p><p>Different OS installation methods cater to various needs—whether setting up a system for the first time, updating it, or deploying it across multiple devices. Let’s look at the primary types of OS installations in detail.<sup>[71]</sup></p><ol style=\"list-style-type: decimal;\"><li><strong>Clean Installation</strong> - A clean installation is a process where an operating system is installed fresh, with no remnants of previous versions or user data. This installation type is commonly used when:</li></ol><ul style=\"list-style-type: disc;\"><li><strong>Setting Up New Hardware</strong>: A clean install is ideal for new computers that have no existing OS or data.</li><li><strong>System Cleanup or Restoration</strong>: It’s also popular when a system requires a complete reset due to performance issues, malware, or corrupted files.</li><li><strong>User Control Over Configuration</strong>: A clean install gives users total control over the system’s configuration and removes any pre-installed software or unnecessary files.</li></ul><p>In a clean installation, the OS is usually installed on a formatted drive, which erases all existing data. This results in a pristine system setup, often delivering improved performance and stability.</p><ol style=\"list-style-type: decimal;\"><li><strong>Upgrade Installation</strong> - An upgrade installation replaces an existing version of an OS with a newer one while preserving user files, settings, and applications. It’s most commonly used when:</li></ol><ul style=\"list-style-type: disc;\"><li><strong>Moving to a New OS Version:</strong> Users want to move to the latest OS version without losing data or applications.</li><li><strong>Minimal Downtime</strong>: Since an upgrade keeps user data and settings intact, it requires less effort compared to a clean install.</li><li><strong>Retaining Configurations</strong>: It is beneficial for retaining configurations, applications, and personalization settings.</li></ul><p>Upgrade installations are typically faster and more convenient, but they can sometimes carry over bugs or compatibility issues from the previous version.</p><ol style=\"list-style-type: decimal;\"><li><strong>Network Installation</strong> - A network installation allows an OS to be installed over a network connection, with the OS files hosted on a server instead of local storage. This method is especially useful in enterprise environments, schools, and organizations where multiple devices require OS installation. Key benefits and features include:</li></ol><ul style=\"list-style-type: disc;\"><li><strong>Centralized OS Deployment</strong>: Network installations allow system administrators to manage and deploy OS setups across multiple devices from a single location.</li><li><strong>Diskless or Thin Clients</strong>: It’s ideal for diskless devices, where the OS image is streamed over the network.</li><li><strong>Reduced Setup Time</strong>: By automating the deployment process, network installations can significantly reduce the time and effort needed to set up multiple systems.</li></ul><p>Network installations can be configured for scalability, allowing administrators to set up numerous devices simultaneously, ensuring consistency across the organization.</p><ol style=\"list-style-type: decimal;\"><li><strong>Dual-Boot Installation </strong>- A dual-boot installation allows a computer to run two different operating systems, with the option to choose between them at startup. This setup is particularly useful for:</li></ol><ul style=\"list-style-type: disc;\"><li><strong>Developers and Testers</strong>: Those who need to work in different OS environments without using separate hardware.</li><li><strong>Compatibility Needs</strong>: Users who require certain applications or features that are only available on a specific OS.</li><li><strong>Enhanced Flexibility</strong>: It allows users to switch between operating systems depending on their task or preference.</li></ul><p>Dual-booting requires partitioning the hard drive, with each OS occupying its partition, and a bootloader to handle the selection process.</p><ol style=\"list-style-type: decimal;\"><li><strong>Virtual Installation</strong> - A virtual installation involves running an OS within a virtual machine (VM) rather than installing it directly on hardware. Virtual installations are common in development, testing, and enterprise environments for several reasons:</li></ol><ul style=\"list-style-type: disc;\"><li><strong>Multi-OS Environments</strong>: Users can run multiple OS instances simultaneously on a single physical device.</li><li><strong>Safe Testing and Experimentation</strong>: Virtual machines provide an isolated environment for testing software without risking the primary OS.</li><li><strong>Resource Efficiency</strong>: Virtualization enables better use of system resources and can reduce the need for multiple physical machines.</li></ul><p>Tools like VMware, VirtualBox, and Hyper-V facilitate virtual installations, allowing users to create, snapshot, and manage virtual OS environments on demand.</p><ol style=\"list-style-type: decimal;\"><li><strong>Unattended Installation</strong> - An unattended installation automates the OS setup process by using preconfigured settings, typically defined in an answer file. This is particularly useful in enterprise environments where repetitive installations are common:</li></ol><ul style=\"list-style-type: disc;\"><li><strong>Automation of Setup Tasks</strong>: By automating responses to installation prompts, unattended installations can streamline OS deployment.</li><li><strong>Uniform Configuration</strong>: Organizations can maintain consistency by applying standardized settings across multiple machines.</li><li><strong>Time Efficiency</strong>: Unattended installation reduces the time administrators spend monitoring or interacting with each OS setup.</li></ul><p>Unattended installations are often paired with network installation setups, making them ideal for large-scale deployments that require consistent settings.</p><ol style=\"list-style-type: decimal;\"><li><strong>Repair Installation</strong> - A repair installation, also called an in-place repair, is used to fix an existing OS installation without deleting user data or applications. This installation type is typically chosen when:</li></ol><ul style=\"list-style-type: disc;\"><li><strong>Fixing OS Corruptions</strong>: It’s useful for addressing corrupted files, missing system components, or software-related issues.</li><li><strong>Minimizing Data Loss:</strong> Unlike a clean install, a repair install preserves user files, settings, and applications.</li><li><strong>Quick Recovery:</strong> It’s faster than a clean install and can restore functionality without affecting the overall setup.</li></ul><p>A repair installation is beneficial when an OS is functional but requires stability improvements or repairs to system files.</p><ol style=\"list-style-type: decimal;\"><li><strong>Custom Installation</strong> - A custom installation allows users to tailor the OS setup by selecting specific components, partitions, and configurations. This type of installation is ideal for:</li></ol><ul style=\"list-style-type: disc;\"><li><strong>Advanced Users</strong>: Users with specific requirements for partitioning, storage allocation, or component selection.</li><li><strong>Unique Configurations:</strong> Custom installations allow for non-standard configurations or setups that aren’t possible with default installation paths.</li><li><strong>Partition Management</strong>: Users can customize partition sizes, select which drives to install the OS on, and create multiple partitions as needed.</li></ul><p>Custom installations provide the flexibility to define specific settings, making it a favorite among advanced users and system administrators.</p><ol style=\"list-style-type: decimal;\"><li><strong>Remote Installation</strong> - Remote installations allow an OS to be installed on a computer through a remote connection. Typically used in corporate or IT environments, this installation type offers several advantages:</li></ol><ul style=\"list-style-type: disc;\"><li><strong>Centralized Control:</strong> IT administrators can install OS updates or fresh installations remotely, reducing the need for onsite support.</li><li><strong>Ease of Access for Remote Users</strong>: For distributed teams, remote installation is a convenient way to ensure all employees have the required OS.</li><li><strong>Flexibility in System Management</strong>: This method enables efficient system setup across geographically dispersed machines.</li></ul><p>Remote installations save time and resources by allowing support teams to deploy and manage OS installations without physical access to each device.<sup>[72]</sup></p><h4><a id=\"_uwu0wnm9etnr\"></a><strong>C. Standard vs. Custom Installation</strong></h4><ol style=\"list-style-type: decimal;\"><li>A <strong>Standard installation</strong> (sometimes called Typical, Full, or Express) installs the most commonly needed components of a software package automatically, using default settings chosen by the developer. You don’t usually make many decisions — you just click “Next” and let it install.<sup>[73][74]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460449,
+        "id": 1777220247042,
         "file": null,
         "type": "image",
-        "order": 60,
-        "title": "",
+        "order": 27,
+        "title": "Software Installation and Configuration",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-4-1776121464252-37.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121464252-37.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-4-1776121464252-37.png",
-        "fileName": "docx-lesson-4-1776121464252-37.png"
-      },
-      {
-        "id": 1776121460450,
-        "file": null,
-        "type": "paragraph",
-        "order": 61,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>Installs standard features and tools without asking many configuration questions.</li><li>Uses the default installation location and settings.</li><li>Best choice for average users who want a quick and easy setup.</li><li>Doesn’t show every option during the process, so you may get features you don’t need.</li></ul><ol style=\"list-style-type: decimal;\"><li>A <strong>Custom installation</strong> lets you choose which parts of the software you want to install, where to install them, and possibly other settings. This is an advanced option that gives users more control.<sup>[75][76]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460451,
-        "file": null,
-        "type": "image",
-        "order": 62,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121464259-38.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121464259-38.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-4-1776121464259-38.png",
-        "fileName": "docx-lesson-4-1776121464259-38.png"
-      },
-      {
-        "id": 1776121460452,
-        "file": null,
-        "type": "paragraph",
-        "order": 63,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>User selects features to install</li><li>Can choose installation directory (e.g., D:\\ drive)</li><li>Allows advanced configuration</li><li>Option to exclude unnecessary components</li></ul><h4><a id=\"_hc501mfijsp0\"></a><strong>D. Initial Configuration Settings</strong></h4><p>\tAfter installing an operating system, a computer is not immediately ready for regular use. It requires initial configuration settings, which are essential steps that personalize, secure, and optimize the system. These settings ensure that the computer is functional, safe from threats, properly connected to networks, and tailored to the user’s needs. Proper configuration lays the foundation for efficient use and prevents errors or issues that can arise from default, unconfigured systems.</p><ol style=\"list-style-type: decimal;\"><li> <strong>Region, Language, and Time Settings</strong></li></ol><p>During the first stage of configuration, users select their country or region, display language, time zone, and keyboard layout. This ensures that the operating system displays information correctly, such as dates, times, currency, and system messages. The keyboard layout must match the user’s preferred typing format to prevent input errors. Correct configuration of these settings is essential for both usability and software compatibility, especially in applications that rely on local formats, such as spreadsheets, calendars, and accounting software.<sup>[77][78][79]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460453,
-        "file": null,
-        "type": "image",
-        "order": 64,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121464266-39.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121464266-39.png"
+            "url": "/uploads/lessons/129_a_standard_installation_sometimes_called.webp",
+            "file": null,
+            "fileName": "129_a_standard_installation_sometimes_called.webp",
+            "caption": "A Standard installation (sometimes called Typical"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-4-1776121464267-40.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121464267-40.png"
+            "url": "/uploads/lessons/130_a_custom_installation_lets_you_choose_wh.webp",
+            "file": null,
+            "fileName": "130_a_custom_installation_lets_you_choose_wh.webp",
+            "caption": "A Custom installation lets you choose which parts of the sof"
           },
           {
-            "url": "/uploads/lessons/docx-lesson-4-1776121464280-41.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121464280-41.png"
+            "url": "/uploads/lessons/131_during_the_first_stage_of_configuration__crop_approx.webp",
+            "file": null,
+            "fileName": "131_during_the_first_stage_of_configuration__crop_approx.webp",
+            "caption": "During the first stage of configuration"
+          },
+          {
+            "url": "/uploads/lessons/134_creating_a_user_account_is_a_crucial_ste.webp",
+            "file": null,
+            "fileName": "134_creating_a_user_account_is_a_crucial_ste.webp",
+            "caption": "Creating a user account is a crucial step to protect the sys"
+          },
+          {
+            "url": "/uploads/lessons/135_network_configuration_allows_the_compute.webp",
+            "file": null,
+            "fileName": "135_network_configuration_allows_the_compute.webp",
+            "caption": "Network configuration allows the computer to connect to the"
+          },
+          {
+            "url": "/uploads/lessons/136_security_settings_are_configured_to_prot.webp",
+            "file": null,
+            "fileName": "136_security_settings_are_configured_to_prot.webp",
+            "caption": "Security settings are configured to protect the computer fro"
+          },
+          {
+            "url": "/uploads/lessons/137_device_drivers_act_as_a_bridge_between_t.webp",
+            "file": null,
+            "fileName": "137_device_drivers_act_as_a_bridge_between_t.webp",
+            "caption": "Device drivers act as a bridge between the operating system"
+          },
+          {
+            "url": "/uploads/lessons/138_after_technical_and_security_settings_ar.webp",
+            "file": null,
+            "fileName": "138_after_technical_and_security_settings_ar.webp",
+            "caption": "After technical and security settings are configured"
           }
         ],
         "layout": "grid-3",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-4-1776121464266-39.png",
-        "fileName": "docx-lesson-4-1776121464266-39.png"
-      },
-      {
-        "id": 1776121460454,
-        "file": null,
-        "type": "paragraph",
-        "order": 65,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Selecting country/region</li><li>Choosing display language</li><li>Setting time zone</li><li>Choosing keyboard layout</li></ul>",
-              "<ul style=\"list-style-type: disc;\"><li>Ensures correct date/time</li><li>Proper currency and format settings</li><li>Correct keyboard input</li></ul>"
-            ]
-          ],
-          "headers": [
-            "<p>What It Includes:</p>",
-            "<p>Why It’s Important:</p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776121460455,
-        "file": null,
-        "type": "paragraph",
-        "order": 66,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>User Account Setup</strong></li></ol><p>Creating a user account is a crucial step to protect the system and manage access. During this stage, users typically create an administrator account, set a password or PIN, and optionally link a cloud account such as a Microsoft account in Windows 11. These credentials control who can make changes to the system and access sensitive files. Proper account setup prevents unauthorized access, allows personalized settings for each user, and ensures that administrative privileges are managed securely.<sup>[80]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460456,
-        "file": null,
-        "type": "image",
-        "order": 67,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121464305-42.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121464305-42.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-4-1776121464305-42.png",
-        "fileName": "docx-lesson-4-1776121464305-42.png"
-      },
-      {
-        "id": 1776121460457,
-        "file": null,
-        "type": "paragraph",
-        "order": 68,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Creating administrator account</li><li>Setting password or PIN</li><li>Linking Microsoft account (optional)</li></ul>",
-              "<ul style=\"list-style-type: disc;\"><li>Protects the system from unauthorized access</li><li>Allows personalized settings</li><li>Controls administrative privileges</li></ul>"
-            ]
-          ],
-          "headers": [
-            "<p>What It Includes:</p>",
-            "<p>Why It’s Important:</p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776121460458,
-        "file": null,
-        "type": "paragraph",
-        "order": 69,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Network Configuration</strong></li></ol><p>Network configuration allows the computer to connect to the internet or a local network. This includes setting up Wi-Fi or Ethernet connections and configuring IP addresses either automatically (DHCP) or manually. Network connectivity is essential for accessing online resources, downloading system and software updates, and enabling cloud-based applications. Without proper network configuration, the system cannot stay updated, which may affect performance and security.<sup>[81]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460459,
-        "file": null,
-        "type": "image",
-        "order": 70,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121464423-43.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121464423-43.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-4-1776121464423-43.png",
-        "fileName": "docx-lesson-4-1776121464423-43.png"
-      },
-      {
-        "id": 1776121460460,
-        "file": null,
-        "type": "paragraph",
-        "order": 71,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Connecting to Wi-Fi</li><li>Setting up Ethernet connection</li><li>Configuring IP settings (Automatic/DHCP or Manual)</li></ul>",
-              "<ul style=\"list-style-type: disc;\"><li>Enables internet access</li><li>Allows system updates</li><li>Enables cloud services</li></ul>"
-            ]
-          ],
-          "headers": [
-            "<p>What It Includes:</p>",
-            "<p>Why It’s Important:</p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776121460461,
-        "file": null,
-        "type": "paragraph",
-        "order": 72,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Security Settings</strong></li></ol><p>Security settings are configured to protect the computer from threats such as viruses, malware, and unauthorized access. This involves enabling the firewall, activating antivirus programs, setting automatic system updates, and adjusting privacy settings. By configuring these security measures during initial setup, the system is safeguarded from attacks and vulnerabilities. Enabling automatic updates also ensures that the system receives critical security patches as they are released.<sup>[82]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460462,
-        "file": null,
-        "type": "image",
-        "order": 73,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121464457-44.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121464457-44.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-4-1776121464457-44.png",
-        "fileName": "docx-lesson-4-1776121464457-44.png"
-      },
-      {
-        "id": 1776121460463,
-        "file": null,
-        "type": "paragraph",
-        "order": 74,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Enabling firewall</li><li>Activating antivirus</li><li>Setting automatic updates</li><li>Configuring privacy settings</li></ul>",
-              "<ul style=\"list-style-type: disc;\"><li>Protects against malware</li><li>Prevents unauthorized access</li><li>Keeps system updated</li></ul>"
-            ]
-          ],
-          "headers": [
-            "<p>What It Includes:</p>",
-            "<p>Why It’s Important:</p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776121460464,
-        "file": null,
-        "type": "paragraph",
-        "order": 75,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Device Driver Installation</strong></li></ol><p>Device drivers act as a bridge between the operating system and hardware components. Installing or updating drivers for graphics cards, printers, motherboards, and other peripherals ensures that all devices function correctly. Proper driver installation improves system performance, prevents hardware errors, and allows the operating system to fully utilize the capabilities of installed components. Failing to install drivers may result in malfunctioning devices or reduced functionality.<sup>[83]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460465,
-        "file": null,
-        "type": "image",
-        "order": 76,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121464528-45.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121464528-45.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-4-1776121464528-45.png",
-        "fileName": "docx-lesson-4-1776121464528-45.png"
-      },
-      {
-        "id": 1776121460466,
-        "file": null,
-        "type": "paragraph",
-        "order": 77,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Installing graphics driver</li><li>Installing printer drivers</li><li>Updating motherboard drivers</li></ul>",
-              "<ul style=\"list-style-type: disc;\"><li>Ensures hardware works properly</li><li>Improves system performance</li><li>Prevents device errors</li></ul>"
-            ]
-          ],
-          "headers": [
-            "<p>What It Includes:</p>",
-            "<p>Why It’s Important:</p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776121460467,
-        "file": null,
-        "type": "paragraph",
-        "order": 78,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>System Personalization</strong></li></ol><p>After technical and security settings are configured, system personalization allows users to adjust the interface and environment to suit their preferences. This includes changing wallpapers, adjusting display resolution, applying themes, and configuring the taskbar or Start menu. Personalization not only improves usability and aesthetics but also enhances productivity by making navigation more intuitive and comfortable for the user.<sup>[84]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460468,
-        "file": null,
-        "type": "image",
-        "order": 79,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-4-1776121464601-46.png",
-            "caption": "",
-            "fileName": "docx-lesson-4-1776121464601-46.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-4-1776121464601-46.png",
-        "fileName": "docx-lesson-4-1776121464601-46.png"
-      },
-      {
-        "id": 1776121460469,
-        "file": null,
-        "type": "paragraph",
-        "order": 80,
-        "title": "",
-        "caption": "",
-        "content": "",
-        "fileName": null,
-        "tableData": {
-          "rows": [
-            [
-              "<ul style=\"list-style-type: disc;\"><li>Changing wallpaper</li><li>Adjusting display resolution</li><li>Setting themes</li><li>Configuring taskbar</li></ul>",
-              "<ul style=\"list-style-type: disc;\"><li>Improves user experience</li><li>Makes navigation easier</li><li>Adjusts system for productivit7</li></ul>"
-            ]
-          ],
-          "headers": [
-            "<p>What It Includes:</p>",
-            "<p>Why It’s Important:</p>"
-          ]
-        },
-        "contentLayout": "table"
-      },
-      {
-        "id": 1776121460470,
-        "file": null,
-        "type": "paragraph",
-        "order": 81,
-        "title": "",
-        "caption": "",
-        "content": "<h4><a id=\"_330h1blbuorf\"></a><strong>E. Post-Installation Security Measures</strong></h4><p>\tWhen a system (operating system, software suite, or device) is newly installed or repaired, it starts in a state where vulnerabilities are most exposed. Fresh installations often miss critical updates and protections that defend against malware, intrusion, and misuse. This makes post-installation hardening an essential service step. Security measures here help protect data, prevent unauthorized access, and ensure systems perform reliably over time.<sup>[85]</sup></p><ol style=\"list-style-type: decimal;\"><li><strong>Immediate Steps After System Installation</strong></li></ol><ul style=\"list-style-type: disc;\"><li><strong>Apply Operating System Security Updates</strong><ul style=\"list-style-type: circle;\"><li>As soon as the OS is installed (e.g., Windows, Linux, macOS), connect to a protected network and download all critical updates and patches.</li><li>Enable automatic updates so future patches install without manual intervention.<sup>[86]</sup></li></ul></li><li><strong>Install Security Software</strong><ul style=\"list-style-type: circle;\"><li>Install a reputable antivirus/anti-malware solution and firewall to defend against threats like viruses, spyware, and unauthorized access.</li><li>Keep virus definitions and software up to date.<sup>[87]</sup></li></ul></li><li><strong>Configure User Accounts Securely</strong><ul style=\"list-style-type: circle;\"><li>Create strong passwords and avoid using default or weak credentials.</li><li>Set standard user accounts for daily use and reserve administrative accounts for system management tasks only.<sup>[88]</sup></li></ul></li></ul><ol style=\"list-style-type: decimal;\"><li><strong>Ongoing Maintenance and Monitoring</strong></li></ol><ul style=\"list-style-type: disc;\"><li><strong>Scheduled Updates &amp; Patches</strong><ul style=\"list-style-type: circle;\"><li>Freezing security updates after the initial install is not sufficient. Regularly check for OS, driver, and application updates to cover newly discovered risks.<sup>[91]</sup></li></ul></li><li><strong>Scheduled Scans</strong><ul style=\"list-style-type: circle;\"><li>Set up scheduled antivirus and vulnerability scans to catch threats proactively<sup>[90]</sup></li></ul></li><li><strong>User Awareness</strong><ul style=\"list-style-type: circle;\"><li>Train users on safe behavior such as avoiding suspicious emails, phishing, and unsafe downloads — human error often undermines technical defenses.<sup>[92]</sup></li></ul></li></ul><ol style=\"list-style-type: decimal;\"><li><strong>Backup and Recovery Protocols</strong></li></ol><ul style=\"list-style-type: disc;\"><li>Establish routine backup procedures so data can be restored if malware or hardware failure occurs. Automated backups to cloud or external storage improve resilience.</li></ul><ol style=\"list-style-type: decimal;\"><li><strong>Documentation and Standard Operating Procedures (SOPs)</strong></li></ol><ul style=\"list-style-type: disc;\"><li>For technicians and service centers, create clear documentation of:<ul style=\"list-style-type: circle;\"><li>What security steps were implemented.</li><li>Update and patch logs.</li><li>Configurations applied during servicing.</li></ul></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776121460471,
-        "file": null,
-        "type": "subtopic",
-        "order": 82,
-        "title": "Standardization reduces errors and ensures consistency in security practices.[93]",
-        "caption": "",
-        "content": "",
-        "fileName": null
+        "content": "/uploads/lessons/129_a_standard_installation_sometimes_called.webp",
+        "fileName": "129_a_standard_installation_sometimes_called.webp"
       },
       {
         "id": 1776121460474,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 83,
+        "order": 28,
         "title": "",
         "caption": "",
         "content": "",
@@ -1922,16 +818,6 @@
             "correctAnswer": 2
           }
         ]
-      },
-      {
-        "id": 1776121460476,
-        "file": null,
-        "type": "references",
-        "order": 84,
-        "title": "",
-        "caption": "",
-        "content": "https://codetreatise.github.io/PC-Build-Guide/assembly/build-guide/\nhttps://geekchamp.com/safety-precautions-in-computer-hardware/?utm_source=chatgpt.com\nhttps://www.esda.org/esd-overview/esd-fundamentals/part-3-basic-esd-control-procedures-and-materials/?utm_source=chatgpt.com\nhttps://www.pcworld.com/article/2044298/do-you-need-an-anti-static-wristband-when-youre-building-a-pc.html?utm_source=chatgpt.com\nhttps://www.tomshardware.com/pc-components/motherboards/how-to-install-a-motherboard\nhttps://www.asus.com/support/faq/1045574/\nhttps://www.hp.com/us-en/shop/tech-takes/how-to-install-solid-state-hard-drive\nhttps://www.ibm.com/docs/en/power9/0000-REF?topic=POWER9_REF/p9eiw/p9eiw_preinstalled_replacingthepowersupplies.html\nhttps://oboe.com/learn/build-your-own-pc-from-scratch-1lhondc\nhttps://www.geeksforgeeks.org/software-and-its-types/\nhttp://ibm.com/think/topics/operating-systems\nhttps://sriindu.ac.in/wp-content/uploads/2023/10/R20CSE2202-OPERATING-SYSTEMS.pdf\nhttps://www.techrepublic.com/pictures/photos-looking-back-to-the-birth-of-the-mainframe/?utm_source=chatgpt.com\nhttps://www.indeed.com/career-advice/career-development/types-of-operating-systems\nhttps://www.geeksforgeeks.org/operating-systems/time-sharing-operating-system/\nhttps://www.researchgate.net/figure/Distributed-computer-system_fig1_220066154\nhttps://byjus.com/gate/network-operating-system-notes/\nhttps://www.mitsubishifa.co.th/en/news/things-to-know-about-industrial-control-system?utm_source=chatgpt.com\nhttps://www.geeksforgeeks.org/operating-systems/single-user-operating-system/\nhttps://teachcomputerscience.com/multi-user-operating-system/\nhttps://www.ebsco.com/research-starters/computer-science/multi-user-operating-systems\nhttps://webdesignledger.com/fun-history-windows-logo/\nhttps://www.vectorstock.com/royalty-free-vector/ios-icon-logo-software-phone-apple-symbol-design-vector-46322141\nhttps://www.irinablok.com/android\nhttps://www.dataretrieval.org.uk/mac-os-hard-drive-data-recovery/\nhttps://www.freepnglogos.com/pics/linux\nhttps://www.techtarget.com/searchenterprisedesktop/definition/device-driver\nhttps://conclusive.tech/glossary/what-is-a-device-driver/\nhttps://www.daskeyboard.com/\nhttps://www.itech.ph/product/razer-basilisk-v3-x-hyperspeed-customizable-wireless-gaming-mouse-with-rgb-lighting-copy/?srsltid=AfmBOorVAu3RYSZNqxnOewxV6M_bcr6YuDLGL1kFMl31WSLDxVVGciFc\nhttps://www.philips.com.ph/c-p/SPD2525BD_97/dvd-24x-rewriter\nhttps://cartridgesdirect.com.au/blog/types-of-printers\nhttps://www.wevolver.com/article/i2c-vs-spi-protocols-differences-pros-cons-use-cases\nhttps://www.hp.com/sg-en/shop/tech-takes/post/differences-between-led-display-and-lcd-monitor\nhttps://www.ktron.in/product/esp8266-esp-12e-wifi-module/?srsltid=AfmBOortwi7w8TFPuRbU_VU6K1VC00j-6SeEHsn-Tc146cRZlTEw-S_C&v=a25496ebf095\nhttps://vilros.com/products/vilros-retro-gaming-ps2-style-usb-gamepads-set-of-2?srsltid=AfmBOooB5Y6jVKVNS-OpH2Hp7w_LOmvqkOG6THSCzvPjCLYFnvWoEGoa\nhttps://www.ibm.com/think/topics/firmware\nhttps://juniortoexpert.com/en/bios-basic-input-output-system/\nhttps://www.lenovo.com/au/en/glossary/uefi/?orgRef=https%253A%252F%252Fwww.google.com%252F\nhttps://www.freecodecamp.org/news/uefi-vs-bios/\nhttps://www.netgear.com/hub/technology/what-is-firmware/#:~:text=Peripheral%20Firmware%20%E2%80%93%20Found%20in%20peripherals%20such,devices%20communicate%20with%20the%20computer%20and%20other\nhttps://www.ninjaone.com/blog/what-is-a-firmware-update/#:~:text=How%20do%20you%20update%20firmware%20on%20a,support%20site%20and%20following%20the%20provided%20instructions\nhttp://linkedin.com/pulse/firmware-upgrade-importance-best-practices-ota-methods-mani-drknc#:~:text=Thorough%20Testing:%20Before%20deploying%20firmware,confusion%20and%20ensures%20user%20participation\nhttps://www.indeed.com/career-advice/career-development/what-is-application-software#:~:text=Improving%20Customer%20Relationships-,What%20does%20application%20software%20do?,common%20functions%20for%20application%20software\nhttps://study.com/academy/lesson/video/microsoft-office-and-open-office-office-suite-applications.html\nhttps://ms.codes/blogs/microsoft-office/what-is-microsoft-office-suite?srsltid=AfmBOooR6S3ykIKZbsRDgn7btHtypb9VW_LL5YCFTzOlYVY3h6iWlGP8\nhttps://zapier.com/blog/best-web-browser/\nhttps://www.wowza.com/blog/what-is-a-media-player#:~:text=Hardware%20Media%20Players:%20Physical%20devices,They%20handle%20various%20tasks%2C%20including\nhttps://www.finoit.com/articles/what-is-programming-software/#:~:text=Programming%20software%20is%20a%20tool%20that%20helps,*%20**Xcode**%20Foundation%20of%20iOS%20app%20development\nhttps://uk.indeed.com/career-advice/career-development/coding-softwares\nhttps://logowik.com/notepad-logo-vector-63896.html\nhttps://logowik.com/sublime-text-icon-logo-vector-71411.html#google_vignette\nhttps://en.wikipedia.org/wiki/Visual_Studio_Code\nhttps://icons8.com/icon/61466/intellij-idea\nhttps://www.logo.wine/logo/NetBeans\nhttps://eclipse-ide.macupdate.com/\nhttps://www.indeed.com/career-advice/finding-a-job/developer-vs-programmer\nhttps://www.programiz.com/article/difference-compiler-interpreter\nhttps://www.sciencedirect.com/topics/computer-science/debugging-tool#:~:text=A%20debugging%20tool%20is%20a,for%20immediate%20use%20when%20needed\nhttps://saucelabs.com/resources/blog/best-debugging-tools\nhttps://raygun.com/blog/java-debugging-tools/#:~:text=Besides%20Eclipse%20and%20NetBeans%2C%20IntelliJ%20IDEA%20is,you%20ask%20them%20which%20IDE%20they%20use\nhttps://conclusive.tech/glossary/debugging-tools-the-best/\nhttp://requestly.com/blog/top-10-tools-to-speed-up-android-development/#:~:text=It%20(%20Flipper%20)%20provides%20an%20extensible,interact%20with%20React%20Native%20and%20JavaScript%20apps\nhttps://github.com/resources/articles/what-is-version-control\nhttps://www.linkedin.com/pulse/software-installation-configuration-enabling-productive-hassan-raza-q77jf\nhttps://docs.oracle.com/cd/E12840_01/common/docs103_otn/install/prepare.html?utm_source=chatgpt.com\nhttps://www.ituonline.com/tech-definitions/what-are-types-of-os-installations/\nhttps://docs.tibco.com/pub/fsi/2.0.0/doc/html/GUID-79306AAD-85B8-41A0-8A31-1A324A362B7E.html?utm_source=chatgpt.com\nhttps://www.sciencedirect.com/topics/computer-science/default-install?utm_source=chatgpt.com\nhttps://product.corel.com/help/Installation/CDTS/540226119/Main/EN/Documentation/wwhelp/wwhimpl/js/html/wwhelp.htm#context=CorelDRAW_Technical_Suite&file=CorelDRAW-Technical-Suite-Installation-options.html\nhttps://www.advancedinstaller.com/user-guide/tutorial-creating-suite-installations.html?utm\nhttps://www.windowscentral.com/how-adjust-region-settings-windows-11?utm_\nhttps://www.partitionwizard.com/partitionmagic/how-to-fix-choose-your-keyboard-layout.html?utm_\nhttps://softkeys.uk/blogs/blog/how-to-change-timezone-on-windows-10?srsltid=AfmBOopmnvz-158pYL-XJ7QSEIt_Z9umrFTL3Sbb1aOY9uQJwtuDXYOa&utm\nhttps://www.windowscentral.com/how-create-local-account-during-windows-10-home-setup-process?utm\nhttps://www.intel.com/content/www/us/en/support/articles/000092599/intel-nuc.html?utm\nhttps://support.microsoft.com/en-us/windows/stay-protected-with-the-windows-security-app-2ae0363d-0ada-c064-8b56-6a39afb6a963?utm\nhttps://www.intel.com/content/www/us/en/support/articles/000005474/graphics.html\nhttps://support.microsoft.com/en-us/windows/personalize-your-colors-in-windows-3290d30f-d064-5cfe-6470-2fe9c6533e37?utm\nhttps://acg.pnp.gov.ph/enhance-cybersecurity-by-implementing-computer-hardening/?utm_source=chatgpt.com\nhttps://techspace.co.th/help/kb/security/endpoint/13-step-to-secure-your-pc-after-a-fresh-windows-installation?utm_source=chatgpt.com\nhttps://cpa.gov.eg/en-us/Guidelines/Safe-use-of-the-Internet/ArtMID/480/ArticleID/1993/-7-Practices-for-Computer-Security?utm_source=chatgpt.com\nhttps://tsplus.net/advanced-security/blog/security-measures-for-your-pc/\nhttps://www.pcmatic.com/blog/new-devices-need-new-security-the-3-things-you-must-do-after-unboxing/?utm_source=chatgpt.com\nhttps://informationsecurity.iu.edu/resources-professionals/best-practices.html?utm_source=chatgpt.com\nhttps://www.utsc.utoronto.ca/iits/top-10-security-best-practices?utm_source=chatgpt.com\nhttps://security.calpoly.edu/top-10-security-practices\nhttps://datacalculus.com/en/blog/it-system-installation-and-disposal/it-systems-specialist/installing-security-software-a-guide-for-it-systems-specialists",
-        "fileName": null
       }
     ],
     "diagnosticQuestions": [

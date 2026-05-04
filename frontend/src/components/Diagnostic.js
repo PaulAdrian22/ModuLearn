@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { bktApi } from '../services/api';
 import SkillMasteryResults from './SkillMasteryResults';
 import { resolveCorrectAnswerText, shuffleQuestionChoicesList } from '../utils/assessmentShuffle';
 import { getPreferredLanguage, normalizePreferredLanguage } from '../utils/languagePreference';
@@ -126,13 +126,13 @@ const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null, onBack = n
     try {
       const skillAnswers = answers.filter(a => a.skill !== 'No Skill');
       if (skillAnswers.length > 0) {
-        const res = await axios.post('/bkt/batch-update', {
+        const res = await bktApi.batchUpdate({
           answers: skillAnswers,
           assessmentType: 'Diagnostic',
-          moduleId: Number.isFinite(Number(moduleId)) ? Number(moduleId) : null,
-          timeSpentSeconds: totalTimeSpent
+          moduleId: moduleId ?? null,
+          timeSpentSeconds: totalTimeSpent,
         });
-        setSkillResults(res.data);
+        setSkillResults(res);
       }
     } catch (err) {
       console.error('Error updating skill mastery:', err);

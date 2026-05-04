@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../App';
+import { supabase } from '../lib/supabase';
 
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const loginScale = 'min(1, calc((100dvh - 72px) / 760))';
+  // Scale-down only on tall-but-narrow mobile so the card fits without
+  // overflow. We don't scale below 0.85 — anything smaller makes inputs
+  // too small to tap reliably (WCAG min target is 44×44px).
+  const loginScale = 'clamp(0.85, calc((100dvh - 72px) / 760), 1)';
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -30,22 +33,42 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axios.post('/auth/login', formData);
-      login(response.data.user, response.data.token);
-      
-      // Redirect based on user role
-      if (response.data.user.role === 'admin') {
+      await login(formData.username, formData.password);
+
+      // Resolve the role from the freshly-loaded profile so the redirect is correct.
+      // login() resolves once Supabase has the session; the profile row arrives
+      // via onAuthStateChange but we read it directly here for an immediate redirect.
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      let role = 'student';
+      let isNewUser = false;
+      if (authUser) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role, last_login')
+          .eq('id', authUser.id)
+          .single();
+        role = profile?.role ?? 'student';
+        isNewUser = !profile?.last_login;
+        // Touch last_login so isNewUser flips to false on subsequent logins.
+        await supabase
+          .from('profiles')
+          .update({ last_login: new Date().toISOString() })
+          .eq('id', authUser.id);
+      }
+
+      if (role === 'admin') {
         navigate('/admin/dashboard');
       } else {
-        navigate('/dashboard', {
-          state: {
-            fromLogin: true,
-            isNewUser: Boolean(response.data.isNewUser),
-          },
-        });
+        navigate('/dashboard', { state: { fromLogin: true, isNewUser } });
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed. Please try again.');
+      const msg = err?.message || '';
+      // Map common Supabase auth errors to user-facing copy.
+      if (msg.toLowerCase().includes('invalid login credentials')) {
+        setError('Incorrect username or password.');
+      } else {
+        setError(msg || 'Login failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

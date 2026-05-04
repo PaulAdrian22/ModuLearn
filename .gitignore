@@ -57,8 +57,15 @@ backend/uploads/profiles/
 # Large local design assets (not needed for deployment)
 ui designs/
 
+# Large image asset folders — upload to Supabase Storage instead
+Simulations/
+lesson images webp/
+
+# Claude Code internal session data
+.claude/
+
+# Backup snapshots
+*.bak.json
+
 # Configuration
 config/local.json
-
-# Local Netlify folder
-.netlify

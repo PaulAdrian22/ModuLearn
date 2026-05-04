@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import axios from 'axios';
+import { bktApi } from '../services/api';
 import { resolveCorrectAnswerText, shuffleQuestionChoicesList } from '../utils/assessmentShuffle';
 import { normalizePreferredLanguage } from '../utils/languagePreference';
 
@@ -229,16 +229,14 @@ const InitialAssessmentModal = ({
       : 0;
 
     try {
-      const response = await axios.post('/bkt/batch-update', {
+      const response = await bktApi.batchUpdate({
         answers: mappedAnswers,
         assessmentType: 'Initial',
         moduleId: null,
         timeSpentSeconds: totalTimeSpent,
       });
 
-      const returnedSkills = Array.isArray(response?.data?.skills)
-        ? response.data.skills
-        : [];
+      const returnedSkills = Array.isArray(response?.skills) ? response.skills : [];
 
       setScore(finalScore);
       setElapsedTime(totalTimeSpent);

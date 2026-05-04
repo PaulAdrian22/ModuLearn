@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../App';
 import SimulationRenderer from '../components/SimulationRenderer';
+import SafetyDisclaimer from '../components/SafetyDisclaimer';
 import { isDisassemblyActivity, normalizeConfig } from '../data/simulationActivities';
+import { simulationsApi } from '../services/api';
 
 const PENALTY_PER_MISTAKE = 5;
 
@@ -24,6 +25,8 @@ const SimulationActivity = () => {
   const [simulation, setSimulation] = useState(null);
   const [config, setConfig] = useState(null);
   const [hasActivityStarted, setHasActivityStarted] = useState(false);
+  const [hasAcknowledgedSafety, setHasAcknowledgedSafety] = useState(false);
+  const [showSafetyModal, setShowSafetyModal] = useState(false);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [revealedIds, setRevealedIds] = useState(() => new Set());
@@ -57,14 +60,14 @@ const SimulationActivity = () => {
       setLoading(true);
       setLoadError('');
       try {
-        const [simRes, configRes] = await Promise.all([
-          axios.get(`/simulations/${id}?userId=${user.userId}`),
-          axios.get(`/simulations/${id}/config`)
-        ]);
+        const sim = await simulationsApi.get(id);
         if (!mounted) return;
-        setSimulation(simRes.data || null);
-        const normalized = normalizeConfig(configRes.data?.config || {});
-        setConfig(normalized);
+        setSimulation(sim || null);
+        // ZoneData on the simulation row IS the config blob now (set by
+        // the admin editor). Fall back to {} for legacy rows.
+        const rawConfig = sim?.zone_data ?? sim?.ZoneData ?? {};
+        const parsed = typeof rawConfig === 'string' ? JSON.parse(rawConfig) : rawConfig;
+        setConfig(normalizeConfig(parsed || {}));
         setHasActivityStarted(false);
         setCurrentIndex(0);
         setRevealedIds(new Set());
@@ -90,10 +93,8 @@ const SimulationActivity = () => {
     if (!simulation || !user?.userId) return;
     startedRef.current = true;
     startTimeRef.current = Date.now();
-    axios.post('/simulations/start', {
-      simulationId: simulation.SimulationID,
-      userId: user.userId
-    }).catch((error) => console.error('Failed to mark simulation started:', error));
+    simulationsApi.start(simulation.SimulationID)
+      .catch((error) => console.error('Failed to mark simulation started:', error));
   }, [hasActivityStarted, simulation, user?.userId]);
 
   // Elapsed timer.
@@ -109,11 +110,9 @@ const SimulationActivity = () => {
     if (!simulation || !user?.userId || submitting) return;
     setSubmitting(true);
     try {
-      await axios.post('/simulations/complete', {
-        simulationId: simulation.SimulationID,
-        userId: user.userId,
+      await simulationsApi.complete(simulation.SimulationID, {
         score: finalScore,
-        timeSpent: finalElapsed
+        timeSpent: finalElapsed,
       });
     } catch (error) {
       console.error('Failed to submit simulation completion:', error);
@@ -160,6 +159,20 @@ const SimulationActivity = () => {
   const handleExit = () => { navigate('/simulations'); };
 
   const handleStartActivity = () => {
+    // Show the safety disclaimer first; the modal calls back to actually
+    // start the activity once acknowledged.
+    if (!hasAcknowledgedSafety) {
+      setShowSafetyModal(true);
+      return;
+    }
+    setHasActivityStarted(true);
+    setElapsed(0);
+    startTimeRef.current = Date.now();
+  };
+
+  const handleSafetyAcknowledged = () => {
+    setHasAcknowledgedSafety(true);
+    setShowSafetyModal(false);
     setHasActivityStarted(true);
     setElapsed(0);
     startTimeRef.current = Date.now();
@@ -258,6 +271,12 @@ const SimulationActivity = () => {
 
   return (
     <div className="simulation-theme min-h-screen bg-[#F5F7FA]">
+      {showSafetyModal && simulation && (
+        <SafetyDisclaimer
+          simulationId={simulation.SimulationID}
+          onAcknowledge={handleSafetyAcknowledged}
+        />
+      )}
       <div className="bg-[#0B2B4C] text-white px-5 md:px-8 py-4 flex items-center gap-4 shadow">
         <button
           onClick={handleExit}

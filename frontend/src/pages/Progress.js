@@ -1,17 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import Navbar from '../components/Navbar';
-import SkeletonLoader from '../components/SkeletonLoader';
+import { progressApi, usersApi, bktApi } from '../services/api';
+import { useAsyncData } from '../hooks/useAsyncData';
 
 const Progress = () => {
-  const navigate = useNavigate();
-  const [progressData, setProgressData] = useState(null);
-  const [bktData, setBktData] = useState([]);
-  const [skillsData, setSkillsData] = useState([]);
-  const [learningSummary, setLearningSummary] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [showLoading, setShowLoading] = useState(false);
   const [scrollThumbTop, setScrollThumbTop] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const scrollContainerRef = React.useRef(null);
@@ -19,9 +11,30 @@ const Progress = () => {
   const dragStartY = React.useRef(0);
   const dragStartScrollTop = React.useRef(0);
 
-  useEffect(() => {
-    fetchProgressData();
-  }, []);
+  const { data: bundle, loading } = useAsyncData(
+    async () => {
+      // BKT call is allowed to fail (Modal cold-start, missing env, etc.)
+      // without taking down the whole page; the others are required.
+      const [progressData, bktData, learningSummary] = await Promise.all([
+        progressApi.list(),
+        bktApi.knowledgeStates().catch((err) => {
+          console.warn('BKT function unavailable', err?.message);
+          return [];
+        }),
+        usersApi.learningProgressSummary(),
+      ]);
+      return { progressData, bktData, learningSummary };
+    },
+    [],
+    {
+      initial: {
+        progressData: null,
+        bktData: [],
+        learningSummary: null,
+      },
+    },
+  );
+  const { progressData, bktData, learningSummary } = bundle ?? {};
 
   // Handle scroll synchronization
   useEffect(() => {
@@ -72,38 +85,6 @@ const Progress = () => {
     };
   }, [isDragging]);
 
-  const fetchProgressData = async () => {
-    try {
-      setLoading(true);
-      
-      // Delay showing loading spinner
-      const loadingTimer = setTimeout(() => setShowLoading(true), 200);
-      
-      // Fetch progress stats
-      const progressResponse = await axios.get('/progress');
-      setProgressData(progressResponse.data);
-      
-      // Fetch BKT knowledge states
-      const bktResponse = await axios.get('/bkt/knowledge-states');
-      setBktData(bktResponse.data);
-      
-      // Fetch learning skills analytics
-      const skillsResponse = await axios.get('/learning-skills/analytics');
-      setSkillsData(skillsResponse.data);
-
-      // Fetch detailed learning progress summary for the bottom panel
-      const summaryResponse = await axios.get('/users/learning-progress-summary');
-      setLearningSummary(summaryResponse.data);
-      
-      clearTimeout(loadingTimer);
-      setLoading(false);
-      setShowLoading(false);
-    } catch (err) {
-      console.error('Error fetching progress data:', err);
-      setLoading(false);
-      setShowLoading(false);
-    }
-  };
 
   const TOKEN_ICON_BY_KEY = {
     play: (

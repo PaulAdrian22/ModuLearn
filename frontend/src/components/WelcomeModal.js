@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { profileApi } from '../services/api';
 
 const WelcomeModal = ({ userName, onComplete }) => {
   const [step, setStep] = useState(1);
@@ -37,16 +37,16 @@ const WelcomeModal = ({ userName, onComplete }) => {
     setError('');
 
     try {
-      await axios.put('/users/profile', {
+      await profileApi.update({
         name: userName,
         age: parseInt(formData.age),
-        educationalBackground: formData.educationalBackground
+        educational_background: formData.educationalBackground,
       });
-      
+
       onComplete();
     } catch (err) {
       console.error('Error updating profile:', err);
-      setError(err.response?.data?.message || 'Failed to save your information');
+      setError(err.message || 'Failed to save your information');
       setSaving(false);
     }
   };

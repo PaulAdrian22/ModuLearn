@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../App';
 import IntroductionFlow from '../components/IntroductionFlow';
 import Navbar from '../components/Navbar';
-import { normalizePreferredLanguage, withPreferredLanguage } from '../utils/languagePreference';
+import { normalizePreferredLanguage, getPreferredLanguage } from '../utils/languagePreference';
+import { modulesApi, progressApi, usersApi, profileApi } from '../services/api';
+import { useAsyncData } from '../hooks/useAsyncData';
 
 const decodeHtmlEntities = (value = '') => {
   const normalized = String(value)
@@ -47,11 +48,22 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
-  const [modules, setModules] = useState([]);
-  const [stats, setStats] = useState(null);
-  const [error, setError] = useState('');
   const [showIntroduction, setShowIntroduction] = useState(false);
   const [isNewUserLogin, setIsNewUserLogin] = useState(false);
+
+  const { data: dashboard, error } = useAsyncData(
+    async () => {
+      const [modulesData, statsData] = await Promise.all([
+        modulesApi.list({ language: getPreferredLanguage() ?? 'English' }),
+        usersApi.stats(),
+      ]);
+      return { modules: modulesData, stats: statsData };
+    },
+    [user?.userId],
+    { initial: { modules: [], stats: null } },
+  );
+  const modules = dashboard?.modules ?? [];
+  const stats = dashboard?.stats ?? null;
 
   // Redirect admin users to admin panel
   useEffect(() => {
@@ -82,26 +94,9 @@ const Dashboard = () => {
     }
   }, [location.state]);
 
-  const fetchDashboardData = useCallback(async () => {
-    try {
-      // Fetch modules with user progress
-      const [modulesResponse, statsResponse] = await Promise.all([
-        axios.get(withPreferredLanguage(`/modules?userId=${user.userId}`)),
-        axios.get('/users/stats')
-      ]);
-      console.log('Dashboard fetched modules:', modulesResponse.data);
-      setModules(modulesResponse.data);
-      setStats(statsResponse.data);
-    } catch (err) {
-      console.error('Error fetching dashboard data:', err);
-      setError('Failed to load dashboard data');
-    }
-  }, [user.userId]);
-
   useEffect(() => {
     checkNewUser();
-    fetchDashboardData();
-  }, [checkNewUser, fetchDashboardData]);
+  }, [checkNewUser]);
 
   const handleModuleClick = async (module) => {
     if (!module.Is_Unlocked) {
@@ -109,7 +104,7 @@ const Dashboard = () => {
     }
 
     try {
-      await axios.post('/progress/start', { moduleId: module.ModuleID });
+      await progressApi.start(module.ModuleID);
     } catch (err) {
       console.error('Error opening module progress:', err);
     }
@@ -197,8 +192,9 @@ const Dashboard = () => {
             localStorage.setItem('preferredLanguage', normalizedLanguage);
             window.dispatchEvent(new CustomEvent('preferredLanguageChanged', { detail: normalizedLanguage }));
 
-            axios.put('/users/profile', { preferredLanguage: normalizedLanguage }).catch((err) => {
-              console.error('Error saving preferred language:', err);
+            // Persist server-side too so the choice follows the user across devices.
+            profileApi.update({ preferred_language: normalizedLanguage }).catch((err) => {
+              console.warn('Failed to persist preferred_language', err?.message);
             });
 
             setShowIntroduction(false);

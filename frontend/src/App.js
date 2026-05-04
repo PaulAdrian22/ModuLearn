@@ -1,93 +1,51 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
 import { ProfileProvider } from './contexts/ProfileContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { applyAppearanceSettings, getStoredAppearanceSettings } from './utils/appearanceSettings';
-import { API_BASE_URL } from './config/api';
 import ThemedConfirmHost from './components/ThemedConfirmHost';
-
-// Pages
+import OfflineBanner from './components/OfflineBanner';
+// Eagerly loaded — entry points (Landing/Login/Register) and the most
+// commonly visited student pages. Stays in the initial bundle.
 import Landing from './pages/Landing';
 import About from './pages/About';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
-import Lessons from './pages/Lessons';
-import ModuleView from './pages/ModuleView';
-import Assessment from './pages/Assessment';
-import FinalAssessment from './pages/FinalAssessment';
-import InitialAssessment from './pages/InitialAssessment';
-import Profile from './pages/Profile';
-import Progress from './pages/Progress';
-import Simulations from './pages/Simulations';
-import SimulationActivity from './pages/SimulationActivity';
-import AdminLessons from './pages/AdminLessons';
-import AddLesson from './pages/AddLesson';
-import AdminLearners from './pages/AdminLearners';
-import AdminDashboard from './pages/AdminDashboard';
-import AdminSettings from './pages/AdminSettings';
-import AdminSimulations from './pages/AdminSimulations';
-import AdminSimulationEditor from './pages/AdminSimulationEditor';
 
-// Context
-export const AuthContext = createContext();
+// Re-export so existing `import { useAuth } from '../App'` consumers keep working.
+export { useAuth, AuthProvider };
 
-// Axios configuration
-axios.defaults.baseURL = API_BASE_URL;
+// Lazy-loaded — split into separate JS chunks fetched on demand.
+// Student pages that aren't on the initial path:
+const Lessons              = lazy(() => import('./pages/Lessons'));
+const ModuleView           = lazy(() => import('./pages/ModuleView'));
+const Assessment           = lazy(() => import('./pages/Assessment'));
+const FinalAssessment      = lazy(() => import('./pages/FinalAssessment'));
+const InitialAssessment    = lazy(() => import('./pages/InitialAssessment'));
+const Profile              = lazy(() => import('./pages/Profile'));
+const Progress             = lazy(() => import('./pages/Progress'));
+const Simulations          = lazy(() => import('./pages/Simulations'));
+const SimulationActivity   = lazy(() => import('./pages/SimulationActivity'));
+// Admin pages — students never download these. AddLesson alone is ~8000
+// lines and pulls in jspdf + xlsx + the whole editor; lazy-loading is
+// almost mandatory.
+const AdminLessons         = lazy(() => import('./pages/AdminLessons'));
+const AddLesson            = lazy(() => import('./pages/AddLesson'));
+const AdminLearners        = lazy(() => import('./pages/AdminLearners'));
+const AdminDashboard       = lazy(() => import('./pages/AdminDashboard'));
+const AdminSettings        = lazy(() => import('./pages/AdminSettings'));
+const AdminSimulations     = lazy(() => import('./pages/AdminSimulations'));
+const AdminSimulationEditor = lazy(() => import('./pages/AdminSimulationEditor'));
 
-// Auth Provider
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token'));
-  const [loading, setLoading] = useState(true);
+// Suspense fallback while a chunk loads.
+const ChunkLoadingFallback = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <div className="spinner" />
+  </div>
+);
 
-  useEffect(() => {
-    const verifyToken = async () => {
-      if (token) {
-        try {
-          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-          const response = await axios.get('/auth/verify');
-          setUser(response.data.user);
-        } catch (error) {
-          console.error('Token verification failed:', error);
-          logout();
-        }
-      }
-      setLoading(false);
-    };
-
-    verifyToken();
-  }, [token]);
-
-  const login = (userData, authToken) => {
-    setUser(userData);
-    setToken(authToken);
-    localStorage.setItem('token', authToken);
-    axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
-  };
-
-  const logout = () => {
-    setUser(null);
-    setToken(null);
-    localStorage.removeItem('token');
-    delete axios.defaults.headers.common['Authorization'];
-  };
-
-  return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-// Custom hook for auth
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
-  }
-  return context;
-};
+// AuthProvider + useAuth now live in contexts/AuthContext.js (re-exported above).
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -268,17 +226,14 @@ const GlobalTokenUnlockTracker = () => {
 
     const runUnlockCheck = async () => {
       try {
-        const [progressResponse, bktResponse, summaryResponse] = await Promise.all([
-          axios.get('/progress'),
-          axios.get('/bkt/knowledge-states'),
-          axios.get('/users/learning-progress-summary')
+        const { progressApi, usersApi, bktApi } = await import('./services/api');
+        const [progressData, bktData, summary] = await Promise.all([
+          progressApi.list(),
+          bktApi.knowledgeStates().catch(() => []),
+          usersApi.learningProgressSummary().catch(() => ({})),
         ]);
 
         if (!mounted) return;
-
-        const progressData = Array.isArray(progressResponse.data) ? progressResponse.data : [];
-        const bktData = Array.isArray(bktResponse.data) ? bktResponse.data : [];
-        const summary = summaryResponse.data || {};
 
         const skillPercents = bktData.map((record) => Math.round(parseFloat(record.PKnown || 0) * 100));
         const avgReview = summary?.assessment?.averageReviewAssessmentScore || 0;
@@ -415,10 +370,12 @@ function App() {
     <Router>
       <AppearanceManager />
       <ThemedConfirmHost />
+      <OfflineBanner />
       <AuthProvider>
         <ProfileProvider>
           <GlobalTokenUnlockTracker />
           <div className="min-h-screen w-screen overflow-x-hidden">
+            <Suspense fallback={<ChunkLoadingFallback />}>
             <Routes>
               {/* Public Routes */}
             <Route path="/" element={<Landing />} />
@@ -577,7 +534,8 @@ function App() {
             {/* Fallback */}
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
-        </div>
+            </Suspense>
+          </div>
       </ProfileProvider>
     </AuthProvider>
   </Router>

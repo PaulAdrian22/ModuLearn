@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useAuth } from '../App';
+import { profileApi } from '../services/api';
+import { supabase } from '../lib/supabase';
+import { passwordErrorMessage } from '../utils/passwordPolicy';
 import AdminNavbar from '../components/AdminNavbar';
 import Notification from '../components/Notification';
 import { applyAppearanceSettings, getStoredAppearanceSettings, saveAppearanceSettings } from '../utils/appearanceSettings';
@@ -29,18 +31,8 @@ const AdminSettings = () => {
     setUiSize(settings.uiSize);
     applyAppearanceSettings(settings);
 
-    const fetchAdminContact = async () => {
-      try {
-        const response = await axios.get('/users/profile', {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        });
-        setAdminEmail(response.data?.Email || response.data?.email || user?.email || '');
-      } catch (error) {
-        setAdminEmail(user?.email || '');
-      }
-    };
-
-    fetchAdminContact();
+    setAdminEmail(user?.email || '');
+    void profileApi;
   }, []);
 
   const showNotification = (message, type = 'success') => {
@@ -75,24 +67,28 @@ const AdminSettings = () => {
 
   const handleUpdateEmail = async (newEmail) => {
     try {
-      await axios.put('/users/profile', { email: newEmail });
-
+      const { error } = await supabase.auth.updateUser({ email: newEmail });
+      if (error) throw error;
       setAdminEmail(newEmail);
       setShowEmailModal(false);
-      showNotification('Email updated successfully');
+      showNotification('Email update requested. Check your inbox to confirm.');
     } catch (error) {
-      showNotification(error.response?.data?.message || 'Failed to update email', 'error');
+      showNotification(error.message || 'Failed to update email', 'error');
     }
   };
 
   const handleUpdatePassword = async (passwords) => {
+    const issue = passwordErrorMessage(passwords.newPassword);
+    if (issue) {
+      showNotification(issue, 'error');
+      return;
+    }
     try {
-      await axios.post('/users/change-password', passwords);
-
+      await profileApi.changePassword(passwords.newPassword);
       setShowPasswordModal(false);
       showNotification('Password updated successfully');
     } catch (error) {
-      showNotification(error.response?.data?.message || 'Failed to update password', 'error');
+      showNotification(error.message || 'Failed to update password', 'error');
     }
   };
 

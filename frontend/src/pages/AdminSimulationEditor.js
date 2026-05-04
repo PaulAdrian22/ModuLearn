@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../App';
+import { adminApi } from '../services/api';
 import AdminNavbar from '../components/AdminNavbar';
 import SimulationRenderer, { simAssetUrl } from '../components/SimulationRenderer';
 import ImageCropper from '../components/ImageCropper';
@@ -63,6 +63,28 @@ const SKILL_TYPE_THEME = {
   }
 };
 
+const DOCX_SIMULATION_SKILL_MAP = {
+  3: {
+    1: 'Memorization',
+    2: 'Technical Comprehension',
+    3: 'Analytical Thinking',
+    4: 'Problem Solving',
+    5: 'Critical Thinking',
+    6: 'Memorization',
+    7: 'Technical Comprehension',
+    8: 'Analytical Thinking',
+    9: 'Problem Solving',
+    10: 'Critical Thinking'
+  },
+  4: {
+    1: 'Problem Solving',
+    2: 'Critical Thinking',
+    3: 'Analytical Thinking',
+    4: 'Technical Comprehension',
+    5: 'Memorization'
+  }
+};
+
 const ACTIVITY_TYPE_THEME = {
   Disassembling: {
     label: 'Disassembling',
@@ -96,6 +118,14 @@ const getSkillTheme = (rawSkillType) => {
     skillType: normalizedSkillType,
     ...(SKILL_TYPE_THEME[normalizedSkillType] || SKILL_TYPE_THEME['Technical Comprehension'])
   };
+};
+
+const getDocxSkillForSimulation = (simulation = {}) => {
+  const moduleId = Number(simulation?.ModuleID || 0);
+  const simulationOrder = Number(simulation?.SimulationOrder || 0);
+  if (!moduleId || !simulationOrder) return '';
+
+  return DOCX_SIMULATION_SKILL_MAP[moduleId]?.[simulationOrder] || '';
 };
 
 const uid = () => `id-${Math.random().toString(36).slice(2, 10)}`;
@@ -133,19 +163,20 @@ const AdminSimulationEditor = () => {
         setLoading(true);
         setError('');
 
-        const configResponse = await axios.get(`/admin/simulations/${id}`);
+        const sim = await adminApi.simulations.get(id);
+        const order = Number(sim?.simulation_order || sim?.SimulationOrder || 0);
+        const rawConfig = sim?.zone_data ?? sim?.ZoneData ?? {};
+        const parsed = typeof rawConfig === 'string' ? JSON.parse(rawConfig) : rawConfig;
+        const normalized = normalizeConfig(parsed || {}, { activityOrder: order });
 
-        const order = Number(configResponse?.data?.activityOrder || 0);
-        const normalized = normalizeConfig(configResponse?.data?.config || {}, { activityOrder: order });
-
-        setSimulation(configResponse?.data?.simulation || null);
+        setSimulation(sim || null);
         setActivityOrder(order);
         setConfig(normalized);
         setSelectedMomentId(normalized.timeline[0]?.id || null);
         setPreviewIndex(0);
       } catch (loadError) {
         console.error('Failed to load simulation editor:', loadError);
-        setError(loadError?.response?.data?.message || 'Failed to load simulation editor.');
+        setError(loadError?.message || 'Failed to load simulation editor.');
       } finally {
         setLoading(false);
       }
@@ -366,21 +397,17 @@ const AdminSimulationEditor = () => {
         });
       });
 
-      const saveResponse = await axios.put(`/admin/simulations/${id}`, { config });
-      
-      // Debug: Log what we received back
-      console.log('Response from backend:', saveResponse?.data);
-      console.log('Normalized config in response:', saveResponse?.data?.config);
-      
-      const normalized = normalizeConfig(saveResponse?.data?.config || {}, { activityOrder });
-      
-      console.log('Normalized config after normalizeConfig:', normalized);
+      // Persist the config blob into simulations.zone_data jsonb directly.
+      const saved = await adminApi.simulations.update(id, { zone_data: config });
+      const rawConfig = saved?.zone_data ?? saved?.ZoneData ?? {};
+      const parsed = typeof rawConfig === 'string' ? JSON.parse(rawConfig) : rawConfig;
+      const normalized = normalizeConfig(parsed || {}, { activityOrder });
 
       setConfig(normalized);
       setSaveNotice('Simulation saved successfully.');
     } catch (saveError) {
       console.error('Failed to save simulation:', saveError);
-      setError(saveError?.response?.data?.message || 'Failed to save simulation changes.');
+      setError(saveError?.message || 'Failed to save simulation changes.');
     } finally {
       setSaving(false);
     }
@@ -480,6 +507,9 @@ const AdminSimulationEditor = () => {
   };
 
   const timeline = config?.timeline || [];
+  const mappedSkillType = getDocxSkillForSimulation(simulation);
+  const displaySkillType = mappedSkillType || meta.skill;
+  const skillTheme = getSkillTheme(displaySkillType);
 
   return (
     <div className="simulation-theme min-h-screen bg-[#F5F7FA]">
@@ -519,7 +549,7 @@ const AdminSimulationEditor = () => {
           </div>
         </div>
 
-        <div className="simulation-surface bg-white rounded-2xl shadow-sm p-6 mb-6 border border-[#e4ebf2]" style={{ borderTop: `4px solid ${getSkillTheme(meta.skill).solid}` }}>
+        <div className="simulation-surface bg-white rounded-2xl shadow-sm p-6 mb-6 border border-[#e4ebf2]" style={{ borderTop: `4px solid ${skillTheme.solid}` }}>
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="text-xs uppercase tracking-wide text-gray-500">Simulation</p>
@@ -550,9 +580,9 @@ const AdminSimulationEditor = () => {
                 </span>
                 <span
                   className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold"
-                  style={{ backgroundColor: getSkillTheme(meta.skill).soft, color: getSkillTheme(meta.skill).text, border: `1px solid ${getSkillTheme(meta.skill).solid}40` }}
+                  style={{ backgroundColor: skillTheme.soft, color: skillTheme.text, border: `1px solid ${skillTheme.solid}40` }}
                 >
-                  Skill: {getSkillTheme(meta.skill).skillType}
+                  Skill: {skillTheme.skillType}
                 </span>
               </div>
             </div>
@@ -562,7 +592,7 @@ const AdminSimulationEditor = () => {
               onClick={handleSave}
               disabled={saving}
               className="px-6 py-2.5 text-white rounded-lg font-semibold transition-all disabled:opacity-60 disabled:cursor-not-allowed"
-              style={{ backgroundColor: getSkillTheme(meta.skill).solid }}
+              style={{ backgroundColor: skillTheme.solid }}
             >
               {saving ? 'Saving...' : 'Save Simulation'}
             </button>

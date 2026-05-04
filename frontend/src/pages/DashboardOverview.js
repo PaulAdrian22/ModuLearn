@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../App';
 import Navbar from '../components/Navbar';
 import SkeletonLoader from '../components/SkeletonLoader';
 import { themedConfirm } from '../utils/themedConfirm';
-import { withPreferredLanguage } from '../utils/languagePreference';
+import { modulesApi, progressApi, usersApi } from '../services/api';
+import { supabase } from '../lib/supabase';
+import { getPreferredLanguage } from '../utils/languagePreference';
+import { useAsyncData } from '../hooks/useAsyncData';
 
 const decodeHtmlEntities = (value = '') => {
   const normalized = String(value)
@@ -45,49 +47,23 @@ const formatLastOpened = (dateString) => {
 const DashboardOverview = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [modules, setModules] = useState([]);
-  const [stats, setStats] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [showLoading, setShowLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  // Redirect admin users to admin panel
   useEffect(() => {
-    if (user?.role === 'admin') {
-      navigate('/admin/dashboard');
-    }
+    if (user?.role === 'admin') navigate('/admin/dashboard');
   }, [user, navigate]);
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
-
-  const fetchDashboardData = async () => {
-    try {
-      setLoading(true);
-      
-      // Delay showing loading spinner to avoid flicker on fast loads
-      const loadingTimer = setTimeout(() => setShowLoading(true), 200);
-      
-      // Fetch modules with user progress
-      const [modulesResponse, statsResponse] = await Promise.all([
-        axios.get(withPreferredLanguage(`/modules?userId=${user.userId}`)),
-        axios.get('/users/stats')
+  const { data: dashboard, loading, error } = useAsyncData(
+    async () => {
+      const [modulesData, statsData] = await Promise.all([
+        modulesApi.list({ language: getPreferredLanguage() ?? 'English' }),
+        usersApi.stats(),
       ]);
-      console.log('Dashboard fetched modules:', modulesResponse.data);
-      setModules(modulesResponse.data);
-      setStats(statsResponse.data);
-      
-      clearTimeout(loadingTimer);
-      setLoading(false);
-      setShowLoading(false);
-    } catch (err) {
-      console.error('Error fetching dashboard data:', err);
-      setError('Failed to load dashboard data');
-      setLoading(false);
-      setShowLoading(false);
-    }
-  };
+      return { modules: modulesData, stats: statsData };
+    },
+    [],
+    { initial: { modules: [], stats: null } },
+  );
+  const modules = dashboard?.modules ?? [];
+  const stats = dashboard?.stats ?? null;
 
   const handleLogout = async () => {
     const shouldLogout = await themedConfirm({
@@ -98,7 +74,7 @@ const DashboardOverview = () => {
     });
 
     if (shouldLogout) {
-      localStorage.removeItem('token');
+      await supabase.auth.signOut();
       navigate('/login');
     }
   };
@@ -109,7 +85,7 @@ const DashboardOverview = () => {
     }
 
     try {
-      await axios.post('/progress/start', { moduleId: module.ModuleID });
+      await progressApi.start(module.ModuleID);
     } catch (err) {
       console.error('Error opening module progress:', err);
     }

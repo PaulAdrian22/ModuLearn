@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../App';
+import { adminApi } from '../services/api';
+import { useAsyncData } from '../hooks/useAsyncData';
 import AdminNavbar from '../components/AdminNavbar';
 import Avatar from '../components/Avatar';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
@@ -27,9 +28,7 @@ const LESSON_COLORS = ['#7CA7F9', '#6B98F0', '#E7B346', '#E99942', '#EE9C47', '#
 const AdminLearners = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [learners, setLearners] = useState([]);
   const [filteredLearners, setFilteredLearners] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortField, setSortField] = useState('alphabetical');
   const [sortDirection, setSortDirection] = useState('asc');
@@ -40,20 +39,38 @@ const AdminLearners = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [activeTab, setActiveTab] = useState('active');
   const [selectedMetric, setSelectedMetric] = useState('timeSpentPerLesson');
-  const [stats, setStats] = useState({
-    total: 0,
-    active: 0,
-    inactive: 0
-  });
 
   useEffect(() => {
-    if (user?.role !== 'admin') {
-      navigate('/dashboard');
+    if (user?.role !== 'admin') navigate('/dashboard');
+  }, [user, navigate]);
+
+  // Single source for the learners list. Mutations (delete) call refetch().
+  const { data: learnersData, loading, refetch: fetchLearners } = useAsyncData(
+    async () => {
+      const allUsers = await adminApi.users.listAll();
+      return allUsers.filter((u) => u.Role === 'student');
+    },
+    [],
+    { initial: [] },
+  );
+  const learners = learnersData ?? [];
+
+  // Active/inactive stats derived from learners; 7-day login window.
+  const stats = useMemo(() => {
+    const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const active = learners.filter((l) => l.last_login && new Date(l.last_login).getTime() > sevenDaysAgo).length;
+    return { total: learners.length, active, inactive: learners.length - active };
+  }, [learners]);
+
+  // Per-learner metric summary fetch — fires when the learners list changes.
+  useEffect(() => {
+    if (!learners.length) {
+      setLearnerMetricSummaries({});
       return;
     }
-
-    fetchLearners();
-  }, [user, navigate]);
+    fetchLearnerMetricSummaries(learners);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [learners]);
 
   useEffect(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -122,16 +139,17 @@ const AdminLearners = () => {
     setMetricFilterLoading(true);
 
     try {
+      // Lesson metrics now come from the learner-metrics Edge Function.
       const summaryEntries = await Promise.all(
         studentLearners.map(async (learner) => {
           try {
-            const response = await axios.get(`/users/${learner.UserID}/details`);
-            return [learner.UserID, buildMetricSummary(response.data?.lessonMetrics || [])];
-          } catch (error) {
-            console.error(`Failed to load metric summary for learner ${learner.UserID}:`, error);
+            const details = await adminApi.users.details(learner.UserID);
+            return [learner.UserID, buildMetricSummary(details?.lessonMetrics || [])];
+          } catch (err) {
+            console.warn(`learner-metrics failed for ${learner.UserID}`, err?.message);
             return [learner.UserID, null];
           }
-        })
+        }),
       );
 
       const summaries = {};
@@ -145,51 +163,13 @@ const AdminLearners = () => {
     }
   };
 
-  const fetchLearners = async () => {
-    try {
-      const response = await axios.get('/users/all');
-      console.log('Fetched users:', response.data); // Debug log
-      
-      // Filter for students only
-      const studentLearners = response.data.filter(u => u.Role === 'student');
-      console.log('Student learners:', studentLearners); // Debug log
-      
-      setLearners(studentLearners);
-      setFilteredLearners(studentLearners);
-      fetchLearnerMetricSummaries(studentLearners);
-      
-      // Calculate stats
-      const now = Date.now();
-      const sevenDaysAgo = now - (7 * 24 * 60 * 60 * 1000);
-      const activeCount = studentLearners.filter(l => {
-        if (!l.last_login) return false;
-        const lastLogin = new Date(l.last_login).getTime();
-        return lastLogin > sevenDaysAgo;
-      }).length;
-      
-      setStats({
-        total: studentLearners.length,
-        active: activeCount,
-        inactive: studentLearners.length - activeCount
-      });
-      
-      setLoading(false);
-    } catch (err) {
-      console.error('Error fetching learners:', err);
-      console.error('Error response:', err.response);
-      setLoading(false);
-    }
-  };
-
   const handleViewDetails = async (learner) => {
     try {
-      // Fetch detailed learner info including progress
-      const response = await axios.get(`/users/${learner.UserID}/details`);
-      setSelectedLearner(response.data);
+      const details = await adminApi.users.details(learner.UserID);
+      setSelectedLearner({ ...learner, ...details });
       setShowDetails(true);
     } catch (err) {
       console.error('Error fetching learner details:', err);
-      // Fallback to basic info
       setSelectedLearner(learner);
       setShowDetails(true);
     }
@@ -209,7 +189,7 @@ const AdminLearners = () => {
     }
 
     try {
-      await axios.delete(`/users/delete/${learnerId}`);
+      await adminApi.users.delete(learnerId);
       fetchLearners();
       setShowDetails(false);
     } catch (err) {

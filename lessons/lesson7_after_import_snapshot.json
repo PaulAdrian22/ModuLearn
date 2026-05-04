@@ -17,44 +17,21 @@
         "fileName": null
       },
       {
-        "id": 1776123300093,
+        "id": 1777220247068,
         "file": null,
         "type": "paragraph",
         "order": 2,
         "title": "",
         "caption": "",
-        "content": "<p>A computer network is a group of linked computing devices that may communicate and share resources with one another. These devices can be found in both traditional and cloud-based settings. In order to speed up the transfer and exchange of data and resources, networking, also known as computer networking, entails connecting two or more computing devices (such as desktop computers, laptops, mobile devices, routers, and apps).<sup>[5]</sup></p><p>In order to share information over wired or wireless connections, networked devices rely on communication protocols, which are rules that specify how to send or exchange data over a network. From personal communication and entertainment to cloud-native commercial processes and global infrastructure, computer networks are the foundation of almost every digital activity. Today's networks, which are built for speed, scalability, and IT security, provide dynamic data flows between virtualized cloud environments and on-premises systems.<sup>[5]</sup></p>",
+        "content": "<p>A computer network is a group of linked computing devices that may communicate and share resources with one another. These devices can be found in both traditional and cloud-based settings. In order to speed up the transfer and exchange of data and resources, networking, also known as computer networking, entails connecting two or more computing devices (such as desktop computers, laptops, mobile devices, routers, and apps).[5]</p>\n<p>In order to share information over wired or wireless connections, networked devices rely on communication protocols, which are rules that specify how to send or exchange data over a network. From personal communication and entertainment to cloud-native commercial processes and global infrastructure, computer networks are the foundation of almost every digital activity. Today's networks, which are built for speed, scalability, and IT security, provide dynamic data flows between virtualized cloud environments and on-premises systems.[5]</p>\n<p>Quick Background in Computer Networking</p>\n<p>Computer science engineers had to physically transfer computers in order to share data across devices prior to modern networking procedures. This was an exhausting procedure because computers were big and bulky at the time. In the late 1960s, the Department of Defense provided funding for the establishment of the first operational computer network, which later became known as ARPANET, in an effort to streamline the process, particularly for government employees. The internet and cloud networking, which currently offer globally distributed infrastructures and application services, were both made possible by this turning point.[5]</p>\n<p>Computer systems and networking techniques have advanced dramatically, enabling significant inter-device communication for a variety of industries, including entertainment and business. Cloud-centric networking means using the cloud as a main place to store data and run applications. Instead of everything staying on one computer or in one building, information can move between local computers and cloud services like AWS or Microsoft Azure. This allows people to access files and programs from different places and devices more easily.Businesses can cut expenses and scale resources with this strategy. Furthermore, networking is being improved by developments in artificial intelligence and machine learning, which automate management, increase security, and optimize performance through real-time traffic monitoring.[5]</p>\n<p>Using email as a basic example, here’s how data moves through a network. To send an email, a user must first compose the message and then click the \"send\" button. An SMTP or POP3 protocol uses the sender's wifi to route the message from the sender node through the network switches when the user hits \"send.\" In this case, it is compressed and divided into smaller and smaller pieces (and eventually into bits, or strings of ones and zeros).[5]</p>\n<p>Network gateways transform data and communication protocols as necessary before sending the bit stream to the recipient's network. The same procedures guide the email data across the network switches on the recipient's network once the bit stream reaches their computer. Until the email reaches the recipient's inbox (the receiver node) in a human-readable format, the network reconstructs the original message during this process.[5]</p>\n<p>What do you call a group of computers and devices connected together so they can share files, printers, and communicate with each other?</p>",
         "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300094,
-        "file": null,
-        "type": "subtopic",
-        "order": 3,
-        "title": "Quick Background in Computer Networking",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300095,
-        "file": null,
-        "type": "paragraph",
-        "order": 4,
-        "title": "",
-        "caption": "",
-        "content": "<p>Computer science engineers had to physically transfer computers in order to share data across devices prior to modern networking procedures. This was an exhausting procedure because computers were big and bulky at the time. In the late 1960s, the Department of Defense provided funding for the establishment of the first operational computer network, which later became known as ARPANET, in an effort to streamline the process, particularly for government employees. The internet and cloud networking, which currently offer globally distributed infrastructures and application services, were both made possible by this turning point.<sup>[5]</sup></p><p>Computer systems and networking techniques have advanced dramatically, enabling significant inter-device communication for a variety of industries, including entertainment and business. Cloud-centric networking means using the cloud as a main place to store data and run applications. Instead of everything staying on one computer or in one building, information can move between local computers and cloud services like AWS or Microsoft Azure. This allows people to access files and programs from different places and devices more easily.Businesses can cut expenses and scale resources with this strategy. Furthermore, networking is being improved by developments in artificial intelligence and machine learning, which automate management, increase security, and optimize performance through real-time traffic monitoring.<sup>[5]</sup></p><p>Using email as a basic example, here’s how data moves through a network. To send an email, a user must first compose the message and then click the \"send\" button. An SMTP or POP3 protocol uses the sender's wifi to route the message from the sender node through the network switches when the user hits \"send.\" In this case, it is compressed and divided into smaller and smaller pieces (and eventually into bits, or strings of ones and zeros).<sup>[5]</sup></p><p>Network gateways transform data and communication protocols as necessary before sending the bit stream to the recipient's network. The same procedures guide the email data across the network switches on the recipient's network once the bit stream reaches their computer. Until the email reaches the recipient's inbox (the receiver node) in a human-readable format, the network reconstructs the original message during this process.<sup>[5]</sup></p>",
-        "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
         "id": 1776123300098,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 5,
+        "order": 3,
         "title": "",
         "caption": "",
         "content": "",
@@ -92,29 +69,28 @@
         "id": 1776123300099,
         "file": null,
         "type": "topic",
-        "order": 6,
+        "order": 4,
         "title": "Topic 2: Purpose and benefits of networking in computer systems",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776123300100,
+        "id": 1777220247069,
         "file": null,
         "type": "paragraph",
-        "order": 7,
+        "order": 5,
         "title": "",
         "caption": "",
-        "content": "<p>Networking connects computers and devices so they can share data, resources, and communicate effectively. It enables everything from home internet access to global business operations by transmitting information in packets across wired or wireless links.<sup>[6][7]</sup></p><p>Several benefits can be named in networking in computer systems. Multiple users access one printer, scanner, or storage drive, cutting hardware costs and setup needs. It’s called resource sharing. For example, an office saves money by linking all PCs to a single high-capacity server.<sup>[8][9]</sup> File and data sharing becomes easy, where you can send files instantly between devices without USB drives or duplicates, using centralized storage for updates from anywhere on the network.<sup>[6][10]</sup> There is better communication using email, video calls, and chat apps for real-time teamwork, bridging distances so remote workers collaborate like they're in the same room.<sup>[8][11]</sup> Cost is then reduced by buying extra devices and simplifies maintenance with shared software licenses and centralized management.<sup>[6][9]</sup> Lastly, efficiency and scalability is increased, boosting productivity by speeding up data access and grows easily—add users or devices without rebuilding everything.<sup>[8][9]</sup></p>",
+        "content": "<p>Networking connects computers and devices so they can share data, resources, and communicate effectively. It enables everything from home internet access to global business operations by transmitting information in packets across wired or wireless links.[6][7]</p>\n<p>Several benefits can be named in networking in computer systems. Multiple users access one printer, scanner, or storage drive, cutting hardware costs and setup needs. It’s called resource sharing. For example, an office saves money by linking all PCs to a single high-capacity server.[8][9] File and data sharing becomes easy, where you can send files instantly between devices without USB drives or duplicates, using centralized storage for updates from anywhere on the network.[6][10] There is better communication using email, video calls, and chat apps for real-time teamwork, bridging distances so remote workers collaborate like they're in the same room.[8][11] Cost is then reduced by buying extra devices and simplifies maintenance with shared software licenses and centralized management.[6][9] Lastly, efficiency and scalability is increased, boosting productivity by speeding up data access and grows easily—add users or devices without rebuilding everything.[8][9]</p>\n<p>What do you call the networking benefit where multiple computers can use the same device, such as a printer, through a network?</p>\n<p>Network security</p>\n<p>Data encryption</p>\n<p>Resource sharing</p>\n<p>Network topology</p>\n<p>How does networking improve communication?</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
         "id": 1776123300103,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 8,
+        "order": 6,
         "title": "",
         "caption": "",
         "content": "",
@@ -152,667 +128,156 @@
         "id": 1776123300104,
         "file": null,
         "type": "topic",
-        "order": 9,
+        "order": 7,
         "title": "Topic 3: Types of Networks",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776123300105,
+        "id": 1777220247070,
         "file": null,
         "type": "paragraph",
-        "order": 10,
+        "order": 8,
         "title": "",
         "caption": "",
-        "content": "<p>There are various types of computer networking options available. The classification of network in computers can be done according to their size as well as their purpose.<sup>[12]</sup></p><p>The geographic area and number of computers that make up a network should be used to determine its size. It covers anything from gadgets kept in one room to millions of gadgets dispersed throughout the globe. The most common kinds of computer networks are as follows:<sup>[12]</sup></p>",
+        "content": "<p>There are various types of computer networking options available. The classification of network in computers can be done according to their size as well as their purpose.[12]</p>\n<p>The geographic area and number of computers that make up a network should be used to determine its size. It covers anything from gadgets kept in one room to millions of gadgets dispersed throughout the globe. The most common kinds of computer networks are as follows:[12]</p>\n<p>Personal Area Network (PAN)</p>\n<p>It connects devices within an individual’s immediate vicinity, typically within a range of about 10 meters (33 feet). It enables communication and data sharing among personal devices such as smartphones, tablets, laptops, smartwatches, and other wearables.[13]</p>\n<p>Types of PANs (Not necessary to be included):</p>\n<p>Wired PAN: Devices are connected via cables or wires in a wired PAN. Although more uncommon than wireless PANs, this kind of PAN is still useful in some situations. For instance, USB cables can be used to create a wired PAN that links devices like printers, keyboards, and external storage devices to computers, tablets, and smartphones. Reliable, fast data transport is made possible by this direct physical connection.[13]</p>\n<p>Wireless PAN: In daily life, wireless PANs are more common. They connect devices without the need for physical cords by utilizing wireless technology. The most popular wireless technology for PANs is Bluetooth, which allows wireless data sharing and communication between nearby devices. Bluetooth PANs are perfect for connecting personal devices since they are simple to set up and provide flexibility and mobility. Depending on the particular needs and devices involved, PANs can also be created using other wireless protocols as Zigbee and Wi-Fi Direct.[13]</p>\n<p>Advantages of PAN</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
-        "id": 1776123300106,
+        "id": 1777220247071,
+        "file": null,
+        "type": "image",
+        "order": 9,
+        "title": "The geographic area and number of computers that make up a n",
+        "images": [
+          {
+            "url": "/uploads/lessons/219_the_geographic_area_and_number_of_comput.webp",
+            "file": null,
+            "fileName": "219_the_geographic_area_and_number_of_comput.webp",
+            "caption": "The geographic area and number of computers that make up a n"
+          }
+        ],
+        "layout": "text-left",
+        "caption": "",
+        "content": "/uploads/lessons/219_the_geographic_area_and_number_of_comput.webp",
+        "fileName": "219_the_geographic_area_and_number_of_comput.webp",
+        "sideTexts": [
+          "<p><strong>The geographic area and number of computers that make up a n</strong></p><p>The geographic area and number of computers that make up a network should be…</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/219_the_geographic_area_and_number_of_comput.webp",
+              "file": null,
+              "fileName": "219_the_geographic_area_and_number_of_comput.webp",
+              "caption": "The geographic area and number of computers that make up a n"
+            }
+          ]
+        ]
+      },
+      {
+        "id": 1777220247072,
+        "file": null,
+        "type": "image",
+        "order": 10,
+        "title": "PAN",
+        "images": [
+          {
+            "url": "/uploads/lessons/220_d_pan.webp",
+            "file": null,
+            "fileName": "220_d_pan.webp",
+            "caption": "PAN"
+          }
+        ],
+        "layout": "text-left",
+        "caption": "",
+        "content": "/uploads/lessons/220_d_pan.webp",
+        "fileName": "220_d_pan.webp",
+        "sideTexts": [
+          "<p><strong>PAN</strong></p><p>d. PAN</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/220_d_pan.webp",
+              "file": null,
+              "fileName": "220_d_pan.webp",
+              "caption": "PAN"
+            }
+          ]
+        ]
+      },
+      {
+        "id": 1777220247073,
         "file": null,
         "type": "image",
         "order": 11,
-        "title": "",
+        "title": "MAN",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776123300283-1.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123300283-1.png"
+            "url": "/uploads/lessons/221_d_man.webp",
+            "file": null,
+            "fileName": "221_d_man.webp",
+            "caption": "MAN"
           }
         ],
-        "layout": "single",
+        "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123300283-1.png",
-        "fileName": "docx-lesson-7-1776123300283-1.png"
+        "content": "/uploads/lessons/221_d_man.webp",
+        "fileName": "221_d_man.webp",
+        "sideTexts": [
+          "<p><strong>MAN</strong></p><p>d. MAN</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/221_d_man.webp",
+              "file": null,
+              "fileName": "221_d_man.webp",
+              "caption": "MAN"
+            }
+          ]
+        ]
       },
       {
-        "id": 1776123300107,
+        "id": 1777220247074,
         "file": null,
-        "type": "paragraph",
+        "type": "image",
         "order": 12,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Personal Area Network (PAN)</strong> </li></ol><p>It connects devices within an individual’s immediate vicinity, typically within a range of about 10 meters (33 feet). It enables communication and data sharing among personal devices such as smartphones, tablets, laptops, smartwatches, and other wearables.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300108,
-        "file": null,
-        "type": "subtopic",
-        "order": 13,
-        "title": "Types of PANs (Not necessary to be included)",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300109,
-        "file": null,
-        "type": "paragraph",
-        "order": 14,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Wired PAN</strong>: Devices are connected via cables or wires in a wired PAN. Although more uncommon than wireless PANs, this kind of PAN is still useful in some situations. For instance, USB cables can be used to create a wired PAN that links devices like printers, keyboards, and external storage devices to computers, tablets, and smartphones. Reliable, fast data transport is made possible by this direct physical connection.<sup>[13]</sup></li><li><strong>Wireless PAN: </strong>In daily life, wireless PANs are more common. They connect devices without the need for physical cords by utilizing wireless technology. The most popular wireless technology for PANs is Bluetooth, which allows wireless data sharing and communication between nearby devices. Bluetooth PANs are perfect for connecting personal devices since they are simple to set up and provide flexibility and mobility. Depending on the particular needs and devices involved, PANs can also be created using other wireless protocols as Zigbee and Wi-Fi Direct.<sup>[13]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300110,
-        "file": null,
-        "type": "subtopic",
-        "order": 15,
-        "title": "Advantages of PAN",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300111,
-        "file": null,
-        "type": "paragraph",
-        "order": 16,
-        "title": "",
-        "caption": "",
-        "content": "<p><strong>Mobility</strong>: PANs provide wireless connectivity, allowing devices to communicate and share data without physical constraints. This enables users to move freely within the network range.<sup>[13]</sup></p><p><strong>Convenience</strong>: PANs offer easy and quick setup, making connecting and configuring devices within the network simple.<sup>[13]</sup></p><p><strong>Personalization</strong>: PANs are designed for individual use, allowing users to personalize and control their network according to their preferences.<sup>[13]</sup></p><p><strong>Energy Efficiency</strong>: PAN technologies like Bluetooth and Zigbee are designed to be power-efficient, ensuring longer battery life for connected devices.<sup>[13]</sup></p><p><strong>Cost-effective</strong>: PANs typically require minimal infrastructure and equipment, making them a cost-effective solution for personal device connectivity.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300112,
-        "file": null,
-        "type": "subtopic",
-        "order": 17,
-        "title": "Disadvantages of PANS",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300113,
-        "file": null,
-        "type": "paragraph",
-        "order": 18,
-        "title": "",
-        "caption": "",
-        "content": "<p><strong>Limited Range:</strong> PANS have a short-range coverage of about 10 meters (33 feet). This restricts connectivity to devices within proximity.<sup>[13]</sup></p><p><strong>Interference</strong>: PANS that use wireless technology may experience interference from other devices that operate on the same frequency. This interference can impact the quality of the signal and the speed at which data is transferred. PANs that use wireless technology may experience interference from other devices that operate on the same frequency. This interference can impact the quality of the signal and the speed at which data is transferred.<sup>[13]</sup></p><p><strong>Data Security</strong>: Wireless PANS may be vulnerable to unauthorized access and data breaches if not properly secured with encryption and authentication mechanisms.<sup>[13]</sup></p><p><strong>Compatibility</strong>: Device compatibility can be an issue as PAN technologies may vary, and devices must support the same wireless standard to establish a connection.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300114,
-        "file": null,
-        "type": "image",
-        "order": 19,
-        "title": "",
+        "title": "WAN",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776123300378-2.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123300378-2.png"
+            "url": "/uploads/lessons/223_d_wan.webp",
+            "file": null,
+            "fileName": "223_d_wan.webp",
+            "caption": "WAN"
           }
         ],
-        "layout": "text-right",
+        "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123300378-2.png",
-        "fileName": "docx-lesson-7-1776123300378-2.png",
+        "content": "/uploads/lessons/223_d_wan.webp",
+        "fileName": "223_d_wan.webp",
         "sideTexts": [
-          "<ol style=\"list-style-type: decimal;\"><li><strong>Local Area Network (LAN)</strong></li></ol>"
+          "<p><strong>WAN</strong></p><p>d. WAN</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776123300378-2.png",
-              "caption": "",
-              "fileName": "docx-lesson-7-1776123300378-2.png"
+              "url": "/uploads/lessons/223_d_wan.webp",
+              "file": null,
+              "fileName": "223_d_wan.webp",
+              "caption": "WAN"
             }
           ]
         ]
-      },
-      {
-        "id": 1776123300115,
-        "file": null,
-        "type": "paragraph",
-        "order": 20,
-        "title": "",
-        "caption": "",
-        "content": "<p>Devices can connect inside a designated geographic region, like a building, business, or house, using a local area network, or LAN. This kind of network is frequently used to help computers and other devices communicate and share data. LANs are frequently used to let connected devices communicate and share resources.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300116,
-        "file": null,
-        "type": "subtopic",
-        "order": 21,
-        "title": "Types of LAN (Not necessary to be included)",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300117,
-        "file": null,
-        "type": "paragraph",
-        "order": 22,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Token Ring LAN: </strong>A special \"token\" is shared among network devices using the token-passing protocol used by Token Ring LANs. Sending data is allowed when a device has the token. Token Ring LANs use a ring topology and guarantee equal network access.<sup>[13]</sup></li><li><strong>Token Bus LAN: </strong>Token Bus LANs use a bus topology instead of a ring topology, although they still use a token-passing system. Network devices compete for the token in order to send data. Compared to token ring LANs, token bus LANs were less popular.<sup>[13]</sup></li><li><strong>Wireless LAN: </strong>WLANs connect devices without the need of physical wires using wireless technologies like Wi-Fi. Through wireless adapters or gadgets with integrated Wi-Fi, they enable users to access the network and its resources. WLANs offer connectivity convenience, mobility, and flexibility.<sup>[13]</sup></li><li><strong>Wired LAN: </strong>Wired LANs connect devices in a restricted area using physical wires, such as fiber-optic or Ethernet cables. They provide dependable, fast data transfer. Data centers, households, and companies all frequently use wired LANs.<sup>[13]</sup></li><li><strong>Cloud Managed LAN: </strong>Cloud Managed LANs use cloud-based control and management to monitor and manage the LAN infrastructure from a central location. A web-based interface makes it possible to configure, monitor, and troubleshoot networks, allowing for scalability, simpler deployment, and easier maintenance.<sup>[13]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300118,
-        "file": null,
-        "type": "subtopic",
-        "order": 23,
-        "title": "Characteristics of LANs",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300119,
-        "file": null,
-        "type": "paragraph",
-        "order": 24,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Limited geographical area</strong>: LANs cover a small physical area, typically within a building or campus.<sup>[13]</sup></li><li><strong>High data transfer rates</strong>: LANs offer fast data transfer, enabling quick communication and resource sharing.<sup>[13]</sup></li><li><strong>Localized administration</strong>: LANs manage and administer network resources locally, enabling control.<sup>[13]</sup></li><li><strong>Shared infrastructure</strong>: LANs often use shared network infrastructure, such as Ethernet switches and routers, to connect devices.<sup>[13]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300120,
-        "file": null,
-        "type": "subtopic",
-        "order": 25,
-        "title": "Advantages of LAN",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300121,
-        "file": null,
-        "type": "paragraph",
-        "order": 26,
-        "title": "",
-        "caption": "",
-        "content": "<p><strong>Resource Sharing: </strong>LANS allow devices to share resources such as printers, scanners, and storage devices, reducing the need for individual devices for each user.<sup>[13]</sup></p><p><strong>File Sharing: </strong>LANS enable users to share files and documents easily, improving collaboration and productivity.<sup>[13]</sup></p><p><strong>Centralized Data Management: </strong>By centralizing data storage on a LAN server, data backup, security, and management become more efficient.<sup>[13]</sup></p><p><strong>Cost-effective:</strong> LANs are generally more cost-effective than wide area networks (WANS) as they require less cabling and equipment.<sup>[13]</sup></p><p><strong>Fast Data Transfer:</strong> LANS provide high-speed data transfer rates, enabling quick access to shared resources and improved communication.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300122,
-        "file": null,
-        "type": "subtopic",
-        "order": 27,
-        "title": "Disadvantages of LAN",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300123,
-        "file": null,
-        "type": "paragraph",
-        "order": 28,
-        "title": "",
-        "caption": "",
-        "content": "<p><strong>Limited geographic range: </strong>LANS are confined to a limited area, typically a building or campus, which restricts connectivity to devices within that range.<sup>[13]</sup></p><p><strong>Installation and maintenance costs: </strong>Setting up and maintaining a LAN can be costly, requiring network equipment, cables, and skilled IT personnel.<sup>[13]</sup></p><p><strong>Network congestion: </strong>In heavily utilized LANS, increased traffic can lead to network congestion and reduced performance.<sup>[13]</sup></p><p><strong>Security risks: </strong>LANS can be vulnerable to unauthorized access, data breaches, and malicious activities if proper security measures are not implemented.<sup>[13]</sup></p><p><strong>Scalability limitations: </strong>The scalability of a LAN may be limited, making it challenging to expand the network as the organization grows.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300124,
-        "file": null,
-        "type": "image",
-        "order": 29,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-7-1776123300572-3.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123300572-3.png"
-          }
-        ],
-        "layout": "text-right",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123300572-3.png",
-        "fileName": "docx-lesson-7-1776123300572-3.png",
-        "sideTexts": [
-          "<ol style=\"list-style-type: decimal;\"><li><strong>Metropolitan Area Network (MAN)</strong></li></ol>"
-        ],
-        "layerImages": [
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-7-1776123300572-3.png",
-              "caption": "",
-              "fileName": "docx-lesson-7-1776123300572-3.png"
-            }
-          ]
-        ]
-      },
-      {
-        "id": 1776123300125,
-        "file": null,
-        "type": "paragraph",
-        "order": 30,
-        "title": "",
-        "caption": "",
-        "content": "<p>A computer network that covers a city or metropolitan area is called a Metropolitan Area Network (MAN). It effectively sends data, sound, and video between different places within the metropolitan area and connects several local area networks (LANs).<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300126,
-        "file": null,
-        "type": "subtopic",
-        "order": 31,
-        "title": "Examples of MAN",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300127,
-        "file": null,
-        "type": "paragraph",
-        "order": 32,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Educational Institutions</strong>: Universities and colleges often establish MANs to interconnect various departments, libraries, and research facilities.<sup>[13]</sup></li><li><strong>Government Networks</strong>: Municipalities or government agencies may use MANs to connect different government buildings, enabling efficient communication and data sharing.<sup>[13]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300128,
-        "file": null,
-        "type": "subtopic",
-        "order": 33,
-        "title": "Types of MAN (Not necessary to be included)",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300129,
-        "file": null,
-        "type": "paragraph",
-        "order": 34,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Fiber Distributed Data Interface (FDDI): </strong>FDDI is a type of MAN that uses fiber optic cables to transmit data over a ring network topology.<sup>[13]</sup></li><li><strong>Asynchronous Transfer Mode (ATM): </strong>MANs use ATM as a high-speed networking technology to efficiently transmit voice, data, and video.<sup>[13]</sup></li><li><strong>Ethernet MAN (E-Man):</strong> E-Man utilizes Ethernet technology to connect multiple LANs within a metropolitan area, providing a cost-effective solution for interconnecting local networks.<sup>[13]</sup></li><li><strong>Wireless MAN (WMAN): </strong>WMANs use wireless technologies such as Wi-Fi and WiMAX to establish networks within metropolitan areas.<sup>[13]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300130,
-        "file": null,
-        "type": "subtopic",
-        "order": 35,
-        "title": "Advantages of MAN",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300131,
-        "file": null,
-        "type": "paragraph",
-        "order": 36,
-        "title": "",
-        "caption": "",
-        "content": "<p><strong>Expanded Connectivity:</strong> MANs provide connectivity to a larger geographic area, enabling communication and data sharing between multiple LANS.<sup>[13]</sup></p><p><strong>Higher Bandwidth:</strong> MANs typically offer higher bandwidth than individual LANs, allowing faster data transfer rates and better performance.<sup>[13]</sup></p><p><strong>Centralized Management: </strong>A MAN allows centralized management and control of network resources, making monitoring and maintaining the network infrastructure easier.<sup>[13]</sup></p><p><strong>Cost-Effective:</strong> Sharing network infrastructure among multiple organizations within a metropolitan area can result in cost savings compared to individual LAN setups.<sup>[13]</sup></p><p><strong>Scalability: </strong>MANs can be easily expanded or upgraded to accommodate the growing needs of businesses or institutions within the metropolitan area.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300132,
-        "file": null,
-        "type": "subtopic",
-        "order": 37,
-        "title": "Disadvantages of MAN",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300133,
-        "file": null,
-        "type": "paragraph",
-        "order": 38,
-        "title": "",
-        "caption": "",
-        "content": "<p><strong>Complexity: </strong>Setting up and managing a MAN can be more complex and challenging than managing a single LAN due to the larger scale and multiple locations involved.<sup>[13]</sup></p><p><strong>Dependency on Service Providers: </strong>MANS often require services from telecommunications or network service providers, which can introduce dependencies and potential points of failure.<sup>[13]</sup></p><p><strong>Security Concerns: </strong>Since a MAN covers a larger area and connects multiple organizations, there is an increased risk of security breaches and unauthorized access to the network.<sup>[13]</sup></p><p><strong>Reliability: </strong>MANS may experience downtime or performance issues, particularly if there are infrastructure or connectivity problems within the metropolitan area.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300134,
-        "file": null,
-        "type": "image",
-        "order": 39,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-7-1776123300701-4.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123300701-4.png"
-          }
-        ],
-        "layout": "text-right",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123300701-4.png",
-        "fileName": "docx-lesson-7-1776123300701-4.png",
-        "sideTexts": [
-          "<ol style=\"list-style-type: decimal;\"><li><strong>Wide Area Network (WAN)</strong></li></ol>"
-        ],
-        "layerImages": [
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-7-1776123300701-4.png",
-              "caption": "",
-              "fileName": "docx-lesson-7-1776123300701-4.png"
-            }
-          ]
-        ]
-      },
-      {
-        "id": 1776123300135,
-        "file": null,
-        "type": "paragraph",
-        "order": 40,
-        "title": "",
-        "caption": "",
-        "content": "<p>A computer network that covers large geographic regions, including cities, nations, or continents, is known as a wide area network, or WAN. It enables long-distance data, audio, and video transmission by connecting several Local Area Networks (LANs) or other WANs. In order to promote communication and resource sharing, many businesses employ WANs to link their distant offices, branches, or data centers.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300136,
-        "file": null,
-        "type": "subtopic",
-        "order": 41,
-        "title": "Examples of WAN",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300137,
-        "file": null,
-        "type": "paragraph",
-        "order": 42,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Virtual Private Network (VPN)</strong>: VPNs create secure tunnels over public networks, such as the internet, to connect remote locations and enable secure communication and resource sharing.<sup>[13]</sup></li><li><strong>Internet-based WAN</strong>: Many organizations leverage the internet as WAN infrastructure, using technologies such as IPsec, MPLS, or software-defined WAN (SD-WAN) to connect their remote sites.<sup>[13]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300138,
-        "file": null,
-        "type": "subtopic",
-        "order": 43,
-        "title": "Characteristics of WAN",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300139,
-        "file": null,
-        "type": "paragraph",
-        "order": 44,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Large Geographic Coverage</strong>: WANs span a significant geographic area, from regional to national to international.<sup>[13]</sup></li><li><strong>Diverse Connectivity Technologies</strong>: WANs use various technologies, including leased lines, fiber-optic links, satellite links, microwave links, and internet-based networks, to connect sites.<sup>[13]</sup></li><li><strong>Reliance on Public or Private Infrastructure</strong>: WANs can utilize public networks, such as the internet, or private leased lines to transmit data, depending on the organization’s requirements and security considerations.<sup>[13]</sup></li><li><strong>Network Protocols and Routing</strong>: WANs employ routing protocols, such as Border Gateway Protocol (BGP), to efficiently direct data packets across multiple interconnected networks and determine the best path.<sup>[13]</sup></li><li><strong>Quality of Service (QoS)</strong>: WANs often implement QoS mechanisms to prioritize certain types of traffic, such as voice or video, to ensure optimal performance and minimize latency for critical applications.<sup>[13]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300140,
-        "file": null,
-        "type": "subtopic",
-        "order": 45,
-        "title": "Types of WAN (Not necessary to be included)",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300141,
-        "file": null,
-        "type": "paragraph",
-        "order": 46,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Packet switching: </strong>Two main types of packet switching are used in wide area networks (WANs): circuit-switched and packet-switched. Let’s explore both types:<sup>[13]</sup></li><li><strong>Circuit-Switched WAN: </strong>In a circuit-switched network, a dedicated communication path is established between two endpoints for the duration of the communication session. This path remains dedicated to the specific session, even without data transmission. Traditional telephone networks are an example of circuit-switched networks.<sup>[13]</sup></li><li><strong>Packet-Switched WAN: </strong>A packet-switched network divides data into packets and transmits them independently. The packets can take different routes and reassemble at the destination. The Internet is an example of a packet-switched network.<sup>[13]</sup></li><li><strong>TCP/IP protocol suite: </strong>The TCP/IP protocol suite is the foundation for communication on the Internet and many private networks. It consists of two main protocols:<sup>[13]</sup></li><li><strong>Transmission Control Protocol (TCP): </strong>TCP provides reliable, connection-oriented communication between devices. TCP breaks data into packets, reassembles them at the destination, and ensures error recovery in the event of any lost packets.<sup>[13]</sup></li><li><strong>Internet Protocol (IP): </strong>IP addresses and routes packets across networks. It establishes the logical addressing scheme used for identifying devices on a network and enables the routing of packets to their destinations.<sup>[13]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300142,
-        "file": null,
-        "type": "subtopic",
-        "order": 47,
-        "title": "Advantages of WAN",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300143,
-        "file": null,
-        "type": "paragraph",
-        "order": 48,
-        "title": "",
-        "caption": "",
-        "content": "<p><strong>Geographical Coverage: </strong>WANS allow communication and connectivity across large distances, enabling organizations to connect remote offices or branches in different cities or countries.<sup>[13]</sup></p><p><strong>Resource Sharing:</strong> WANs facilitate the sharing of resources, such as servers, databases, and applications, among different locations, enabling efficient collaboration and data access.<sup>[13]</sup></p><p><strong>Centralized Management: </strong>WANS can be centrally managed, making monitoring and controlling the network infrastructure easier, ensuring consistent connectivity and performance across the entire network.<sup>[13]</sup></p><p><strong>Scalability: </strong>WANs can be easily scaled up to accommodate the growing needs of organizations, allowing for adding new sites or locations to the network.<sup>[13]</sup></p><p><strong>Wide Range of Services:</strong> WANS provide access to many services, including internet connectivity, cloud services, Voice over IP (VoIP), video conferencing, and virtual private networks (VPNs).<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300144,
-        "file": null,
-        "type": "subtopic",
-        "order": 49,
-        "title": "Disadvantages of WAN",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300145,
-        "file": null,
-        "type": "paragraph",
-        "order": 50,
-        "title": "",
-        "caption": "",
-        "content": "<p><strong>Cost: </strong>Setting up and maintaining a WAN can be costly, requiring dedicated network equipment, high-speed connectivity, and potentially recurring fees for leased lines or service providers.<sup>[13]</sup></p><p><strong>Complexity:</strong> WANs can be complex to design, implement, and manage, especially when dealing with multiple technologies, protocols, and connectivity options.<sup>[13]</sup></p><p><strong>Dependency on Service Providers: </strong>Organizations relying on WANS often depend on third-party service providers for connectivity and service reliability, which can introduce potential points of failure.<sup>[13]</sup></p><p><strong>Security Risks:</strong> WANS extend the network beyond the organization's physical boundaries, increasing the risk of security breaches and unauthorized access to sensitive data.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300146,
-        "file": null,
-        "type": "image",
-        "order": 51,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-7-1776123300923-5.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123300923-5.png"
-          }
-        ],
-        "layout": "text-right",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123300923-5.png",
-        "fileName": "docx-lesson-7-1776123300923-5.png",
-        "sideTexts": [
-          "<ol style=\"list-style-type: decimal;\"><li><strong>Campus Area Network (CAN)</strong></li></ol>"
-        ],
-        "layerImages": [
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-7-1776123300923-5.png",
-              "caption": "",
-              "fileName": "docx-lesson-7-1776123300923-5.png"
-            }
-          ]
-        ]
-      },
-      {
-        "id": 1776123300147,
-        "file": null,
-        "type": "paragraph",
-        "order": 52,
-        "title": "",
-        "caption": "",
-        "content": "<p>A campus area network, or CAN, is a kind of computer network that links several buildings or facilities in a constrained geographic region, like a military installation, business campus, or university campus. The goal of its architecture is to enable fast communication and data exchange across offices, departments, and campus resources.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300148,
-        "file": null,
-        "type": "subtopic",
-        "order": 53,
-        "title": "Examples of CAN",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300149,
-        "file": null,
-        "type": "paragraph",
-        "order": 54,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Educational Institutions</strong>: Universities and colleges often utilize CANs to interconnect academic buildings, research centers, libraries, and administrative offices. It enables seamless collaboration, access to shared resources, and efficient communication across the campus.<sup>[13]</sup></li><li><strong>Healthcare Campuses</strong>: Hospitals or medical complexes may deploy a CAN to connect different departments, clinics, and healthcare facilities, allowing for streamlined communication and secure sharing of patient data.<sup>[13]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300150,
-        "file": null,
-        "type": "subtopic",
-        "order": 55,
-        "title": "Characteristics of CAN",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300151,
-        "file": null,
-        "type": "paragraph",
-        "order": 56,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Geographical Scope</strong>: CANs cover a limited geographic area, typically within a single campus or a closely grouped set of buildings.<sup>[13]</sup></li><li><strong>High-Speed Connectivity</strong>: CANs enable high-speed data transmission, enabling efficient communication and resource sharing.<sup>[13]</sup></li><li><strong>Wired and Wireless Infrastructure</strong>: CANs may incorporate wired and wireless technologies to connect the buildings and facilitate network access for various devices.<sup>[13]</sup></li><li><strong>Scalability and Flexibility</strong>: CANs allow for easy expansion and adaptation to changing campus needs, making them scalable and flexible.<sup>[13]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300152,
-        "file": null,
-        "type": "subtopic",
-        "order": 57,
-        "title": "Advantages of CAN",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300153,
-        "file": null,
-        "type": "paragraph",
-        "order": 58,
-        "title": "",
-        "caption": "",
-        "content": "<p><strong>High Bandwidth: </strong>CANs often provide high-speed connectivity, allowing for fast data transfer rates and efficient communication within the campus.<sup>[13]</sup></p><p><strong>Resource Sharing: </strong>CAN enables the sharing of network resources, such as servers, printers, and internet connections, across multiple buildings or departments.<sup>[13]</sup></p><p><strong>Centralized Management: </strong>A CAN allows centralized management and control of the network infrastructure, making monitoring and maintaining the network easier.<sup>[13]</sup></p><p><strong>Scalability: </strong>It is easy to expand CANs to meet the growing needs of the campus by adding new buildings or facilities to the network.<sup>[13]</sup></p><p><strong>Enhanced Collaboration:</strong> CAN foster collaboration and information sharing among different departments, offices, and individuals within the campus environment.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300154,
-        "file": null,
-        "type": "subtopic",
-        "order": 59,
-        "title": "Disadvantages of CAN",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300155,
-        "file": null,
-        "type": "paragraph",
-        "order": 60,
-        "title": "",
-        "caption": "",
-        "content": "<p><strong>Cost:</strong> Setting up and maintaining a CAN can be expensive, especially if extensive cabling or advanced networking equipment is required to connect the buildings or facilities.<sup>[13]</sup></p><p><strong>Complex Infrastructure: </strong>CANS can have complex network architectures involving multiple switches, routers, and other networking components, which require expertise to design and manage.<sup>[13]</sup></p><p><strong>Single Point of Failure: </strong>A network failure or disruption in one part of the campus can affect the connectivity and communication of the entire network.<sup>[13]</sup></p><p><strong>Security Concerns:</strong> Securing a CAN is crucial, as unauthorized access to the network can potentially compromise sensitive data or resources shared across the campus.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
       },
       {
         "id": 1776123300160,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 61,
+        "order": 13,
         "title": "",
         "caption": "",
         "content": "",
@@ -876,961 +341,444 @@
         "id": 1776123300161,
         "file": null,
         "type": "topic",
-        "order": 62,
+        "order": 14,
         "title": "Topic 4: Network Components",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776123300162,
+        "id": 1777220247075,
         "file": null,
         "type": "paragraph",
-        "order": 63,
+        "order": 15,
         "title": "",
         "caption": "",
-        "content": "<p>Network components are the essential hardware and devices that enable computers and other digital equipment to communicate and share resources within a network. These components form the physical and logical foundation of data communication systems, allowing information to flow efficiently, reliably, and securely between devices. In modern networking environments, properly selected and configured network components ensure high performance, scalability, and stability.<sup>[14]</sup></p><p>The primary network components include Hubs, Switches, Bridges Routers, Gateways, CSU/DSU, Network interface cards (NICs), ISDN adapters, Wireless access points (WAPs), Modems, Transceivers (media converters), and Firewalls. Each device plays a unique role in managing data flow, directing traffic, and connecting different segments of a network.<sup>[14]</sup></p><p>Understanding these components is fundamental for designing, building, and maintaining efficient networks. Knowledge of how these devices function together helps network administrators optimize performance, enhance security, and troubleshoot connectivity problems. As communication technologies continue to evolve, network components remain critical in supporting business operations, education systems, cloud computing, and global digital communication.<sup>[14]</sup></p>",
+        "content": "<p>Network components are the essential hardware and devices that enable computers and other digital equipment to communicate and share resources within a network. These components form the physical and logical foundation of data communication systems, allowing information to flow efficiently, reliably, and securely between devices. In modern networking environments, properly selected and configured network components ensure high performance, scalability, and stability.[14]</p>\n<p>The primary network components include Hubs, Switches, Bridges Routers, Gateways, CSU/DSU, Network interface cards (NICs), ISDN adapters, Wireless access points (WAPs), Modems, Transceivers (media converters), and Firewalls. Each device plays a unique role in managing data flow, directing traffic, and connecting different segments of a network.[14]</p>\n<p>Understanding these components is fundamental for designing, building, and maintaining efficient networks. Knowledge of how these devices function together helps network administrators optimize performance, enhance security, and troubleshoot connectivity problems. As communication technologies continue to evolve, network components remain critical in supporting business operations, education systems, cloud computing, and global digital communication.[14]</p>\n<p>Network Components:</p>\n<p>A hub is a basic networking device that connects multiple computers or devices in a local area network (LAN). It operates at the physical layer of the OSI model and simply broadcasts data to all connected devices without filtering or directing traffic intelligently.</p>\n<p>A hub is used to connect multiple network devices together within a local area network (LAN). Its primary purpose is to provide a centralized connection point that enables communication between computers, printers, and other network devices. Hubs are typically used in small networks where simplicity and low cost are more important than performance and efficiency.</p>\n<p>Hubs feature multiple Ethernet ports that allow several devices to connect simultaneously. They operate at the physical layer of the OSI model and do not perform data filtering, addressing, or traffic management. Hubs are plug-and-play devices requiring no configuration and support half-duplex communication, meaning data can only travel in one direction at a time.</p>\n<p>The main function of a hub is to receive data from one device and transmit it to all other connected devices. It acts as a signal repeater, regenerating and strengthening signals before forwarding them to ensure data reaches all nodes within the network.</p>",
         "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
-        "id": 1776123300163,
+        "id": 1777220247076,
         "file": null,
-        "type": "subtopic",
-        "order": 64,
+        "type": "image",
+        "order": 16,
         "title": "Network Components",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300164,
-        "file": null,
-        "type": "image",
-        "order": 65,
-        "title": "",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123300955-6.png"
-          }
-        ],
-        "layout": "text-right",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-        "fileName": "docx-lesson-7-1776123300955-6.png",
-        "sideTexts": [
-          "<ol style=\"list-style-type: decimal;\"><li><strong>Hubs</strong></li></ol>"
-        ],
-        "layerImages": [
-          [
-            {
-              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-              "caption": "",
-              "fileName": "docx-lesson-7-1776123300955-6.png"
-            }
-          ]
-        ]
-      },
-      {
-        "id": 1776123300165,
-        "file": null,
-        "type": "paragraph",
-        "order": 66,
-        "title": "",
-        "caption": "",
-        "content": "<p>A hub is a basic networking device that connects multiple computers or devices in a local area network (LAN). It operates at the physical layer of the OSI model and simply broadcasts data to all connected devices without filtering or directing traffic intelligently.</p><p>A hub is used to connect multiple network devices together within a local area network (LAN). Its primary purpose is to provide a centralized connection point that enables communication between computers, printers, and other network devices. Hubs are typically used in small networks where simplicity and low cost are more important than performance and efficiency.</p><p>Hubs feature multiple Ethernet ports that allow several devices to connect simultaneously. They operate at the physical layer of the OSI model and do not perform data filtering, addressing, or traffic management. Hubs are plug-and-play devices requiring no configuration and support half-duplex communication, meaning data can only travel in one direction at a time.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300166,
-        "file": null,
-        "type": "image",
-        "order": 67,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-7-1776123300959-7.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123300959-7.png"
+            "url": "/uploads/lessons/224_network_components_approx.webp",
+            "file": null,
+            "fileName": "224_network_components_approx.webp",
+            "caption": "Network Components"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123300959-7.png",
-        "fileName": "docx-lesson-7-1776123300959-7.png",
+        "content": "/uploads/lessons/224_network_components_approx.webp",
+        "fileName": "224_network_components_approx.webp",
         "sideTexts": [
-          "<p>The main function of a hub is to receive data from one device and transmit it to all other connected devices. It acts as a signal repeater, regenerating and strengthening signals before forwarding them to ensure data reaches all nodes within the network.</p>"
+          "<p><strong>Network Components</strong></p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776123300959-7.png",
-              "caption": "",
-              "fileName": "docx-lesson-7-1776123300959-7.png"
+              "url": "/uploads/lessons/224_network_components_approx.webp",
+              "file": null,
+              "fileName": "224_network_components_approx.webp",
+              "caption": "Network Components"
             }
           ]
         ]
       },
       {
-        "id": 1776123300167,
-        "file": null,
-        "type": "paragraph",
-        "order": 68,
-        "title": "",
-        "caption": "",
-        "content": "<p>When a device sends data to a hub, the hub receives the signal and immediately forwards it to <strong>all connected devices</strong>. It does not analyze, filter, or direct the data to a specific destination. Every connected computer receives the data, but only the intended recipient processes it, while the others discard it. Because all data is broadcast to every port, network collisions and traffic congestion frequently occur.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300168,
-        "file": null,
-        "type": "paragraph",
-        "order": 69,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Switches</strong></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300169,
+        "id": 1777220247077,
         "file": null,
         "type": "image",
-        "order": 70,
-        "title": "",
+        "order": 17,
+        "title": "Hubs feature multiple Ethernet ports that allow several devi",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776123301021-8.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123301021-8.png"
+            "url": "/uploads/lessons/225_hubs_feature_multiple_ethernet_ports_tha.webp",
+            "file": null,
+            "fileName": "225_hubs_feature_multiple_ethernet_ports_tha.webp",
+            "caption": "Hubs feature multiple Ethernet ports that allow several devi"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123301021-8.png",
-        "fileName": "docx-lesson-7-1776123301021-8.png",
+        "content": "/uploads/lessons/225_hubs_feature_multiple_ethernet_ports_tha.webp",
+        "fileName": "225_hubs_feature_multiple_ethernet_ports_tha.webp",
         "sideTexts": [
-          "<p>A switch is a networking device that connects multiple devices within a LAN and forwards data only to the intended recipient. It operates primarily at the data link layer of the OSI model and uses MAC addresses to direct traffic efficiently.</p>"
+          "<p><strong>Hubs feature multiple Ethernet ports that allow several devi</strong></p><p>Hubs feature multiple Ethernet ports that allow several devices to connect…</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776123301021-8.png",
-              "caption": "",
-              "fileName": "docx-lesson-7-1776123301021-8.png"
+              "url": "/uploads/lessons/225_hubs_feature_multiple_ethernet_ports_tha.webp",
+              "file": null,
+              "fileName": "225_hubs_feature_multiple_ethernet_ports_tha.webp",
+              "caption": "Hubs feature multiple Ethernet ports that allow several devi"
             }
           ]
         ]
       },
       {
-        "id": 1776123300170,
-        "file": null,
-        "type": "subtopic",
-        "order": 71,
-        "title": "32-port Ethernet switch",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300171,
-        "file": null,
-        "type": "paragraph",
-        "order": 72,
-        "title": "",
-        "caption": "",
-        "content": "<p>A switch is designed to connect multiple devices within a LAN and provide efficient and intelligent data transmission. Its main purpose is to reduce unnecessary network traffic, prevent collisions, and optimize data flow between devices.</p><p>Switches operate at the data link layer of the OSI model and use MAC address tables to direct data accurately. They support full-duplex communication, VLAN configuration, port security, Quality of Service (QoS), and traffic prioritization. Managed switches also allow configuration, monitoring, and performance tuning.</p><p>Switches identify the source and destination devices, filter network traffic, forward frames selectively, and maintain a forwarding database. They also isolate collision domains, improving speed and reliability.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300172,
+        "id": 1777220247078,
         "file": null,
         "type": "image",
-        "order": 73,
-        "title": "",
+        "order": 18,
+        "title": "Switches",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776123301038-9.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123301038-9.png"
+            "url": "/uploads/lessons/226_switches.webp",
+            "file": null,
+            "fileName": "226_switches.webp",
+            "caption": "Switches"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123301038-9.png",
-        "fileName": "docx-lesson-7-1776123301038-9.png",
+        "content": "/uploads/lessons/226_switches.webp",
+        "fileName": "226_switches.webp",
         "sideTexts": [
-          "<p>A switch receives incoming data and examines the <strong>MAC address</strong> of the destination device. It then looks up this address in its internal forwarding table and sends the data <strong>only to the correct port</strong>. This targeted forwarding minimizes unnecessary traffic, reduces collisions, and significantly improves network efficiency and speed.</p>"
+          "<p><strong>Switches</strong></p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776123301038-9.png",
-              "caption": "",
-              "fileName": "docx-lesson-7-1776123301038-9.png"
+              "url": "/uploads/lessons/226_switches.webp",
+              "file": null,
+              "fileName": "226_switches.webp",
+              "caption": "Switches"
             }
           ]
         ]
       },
       {
-        "id": 1776123300173,
-        "file": null,
-        "type": "paragraph",
-        "order": 74,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Switching Methods</strong></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300174,
-        "file": null,
-        "type": "subtopic",
-        "order": 75,
-        "title": "Switches use three methods to handle incoming data",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300175,
-        "file": null,
-        "type": "paragraph",
-        "order": 76,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Cut-through</strong>: Forwards the packet immediately upon receipt — fast, but no error checking, so errors can propagate.</li><li><strong>Store-and-forward</strong>: Waits for the entire packet before forwarding, and performs error checking — slower but more reliable. Delay grows with packet size.</li><li><strong>Fragment-free</strong>: A middle ground; reads only enough of the packet to identify fragments, improving speed while catching some errors.</li></ol><p><strong><em>Note:</em></strong><em> On average, cut-through is about 30 times faster than store-and-forward, but modern switches are fast enough that store-and-forward is commonly used. Some managed switches let you choose between methods.</em></p><ul style=\"list-style-type: disc;\"><li><strong>Working with Hubs and Switches </strong></li></ul><p>Despite switches being superior, hubs are still found in older networks. Admins should know both devices well — for instance, performance bottlenecks detected by monitoring tools may indicate hubs that need to be replaced with switches, especially in production environments. <em>Latency</em> (the time data takes to travel between points) is a key concept here.</p><ul style=\"list-style-type: disc;\"><li><strong>Hub and Switch Ports</strong></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300176,
-        "file": null,
-        "type": "subtopic",
-        "order": 77,
-        "title": "Hubs and switches have two port types",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300177,
-        "file": null,
-        "type": "paragraph",
-        "order": 78,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>MDI (Medium Dependent Interface)</strong>: Standard port for connecting computers.</li><li><strong>MDI-X (MDI Crossed)</strong>: Has crossed wiring, allowing a simple straight-through cable to be used instead of a crossover cable.</li></ol><p><strong><em>Note:</em></strong><em> Most modern devices include a dedicated </em><strong><em>uplink port</em></strong><em>, which uses a straight-through cable to connect two hubs or switches together. Without an uplink port, you can still link two devices using MDI-X ports, but a </em><strong><em>crossover cable</em></strong><em> is required. Some switches have a button to toggle a port between MDI and MDI-X.</em></p><ul style=\"list-style-type: disc;\"><li><strong>Cables Connecting Hubs and Switches </strong></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300178,
-        "file": null,
-        "type": "subtopic",
-        "order": 79,
-        "title": "Two cable types are used",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300179,
-        "file": null,
-        "type": "paragraph",
-        "order": 80,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Straight-through cable: </strong>All wires run directly from one end to the other — used to connect computers to hubs/switches.</li><li><strong>Crossover cable: </strong>Wires 1 &amp; 3 and Wires 2 &amp; 6 are crossed — used to directly connect two hubs or switches without an uplink port.</li></ol><ul style=\"list-style-type: disc;\"><li><strong>Hub and Switch Indicator Lights</strong></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300180,
-        "file": null,
-        "type": "subtopic",
-        "order": 81,
-        "title": "Hubs and switches use LEDs to show connection status. Common indicators include",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300181,
-        "file": null,
-        "type": "paragraph",
-        "order": 82,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Link light</strong>: Shows a live connection exists.</li><li><strong>Activity light</strong>: Flickers to show traffic.</li><li><strong>Speed/duplex lights</strong>: Indicate connection speed and whether it's half- or full-duplex (on higher-end devices).</li></ol><p><strong><em>Note: </em></strong><em>Some devices use dual-color LEDs to combine functions.</em></p><ul style=\"list-style-type: disc;\"><li><strong>Rack-Mount, Stackable, and Freestanding Devices</strong></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300182,
-        "file": null,
-        "type": "subtopic",
-        "order": 83,
-        "title": "Networking devices come in three physical form factors",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300183,
-        "file": null,
-        "type": "paragraph",
-        "order": 84,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Rack-mount</strong>: Designed for 19-inch equipment racks, common in server rooms; mounted with metal brackets.</li><li><strong>Stackable</strong>: Can be physically stacked on top of one another, suitable for environments without racks.</li><li><strong>Freestanding</strong>: Similar to stackable; many manufacturers make devices usable in either rack or freestanding configurations.</li></ol><ul style=\"list-style-type: disc;\"><li><strong>Managed Hubs and Switches</strong></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300184,
-        "file": null,
-        "type": "subtopic",
-        "order": 85,
-        "title": "Both hubs and switches come in managed and unmanaged versions",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300185,
-        "file": null,
-        "type": "paragraph",
-        "order": 86,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Managed devices</strong> have a configuration interface that enables advanced features like <strong>port mirroring</strong> (useful for network monitoring) and manual speed settings — but cost significantly more.</li><li><strong>Unmanaged devices</strong> are simpler and cheaper, generally sufficient for client-side connections.</li><li><strong>Bridges Routers</strong></li></ol><p>A bridge is a network device used to divide a large network into smaller segments to improve performance and reduce traffic congestion. It operates at the data link layer and filters data using MAC addresses.</p><p>A bridge is used to divide large networks into smaller, manageable segments. Its purpose is to reduce traffic congestion, minimize collisions, and enhance network performance by limiting unnecessary data flow between segments.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300186,
+        "id": 1777220247079,
         "file": null,
         "type": "image",
-        "order": 87,
-        "title": "",
+        "order": 19,
+        "title": "Switches identify the source and destination devices",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776123301106-10.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123301106-10.png"
+            "url": "/uploads/lessons/227_switches_identify_the_source_and_destina.webp",
+            "file": null,
+            "fileName": "227_switches_identify_the_source_and_destina.webp",
+            "caption": "Switches identify the source and destination devices"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123301106-10.png",
-        "fileName": "docx-lesson-7-1776123301106-10.png",
+        "content": "/uploads/lessons/227_switches_identify_the_source_and_destina.webp",
+        "fileName": "227_switches_identify_the_source_and_destina.webp",
         "sideTexts": [
-          "<p>Bridges analyze incoming frames, filter traffic, and forward data selectively. They manage traffic flow and isolate collision domains, improving overall network efficiency.</p>"
+          "<p><strong>Switches identify the source and destination devices</strong></p><p>Switches identify the source and destination devices, filter network traffic,…</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776123301106-10.png",
-              "caption": "",
-              "fileName": "docx-lesson-7-1776123301106-10.png"
+              "url": "/uploads/lessons/227_switches_identify_the_source_and_destina.webp",
+              "file": null,
+              "fileName": "227_switches_identify_the_source_and_destina.webp",
+              "caption": "Switches identify the source and destination devices"
             }
           ]
         ]
       },
       {
-        "id": 1776123300187,
-        "file": null,
-        "type": "paragraph",
-        "order": 88,
-        "title": "",
-        "caption": "",
-        "content": "<p>A bridge monitors incoming data frames and checks the <strong>destination MAC address</strong>. If the destination is within the same network segment, the bridge blocks the data from crossing. If the destination is on another segment, the bridge forwards it. This selective forwarding reduces traffic congestion and improves overall network performance.</p><ul style=\"list-style-type: disc;\"><li><strong>Types of Bridges</strong></li></ul><p>There are three types of bridges, noting that detailed knowledge of each isn't required, but a general overview is expected: </p><ol style=\"list-style-type: decimal;\"><li><strong>Transparent Bridge</strong> The most common type. A transparent bridge is completely invisible to the rest of the network — other devices have no awareness it exists. It simply blocks or forwards data based on MAC addresses without any involvement from the connected systems. Because of its simplicity and wide adoption, this is by far the dominant bridge type in Ethernet networks.</li><li><strong>Translational Bridge</strong> Translational bridges convert data from one networking system to another — for example, between <strong>Ethernet and Token Ring</strong> networks. Depending on the direction of travel, the bridge adds or removes fields from the data frame as needed to make it compatible with the destination network type.</li><li><strong>Source-Route Bridge</strong> Developed by <strong>IBM</strong> specifically for <strong>Token Ring</strong> networks. In source-route bridging, the entire route a frame should take is embedded <em>within the frame itself</em>, allowing the bridge to make precise forwarding decisions. Because Token Ring has fallen out of widespread use, source-route bridges are rarely encountered in modern networking.</li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300188,
-        "file": null,
-        "type": "subtopic",
-        "order": 89,
-        "title": "Routers",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300189,
-        "file": null,
-        "type": "paragraph",
-        "order": 90,
-        "title": "",
-        "caption": "",
-        "content": "<p>Routers are devices that direct (route) data across networks by examining incoming data, identifying its destination address, and using <strong>routing tables</strong> to determine the best path forward. Unlike bridges and switches — which rely on hardware-embedded <strong>MAC addresses</strong> — routers use <strong>software-configured network addresses</strong>, making them more flexible and capable, but also more complex.</p><p>A router requires <strong>at least two network interfaces</strong> to function. These can be LAN-to-LAN interfaces or, more commonly, a combination of LAN and <strong>WAN (Wide Area Network)</strong> ports. For example, a router might have two LAN ports (AUI) and two WAN ports (Serial), enabling it to manage traffic across both local and wide-area segments simultaneously.</p><ul style=\"list-style-type: disc;\"><li><strong>Routable Protocols and Routing Protocols</strong></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300190,
-        "file": null,
-        "type": "subtopic",
-        "order": 91,
-        "title": "Routers depend on two distinct types of protocols to work",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300191,
-        "file": null,
-        "type": "paragraph",
-        "order": 92,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Routable protocols</strong> — identify devices by their network address and unique device address, allowing data to be directed across networks.</li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300192,
-        "file": null,
-        "type": "subtopic",
-        "order": 93,
-        "title": "Three major routable protocols are covered",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300193,
-        "file": null,
-        "type": "paragraph",
-        "order": 94,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>TCP/IP (Transmission Control Protocol/Internet Protocol)</strong> Developed in the 1970s by the U.S. Department of Defense for WAN use, TCP/IP became the dominant standard for both WANs and LANs due to its flexibility and durability.</li><li><strong>IPX/SPX (Internetwork Packet Exchange/Sequenced Packet Exchange)</strong> Created by Novell for NetWare networks, IPX/SPX was widely used for many years but has since been largely replaced by TCP/IP.</li><li><strong>AppleTalk</strong> A full-featured protocol suite designed for Apple/Macintosh systems, in use since the early 1980s. </li><li><strong>Routing protocols</strong> — allow routers to communicate with each other and share network topology information.</li><li><strong>Distance-Vector Protocols </strong>- With distance-vector protocols, each router shares everything it knows about the network with its <strong>directly connected neighbors</strong> only. Routers don't have a full map of the network — they only know the <strong>next hop</strong> toward a destination.</li></ol><p><strong>Routing loops</strong> are a key problem with distance-vector protocols. They occur when routers keep forwarding a packet back and forth between each other indefinitely — a situation that leads to the <strong>count to infinity</strong> problem, where the hop count keeps incrementing with no resolution.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300194,
-        "file": null,
-        "type": "subtopic",
-        "order": 95,
-        "title": "Two strategies prevent routing loops",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300195,
-        "file": null,
-        "type": "paragraph",
-        "order": 96,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>Split horizon</strong>: A router will not advertise a route back on the interface from which it originally learned that route — since the neighboring router must already know about it.</li><li><strong>Split horizon with poison reverse (poison reverse)</strong>: The router <em>does</em> advertise routes back on the interface they were learned from, but assigns them an <strong>infinite hop count</strong>, effectively saying \"I know this route exists, but I can't reach it.\" This discourages the neighbor from trying to route through this router to reach that destination.<ol style=\"list-style-type: decimal;\"><li><strong>Link-State Protocols</strong> — Routers using link-state protocols build and maintain a <strong>complete map of the entire network</strong> in memory, rather than relying on neighbor-by-neighbor updates. </li></ol></li><li><strong>Dedicated Hardware Versus Server-Based Routers</strong></li></ul><p>A router can be a dedicated hardware device or a server system with multiple network interfaces. While dedicated hardware routers provide superior performance, they offer fewer features for their price compared to server-based solutions. Nonetheless, the benefits of dedicated hardware often outweigh these limitations.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300196,
-        "file": null,
-        "type": "subtopic",
-        "order": 97,
-        "title": "The following are some of the advantages of dedicated hardware routers",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300197,
-        "file": null,
-        "type": "paragraph",
-        "order": 98,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>Typically faster than server-based routers</li><li>Generally more reliable than server-based routers</li><li>Easier to harden against attacks than server-based routing solutions </li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300198,
-        "file": null,
-        "type": "subtopic",
-        "order": 99,
-        "title": "The following are some of the disadvantages of dedicated hardware routers",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300199,
-        "file": null,
-        "type": "paragraph",
-        "order": 100,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>More expensive than server-based router solutions; extra functionality may have to be purchased</li><li>Often require specialized skills and knowledge to manage them</li><li>Limited to a small range of possible uses</li></ul><p>The qualities of a router determine its capabilities. A simple router can only route one protocol between two identical network interfaces. A more advanced router could serve as a gateway between two protocols and two networks. Furthermore, it might provide firewall services, either remote access features like virtual private networking or security and authentication.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300200,
-        "file": null,
-        "type": "paragraph",
-        "order": 101,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Gateways</strong></li></ol><p>A gateway is a network device that connects networks using different communication protocols. It performs data translation and enables communication between incompatible systems.</p><p>A gateway enables communication between networks that use different protocols, architectures, or data formats. Its purpose is to provide protocol translation and ensure compatibility between diverse systems.</p><p>Gateways support protocol conversion, data translation, message formatting, and traffic routing. They are commonly used in enterprise networks, IoT systems, and cloud computing environments.</p><p>Gateways convert data formats, manage communication sessions, translate protocols, and route traffic between incompatible networks.</p><p>A gateway receives data from one network and <strong>translates it into a compatible format or protocol</strong> for the destination network. After converting the data, it forwards it to the receiving system. This process enables communication between networks that use different architectures, protocols, or data formats.</p><p>A practical example of a gateway in action is the <strong>SNA (Systems Network Architecture) gateway</strong>, which translates data between a PC-based network and an IBM mainframe or minicomputer. As illustrated in the figure below, the server acting as the SNA gateway sits between the client PCs — connected through a hub — and the mainframe. It intercepts requests from the client side, translates them into the data format the mainframe understands, and then does the reverse for replies coming back from the mainframe. This bidirectional translation is the defining characteristic of any gateway: it does not change the underlying data itself, but converts the <strong>format</strong> in which that data is packaged and transmitted, making seamless communication possible between two otherwise incompatible systems.</p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300201,
+        "id": 1777220247080,
         "file": null,
         "type": "image",
-        "order": 102,
-        "title": "",
+        "order": 20,
+        "title": "A bridge is",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123300955-6.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-        "fileName": "docx-lesson-7-1776123300955-6.png"
-      },
-      {
-        "id": 1776123300202,
-        "file": null,
-        "type": "paragraph",
-        "order": 103,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Channel Service Unit/Data Service Unit (CSU/DSU)</strong></li></ol><p>A CSU/DSU is a digital interface device used to connect a router to a digital communication line such as a leased line provided by a telecommunications company.<sup>[13]</sup></p><p>A CSU/DSU provides an interface between a router and a digital telecommunications service. Its purpose is to ensure proper digital signal transmission across wide-area network (WAN) circuits.<sup>[13]</sup></p><p>CSU/DSUs offer line conditioning, signal timing, diagnostic testing, and error detection. They provide loopback testing and network performance monitoring.<sup>[13]</sup></p><p>They convert digital signals, manage timing synchronization, perform diagnostics, and maintain signal integrity between customer equipment and service provider networks.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300203,
-        "file": null,
-        "type": "image",
-        "order": 104,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123300955-6.png"
+            "url": "/uploads/lessons/228_a_bridge_is_used_to_divide_large_network.webp",
+            "file": null,
+            "fileName": "228_a_bridge_is_used_to_divide_large_network.webp",
+            "caption": "A bridge is"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-        "fileName": "docx-lesson-7-1776123300955-6.png",
+        "content": "/uploads/lessons/228_a_bridge_is_used_to_divide_large_network.webp",
+        "fileName": "228_a_bridge_is_used_to_divide_large_network.webp",
         "sideTexts": [
-          "<p>A CSU/DSU connects a router to a digital telecommunication line. It <strong>converts digital data from the router into a format suitable for transmission over wide-area network circuits</strong>. When data is received, the CSU/DSU converts it back into a format the router can understand, ensuring proper synchronization and signal integrity.<sup>[13]</sup></p>"
+          "<p><strong>A bridge is</strong></p><p>A bridge is used to divide large networks into smaller, manageable segments.…</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-              "caption": "",
-              "fileName": "docx-lesson-7-1776123300955-6.png"
+              "url": "/uploads/lessons/228_a_bridge_is_used_to_divide_large_network.webp",
+              "file": null,
+              "fileName": "228_a_bridge_is_used_to_divide_large_network.webp",
+              "caption": "A bridge is"
             }
           ]
         ]
       },
       {
-        "id": 1776123300204,
-        "file": null,
-        "type": "paragraph",
-        "order": 105,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Network interface cards (NICs)</strong></li></ol><p>A Network Interface Card (NIC) is a hardware component that enables a computer or device to connect to a network. NICs’ purpose is to enable devices to connect to a network and manage data communication. They support various speeds, wired and wireless connections, MAC addressing, and error detection. And NICs convert data signals, manage transmission protocols, and control network access.<sup>[13]</sup></p><p>A NIC converts digital data from a computer into <strong>electrical or radio signals</strong> for transmission over network cables or wireless links. When data is received, the NIC converts incoming signals back into digital data that the computer can process. It also manages data framing, error checking, and addressing.<sup>[13]</sup></p><ul style=\"list-style-type: disc;\"><li><strong>Types of Network Interfaces:</strong></li></ul><ol style=\"list-style-type: decimal;\"><li><strong>Add-in Expansion Cards (NICs) -</strong> The most common form — a card that slots into a PCI expansion slot on the motherboard. These are the standard choice for desktop computers and servers.<sup>[13][Image-15]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300205,
+        "id": 1777220247081,
         "file": null,
         "type": "image",
-        "order": 106,
-        "title": "",
+        "order": 21,
+        "title": "A practical example of a gateway in action is the SNA (Syste",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776123301822-11.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123301822-11.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123301822-11.png",
-        "fileName": "docx-lesson-7-1776123301822-11.png"
-      },
-      {
-        "id": 1776123300206,
-        "file": null,
-        "type": "image",
-        "order": 107,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-7-1776123301826-12.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123301826-12.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123301826-12.png",
-        "fileName": "docx-lesson-7-1776123301826-12.png"
-      },
-      {
-        "id": 1776123300207,
-        "file": null,
-        "type": "paragraph",
-        "order": 108,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>PCMCIA Network Cards -</strong> Designed specifically for <strong>laptop computers</strong>, PCMCIA cards (also called PC Cards) slide into a slot on the side of a laptop. They are thin, portable, and often come with a small <strong>media adapter dongle</strong> that plugs into the card and provides the actual network port (RJ-45). Indicator LEDs on PCMCIA cards are sometimes absent or built into the media adapter itself rather than the card.<sup>[13][Image-16]</sup></li></ol>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300208,
-        "file": null,
-        "type": "image",
-        "order": 109,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-7-1776123301830-13.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123301830-13.png"
-          }
-        ],
-        "layout": "single",
-        "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123301830-13.png",
-        "fileName": "docx-lesson-7-1776123301830-13.png"
-      },
-      {
-        "id": 1776123300209,
-        "file": null,
-        "type": "paragraph",
-        "order": 110,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Built-in (Embedded) Network Interface -</strong> In many modern systems — especially laptops — the network interface is <strong>integrated directly into the motherboard</strong>, eliminating the need for a separate card. While this saves an expansion slot and virtually guarantees hardware compatibility, the downside is that it <strong>cannot be upgraded</strong>. If a built-in interface needs to be replaced or upgraded, you would install an add-in NIC and then <strong>disable the on-board interface</strong> — typically through the system's BIOS setup screen or a system configuration utility.<sup>[13]</sup></li></ol><ul style=\"list-style-type: disc;\"><li><strong>NIC Indicator Lights</strong></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300210,
-        "file": null,
-        "type": "subtopic",
-        "order": 111,
-        "title": "Regardless of form factor, a NIC typically has at least two LEDs",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300211,
-        "file": null,
-        "type": "paragraph",
-        "order": 112,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Link light</strong> — Indicates whether a live network connection exists between the card and the network. If unlit, something is wrong with the cable or connection.<sup>[13]</sup></li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Activity light</strong> — Flickers to show network traffic. Constant flickering may indicate either a very busy network or a network problem worth investigating.<sup>[13]</sup></li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Speed light</strong> — Found on some 10/100Mbps Ethernet NICs; indicates the speed at which the connection is operating.<sup>[13]</sup></li></ul><p><strong><em>Note: </em></strong><em>Some cards combine multiple functions into </em><strong><em>dual-color LEDs</em></strong><em> to save space. PCMCIA cards may have no lights at all, or lights may be incorporated into the media adapter.</em><sup>[13]</sup></p><ul style=\"list-style-type: disc;\"><li><strong>Installing Network Cards</strong></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300212,
-        "file": null,
-        "type": "subtopic",
-        "order": 113,
-        "title": "When installing a NIC, several important considerations apply",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300213,
-        "file": null,
-        "type": "paragraph",
-        "order": 114,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li><strong>ESD (Electrostatic Discharge) -</strong> The chapter includes an Exam Alert emphasizing that <strong>ESD precautions are critical</strong> when handling any internal component. ESD can cause immediate failure or gradual degradation. Proper precautions include wearing an <strong>anti-static wrist strap</strong> and properly grounding yourself before touching any hardware.<sup>[13]</sup></li><li><strong>Drivers -</strong> Almost every NIC ships with a driver disk, but the included drivers are rarely the most current version. You should always <strong>visit the NIC manufacturer's website</strong> to download the latest drivers before installation, as drivers are essential to the card functioning correctly.<sup>[13]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300214,
-        "file": null,
-        "type": "subtopic",
-        "order": 115,
-        "title": "NIC Configuration Utilities Older NICs were configured using",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300215,
-        "file": null,
-        "type": "image",
-        "order": 116,
-        "title": "",
-        "images": [
-          {
-            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123300955-6.png"
+            "url": "/uploads/lessons/229_a_practical_example_of_a_gateway_in_acti_approx.webp",
+            "file": null,
+            "fileName": "229_a_practical_example_of_a_gateway_in_acti_approx.webp",
+            "caption": "A practical example of a gateway in action is the SNA (Syste"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-        "fileName": "docx-lesson-7-1776123300955-6.png",
+        "content": "/uploads/lessons/229_a_practical_example_of_a_gateway_in_acti_approx.webp",
+        "fileName": "229_a_practical_example_of_a_gateway_in_acti_approx.webp",
         "sideTexts": [
-          "<ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Jumpers</strong> — small groups of pins on the card that you physically connect or disconnect to set configuration options.<sup>[13]</sup></li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>DIP switches</strong> — small plastic blocks of switches used similarly to jumpers.<sup>[13]</sup></li></ul>"
+          "<p><strong>A practical example of a gateway in action is the SNA (Syste</strong></p><p>A practical example of a gateway in action is the SNA (Systems Network…</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-              "caption": "",
-              "fileName": "docx-lesson-7-1776123300955-6.png"
+              "url": "/uploads/lessons/229_a_practical_example_of_a_gateway_in_acti_approx.webp",
+              "file": null,
+              "fileName": "229_a_practical_example_of_a_gateway_in_acti_approx.webp",
+              "caption": "A practical example of a gateway in action is the SNA (Syste"
             }
           ]
         ]
       },
       {
-        "id": 1776123300216,
-        "file": null,
-        "type": "paragraph",
-        "order": 117,
-        "title": "",
-        "caption": "",
-        "content": "<p>Both methods have been largely replaced by <strong>software configuration utilities</strong>, which allow you to configure card settings, test whether the card is working, and access statistical and diagnostic information through the operating system — a far more convenient and user-friendly approach.<sup>[13]</sup></p><p><strong>Physical Slot Availability</strong> Before purchasing or installing a NIC, confirm that a free expansion slot is actually available in the system. Modern PCs typically have three or four usable slots, and the trend toward <strong>component integration on the motherboard</strong> (built-in audio, serial/parallel ports, etc.) means slots are less likely to be occupied. However, on older or heavily expanded systems, slots may be scarce.<sup>[13]</sup></p><p><strong>Built-in Network Interfaces</strong> As noted above, if a system has a built-in NIC that needs to be replaced or supplemented, you must <strong>disable the on-board interface</strong> to avoid conflicts. This is typically done through the <strong>BIOS setup screen</strong> or a system configuration utility — consult the system documentation or manufacturer's website for the specific steps.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300217,
-        "file": null,
-        "type": "paragraph",
-        "order": 118,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>ISDN adapters</strong></li></ol><p>An ISDN adapter is a device that connects computers and networks to Integrated Services Digital Network (ISDN) communication lines. ISDN adapters provide digital voice and data connectivity using telephone networks. They support digital transmission, simultaneous voice and data communication, and improved reliability. They convert digital data into ISDN-compatible signals and manage communication sessions. <sup>[13]</sup></p><p>An ISDN adapter converts digital data from a computer into <strong>ISDN-compatible digital signals</strong> for transmission over telephone networks. It also receives incoming digital signals and converts them into usable computer data, allowing fast and stable voice and data communication.<sup>[13]</sup></p><p>ISDN adapters are available in two main physical forms — <strong>external</strong> and <strong>internal</strong> — each suited to different installation needs and environments.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300218,
+        "id": 1777220247082,
         "file": null,
         "type": "image",
-        "order": 119,
-        "title": "",
+        "order": 22,
+        "title": "Add-in Expansion Cards (NICs)",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123300955-6.png"
+            "url": "/uploads/lessons/231_add_in_expansion_cards_nics_the_most_com.webp",
+            "file": null,
+            "fileName": "231_add_in_expansion_cards_nics_the_most_com.webp",
+            "caption": "Add-in Expansion Cards (NICs)"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-        "fileName": "docx-lesson-7-1776123300955-6.png",
+        "content": "/uploads/lessons/231_add_in_expansion_cards_nics_the_most_com.webp",
+        "fileName": "231_add_in_expansion_cards_nics_the_most_com.webp",
         "sideTexts": [
-          "<p><strong>External ISDN adapters<sup>[image-17]</sup></strong> are standalone devices that connect to a computer through a serial port, making them straightforward to install and easy to move between systems. Because they use the serial port's existing resources, no internal configuration is required. They are similar in concept to an external modem, but instead of converting between digital and analog signals like a modem does, an ISDN terminal adapter translates between two different <strong>digital</strong> formats.<sup>[13]</sup></p>"
+          "<p><strong>Add-in Expansion Cards (NICs)</strong></p><p>Add-in Expansion Cards (NICs) - The most common form — a card that slots into a…</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-              "caption": "",
-              "fileName": "docx-lesson-7-1776123300955-6.png"
+              "url": "/uploads/lessons/231_add_in_expansion_cards_nics_the_most_com.webp",
+              "file": null,
+              "fileName": "231_add_in_expansion_cards_nics_the_most_com.webp",
+              "caption": "Add-in Expansion Cards (NICs)"
             }
           ]
         ]
       },
       {
-        "id": 1776123300219,
+        "id": 1777220247083,
         "file": null,
         "type": "image",
-        "order": 120,
-        "title": "",
+        "order": 23,
+        "title": "PCMCIA Network Cards",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123300955-6.png"
+            "url": "/uploads/lessons/232_pcmcia_network_cards_designed_specifical.webp",
+            "file": null,
+            "fileName": "232_pcmcia_network_cards_designed_specifical.webp",
+            "caption": "PCMCIA Network Cards"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-        "fileName": "docx-lesson-7-1776123300955-6.png",
+        "content": "/uploads/lessons/232_pcmcia_network_cards_designed_specifical.webp",
+        "fileName": "232_pcmcia_network_cards_designed_specifical.webp",
         "sideTexts": [
-          "<p><strong>Internal ISDN adapters<sup>[image-18]</sup></strong> are installed directly inside a computer as an expansion card, fitting into an available slot on the motherboard — much like a standard NIC in appearance. While they require a bit more effort to install, they are a cleaner and more permanent solution. When installing an internal adapter, you must ensure that both physical slot space and logical system resources (such as IRQ and memory addresses) are available. As with any adapter, downloading the latest drivers from the manufacturer's website before installation is strongly recommended.<sup>[13]</sup></p>"
+          "<p><strong>PCMCIA Network Cards</strong></p><p>PCMCIA Network Cards - Designed specifically for laptop computers, PCMCIA cards…</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-              "caption": "",
-              "fileName": "docx-lesson-7-1776123300955-6.png"
+              "url": "/uploads/lessons/232_pcmcia_network_cards_designed_specifical.webp",
+              "file": null,
+              "fileName": "232_pcmcia_network_cards_designed_specifical.webp",
+              "caption": "PCMCIA Network Cards"
             }
           ]
         ]
       },
       {
-        "id": 1776123300220,
-        "file": null,
-        "type": "paragraph",
-        "order": 121,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Wireless access points (WAPs)</strong></li></ol><p>A Wireless Access Point (WAP) is a device that allows wireless devices to connect to a wired network using Wi-Fi signals. WAPs' purpose is to provide wireless network access and extend coverage for mobile devices. They allow users to connect without physical cables. They transmit and receive wireless signals, manage device connections, authenticate users, and forward data between wired and wireless networks.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300221,
+        "id": 1777220247084,
         "file": null,
         "type": "image",
-        "order": 122,
-        "title": "",
+        "order": 24,
+        "title": "Jumpers — small groups of pins on the card that you physical",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123300955-6.png"
+            "url": "/uploads/lessons/234_jumpers_small_groups_of_pins_on_the_card_approx.webp",
+            "file": null,
+            "fileName": "234_jumpers_small_groups_of_pins_on_the_card_approx.webp",
+            "caption": "Jumpers — small groups of pins on the card that you physical"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-        "fileName": "docx-lesson-7-1776123300955-6.png",
+        "content": "/uploads/lessons/234_jumpers_small_groups_of_pins_on_the_card_approx.webp",
+        "fileName": "234_jumpers_small_groups_of_pins_on_the_card_approx.webp",
         "sideTexts": [
-          "<p>A wireless access point receives data from a wired network and <strong>transmits it as radio signals. </strong>Wireless devices such as laptops and smartphones receive these signals and send responses back through the same radio channel. The WAP converts these wireless signals back into wired network data, enabling seamless wireless communication.<sup>[13]</sup></p>"
+          "<p><strong>Jumpers — small groups of pins on the card that you physical</strong></p><p>Jumpers — small groups of pins on the card that you physically connect or…</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-              "caption": "",
-              "fileName": "docx-lesson-7-1776123300955-6.png"
+              "url": "/uploads/lessons/234_jumpers_small_groups_of_pins_on_the_card_approx.webp",
+              "file": null,
+              "fileName": "234_jumpers_small_groups_of_pins_on_the_card_approx.webp",
+              "caption": "Jumpers — small groups of pins on the card that you physical"
             }
           ]
         ]
       },
       {
-        "id": 1776123300222,
-        "file": null,
-        "type": "paragraph",
-        "order": 123,
-        "title": "",
-        "caption": "",
-        "content": "<p>A WAP serves as the critical bridge between the wireless and wired portions of a network. As shown in figure below, a WAP is typically connected directly into a wired Ethernet LAN<sup>[image-19]</sup>, acting as the entry and exit point for all wireless traffic. This allows wireless client devices — such as laptops, smartphones, and tablets — to access the same network resources as devices connected through physical cables, without any wired connection of their own.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300223,
+        "id": 1777220247085,
         "file": null,
         "type": "image",
-        "order": 124,
-        "title": "",
+        "order": 25,
+        "title": "ISDN adapters are available in two main physical forms — ext",
         "images": [
           {
-            "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-            "caption": "",
-            "fileName": "docx-lesson-7-1776123300955-6.png"
+            "url": "/uploads/lessons/235_isdn_adapters_are_available_in_two_main__approx.webp",
+            "file": null,
+            "fileName": "235_isdn_adapters_are_available_in_two_main__approx.webp",
+            "caption": "ISDN adapters are available in two main physical forms — ext"
           }
         ],
         "layout": "text-left",
         "caption": "",
-        "content": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-        "fileName": "docx-lesson-7-1776123300955-6.png",
+        "content": "/uploads/lessons/235_isdn_adapters_are_available_in_two_main__approx.webp",
+        "fileName": "235_isdn_adapters_are_available_in_two_main__approx.webp",
         "sideTexts": [
-          "<p>In practice, WAPs operate using an <strong>infrastructure mode<sup>[image-20]</sup></strong> wireless network design, as illustrated in figure below. In this setup, all wireless client devices communicate through the WAP rather than directly with each other. The WAP receives transmissions from wireless devices within its coverage range and forwards those signals onto the broader network — whether that is a private internal Ethernet network or the Internet. Depending on the size of the area to be covered, a deployment may use a <strong>single WAP</strong> for a small location such as a home or small office, or <strong>multiple WAPs</strong> for larger environments such as office buildings or campuses, where extended range and greater client capacity are required.<sup>[13]</sup></p>"
+          "<p><strong>ISDN adapters are available in two main physical forms — ext</strong></p><p>ISDN adapters are available in two main physical forms — external and…</p>"
         ],
         "layerImages": [
           [
             {
-              "url": "/uploads/lessons/docx-lesson-7-1776123300955-6.png",
-              "caption": "",
-              "fileName": "docx-lesson-7-1776123300955-6.png"
+              "url": "/uploads/lessons/235_isdn_adapters_are_available_in_two_main__approx.webp",
+              "file": null,
+              "fileName": "235_isdn_adapters_are_available_in_two_main__approx.webp",
+              "caption": "ISDN adapters are available in two main physical forms — ext"
             }
           ]
         ]
       },
       {
-        "id": 1776123300224,
+        "id": 1777220247086,
         "file": null,
-        "type": "paragraph",
-        "order": 125,
-        "title": "",
+        "type": "image",
+        "order": 26,
+        "title": "External ISDN adapters[image-17] are standalone devices that",
+        "images": [
+          {
+            "url": "/uploads/lessons/236_external_isdn_adapters_image_17_are_stan.webp",
+            "file": null,
+            "fileName": "236_external_isdn_adapters_image_17_are_stan.webp",
+            "caption": "External ISDN adapters[image-17] are standalone devices that"
+          }
+        ],
+        "layout": "text-left",
         "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li><strong>Modems</strong></li></ol><p>A modem (modulator-demodulator) is a device that converts digital data into analog signals for transmission over communication lines and converts received analog signals back into digital form. Modems provide internet connectivity by converting digital signals into analog form and vice versa. They support multiple connection technologies such as DSL, cable, fiber, and cellular networks, offering varying speeds and performance levels. It also modulates and demodulates signals, manages connection stability, and supports error correction.<sup>[13]</sup></p><p>A modem converts outgoing <strong>digital signals into analog signals</strong> suitable for transmission over telephone, cable, or fiber lines. When incoming signals are received, the modem converts them back into digital form. This modulation and demodulation process allows computers to communicate over long-distance communication lines.<sup>[13]</sup></p><ol style=\"list-style-type: decimal;\"><li><strong>Transceivers (media converters)</strong></li></ol><p>A transceiver is a device that both transmits and receives signals in a network communication system. Transceivers’ purpose is to enable two-way communication by transmitting and receiving signals.They support electrical, optical, and wireless communication technologies. And they convert data formats and manage signal transmission and reception.<sup>[13]</sup></p><p>A transceiver both <strong>transmits and receives signals</strong> by converting data into electrical, optical, or radio signals for transmission. When signals arrive, it converts them back into usable data. This dual function allows seamless two-way communication in wired, fiber-optic, and wireless networks.<sup>[13]</sup></p><ol style=\"list-style-type: decimal;\"><li><strong>Firewalls.</strong></li></ol><p>A firewall is a network security device that monitors, filters, and controls incoming and outgoing network traffic based on predefined security rules. Firewalls’ purpose is to protect networks from unauthorized access and cyber threats. They provide traffic filtering, intrusion detection, logging, access control, and policy enforcement. And they inspect packets, block malicious traffic, and enforce security rules.<sup>[13]</sup></p><p>A firewall examines all incoming and outgoing network traffic and <strong>applies security rules</strong> to decide whether to allow or block each data packet. It filters traffic based on IP addresses, ports, protocols, and content, protecting the network from unauthorized access, malware, and cyberattacks.<sup>[13]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
+        "content": "/uploads/lessons/236_external_isdn_adapters_image_17_are_stan.webp",
+        "fileName": "236_external_isdn_adapters_image_17_are_stan.webp",
+        "sideTexts": [
+          "<p><strong>External ISDN adapters[image-17] are standalone devices that</strong></p><p>External ISDN adapters[image-17] are standalone devices that connect to a…</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/236_external_isdn_adapters_image_17_are_stan.webp",
+              "file": null,
+              "fileName": "236_external_isdn_adapters_image_17_are_stan.webp",
+              "caption": "External ISDN adapters[image-17] are standalone devices that"
+            }
+          ]
+        ]
+      },
+      {
+        "id": 1777220247087,
+        "file": null,
+        "type": "image",
+        "order": 27,
+        "title": "A Wireless Access Point (WAP) is a device that allows wirele",
+        "images": [
+          {
+            "url": "/uploads/lessons/237_a_wireless_access_point_wap_is_a_device_.webp",
+            "file": null,
+            "fileName": "237_a_wireless_access_point_wap_is_a_device_.webp",
+            "caption": "A Wireless Access Point (WAP) is a device that allows wirele"
+          }
+        ],
+        "layout": "text-left",
+        "caption": "",
+        "content": "/uploads/lessons/237_a_wireless_access_point_wap_is_a_device_.webp",
+        "fileName": "237_a_wireless_access_point_wap_is_a_device_.webp",
+        "sideTexts": [
+          "<p><strong>A Wireless Access Point (WAP) is a device that allows wirele</strong></p><p>A Wireless Access Point (WAP) is a device that allows wireless devices to…</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/237_a_wireless_access_point_wap_is_a_device_.webp",
+              "file": null,
+              "fileName": "237_a_wireless_access_point_wap_is_a_device_.webp",
+              "caption": "A Wireless Access Point (WAP) is a device that allows wirele"
+            }
+          ]
+        ]
+      },
+      {
+        "id": 1777220247088,
+        "file": null,
+        "type": "image",
+        "order": 28,
+        "title": "A WAP serves as the critical bridge between the wireless and",
+        "images": [
+          {
+            "url": "/uploads/lessons/238_a_wap_serves_as_the_critical_bridge_betw.webp",
+            "file": null,
+            "fileName": "238_a_wap_serves_as_the_critical_bridge_betw.webp",
+            "caption": "A WAP serves as the critical bridge between the wireless and"
+          }
+        ],
+        "layout": "text-left",
+        "caption": "",
+        "content": "/uploads/lessons/238_a_wap_serves_as_the_critical_bridge_betw.webp",
+        "fileName": "238_a_wap_serves_as_the_critical_bridge_betw.webp",
+        "sideTexts": [
+          "<p><strong>A WAP serves as the critical bridge between the wireless and</strong></p><p>A WAP serves as the critical bridge between the wireless and wired portions of…</p>"
+        ],
+        "layerImages": [
+          [
+            {
+              "url": "/uploads/lessons/238_a_wap_serves_as_the_critical_bridge_betw.webp",
+              "file": null,
+              "fileName": "238_a_wap_serves_as_the_critical_bridge_betw.webp",
+              "caption": "A WAP serves as the critical bridge between the wireless and"
+            }
+          ]
+        ]
       },
       {
         "id": 1776123300231,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 126,
+        "order": 29,
         "title": "",
         "caption": "",
         "content": "",
@@ -1920,51 +868,28 @@
         "id": 1776123300232,
         "file": null,
         "type": "topic",
-        "order": 127,
+        "order": 30,
         "title": "Topic 5: Making an Ethernet Cable",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776123300233,
+        "id": 1777220247089,
         "file": null,
         "type": "paragraph",
-        "order": 128,
+        "order": 31,
         "title": "",
         "caption": "",
-        "content": "<p>\tCreating an Ethernet cable is a fundamental skill in computer networking used to connect devices such as computers, routers, switches, printers, and servers. It is a fundamental part of establishing the most basic connection in a network. An Ethernet cable is a network cable used to connect devices, most commonly within a Local Area Network (LAN). It contains eight copper wires grouped into four twisted pairs. These pairs are twisted together to reduce interference and maintain stable data transmission. Each wire has a specific color, and the order of these colors must follow a standard pattern when attaching the connector. At both ends of the cable, an RJ-45 connector is attached so the cable can plug into network ports. Ethernet cables are commonly used in everyday networking environments where multiple devices need to communicate and share resources, such as:</p><ol style=\"list-style-type: decimal;\"><li>Computer to router</li><li>Computer to switch</li><li>Switch to router</li><li>Computer to computer</li><li>Printer to network</li><li>Access point to switch</li><li><strong>Ethernet Cable Categories</strong></li></ol><p>Ethernet cables are classified into categories depending on their speed and performance. These categories indicate how much data the cable can carry and how well it resists interference. Choosing the correct cable category helps ensure stable connections and supports the required network speed. In today’s standard, Cat5e and Cat6 are the most commonly used in basic networking.Ethernet cable categories include:</p><ol style=\"list-style-type: decimal;\"><li><strong>Cat5</strong> - Older standard, supports up to 100 Mbps</li><li><strong>Cat5e</strong> - Improved Cat5, supports up to 1 Gbps</li><li><strong>Cat6</strong> - Faster speed and less interference</li><li><strong>Cat6a</strong> - Supports higher speeds over longer distances</li><li><strong>Cat7</strong> - Shielded cable with improved performance</li><li><strong>Ethernet Cable Types and Wire Color Coding Standards</strong></li></ol><p>Ethernet cables can be categorized based on how the wires are arranged on both ends. The arrangement of wires determines how devices communicate with each other. Choosing the correct cable type ensures proper signal transmission and prevents connection problems. The two most common types used in basic networking are straight-through and crossover cables.</p><p>A straight-through cable uses the same wiring standard on both ends. This means both ends are either T568A to T568A or T568B to T568B. This type of cable is the most commonly used in networking and is typically used when connecting different types of devices within a network.</p><p>The following color sequence is used when applying the T568A standard, sequenced from left to right:</p><ol style=\"list-style-type: decimal;\"><li>White/Green</li><li>Green</li><li>White/Orange</li><li>Blue</li><li>White/Blue</li><li>Orange</li><li>White/Brown</li><li>Brown</li></ol><p>A crossover cable uses different wiring standards on each end. One end follows T568A and the other follows T568B. This allows similar devices to communicate directly without the need for a switch or router between them. Modern devices often support auto MDI-X, which automatically adjusts the connection, but understanding crossover cables is still important.<strong> </strong>The following color sequence is used when applying the T568B standard, sequenced from left to right:</p><ol style=\"list-style-type: decimal;\"><li>White/Orange</li><li>Orange</li><li>White/Green</li><li>Blue</li><li>White/Blue</li><li>Green</li><li>White/Brown</li><li>Brown</li></ol><ol style=\"list-style-type: decimal;\"><li><strong>RJ Connector Types</strong></li></ol><p>RJ connectors are plastic connectors attached to the ends of network cables. They hold the wires in place and allow the cable to connect to network devices. These connectors differ in size, number of pins, and intended use. Understanding the difference between connector types is important to ensure that the correct connector is used when making Ethernet cables, since using the wrong one may prevent proper connectivity or damage the cable.</p><p>The RJ-45 connector is the standard connector used for Ethernet cables. It has 8 pins that match the eight wires inside the cable. This connector is used in LAN connections and supports high-speed data transmission. RJ-45 connectors are wider than telephone connectors and are designed specifically for networking.</p><p>The RJ-11 connector is smaller and commonly used for telephone lines. It usually has 4 or 6 pins and is not suitable for Ethernet networking. Although it looks similar to RJ-45, it should not be used when making Ethernet cables.</p><ol style=\"list-style-type: decimal;\"><li><strong>Tools Needed in Making an Ethernet Cable</strong></li></ol><p>Creating an Ethernet cable requires specific tools that help prepare the wires, attach connectors, and ensure a secure connection. Using the correct tools makes the process easier and reduces the chances of damaging the cable or connectors.</p><ol style=\"list-style-type: decimal;\"><li>UTP cable (Cat5e, Cat6, etc.)</li><li>RJ-45 connectors</li><li>Crimping tool</li><li>Wire stripper</li><li>Cable cutter</li><li>Cable tester </li><li><strong>Steps in Making an Ethernet Cable</strong></li></ol><p>Following proper steps ensures that the cable is correctly assembled and functions properly. Each step must be performed carefully, especially when arranging the wires and inserting them into the connector, since mistakes can cause network issues.</p>",
+        "content": "<p>Creating an Ethernet cable is a fundamental skill in computer networking used to connect devices such as computers, routers, switches, printers, and servers. It is a fundamental part of establishing the most basic connection in a network. An Ethernet cable is a network cable used to connect devices, most commonly within a Local Area Network (LAN). It contains eight copper wires grouped into four twisted pairs. These pairs are twisted together to reduce interference and maintain stable data transmission. Each wire has a specific color, and the order of these colors must follow a standard pattern when attaching the connector. At both ends of the cable, an RJ-45 connector is attached so the cable can plug into network ports. Ethernet cables are commonly used in everyday networking environments where multiple devices need to communicate and share resources, such as:</p>\n<p>Computer to router</p>\n<p>Computer to switch</p>\n<p>Switch to router</p>\n<p>Computer to computer</p>\n<p>Printer to network</p>\n<p>Access point to switch</p>\n<p>Ethernet Cable Categories</p>",
         "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300234,
-        "file": null,
-        "type": "subtopic",
-        "order": 129,
-        "title": "Follow these steps to properly create an Ethernet cable",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300235,
-        "file": null,
-        "type": "paragraph",
-        "order": 130,
-        "title": "",
-        "caption": "",
-        "content": "<ol style=\"list-style-type: decimal;\"><li>Measure and cut the cable to the desired length.</li><li>Strip about 1 inch of the outer cable jacket.</li><li>Untwist the four pairs of wires.</li><li>Straighten the eight individual wires.</li><li>Arrange the wires according to T568A or T568B.</li><li>Align the wires evenly and trim them to equal length.</li><li>Insert the wires carefully into the RJ-45 connector.</li><li>Make sure each wire reaches the end of the connector.</li><li>Place the connector into the crimping tool.</li><li>Press firmly to crimp the connector.</li><li>Repeat the process for the other end.</li><li>Test the cable using a cable tester.</li></ol><p>When making an Ethernet cable, ensure that the wires are arranged in the correct color order before inserting them into the RJ-45 connector, and verify that all eight wires reach the end of the connector so each pin makes proper contact. When using a crimping tool, insert the RJ-45 connector into the correct slot of the tool, squeeze the handles firmly until the tool fully compresses, and avoid partially crimping since this may cause loose connections or intermittent network issues. After crimping both ends, use a cable tester by plugging one end of the cable into the main tester unit and the other end into the remote unit, then power on the tester to check the sequence of lights. The indicator lights should turn on in order from 1 to 8 (or match the tester’s labeled pattern); if lights are missing, out of order, or not lighting up, the cable may have incorrect wiring, loose pins, or damaged wires and should be rechecked or re-crimped.</p>",
-        "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
         "id": 1776123300240,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 131,
+        "order": 32,
         "title": "",
         "caption": "",
         "content": "",
@@ -2028,293 +953,28 @@
         "id": 1776123300241,
         "file": null,
         "type": "topic",
-        "order": 132,
+        "order": 33,
         "title": "Topic 6: Network Configuration and Setup",
         "caption": "",
         "content": "",
         "fileName": null
       },
       {
-        "id": 1776123300242,
+        "id": 1777220247090,
         "file": null,
         "type": "paragraph",
-        "order": 133,
+        "order": 34,
         "title": "",
         "caption": "",
-        "content": "<p>Network configuration is the process of testing a network to ensure it is fully operable when devices are connected to it, and training those devices to communicate with each other through it.<a href=\"https://thenetworkinstallers.com/blog/network-installation-steps/\"> </a>It is a critical phase that follows the physical installation of hardware, and it is the final step in achieving an efficient, streamlined, and fully integrated network. The basics of network configuration involve setting up and managing various components to ensure efficient data transmission and communication — including assigning IP addresses, configuring subnet masks, setting up routers and switches, establishing network protocols such as TCP/IP, enabling DHCP for automatic IP address assignment, configuring DNS servers for domain name resolution, and implementing security measures like firewalls and encryption.<sup>[21]</sup></p>",
+        "content": "<p>Network configuration is the process of testing a network to ensure it is fully operable when devices are connected to it, and training those devices to communicate with each other through it. It is a critical phase that follows the physical installation of hardware, and it is the final step in achieving an efficient, streamlined, and fully integrated network. The basics of network configuration involve setting up and managing various components to ensure efficient data transmission and communication — including assigning IP addresses, configuring subnet masks, setting up routers and switches, establishing network protocols such as TCP/IP, enabling DHCP for automatic IP address assignment, configuring DNS servers for domain name resolution, and implementing security measures like firewalls and encryption.[21]</p>\n<p>5.1 Planning and Designing the Network</p>\n<p>Before any physical or software configuration begins, careful planning is essential. Before you start, you need to figure out what your network actually has to do. It's also smart to think ahead — will you need more bandwidth in the future? Are there plans for remote teams or new software that could strain your network? Mapping out what you need now and later can help you avoid building a network that's outdated before it's even running.[22]</p>\n<p>To choose the right network, assess the required bandwidth, scalability, security needs, and budget. Consider wired or wireless options based on high reliability, performance, and future technology compatibility. Prioritize network solutions that meet current requirements while accommodating future growth and security concerns within budget constraints.[21]</p>\n<p>Key planning decisions include:</p>\n<p>Network type — choose between wired, Wi-Fi, or a hybrid network based on your security, speed, and flexibility needs.[23]</p>\n<p>Topology — the way the network installation provider sets up your network is called the network topology, which includes how the devices, cables, and ports are arranged.[24]</p>\n<p>Hub location — identifying one or more potential locations for the network hub is a key step. Place the hub strategically in a secure, less accessible area, particularly important if handling sensitive data. Essential network components like servers, routers, and firewalls should be placed here. Ensure this space provides not only security but also adequate ventilation and power supply for the efficiency and longevity of network hardware.[25]</p>",
         "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300243,
-        "file": null,
-        "type": "subtopic",
-        "order": 134,
-        "title": "5.1 Planning and Designing the Network",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300244,
-        "file": null,
-        "type": "paragraph",
-        "order": 135,
-        "title": "",
-        "caption": "",
-        "content": "<p>Before any physical or software configuration begins, careful planning is essential. Before you start, you need to figure out what your network actually has to do. It's also smart to think ahead — will you need more bandwidth in the future? Are there plans for remote teams or new software that could strain your network? Mapping out what you need now and later can help you avoid building a network that's outdated before it's even running.<sup>[22]</sup></p><p>To choose the right network, assess the required bandwidth, scalability, security needs, and budget. Consider wired or wireless options based on high reliability, performance, and future technology compatibility. Prioritize network solutions that meet current requirements while accommodating future growth and security concerns within budget constraints.<sup>[21]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300245,
-        "file": null,
-        "type": "subtopic",
-        "order": 136,
-        "title": "Key planning decisions include",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300246,
-        "file": null,
-        "type": "paragraph",
-        "order": 137,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Network type</strong> — choose between wired, Wi-Fi, or a hybrid network based on your security, speed, and flexibility needs.<sup>[23]</sup></li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Topology</strong> — the way the network installation provider sets up your network is called the network topology, which includes how the devices, cables, and ports are arranged.<sup>[24]</sup></li><li style=\"list-style-type: none; margin: 0.2rem 0;\"><strong>Hub location</strong> — identifying one or more potential locations for the network hub is a key step. Place the hub strategically in a secure, less accessible area, particularly important if handling sensitive data. Essential network components like servers, routers, and firewalls should be placed here. Ensure this space provides not only security but also adequate ventilation and power supply for the efficiency and longevity of network hardware.<sup>[25]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300247,
-        "file": null,
-        "type": "subtopic",
-        "order": 138,
-        "title": "5.2 Hardware Selection and Physical Installation",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300248,
-        "file": null,
-        "type": "paragraph",
-        "order": 139,
-        "title": "",
-        "caption": "",
-        "content": "<p>The hardware you choose can make or break your network. For wired setups, go for routers and switches that can handle your data needs. Wireless networks should use the latest standards like Wi-Fi 6 or newer for better speed and reliability. Placement is just as important — put access points in high-use areas, avoid hiding your router in a closet, and double-check that your devices are compatible before you buy.<sup>[22]</sup></p><p>Once hardware is selected, the physical installation can begin. Start by securely mounting routers, switches, and access points in their designated spots. Run cables neatly, and label everything so troubleshooting isn't a nightmare.<sup>[22]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300249,
-        "file": null,
-        "type": "subtopic",
-        "order": 140,
-        "title": "5.3 IP Addressing and Network Configuration",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300250,
-        "file": null,
-        "type": "paragraph",
-        "order": 141,
-        "title": "",
-        "caption": "",
-        "content": "<p>One of the most fundamental aspects of network configuration is assigning IP addresses to all devices on the network. There are two approaches: <strong>manual (static)</strong> assignment and <strong>automatic (dynamic)</strong> assignment via DHCP.</p><ul style=\"list-style-type: disc;\"><li><strong>Static IP Addressing</strong></li></ul><p>When you configure an IP address manually on a computer, you need to configure the same settings that a computer normally receives via DHCP: an available IP address on the same IP network as the router, the subnet mask, the default gateway, and a DNS server address.<sup>[26]</sup> Static addressing is typically used for servers, routers, and printers — devices that need a consistent, predictable address on the network.</p><ul style=\"list-style-type: disc;\"><li><strong>Dynamic IP Addressing (DHCP)</strong></li></ul><p>DHCP is a network protocol that automatically gives devices an IP address and other network settings so they can connect and communicate on a network without manual configuration. It assigns a unique IP address to each device, provides the subnet mask to define the local network range, configures the default gateway for communication outside the local network, and supplies DNS server addresses for domain name resolution.<sup>[27]</sup> </p><p>DHCP works using a client-server model where the client requests network settings, the server allocates them from an address pool, and the settings are delivered as options for a fixed lease time.<sup>[27]</sup> The process follows four key steps commonly known as <strong>DORA</strong>:</p><ol style=\"list-style-type: decimal;\"><li><strong>Discover</strong> — the client broadcasts a request looking for a DHCP server.<sup>[27]</sup></li><li><strong>Offer</strong> — the DHCP server responds with an available IP address and configuration options.<sup>[27]</sup></li><li><strong>Request</strong> — the client formally requests the offered IP address.<sup>[27]</sup></li><li><strong>Acknowledge</strong> — the server confirms the assignment and provides the full configuration.<sup>[27]</sup></li></ol><p>When creating your DHCP scope, be sure to have an understanding of any IP addresses that are already being used with manual configurations. You can do a network scan or refer to your network map to see what IP addresses are already being used, to ensure there are no conflicts.<sup>[28]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300251,
-        "file": null,
-        "type": "subtopic",
-        "order": 142,
-        "title": "5.4 Configuring Routers and Switches",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300252,
-        "file": null,
-        "type": "paragraph",
-        "order": 143,
-        "title": "",
-        "caption": "",
-        "content": "<p>To configure the router for your business network, log in to the router's web interface and follow the setup wizard to configure network settings such as SSID, password, and DHCP.<sup>[23]</sup> </p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300253,
-        "file": null,
-        "type": "subtopic",
-        "order": 144,
-        "title": "Key router and switch configuration tasks include",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300254,
-        "file": null,
-        "type": "paragraph",
-        "order": 145,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>Setting up <strong>routing protocols</strong> (such as RIP or OSPF) to manage how data is directed between networks.<sup>[23]</sup></li><li>Configuring <strong>VLANs (Virtual Local Area Networks)</strong> on managed switches to segment network traffic for security and performance.<sup>[23]</sup></li><li>Enabling <strong>QoS (Quality of Service)</strong> — a feature that allows you to prioritize network traffic based on specific applications or services.<sup>[23]</sup></li><li>Setting up a <strong>VPN</strong> — to set up a VPN for your business network, you need to configure a VPN server and client, set up authentication and encryption, and configure routing and firewall rules.<sup>[23]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300255,
-        "file": null,
-        "type": "subtopic",
-        "order": 146,
-        "title": "5.5 DNS Configuration",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300256,
-        "file": null,
-        "type": "paragraph",
-        "order": 147,
-        "title": "",
-        "caption": "",
-        "content": "<p>DNS is a network protocol used to translate hostnames into IP addresses. DNS is not required to establish a network connection, but it is much more user-friendly for human users than the numeric addressing scheme — for example, you can access Google by typing <em>www.google.com</em> rather than its numerical IP address.<sup>[29]</sup></p><p>To use DNS, you must have a DNS server configured to handle the resolution process. The application maintains a table of dynamic or static hostname-to-IP address mappings. When a user requests some network resource using a hostname, a DNS request is sent to the DNS server asking for the IP address of the hostname, and the DNS server replies with the IP address.<sup>[29]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300257,
-        "file": null,
-        "type": "subtopic",
-        "order": 148,
-        "title": "Best practices for DNS configuration include",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300258,
-        "file": null,
-        "type": "paragraph",
-        "order": 149,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>Using descriptive hostnames on local networks to reduce confusion, especially as the network grows.<sup>[28]</sup></li><li>Ensuring that all devices on your network are provided DNS server settings via DHCP.<sup>[28]</sup></li><li>Restricting outbound access to only trusted and approved DNS servers to prevent traffic from being redirected to malicious websites.<sup>[28]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300259,
-        "file": null,
-        "type": "subtopic",
-        "order": 150,
-        "title": "5.6 Network Security Configuration",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300260,
-        "file": null,
-        "type": "paragraph",
-        "order": 151,
-        "title": "",
-        "caption": "",
-        "content": "<p>Security must be built into the network configuration from the very beginning — not added as an afterthought.</p><ul style=\"list-style-type: disc;\"><li><strong>Firewall Configuration</strong></li></ul><p>A firewall acts as a barrier between your internal network and the outside world, monitoring incoming and outgoing network traffic. It works as the first line of defense in protecting your business data from cyber threats such as hackers, malware, and other malicious activities.<sup>[30]</sup></p>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300261,
-        "file": null,
-        "type": "subtopic",
-        "order": 152,
-        "title": "Key firewall configuration best practices include",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300262,
-        "file": null,
-        "type": "paragraph",
-        "order": 153,
-        "title": "",
-        "caption": "",
-        "content": "<ul style=\"list-style-type: disc;\"><li>The golden rule of configuring firewall rules is \"default deny\" — start by blocking everything and only open the doors that absolutely need to be open.<sup>[31]</sup></li><li>Each account should only have access to the files and tools necessary to do the user's job — following the principle of least privilege ensures that firewalls can secure the network more effectively.<sup>[32]</sup></li><li>Always designate specific destination ports for connected services, and take the time to learn which ports users expect to find open when they try to access networks.<sup>[32]</sup></li><li>Every time an authorized administrator changes a configuration, it must be recorded in the log for audits and compliance. Regularly monitoring firewall logs helps detect unauthorized break-ins and allows you to take action to mitigate risk.<sup>[33]</sup></li><li><strong>Encryption</strong></li></ul><p>Firewalls control access to the network, while encryption protects data by transforming it into an unreadable format for unauthorized users. When combined, firewalls and encryption create a robust defense that safeguards data at multiple levels.<sup>[34]</sup></p><p>By encrypting data in transit and at rest, organizations add a layer of protection against interception or theft — ensuring that even if an attacker bypasses the firewall, the encrypted data remains inaccessible. TLS (Transport Layer Security) and SSL (Secure Sockets Layer) are widely used encryption protocols that secure data transmitted over networks, especially in web applications.<sup>[34]</sup></p><ul style=\"list-style-type: disc;\"><li><strong>Additional Security Measures</strong><ul data-indent-group=\"true\" style=\"padding-left: 1.25rem; margin: 0.25rem 0 0.2rem; list-style-type: none;\"><li style=\"list-style-type: none; margin: 0.2rem 0;\">Ensure the security of your business network by using strong passwords, enabling WPA2 encryption, disabling guest networks, and using a firewall.<sup>[23]</sup></li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Use virtual private networks (VPNs) to encrypt data in transit, antivirus to prevent known malware, and intrusion detection and prevention systems (IDS/IPS) to detect any network intrusion attempts.<sup>[35]</sup></li><li style=\"list-style-type: none; margin: 0.2rem 0;\">Use strong passwords, update firmware, and install firewalls. Encrypt traffic, limit access, and check security logs regularly.<sup>[36]</sup></li></ul></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300263,
-        "file": null,
-        "type": "subtopic",
-        "order": 154,
-        "title": "5.7 Testing and Troubleshooting the Network",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300264,
-        "file": null,
-        "type": "paragraph",
-        "order": 155,
-        "title": "",
-        "caption": "",
-        "content": "<p>Once the network is configured, thorough testing must be conducted before it goes live.</p><p>After the physical installation is done, it's time to configure the network devices. This means testing the network to check if everything works well. Experts check if all devices can communicate with each other. This step is important for your network to run smoothly and meet your business needs.<sup>[24]</sup></p><p>Use speed test tools to check your internet speed, and ensure that devices are connecting as expected.<sup>[37] </sup>Common troubleshooting steps include: </p><ul style=\"list-style-type: disc;\"><li>To troubleshoot network connectivity issues, check the physical connections, restart the network devices, check the IP addresses, and check the network settings.<sup>[23]</sup></li><li>Check device settings and verify IP assignments first. Use monitoring tools to spot problems early and review security logs for unusual activity.<sup>[36]</sup></li><li>You can manage and monitor your business network using network management software such as SNMP, or cloud-based services such as Cisco Meraki.<sup>[23]</sup></li></ul>",
-        "fileName": null,
-        "tableData": null,
-        "contentLayout": "text"
-      },
-      {
-        "id": 1776123300265,
-        "file": null,
-        "type": "subtopic",
-        "order": 156,
-        "title": "5.8 Testing and Troubleshooting the Network",
-        "caption": "",
-        "content": "",
-        "fileName": null
-      },
-      {
-        "id": 1776123300266,
-        "file": null,
-        "type": "paragraph",
-        "order": 157,
-        "title": "",
-        "caption": "",
-        "content": "<p>Like any system, a robust network will require ongoing attention to maintain optimal performance.<sup>[21]</sup></p><p>Routine maintenance includes regular software updates, replacing aging hardware, and support contracts — all of which play a role in keeping your network operational. Proper maintenance helps your network last longer, run more efficiently, and helps you save time and money in the long run.<sup>[24]</sup></p><p>Training your IT team is another ongoing cost. Building their skills can save time and reduce downtime when issues come up. Your network will also need to adapt to business growth, whether that means adding bandwidth, new access points, or upgraded hardware — planning for these upgrades in advance helps spread the costs and keeps your budget on track.<sup>[22]</sup></p>",
-        "fileName": null,
-        "tableData": null,
         "contentLayout": "text"
       },
       {
         "id": 1776123300268,
         "file": null,
         "type": "review-multiple-choice",
-        "order": 158,
+        "order": 35,
         "title": "",
         "caption": "",
         "content": "",
@@ -2334,16 +994,6 @@
             "correctAnswer": 1
           }
         ]
-      },
-      {
-        "id": 1776123300269,
-        "file": null,
-        "type": "references",
-        "order": 159,
-        "title": "",
-        "caption": "",
-        "content": "https://www.geeksforgeeks.org/computer-networks/computer-network-tutorials/\nhttps://networklessons.com/network-fundamentals\nhttps://www.networkacademy.io/ccna/network-fundamentals\nhttps://www.alexomegapy.com/post/osi-model-tcp-ip-framework-and-network-topologies-overview\nhttps://www.ibm.com/think/topics/networking\nhttps://www.nwkings.com/advantages-of-computer-networking\nhttps://www.geeksforgeeks.org/computer-networks/importance-of-computer-networking/\nhttps://www.uninets.com/blog/advantages-of-computer-networks\nhttps://www.geeksforgeeks.org/computer-networks/advantages-and-disadvantages-of-computer-networking/\nhttps://www.netsync.com/2025/07/02/the-key-benefits-of-computer-networking-for-modern-teams/\nhttps://www.guru99.com/types-of-computer-network.html\nhttps://www.educba.com/types-of-computer-network/#Different%20Types%20of%20Network\nhttps://3.bp.blogspot.com/-Fpmu4-L14lI/VXKms78BCnI/AAAAAAAACVs/r0iWhBkfRp0/s1600/DCP_3429.JPG\nhttps://www.astrosnap.com/adapters/USBG-LPT-PCM.jpeg\nhttps://tse3.mm.bing.net/th/id/OIP.YFHa5c7NVhe1NuD8hvWb-AHaFj?rs=1&pid=ImgDetMain&o=7&rm=3\nhttps://cdn.cs.1worldsync.com/70/23/7023c43d-ff87-4629-bce3-36bc21180334.jpg\nhttps://www.vce-download.net/design/wikipic/268.jpg\nhttps://www.conceptdraw.com/How-To-Guide/picture/Ad-Hoc-wireless-network-diagram.png\nhttps://thenetworkinstallers.com/blog/network-installation-steps/\nhttps://www.meter.com/resources/network-installation\nhttps://bestructured.com/the-ultimate-network-installation-guide-installing-a-network-in-10-steps/\nhttps://clrnet.net/a-step-by-step-guide-to-the-network-installation-process/\nhttps://yestechie.com/articles/office-network-installation-guide\nhttps://www.homenethowto.com/basics/giving-the-computer-an-ip-address/\nhttps://www.geeksforgeeks.org/computer-networks/dynamic-host-configuration-protocol-dhcp/\nhttps://www.msp360.com/resources/blog/sysadmins-guide-to-network-services/\nhttps://study-ccna.com/dhcp-dns/\nhttps://ncs.support/security-measures-for-business-data-protection/%5C\nhttps://nordlayer.com/learn/firewall/firewall-best-practices/\nhttps://www.eccouncil.org/cybersecurity-exchange/network-security/six-network-firewall-configuration-best-practices/\nhttps://backbox.com/blog/7-firewall-best-practices-to-secure-your-network/\nhttps://www.darktrace.com/cyber-ai-glossary/firewalls-and-network-security-how-to-protect-your-business\nhttps://www.checkpoint.com/cyber-hub/network-security/what-is-firewall/8-firewall-best-practices-for-securing-the-network/\nhttps://www.meter.com/resources/network-configuration\nhttps://www.itech2.com/network-installation-configuration-the-ultimate-guide/",
-        "fileName": null
       }
     ],
     "diagnosticQuestions": [

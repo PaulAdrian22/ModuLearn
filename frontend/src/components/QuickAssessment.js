@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useAuth } from '../App';
+import { bktApi } from '../services/api';
+import { deriveReviewCooldownFromResponse, setReviewCooldown } from '../utils/reviewCooldown';
 import SkillMasteryResults from './SkillMasteryResults';
 import {
   trackPerformance,
@@ -191,14 +192,20 @@ const QuickAssessment = ({ questions, onComplete, onCancel, topicTitle, moduleId
       }));
       const skillAnswers = answers.filter(a => a.skill !== 'No Skill');
       if (skillAnswers.length > 0) {
-        const numericModuleId = Number.parseInt(moduleId, 10);
-        const res = await axios.post('/bkt/batch-update', {
+        const res = await bktApi.batchUpdate({
           answers: skillAnswers,
           assessmentType: 'Review',
-          moduleId: Number.isFinite(numericModuleId) ? numericModuleId : null,
-          timeSpentSeconds: timeSpent
+          moduleId: moduleId ?? null,
+          timeSpentSeconds: timeSpent,
         });
-        setSkillResults(res.data);
+        setSkillResults(res);
+
+        // Diagram rule: any incorrect Review item triggers a 30s cooldown
+        // before the lesson's review can be taken again.
+        const { triggered, cooldownSeconds } = deriveReviewCooldownFromResponse(res);
+        if (triggered && moduleId) {
+          setReviewCooldown(moduleId, cooldownSeconds);
+        }
       }
     } catch (err) {
       console.error('Error updating BKT:', err);

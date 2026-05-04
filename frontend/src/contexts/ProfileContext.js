@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
-import axios from 'axios';
 import { useAuth } from '../App';
+import { profileApi } from '../services/api';
 
 const ProfileContext = createContext();
 
@@ -17,8 +17,8 @@ export const ProfileProvider = ({ children }) => {
     }
 
     try {
-      const response = await axios.get('/users/profile');
-      setProfile(response.data);
+      const data = await profileApi.me();
+      setProfile(data);
       setError(null);
     } catch (err) {
       console.error('Error fetching profile:', err);

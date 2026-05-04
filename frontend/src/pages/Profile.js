@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../App';
+import { profileApi, storageApi, adminApi } from '../services/api';
+import { passwordErrorMessage } from '../utils/passwordPolicy';
 import { useProfile } from '../contexts/ProfileContext';
 import Navbar from '../components/Navbar';
 import Notification from '../components/Notification';
@@ -241,23 +242,26 @@ const Profile = () => {
 
   const handleUpdateUsername = async (newName) => {
     try {
-      await axios.put('/users/profile', { name: newName });
+      // "Username" UI label maps to the display `name` column.
+      await profileApi.update({ name: newName });
       setMessage({ type: 'success', text: 'Username updated successfully!', show: true });
       await refreshProfile();
       setShowUsernameModal(false);
     } catch (err) {
-      setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to update username', show: true });
+      setMessage({ type: 'error', text: err.message || 'Failed to update username', show: true });
     }
   };
 
   const handleUpdateEmail = async (newEmail) => {
+    // Email changes go through Supabase Auth (sends a confirmation flow if enabled).
     try {
-      await axios.put('/users/profile', { email: newEmail });
-      setMessage({ type: 'success', text: 'Email updated successfully!', show: true });
+      const { error } = await (await import('../lib/supabase')).supabase.auth.updateUser({ email: newEmail });
+      if (error) throw error;
+      setMessage({ type: 'success', text: 'Email update requested. Check your inbox to confirm.', show: true });
       await refreshProfile();
       setShowEmailModal(false);
     } catch (err) {
-      setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to update email', show: true });
+      setMessage({ type: 'error', text: err.message || 'Failed to update email', show: true });
     }
   };
 
@@ -265,7 +269,9 @@ const Profile = () => {
     const normalizedLanguage = normalizePreferredLanguageValue(newLanguage);
 
     try {
-      await axios.put('/users/profile', { preferredLanguage: normalizedLanguage });
+      // Persist server-side so the choice follows the user across devices,
+      // and client-side for instant reads.
+      await profileApi.update({ preferred_language: normalizedLanguage });
       localStorage.setItem('preferredLanguage', normalizedLanguage);
       setPreferredLanguage(normalizedLanguage);
       if (typeof window !== 'undefined') {
@@ -276,20 +282,26 @@ const Profile = () => {
         );
       }
       setMessage({ type: 'success', text: 'Language updated successfully!', show: true });
-      await refreshProfile();
       setShowLanguageModal(false);
     } catch (err) {
-      setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to update language', show: true });
+      setMessage({ type: 'error', text: err.message || 'Failed to update language', show: true });
     }
   };
 
   const handleUpdatePassword = async (passwords) => {
+    const issue = passwordErrorMessage(passwords.newPassword);
+    if (issue) {
+      setMessage({ type: 'error', text: issue, show: true });
+      return;
+    }
     try {
-      await axios.post('/users/change-password', passwords);
+      // Supabase Auth doesn't require the current password to set a new one;
+      // the confirm-current-password step is UI-only.
+      await profileApi.changePassword(passwords.newPassword);
       setMessage({ type: 'success', text: 'Password updated successfully!', show: true });
       setShowPasswordModal(false);
     } catch (err) {
-      setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to update password', show: true });
+      setMessage({ type: 'error', text: err.message || 'Failed to update password', show: true });
     }
   };
 
@@ -308,12 +320,12 @@ const Profile = () => {
 
     try {
       setMessage({ type: '', text: '', show: false });
-      await axios.delete('/users/delete-picture');
+      await storageApi.deleteProfilePicture();
       setMessage({ type: 'success', text: 'Profile picture deleted successfully!', show: true });
       await refreshProfile();
     } catch (err) {
       console.error('Error deleting picture:', err);
-      setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to delete picture', show: true });
+      setMessage({ type: 'error', text: err.message || 'Failed to delete picture', show: true });
     }
   };
 
@@ -343,7 +355,7 @@ const Profile = () => {
     }
 
     try {
-      await axios.delete(`/users/delete/${user.userId}`);
+      await adminApi.users.delete('self');
       setMessage({ type: 'success', text: 'Account deleted successfully', show: true });
       setTimeout(() => {
         logout();
@@ -351,23 +363,20 @@ const Profile = () => {
       }, 2000);
     } catch (err) {
       console.error('Error deleting account:', err);
-      setMessage({ type: 'error', text: 'Failed to delete account', show: true });
+      setMessage({ type: 'error', text: err.message || 'Failed to delete account', show: true });
     }
   };
 
   const handleSelectDefaultAvatar = async (avatarName) => {
     try {
-      console.log('Selecting avatar:', avatarName);
       setMessage({ type: '', text: '', show: false });
-      const response = await axios.post('/users/select-avatar', { avatarName });
-      console.log('Avatar selection response:', response.data);
+      await storageApi.selectDefaultAvatar(avatarName);
       setMessage({ type: 'success', text: 'Avatar updated successfully!', show: true });
       await refreshProfile();
       setShowAvatarModal(false);
     } catch (err) {
       console.error('Error selecting avatar:', err);
-      console.error('Error response:', err.response?.data);
-      setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to update avatar', show: true });
+      setMessage({ type: 'error', text: err.message || 'Failed to update avatar', show: true });
     }
   };
 
@@ -404,20 +413,14 @@ const Profile = () => {
       setShowCropper(false);
       setMessage({ type: '', text: '', show: false });
 
-      const formData = new FormData();
-      formData.append('profilePicture', croppedImageBlob, 'avatar.jpg');
-
-      const response = await axios.post('/users/upload-picture', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
+      const file = new File([croppedImageBlob], 'avatar.jpg', { type: 'image/jpeg' });
+      await storageApi.uploadAvatar(file);
 
       setMessage({ type: 'success', text: 'Profile picture uploaded successfully!', show: true });
       await refreshProfile();
     } catch (err) {
       console.error('Error uploading picture:', err);
-      setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to upload picture', show: true });
+      setMessage({ type: 'error', text: err.message || 'Failed to upload picture', show: true });
     } finally {
       setUploading(false);
     }

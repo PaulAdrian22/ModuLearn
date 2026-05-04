@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../App';
+import { bktApi, progressApi, modulesApi } from '../services/api';
 import SkillMasteryResults from '../components/SkillMasteryResults';
 import { resolveCorrectAnswerText, shuffleArray, shuffleQuestionChoicesList } from '../utils/assessmentShuffle';
 import { withPreferredLanguage } from '../utils/languagePreference';
@@ -373,8 +373,9 @@ const FinalAssessment = () => {
   const checkAccessAndFetchModule = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(withPreferredLanguage(`/modules/${moduleId}?userId=${user.userId}`));
-      setModule(response.data);
+      const moduleData = await modulesApi.get(moduleId);
+      const response = { data: moduleData }; // shape-shim used below
+      setModule(moduleData);
       
       // Check if module has diagnostic questions
       const hasDiagnosticQuestions = response.data.diagnosticQuestions && response.data.diagnosticQuestions.length > 0;
@@ -404,9 +405,9 @@ const FinalAssessment = () => {
       // Fetch attempt history
       let totalAttempts = 0;
       try {
-        const historyRes = await axios.get(`/bkt/lesson/${moduleId}/final/history`);
-        setAttemptHistory(historyRes.data);
-        totalAttempts = Number(historyRes.data?.totalAttempts || 0);
+        const history = await bktApi.finalHistory(moduleId);
+        setAttemptHistory(history);
+        totalAttempts = Number(history?.totalAttempts || 0);
       } catch (histErr) {
         console.error('Error fetching attempt history:', histErr);
       }
@@ -510,13 +511,13 @@ const FinalAssessment = () => {
     try {
       const skillAnswers = answers.filter(a => a.skill !== 'No Skill');
       if (skillAnswers.length > 0) {
-        const res = await axios.post('/bkt/batch-update', {
+        const res = await bktApi.batchUpdate({
           answers: skillAnswers,
           assessmentType: 'Final',
-          moduleId: parseInt(moduleId),
-          timeSpentSeconds: totalTimeSpent
+          moduleId,
+          timeSpentSeconds: totalTimeSpent,
         });
-        setSkillResults(res.data);
+        setSkillResults(res);
       }
     } catch (err) {
       console.error('Error updating skill mastery:', err);
@@ -529,9 +530,10 @@ const FinalAssessment = () => {
 
   const updateModuleProgress = async (completionRate) => {
     try {
-      await axios.put('/progress/update', {
-        moduleId: parseInt(moduleId),
-        completionRate
+      await progressApi.start(moduleId);
+      await progressApi.update(moduleId, {
+        completion_rate: completionRate,
+        ...(completionRate >= 100 ? { date_completion: new Date().toISOString() } : {}),
       });
     } catch (err) {
       console.error('Error updating progress:', err);

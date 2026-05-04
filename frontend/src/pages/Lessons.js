@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useAuth } from '../App';
 import Navbar from '../components/Navbar';
-import SkeletonLoader from '../components/SkeletonLoader';
-import { withPreferredLanguage } from '../utils/languagePreference';
+import { modulesApi, progressApi } from '../services/api';
+import { getPreferredLanguage } from '../utils/languagePreference';
+import { useAsyncData } from '../hooks/useAsyncData';
 
 const Lessons = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
-  const [modules, setModules] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [showLoading, setShowLoading] = useState(false);
-  const [error, setError] = useState('');
+
+  const { data: modulesData, loading, error } = useAsyncData(
+    () => modulesApi.list({ language: getPreferredLanguage() ?? 'English' }),
+    [],
+    { initial: [] },
+  );
+  const modules = modulesData ?? [];
 
   const toPlainText = (value) => {
     if (!value) return '';
@@ -50,30 +51,6 @@ const Lessons = () => {
     }).format(date);
   };
 
-  useEffect(() => {
-    fetchModules();
-  }, []);
-
-  const fetchModules = async () => {
-    try {
-      setLoading(true);
-      
-      // Delay showing loading spinner
-      const loadingTimer = setTimeout(() => setShowLoading(true), 200);
-      
-      const response = await axios.get(withPreferredLanguage(`/modules?userId=${user.userId}`));
-      setModules(response.data);
-      
-      clearTimeout(loadingTimer);
-      setLoading(false);
-      setShowLoading(false);
-    } catch (err) {
-      console.error('Error fetching modules:', err);
-      setError('Failed to load modules');
-      setLoading(false);
-      setShowLoading(false);
-    }
-  };
 
   const handleModuleClick = async (module) => {
     if (!module.Is_Unlocked) {
@@ -81,7 +58,7 @@ const Lessons = () => {
     }
 
     try {
-      await axios.post('/progress/start', { moduleId: module.ModuleID });
+      await progressApi.start(module.ModuleID);
     } catch (err) {
       console.error('Error opening module progress:', err);
     }
