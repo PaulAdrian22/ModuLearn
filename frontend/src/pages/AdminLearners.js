@@ -79,8 +79,7 @@ const AdminLearners = () => {
     if (query !== '') {
       filtered = filtered.filter((learner) =>
         learner.Name.toLowerCase().includes(query) ||
-        learner.Email.toLowerCase().includes(query) ||
-        learner.EducationalBackground?.toLowerCase().includes(query)
+        (learner.Username || '').toLowerCase().includes(query)
       );
     }
 
@@ -232,8 +231,8 @@ const AdminLearners = () => {
         return { type: 'number', value: parseDateValue(learner.last_login) };
       case 'age':
         return { type: 'number', value: parseNumberValue(learner.Age) };
-      case 'background':
-        return { type: 'text', value: parseTextValue(learner.EducationalBackground) };
+      case 'gender':
+        return { type: 'text', value: parseTextValue(learner.Gender) };
       case 'selectedMetric': {
         const metricKey = metricFilter === 'all' ? 'lessonProgress' : metricFilter;
         const metricValue = learnerMetricSummaries[learner.UserID]?.[metricKey];
@@ -318,7 +317,7 @@ const AdminLearners = () => {
     doc.text('Learner Progress Report', 14, 16);
     doc.setFontSize(11);
     doc.text(`Learner: ${selectedLearner.Name}`, 14, 24);
-    doc.text(`Email: ${selectedLearner.Email}`, 14, 30);
+    doc.text(`Username: ${selectedLearner.Username || '—'}`, 14, 30);
     doc.text(`Metric: ${metricLabel}`, 14, 36);
 
     const tableBody = (selectedLearner.lessonMetrics || []).map((r) => ([
@@ -424,7 +423,7 @@ const AdminLearners = () => {
                 </svg>
                 <input
                   type="text"
-                  placeholder="Search learners by name, email, or background..."
+                  placeholder="Search learners by name or username..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="flex-1 border-none focus:outline-none focus:ring-0 bg-transparent text-text-primary"
@@ -473,7 +472,7 @@ const AdminLearners = () => {
                     <option value="dateJoined">Date Joined</option>
                     <option value="lastOnline">Last Online</option>
                     <option value="age">Age</option>
-                    <option value="background">Background</option>
+                    <option value="gender">Gender</option>
                     <option value="selectedMetric">Selected Metric</option>
                   </select>
                 </div>
@@ -520,10 +519,10 @@ const AdminLearners = () => {
                       Learner
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">
-                      Email
+                      Username
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">
-                      Background
+                      Gender
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">
                       Age
@@ -548,12 +547,10 @@ const AdminLearners = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <p className="text-text-secondary text-sm">{learner.Email}</p>
+                        <p className="text-text-secondary text-sm">{learner.Username || '—'}</p>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <p className="text-text-primary text-sm">
-                          {learner.EducationalBackground || 'Not specified'}
-                        </p>
+                        <p className="text-text-primary text-sm">{learner.Gender || 'Not specified'}</p>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <p className="text-text-primary text-sm">{learner.Age || 'N/A'}</p>
@@ -605,8 +602,9 @@ const AdminLearners = () => {
                   <div className="text-text-primary text-lg md:text-2xl leading-tight">
                     <p><span className="font-bold">User ID :</span> {selectedLearner.UserID}</p>
                     <p><span className="font-bold">Name :</span> {selectedLearner.Name}</p>
-                    <p><span className="font-bold">Email :</span> {selectedLearner.Email}</p>
+                    <p><span className="font-bold">Username :</span> {selectedLearner.Username || '—'}</p>
                     <p><span className="font-bold">Age :</span> {selectedLearner.Age || 'N/A'}</p>
+                    <p><span className="font-bold">Gender :</span> {selectedLearner.Gender || 'Not specified'}</p>
                     <p><span className="font-bold">Password :</span> {selectedLearner.passwordMasked || '********'} <span className="text-gray-500">🔒</span></p>
                   </div>
                 </div>

@@ -254,16 +254,12 @@ const AdminDashboard = () => {
     metricValue: getMetricValue(selectedToggleMetric, item, index),
   }));
 
-  // Keep a consistent Y-axis scale across all toggles so vertical numbers stay visible and stable.
-  const globalMaxMetric = activityData.length
-    ? Math.max(
-        ...TOGGLE_OPTIONS.flatMap((option) =>
-          activityData.map((item, index) => Math.abs(Number(getMetricValue(option.key, item, index) || 0)))
-        )
-      )
+  // Y-axis adapts to the currently selected metric so bars are always visible.
+  const currentMetricMax = activityData.length
+    ? Math.max(...activityData.map((item, index) => Math.abs(Number(getMetricValue(selectedToggleMetric, item, index) || 0))))
     : 0;
 
-  const yAxisMax = Math.max(5, Math.ceil(globalMaxMetric / 5) * 5);
+  const yAxisMax = Math.max(5, Math.ceil(currentMetricMax / 5) * 5);
   const yAxisStep = yAxisMax > 100 ? 20 : yAxisMax > 50 ? 10 : 5;
   const yAxisTicks = [];
   for (let i = yAxisMax; i >= 0; i -= yAxisStep) {
@@ -360,7 +356,15 @@ const AdminDashboard = () => {
 
           {/* Activity Report */}
           <div className="bg-white rounded-2xl shadow-sm p-6">
-              <h2 className="text-2xl font-bold text-secondary mb-6">Activity Report</h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-secondary">Activity Report</h2>
+                <button
+                  onClick={() => setShowExportModal(true)}
+                  className="px-6 py-2.5 bg-[#3A70A1] hover:bg-[#2A5D84] text-white rounded-xl font-semibold text-base leading-tight"
+                >
+                  Export Data
+                </button>
+              </div>
               
               {/* Legend - Single Row */}
               <div className="flex flex-wrap gap-x-5 gap-y-2 mb-6">
@@ -454,14 +458,6 @@ const AdminDashboard = () => {
                   ))}
                 </div>
 
-                <div className="flex justify-end mt-6">
-                  <button
-                    onClick={() => setShowExportModal(true)}
-                    className="px-6 py-2.5 bg-[#3A70A1] hover:bg-[#2A5D84] text-white rounded-xl font-semibold text-base leading-tight"
-                  >
-                    Export Data
-                  </button>
-                </div>
               </div>
           </div>
         </div>

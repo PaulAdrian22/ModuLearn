@@ -21,7 +21,6 @@ create table public.profiles (
     username                text unique,
     age                     int check (age >= 15 and age <= 65),
     gender                  text check (gender in ('Male','Female','Prefer not to say')),
-    educational_background  text,
     role                    text not null default 'student'
                             check (role in ('student', 'admin')),
     profile_picture         text,
