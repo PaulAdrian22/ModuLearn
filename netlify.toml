@@ -1,13 +1,13 @@
 [build]
-  base    = "frontend"
-  command = "npm install && npm run build"
-  publish = "build"
+  command = "npm ci --prefix frontend --no-audit --no-fund && npm run build --prefix frontend"
+  publish = "frontend/build"
 
 [build.environment]
   CI                    = "false"
+  NODE_VERSION          = "20"
+  GENERATE_SOURCEMAP    = "false"
   DISABLE_ESLINT_PLUGIN = "true"
 
-# SPA fallback — all routes serve index.html
 [[redirects]]
   from   = "/*"
   to     = "/index.html"
