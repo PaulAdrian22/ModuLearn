@@ -8,7 +8,7 @@
 //   3. open a service-role Supabase client for DB writes that bypass RLS
 //      (writes are scoped to the verified userId so this is safe).
 
-import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0';
+import { createClient, SupabaseClient } from 'npm:@supabase/supabase-js@2';
 
 export const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',

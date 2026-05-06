@@ -436,7 +436,9 @@ $$;
 -- ============================================================
 -- Views (analytics; same intent as legacy v_* views)
 -- ============================================================
-create or replace view public.v_user_progress_summary as
+create or replace view public.v_user_progress_summary
+with (security_invoker = true)
+as
 select
     p.id           as user_id,
     p.name,
@@ -449,7 +451,9 @@ from public.profiles p
 left join public.progress pr on p.id = pr.user_id
 left join public.modules m   on pr.module_id = m.id;
 
-create or replace view public.v_bkt_knowledge_state as
+create or replace view public.v_bkt_knowledge_state
+with (security_invoker = true)
+as
 select
     p.id        as user_id,
     p.name,
@@ -478,7 +482,9 @@ left join public.skill_parameters sp on bkt.skill_name = sp.skill_name
 left join public.bkt_overall_mastery om
     on p.id = om.user_id and bkt.skill_name = om.skill_name;
 
-create or replace view public.v_lesson_mastery_summary as
+create or replace view public.v_lesson_mastery_summary
+with (security_invoker = true)
+as
 select
     p.id as user_id, p.name,
     m.id as module_id, m.title as module_title, m.lesson_order,

@@ -27,17 +27,8 @@ const buildExecutors = () => ({
   },
 
   'bkt.batchUpdate': async (payload) => {
-    const url = process.env.REACT_APP_BKT_BATCH_UPDATE_URL;
-    if (!url) throw new Error('REACT_APP_BKT_BATCH_UPDATE_URL not set');
-    const { data: { session } } = await supabase.auth.getSession();
-    const token = session?.access_token;
-    if (!token) throw new Error('Not signed in');
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify(payload),
-    });
-    if (!res.ok) throw new Error(`bkt.batchUpdate replay failed (${res.status})`);
+    const { invokeFn } = await import('../services/api/_invokeFn');
+    await invokeFn('bkt-batch-update', { method: 'POST', body: payload });
   },
 });
 

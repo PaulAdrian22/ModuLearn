@@ -225,7 +225,9 @@ create index if not exists idx_bkt_resp_user_skill
 -- I. View updates (drop refs to removed columns)
 -- ============================================================
 drop view if exists public.v_bkt_knowledge_state;
-create view public.v_bkt_knowledge_state as
+create view public.v_bkt_knowledge_state
+with (security_invoker = true)
+as
 select
     p.id        as user_id,
     p.name,
@@ -253,7 +255,9 @@ left join public.bkt_overall_mastery om
     on p.id = om.user_id and bkt.skill_name = om.skill_name;
 
 drop view if exists public.v_lesson_mastery_summary;
-create view public.v_lesson_mastery_summary as
+create view public.v_lesson_mastery_summary
+with (security_invoker = true)
+as
 select
     p.id as user_id, p.name,
     m.id as module_id, m.title as module_title, m.lesson_order,
