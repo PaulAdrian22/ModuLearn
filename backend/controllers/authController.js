@@ -6,6 +6,29 @@ const jwt = require('jsonwebtoken');
 const { query } = require('../config/database');
 const { getUserIdentityColumn } = require('../utils/userIdentity');
 
+// Self-heal: make sure the Gender column exists before inserting. Cached after
+// the first call so subsequent registrations don't re-query schema.
+let genderColumnEnsured = false;
+const ensureGenderColumn = async () => {
+  if (genderColumnEnsured) return;
+  try {
+    const cols = await query('DESCRIBE user');
+    const hasGender = cols.some((c) => c.Field === 'Gender');
+    if (!hasGender) {
+      await query("ALTER TABLE user ADD COLUMN Gender ENUM('Male', 'Female') NULL AFTER Age");
+      console.log('Added missing Gender column to user table.');
+    }
+    genderColumnEnsured = true;
+  } catch (error) {
+    if (error?.code === 'ER_DUP_FIELDNAME') {
+      genderColumnEnsured = true;
+      return;
+    }
+    console.warn('ensureGenderColumn failed:', error?.code || error?.message);
+    // Don't flip the sentinel — retry on next request.
+  }
+};
+
 // Generate JWT token
 const generateToken = (userId, username, name, role = 'student') => {
   return jwt.sign(
@@ -20,6 +43,8 @@ const register = async (req, res) => {
   try {
     const { name, password, age, gender, educationalBackground } = req.body;
     const username = (req.body.username || '').trim();
+
+    await ensureGenderColumn();
 
     const identityColumn = await getUserIdentityColumn();
     const identityValue = username;
@@ -65,10 +90,10 @@ const register = async (req, res) => {
     });
     
   } catch (error) {
-    console.error('Registration error:', error);
+    console.error('Registration error:', { code: error?.code, message: error?.message });
     res.status(500).json({
       error: 'Internal Server Error',
-      message: 'Failed to register user'
+      message: `Failed to register user: ${error?.code || error?.message || 'unknown error'}`
     });
   }
 };
