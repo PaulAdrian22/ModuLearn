@@ -71,7 +71,15 @@ export const buildInitialAssessmentQuestions = (moduleList = [], preferredLangua
         (module) => normalizeLessonLanguage(module?.LessonLanguage) === preferredLessonLanguage
       );
 
-      return matchedLanguageModule || lessonVariants[0];
+      if (matchedLanguageModule) {
+        return matchedLanguageModule;
+      }
+
+      const variantWithoutLanguage = lessonVariants.find(
+        (module) => !('LessonLanguage' in (module || {}))
+      );
+
+      return variantWithoutLanguage || null;
     })
     .filter(Boolean);
 

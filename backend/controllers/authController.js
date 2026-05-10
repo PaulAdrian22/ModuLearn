@@ -4,11 +4,12 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { query } = require('../config/database');
+const { getUserIdentityColumn } = require('../utils/userIdentity');
 
 // Generate JWT token
 const generateToken = (userId, username, name, role = 'student') => {
   return jwt.sign(
-    { userId, username, email: username, name, role },
+    { userId, username, name, role },
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRE || '24h' }
   );
@@ -17,13 +18,15 @@ const generateToken = (userId, username, name, role = 'student') => {
 // Register new user
 const register = async (req, res) => {
   try {
-    const { name, password, age, educationalBackground } = req.body;
-    const username = (req.body.username || req.body.email || '').trim();
+    const { name, password, age, gender, educationalBackground } = req.body;
+    const username = (req.body.username || '').trim();
 
-    // Check if user already exists (Email column stores the username)
+    const identityColumn = await getUserIdentityColumn();
+    const identityValue = username;
+
     const existingUser = await query(
-      'SELECT UserID FROM user WHERE Email = ?',
-      [username]
+      `SELECT UserID FROM user WHERE ${identityColumn} = ?`,
+      [identityValue]
     );
 
     if (existingUser.length > 0) {
@@ -39,25 +42,23 @@ const register = async (req, res) => {
       parseInt(process.env.BCRYPT_ROUNDS) || 10
     );
 
-    // Insert new user (Email column stores username for backward compatibility)
     const result = await query(
-      'INSERT INTO user (Name, Email, Password, Age, EducationalBackground, Role) VALUES (?, ?, ?, ?, ?, ?)',
-      [name, username, hashedPassword, age || null, educationalBackground || null, 'student']
+      `INSERT INTO user (Name, ${identityColumn}, Password, Age, Gender, EducationalBackground, Role) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [name, identityValue, hashedPassword, age, gender, educationalBackground || null, 'student']
     );
 
     const userId = result.insertId;
 
-    // Generate token
-    const token = generateToken(userId, username, name, 'student');
+    const token = generateToken(userId, identityValue, name, 'student');
 
     res.status(201).json({
       message: 'Registration successful',
       user: {
         userId,
         name,
-        username,
-        email: username,
+        username: identityValue,
         age,
+        gender,
         educationalBackground
       },
       token
@@ -76,12 +77,14 @@ const register = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { password } = req.body;
-    const username = (req.body.username || req.body.email || '').trim();
+    const username = (req.body.username || '').trim();
 
-    // Query user by username (stored in Email column for legacy reasons)
+    const identityColumn = await getUserIdentityColumn();
+    const identityValue = username;
+
     const users = await query(
-      'SELECT UserID, Name, Email, Password, Age, EducationalBackground, profile_picture, avatar_type, default_avatar, Role, last_login FROM user WHERE Email = ?',
-      [username]
+      `SELECT UserID, Name, ${identityColumn} AS Username, Password, Age, EducationalBackground, profile_picture, avatar_type, default_avatar, Role, last_login FROM user WHERE ${identityColumn} = ?`,
+      [identityValue]
     );
 
     if (users.length === 0) {
@@ -109,8 +112,7 @@ const login = async (req, res) => {
       [user.UserID]
     );
 
-    // Generate token
-    const token = generateToken(user.UserID, user.Email, user.Name, user.Role || 'student');
+    const token = generateToken(user.UserID, user.Username, user.Name, user.Role || 'student');
 
     // Only treat a learner as "new" on their first-ever successful login.
     // This prevents the initial assessment from reappearing for returning users.
@@ -121,8 +123,7 @@ const login = async (req, res) => {
       user: {
         userId: user.UserID,
         name: user.Name,
-        username: user.Email,
-        email: user.Email,
+        username: user.Username,
         age: user.Age,
         educationalBackground: user.EducationalBackground,
         profile_picture: user.profile_picture,
@@ -149,26 +150,26 @@ const verifyToken = async (req, res) => {
     // Token already verified by middleware
     const userId = req.user.userId;
     
-    // Get fresh user data
+    const identityColumn = await getUserIdentityColumn();
+
     const users = await query(
-      'SELECT UserID, Name, Email, Age, EducationalBackground, Role FROM user WHERE UserID = ?',
+      `SELECT UserID, Name, ${identityColumn} AS Username, Age, EducationalBackground, Role FROM user WHERE UserID = ?`,
       [userId]
     );
-    
+
     if (users.length === 0) {
       return res.status(404).json({
         error: 'Not Found',
         message: 'User not found'
       });
     }
-    
+
     res.json({
       valid: true,
       user: {
         userId: users[0].UserID,
         name: users[0].Name,
-        username: users[0].Email,
-        email: users[0].Email,
+        username: users[0].Username,
         age: users[0].Age,
         educationalBackground: users[0].EducationalBackground,
         role: users[0].Role || 'student'

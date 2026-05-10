@@ -809,6 +809,10 @@ const AddLesson = () => {
   const saveLessonButtonText = isSupplementaryCreateMode ? 'Save Supplementary Lesson' : 'Save Lesson';
   const isSupplementaryLesson = String(lessonData.Difficulty || '').trim().toLowerCase() === 'supplementary';
   const difficultyOptions = ['Easy', 'Challenging', 'Advanced'];
+  const hasReviewStage = roadmapStages.some((stage) => stage.type === 'review');
+  const reviewQuestionCount = reviewQuestions.length;
+  const isReviewQuestionCountValid = reviewQuestionCount === 10 || reviewQuestionCount === 20;
+  const shouldWarnReviewQuestionCount = hasReviewStage && !isReviewQuestionCountValid;
 
   const getSaveButtonLabel = (defaultLabel = 'Save Lesson') => {
     if (loading) return 'Saving...';
@@ -956,6 +960,20 @@ const AddLesson = () => {
         ? Boolean(targetPathOrOptions.forcePrompt)
         : false;
 
+    if (shouldWarnReviewQuestionCount) {
+      const shouldLeave = await themedConfirm({
+        title: 'Review Questions Incomplete',
+        message: `Review questions must be 10 or 20. You currently have ${reviewQuestionCount}. Exit anyway?`,
+        confirmText: 'Exit Anyway',
+        cancelText: 'Stay',
+        variant: 'warning'
+      });
+
+      if (!shouldLeave) {
+        return false;
+      }
+    }
+
     if (!hasUnsavedChanges && !forcePrompt) return true;
 
     const hasChangesMessage = 'You have unsaved lesson changes. Leave this editor and discard them?';
@@ -1000,12 +1018,34 @@ const AddLesson = () => {
   }, [hasUnsavedChanges]);
 
   useEffect(() => {
-    if (!hasUnsavedChanges) {
+    if (!hasUnsavedChanges && !shouldWarnReviewQuestionCount) {
       backGuardArmedRef.current = false;
       return;
     }
 
     const handlePopState = async () => {
+      if (shouldWarnReviewQuestionCount) {
+        const shouldLeaveForReviewCount = await themedConfirm({
+          title: 'Review Questions Incomplete',
+          message: `Review questions must be 10 or 20. You currently have ${reviewQuestionCount}. Exit anyway?`,
+          confirmText: 'Exit Anyway',
+          cancelText: 'Stay',
+          variant: 'warning'
+        });
+
+        if (!shouldLeaveForReviewCount) {
+          window.history.pushState({ addLessonGuard: true }, '', window.location.href);
+          return;
+        }
+      }
+
+      if (!hasUnsavedChanges) {
+        backGuardArmedRef.current = false;
+        window.removeEventListener('popstate', handlePopState);
+        navigate(-1);
+        return;
+      }
+
       const shouldLeave = await themedConfirm({
         title: 'Discard Changes?',
         message: 'You have unsaved lesson changes. Leave this editor and discard them?',
@@ -1031,7 +1071,7 @@ const AddLesson = () => {
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [hasUnsavedChanges, navigate]);
+  }, [hasUnsavedChanges, navigate, reviewQuestionCount, shouldWarnReviewQuestionCount]);
 
   useEffect(() => {
     if (user?.role !== 'admin') {
@@ -5160,11 +5200,18 @@ const AddLesson = () => {
                     activeStage === stage.type ? 'text-highlight-dark font-bold' : 'text-gray-600'
                   }`}>{stage.label}</span>
                   {stageCounter && (
-                    <span className={`text-xs mt-0.5 whitespace-nowrap ${
-                      isOverLimit ? 'text-red-600 font-semibold' : 'text-gray-500'
-                    }`}>
-                      {stageCounter.label}: {stageCounter.count}/{stageCounter.limit}
-                    </span>
+                    <>
+                      <span className={`text-xs mt-0.5 whitespace-nowrap ${
+                        isOverLimit ? 'text-red-600 font-semibold' : 'text-gray-500'
+                      }`}>
+                        {stageCounter.label}: {stageCounter.count}/{stageCounter.limit}
+                      </span>
+                      {stage.type === 'review' && (
+                        <span className="text-[10px] mt-0.5 whitespace-nowrap text-gray-400">
+                          review questions must be 10 or 20
+                        </span>
+                      )}
+                    </>
                   )}
                 </div>
               );

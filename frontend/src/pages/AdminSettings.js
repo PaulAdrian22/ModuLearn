@@ -8,7 +8,7 @@ import { applyAppearanceSettings, getStoredAppearanceSettings, saveAppearanceSet
 const AdminSettings = () => {
   const { user } = useAuth();
   const [notification, setNotification] = useState({ show: false, message: '', type: '' });
-  const [adminEmail, setAdminEmail] = useState('');
+  const [adminUsername, setAdminUsername] = useState('');
   
   // Appearance settings from localStorage (admin-specific keys)
   const [theme, setTheme] = useState(() => getStoredAppearanceSettings(true).theme);
@@ -19,7 +19,7 @@ const AdminSettings = () => {
   const [showThemeModal, setShowThemeModal] = useState(false);
   const [showFontSizeModal, setShowFontSizeModal] = useState(false);
   const [showUiSizeModal, setShowUiSizeModal] = useState(false);
-  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [showUsernameModal, setShowUsernameModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
 
   useEffect(() => {
@@ -34,9 +34,9 @@ const AdminSettings = () => {
         const response = await axios.get('/users/profile', {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
-        setAdminEmail(response.data?.Email || response.data?.email || user?.email || '');
+        setAdminUsername(response.data?.Username || user?.username || '');
       } catch (error) {
-        setAdminEmail(user?.email || '');
+        setAdminUsername(user?.username || '');
       }
     };
 
@@ -73,15 +73,15 @@ const AdminSettings = () => {
     showNotification('UI size updated successfully');
   };
 
-  const handleUpdateEmail = async (newEmail) => {
+  const handleUpdateUsername = async (newUsername) => {
     try {
-      await axios.put('/users/profile', { email: newEmail });
+      await axios.put('/users/profile', { username: newUsername });
 
-      setAdminEmail(newEmail);
-      setShowEmailModal(false);
-      showNotification('Email updated successfully');
+      setAdminUsername(newUsername);
+      setShowUsernameModal(false);
+      showNotification('Username updated successfully');
     } catch (error) {
-      showNotification(error.response?.data?.message || 'Failed to update email', 'error');
+      showNotification(error.response?.data?.message || 'Failed to update username', 'error');
     }
   };
 
@@ -201,11 +201,11 @@ const AdminSettings = () => {
           <div className="space-y-4">
             <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
               <div>
-                <h3 className="font-semibold text-gray-900">Email</h3>
-                <p className="text-sm text-gray-500">{adminEmail || user?.email || 'Not set'}</p>
+                <h3 className="font-semibold text-gray-900">Username</h3>
+                <p className="text-sm text-gray-500">{adminUsername || user?.username || 'Not set'}</p>
               </div>
               <button
-                onClick={() => setShowEmailModal(true)}
+                onClick={() => setShowUsernameModal(true)}
                 className="px-4 py-2 bg-[#346C9A] text-white rounded-lg hover:bg-[#2A5D84] transition-all"
               >
                 Change
@@ -254,11 +254,11 @@ const AdminSettings = () => {
         />
       )}
 
-      {showEmailModal && (
-        <EmailModal
-          currentEmail={adminEmail || user?.email || ''}
-          onSave={handleUpdateEmail}
-          onClose={() => setShowEmailModal(false)}
+      {showUsernameModal && (
+        <UsernameModal
+          currentUsername={adminUsername || user?.username || ''}
+          onSave={handleUpdateUsername}
+          onClose={() => setShowUsernameModal(false)}
         />
       )}
 
@@ -273,23 +273,23 @@ const AdminSettings = () => {
   );
 };
 
-const EmailModal = ({ currentEmail, onSave, onClose }) => {
-  const [email, setEmail] = useState(currentEmail);
+const UsernameModal = ({ currentUsername, onSave, onClose }) => {
+  const [username, setUsername] = useState(currentUsername);
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
-        <h3 className="text-2xl font-bold mb-4">Change Email</h3>
+        <h3 className="text-2xl font-bold mb-4">Change Username</h3>
         <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-[#346C9A] focus:outline-none mb-4"
-          placeholder="Enter new email"
+          placeholder="Enter new username"
         />
         <div className="flex gap-3">
           <button
-            onClick={() => onSave(email)}
+            onClick={() => onSave(username)}
             className="flex-1 px-4 py-2 bg-[#346C9A] text-white rounded-lg font-semibold hover:bg-[#2A5D84]"
           >
             Save

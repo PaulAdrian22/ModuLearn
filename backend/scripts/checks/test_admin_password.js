@@ -7,20 +7,20 @@ async function testAdminPassword() {
     
     // Get admin user from database
     const users = await query(
-      'SELECT UserID, Name, Email, Password, Role FROM user WHERE Email = ?',
-      ['admin@modulearn.com']
+      'SELECT UserID, Name, Username, Password, Role FROM user WHERE Username = ?',
+      ['admin']
     );
-    
+
     if (users.length === 0) {
-      console.log('❌ Admin user not found in database');
+      console.log('Admin user not found in database');
       process.exit(1);
     }
-    
+
     const user = users[0];
     console.log('Found admin user:');
     console.log(`  UserID: ${user.UserID}`);
     console.log(`  Name: ${user.Name}`);
-    console.log(`  Email: ${user.Email}`);
+    console.log(`  Username: ${user.Username}`);
     console.log(`  Role: ${user.Role}`);
     console.log(`  Password Hash: ${user.Password}\n`);
     

@@ -18,6 +18,8 @@
     "import:lesson7": "node scripts/imports/import_lesson7_text.js",
     "seed:simulations": "node scripts/seeds/seed_simulation_activities.js",
     "migrate:simulation:admin": "node scripts/migrations/add_simulation_admin_columns.js",
+    "migrate:gender": "node scripts/migrations/add_gender_column.js",
+    "migrate:rename-email": "node scripts/migrations/rename_email_to_username.js",
     "verify:simulations": "node scripts/checks/verify_simulation_assets.js",
     "sync:remote:api": "node scripts/imports/sync_local_to_remote_api.js",
     "migrate:media:azure": "node scripts/migrations/migrate_media_to_azure_blob.js",

@@ -30,7 +30,7 @@ const authenticate = (req, res, next) => {
     // Attach user info to request
     req.user = {
       userId: decoded.userId,
-      email: decoded.email,
+      username: decoded.username,
       name: decoded.name,
       role: decoded.role || 'student'
     };
@@ -70,7 +70,7 @@ const optionalAuth = (req, res, next) => {
       
       req.user = {
         userId: decoded.userId,
-        email: decoded.email,
+        username: decoded.username,
         name: decoded.name,
         role: decoded.role || 'student'
       };

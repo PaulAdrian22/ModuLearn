@@ -15,8 +15,10 @@ router.get('/profile', authenticate, userController.getUserProfile);
 // PUT /api/users/profile - Update user profile
 router.put('/profile', authenticate, [
   body('name').optional().trim().notEmpty().withMessage('Name cannot be empty'),
-  body('email').optional().isEmail().withMessage('Email must be valid'),
-  body('age').optional().isInt({ min: 1, max: 120 }).withMessage('Age must be between 1 and 120'),
+  body('username').optional().trim()
+    .isLength({ min: 3, max: 100 }).withMessage('Username must be 3-100 characters')
+    .matches(/^[A-Za-z0-9._@-]+$/).withMessage('Username may only contain letters, numbers, and . _ - @'),
+  body('age').optional().isInt({ min: 15, max: 65 }).withMessage('Age must be between 15 and 65'),
   body('educationalBackground').optional().trim(),
   body('preferredLanguage')
     .optional()
@@ -59,8 +61,8 @@ router.get('/all', authenticate, userController.getAllUsers);
 // GET /api/users/:id/details - Get detailed user info (admin only)
 router.get('/:id/details', authenticate, requireAdmin, userController.getUserDetails);
 
-// DELETE /api/users/delete/:id - Delete user account (admin or self)
-router.delete('/delete/:id', authenticate, userController.deleteUser);
+// PUT /api/users/archive/:id - Archive user account (admin only)
+router.put('/archive/:id', authenticate, requireAdmin, userController.archiveUser);
 
 // POST /api/users/report-issue - Submit an issue report
 router.post('/report-issue', authenticate, [

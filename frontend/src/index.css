@@ -486,6 +486,78 @@
   color: #e2e8f0;
 }
 
+.theme-dark .bg-background {
+  background-color: #0b1220 !important;
+}
+
+.theme-dark .bg-background-light {
+  background-color: #111a2b !important;
+}
+
+.theme-dark .bg-surface {
+  background-color: #162234 !important;
+  color: #e2e8f0 !important;
+}
+
+.theme-dark .bg-surface-light {
+  background-color: #1c2a3d !important;
+  color: #e2e8f0 !important;
+}
+
+.theme-dark .text-text-primary {
+  color: #e2e8f0 !important;
+}
+
+.theme-dark .text-text-secondary {
+  color: #cbd5e1 !important;
+}
+
+.theme-dark .text-text-muted {
+  color: #94a3b8 !important;
+}
+
+.theme-dark .border-border {
+  border-color: #334155 !important;
+}
+
+.theme-dark .input {
+  background-color: #1e293b !important;
+  color: #e2e8f0 !important;
+  border-color: #334155 !important;
+}
+
+.theme-dark .input::placeholder {
+  color: #94a3b8 !important;
+}
+
+.theme-dark .card {
+  background-color: #162234 !important;
+  border-color: #334155 !important;
+}
+
+.theme-dark .card-hover {
+  border-color: #3b4a5f !important;
+}
+
+.theme-dark table {
+  background-color: #121a2a;
+  color: #e2e8f0;
+  border-color: #334155;
+}
+
+.theme-dark thead {
+  background-color: #19263a;
+}
+
+.theme-dark th,
+.theme-dark td {
+  border-color: #334155 !important;
+}
+
+.theme-dark tbody tr:nth-child(even) {
+  background-color: #141f30;
+}
+
 .theme-dark .bg-\[\#F5F7FA\] {
   background-color: #0f172a !important;
 }

@@ -108,7 +108,7 @@ const SimulationRenderer = ({
 
   return (
     <div
-      className={`relative w-full aspect-[16/10] rounded-xl bg-[#f3f5f8] border-2 border-transparent overflow-hidden select-none transition-transform duration-500 ease-out ${
+      className={`relative w-full max-w-full mx-auto aspect-[16/10] max-h-[55vh] sm:max-h-[65vh] lg:max-h-none rounded-xl bg-[#f3f5f8] border-2 border-transparent overflow-hidden select-none transition-transform duration-500 ease-out ${
         'scale-100'
       }`}
     >

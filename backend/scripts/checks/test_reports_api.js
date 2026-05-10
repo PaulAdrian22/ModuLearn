@@ -12,7 +12,7 @@ async function testReportsAPI() {
         r.IssueType as Category,
         r.UserID,
         u.Name as Name,
-        u.Email,
+        u.Username,
         r.Status,
         r.Details,
         r.LessonTitle,

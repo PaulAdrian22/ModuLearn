@@ -5,58 +5,38 @@ import { useAuth } from '../App';
 import AdminNavbar from '../components/AdminNavbar';
 import { normalizeSimulationSkill } from '../utils/simulationFlow';
 
+// Aligned with the Mastery Performance palette in Progress.js so the same
+// skill always reads as the same color across the system.
 const SKILL_TYPE_THEME = {
   Memorization: {
-    solid: '#8AB4F8',
-    soft: '#E8F0FE',
-    text: '#2C5A9E'
+    solid: '#F39C12',
+    soft: '#FEF3E0',
+    text: '#7A4D08'
   },
   'Analytical Thinking': {
-    solid: '#FFB74D',
-    soft: '#FFF3E0',
-    text: '#8B5A15'
+    solid: '#2BC4B3',
+    soft: '#E0F7F4',
+    text: '#0E5F58'
   },
   'Critical Thinking': {
-    solid: '#EF5350',
-    soft: '#FFEBEE',
-    text: '#8C2C2A'
+    solid: '#87CEEB',
+    soft: '#EAF5FA',
+    text: '#2C5C77'
   },
   'Problem Solving': {
-    solid: '#AB47BC',
-    soft: '#F3E5F5',
-    text: '#6A2D78'
+    solid: '#FF6B6B',
+    soft: '#FFEAEA',
+    text: '#7A2A2A'
   },
   'Technical Comprehension': {
-    solid: '#4DD0E1',
-    soft: '#E0F7FA',
-    text: '#176A75'
+    solid: '#9B59B6',
+    soft: '#F2E6F5',
+    text: '#52285F'
   },
   'No Skill': {
-    solid: '#6B7280',
+    solid: '#9CA3AF',
     soft: '#F3F4F6',
     text: '#374151'
-  }
-};
-
-const DOCX_SIMULATION_SKILL_MAP = {
-  3: {
-    1: 'Memorization',
-    2: 'Technical Comprehension',
-    3: 'Analytical Thinking',
-    4: 'Problem Solving',
-    5: 'Critical Thinking',
-    6: 'Memorization',
-    7: 'Technical Comprehension',
-    8: 'Analytical Thinking',
-    9: 'Problem Solving',
-    10: 'Critical Thinking'
-  },
-  4: {
-    1: 'Problem Solving',
-    2: 'Critical Thinking',
-    3: 'Analytical Thinking',
-    4: 'Technical Comprehension',
-    5: 'Memorization'
   }
 };
 
@@ -75,36 +55,52 @@ const ACTIVITY_TYPE_THEME = {
     soft: '#E8F5E9',
     text: '#1F5E29',
   },
+  Troubleshooting: {
+    label: 'Troubleshooting',
+    tag: 'Diagnose and fix',
+    solid: '#FFB74D',
+    soft: '#FFF3E0',
+    text: '#8B5A15',
+  },
+  Unassigned: {
+    label: 'Unassigned',
+    tag: 'No activity type set',
+    solid: '#9CA3AF',
+    soft: '#F3F4F6',
+    text: '#374151',
+  },
 };
+
+const ACTIVITY_TYPE_OPTIONS = ['Assembling', 'Disassembling', 'Troubleshooting'];
 
 const getActivityType = (simulation = {}) => {
-  const moduleId = Number(simulation?.ModuleID || 0);
-  if (moduleId === 3) return 'Disassembling';
-  if (moduleId === 4) return 'Assembling';
-
-  const title = String(simulation?.SimulationTitle || '').toLowerCase();
-  if (/^\s*installing\b/.test(title) || /\bassembl/.test(title)) return 'Assembling';
-  return 'Disassembling';
-};
-
-const getDocxSkillForSimulation = (simulation = {}) => {
-  const moduleId = Number(simulation?.ModuleID || 0);
-  const simulationOrder = Number(simulation?.SimulationOrder || 0);
-  if (!moduleId || !simulationOrder) return '';
-
-  return DOCX_SIMULATION_SKILL_MAP[moduleId]?.[simulationOrder] || '';
+  const stored = String(simulation?.ActivityType || '').trim();
+  if (ACTIVITY_TYPE_OPTIONS.includes(stored)) return stored;
+  return 'Unassigned';
 };
 
 const getSkillTypeAssignedPerSimulation = (simulation = {}) => {
-  // Keep admin card skill colors aligned with the learner simulation list.
-  return getDocxSkillForSimulation(simulation);
+  // Purely data-driven — no hardcoded fallback.
+  return simulation?.SkillType || '';
 };
 
 const getSkillTheme = (rawSkillType) => {
-  const normalizedSkillType = normalizeSimulationSkill(rawSkillType, 'Technical Comprehension');
+  if (!rawSkillType) {
+    return {
+      skillType: '',
+      ...SKILL_TYPE_THEME['No Skill'],
+    };
+  }
+  const normalizedSkillType = normalizeSimulationSkill(rawSkillType, '');
+  if (!normalizedSkillType) {
+    return {
+      skillType: '',
+      ...SKILL_TYPE_THEME['No Skill'],
+    };
+  }
   return {
     skillType: normalizedSkillType,
-    ...(SKILL_TYPE_THEME[normalizedSkillType] || SKILL_TYPE_THEME['Technical Comprehension'])
+    ...(SKILL_TYPE_THEME[normalizedSkillType] || SKILL_TYPE_THEME['No Skill']),
   };
 };
 
@@ -118,7 +114,10 @@ const AdminSimulations = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [warning, setWarning] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [createForm, setCreateForm] = useState({ SimulationTitle: '', ModuleID: '', ActivityType: '', Description: '' });
+  const [createError, setCreateError] = useState('');
+  const [creating, setCreating] = useState(false);
 
   useEffect(() => {
     if (user && user.role !== 'admin') {
@@ -234,24 +233,38 @@ const AdminSimulations = () => {
     });
   }, [simulations]);
 
-  const filteredSimulations = useMemo(() => {
-    const normalizedSearch = searchTerm.trim().toLowerCase();
-    if (!normalizedSearch) return sortedSimulations;
+  const filteredSimulations = sortedSimulations;
 
-    return sortedSimulations.filter((simulation) => {
-      const title = String(simulation?.SimulationTitle || '').toLowerCase();
-      const description = String(simulation?.Description || '').toLowerCase();
-      const activityOrder = String(simulation?.activityOrder || simulation?.SimulationOrder || '').toLowerCase();
-      const activityType = String(simulation?.ActivityType || '').toLowerCase();
+  const handleCreateSimulation = async () => {
+    setCreateError('');
+    const title = createForm.SimulationTitle.trim();
+    if (!title) {
+      setCreateError('Title is required');
+      return;
+    }
 
-      return (
-        title.includes(normalizedSearch) ||
-        description.includes(normalizedSearch) ||
-        activityOrder.includes(normalizedSearch) ||
-        activityType.includes(normalizedSearch)
-      );
-    });
-  }, [searchTerm, sortedSimulations]);
+    const payload = {
+      SimulationTitle: title,
+      ModuleID: createForm.ModuleID ? Number(createForm.ModuleID) : null,
+      ActivityType: createForm.ActivityType.trim() || null,
+      Description: createForm.Description.trim() || null,
+    };
+
+    try {
+      setCreating(true);
+      const response = await axios.post('/admin/simulations', payload);
+      const newId = response?.data?.SimulationID;
+      setShowCreateModal(false);
+      setCreateForm({ SimulationTitle: '', ModuleID: '', ActivityType: '', Description: '' });
+      if (newId) {
+        navigate(`/admin/simulations/${newId}`);
+      }
+    } catch (err) {
+      setCreateError(err.response?.data?.message || 'Failed to create simulation');
+    } finally {
+      setCreating(false);
+    }
+  };
 
   return (
     <div className="simulation-theme min-h-screen bg-[#F5F7FA]">
@@ -263,15 +276,16 @@ const AdminSimulations = () => {
             <p className="text-sm text-gray-600 mt-1">Edit learner-facing simulation cards, timeline, and assets.</p>
           </div>
 
-          <div className="relative w-full md:w-96">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(event) => setSearchTerm(event.target.value)}
-              placeholder="Search simulation title or topic..."
-              className="w-full rounded-xl border border-[#bed4e6] bg-white px-4 py-3 text-sm text-[#17364f] placeholder:text-[#7890a2] focus:outline-none focus:ring-2 focus:ring-[#8bb3d8]"
-            />
-          </div>
+          <button
+            type="button"
+            onClick={() => setShowCreateModal(true)}
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-highlight hover:bg-highlight-dark text-white font-semibold px-5 py-3 shadow-sm transition-colors"
+          >
+            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            Add Simulation
+          </button>
         </div>
 
         {loading && (
@@ -298,12 +312,10 @@ const AdminSimulations = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
             </svg>
             <h3 className="simulation-title text-xl font-bold text-[#2b4254] mb-2">
-              {simulations.length === 0 ? 'No simulations found' : 'No simulation matched your search'}
+              No simulations found
             </h3>
             <p className="simulation-text text-[#5d7486]">
-              {simulations.length === 0
-                ? 'Simulations are seeded from the database.'
-                : 'Try another keyword or clear the search bar.'}
+              Use the Add Simulation button to create one.
             </p>
           </div>
         )}
@@ -338,25 +350,6 @@ const AdminSimulations = () => {
                         Available
                       </span>
                     </div>
-
-                    {simulation.hasAdminOverride ? (
-                      <span
-                        className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full text-white"
-                        style={{ backgroundColor: solid }}
-                      >
-                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                        Admin Override
-                      </span>
-                    ) : (
-                      <span
-                        className="px-3 py-1 text-xs font-semibold rounded-full"
-                        style={{ backgroundColor: soft, color: text }}
-                      >
-                        Default Manifest
-                      </span>
-                    )}
                   </div>
 
                   <h3 className="simulation-title text-xl font-bold text-[#0B2B4C] mb-2 leading-tight min-h-[3.2rem]">
@@ -388,7 +381,7 @@ const AdminSimulations = () => {
                       className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold"
                       style={{ backgroundColor: soft, color: text, border: `1px solid ${solid}40` }}
                     >
-                      Skill: {skillType}
+                      Skill: {skillType || 'Not assigned'}
                     </span>
 
                     <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
@@ -402,21 +395,7 @@ const AdminSimulations = () => {
                     )}
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-4 text-xs text-gray-600 mb-6">
-                    <div className="flex items-center gap-1">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7h18M8 7V5a4 4 0 118 0v2m-9 4h10m-9 4h10" />
-                      </svg>
-                      <span>Simulation #{simulation.SimulationOrder}</span>
-                    </div>
-
-                    <div className="flex items-center gap-1">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <span>{simulation.hasAdminOverride ? 'Custom timeline active' : 'Using default timeline'}</span>
-                    </div>
-                  </div>
+                  <div className="mb-6" />
 
                   <button
                     type="button"
@@ -436,6 +415,94 @@ const AdminSimulations = () => {
           </div>
         )}
       </div>
+
+      {showCreateModal && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 sm:p-8">
+            <h3 className="text-2xl font-bold text-[#0B2B4C] mb-1">Add Simulation</h3>
+            <p className="text-sm text-gray-500 mb-5">Create a new simulation activity. You will be redirected to the editor after saving.</p>
+
+            {createError && (
+              <div className="rounded-lg bg-red-50 border border-red-200 text-red-700 px-3 py-2 mb-4 text-sm">
+                {createError}
+              </div>
+            )}
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-[#17364f] mb-1">Title <span className="text-red-500">*</span></label>
+                <input
+                  type="text"
+                  value={createForm.SimulationTitle}
+                  onChange={(e) => setCreateForm({ ...createForm, SimulationTitle: e.target.value })}
+                  className="w-full rounded-lg border border-[#bed4e6] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#8bb3d8]"
+                  placeholder="e.g. Assemble the motherboard"
+                  maxLength={200}
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-[#17364f] mb-1">Module ID</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={createForm.ModuleID}
+                    onChange={(e) => setCreateForm({ ...createForm, ModuleID: e.target.value })}
+                    className="w-full rounded-lg border border-[#bed4e6] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#8bb3d8]"
+                    placeholder="Optional"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-[#17364f] mb-1">Activity Type</label>
+                  <select
+                    value={createForm.ActivityType}
+                    onChange={(e) => setCreateForm({ ...createForm, ActivityType: e.target.value })}
+                    className="w-full rounded-lg border border-[#bed4e6] px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#8bb3d8]"
+                  >
+                    <option value="">Select type</option>
+                    <option value="Assembling">Assembling</option>
+                    <option value="Disassembling">Disassembling</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-[#17364f] mb-1">Description</label>
+                <textarea
+                  rows={3}
+                  value={createForm.Description}
+                  onChange={(e) => setCreateForm({ ...createForm, Description: e.target.value })}
+                  className="w-full rounded-lg border border-[#bed4e6] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#8bb3d8] resize-none"
+                  placeholder="Optional"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3 mt-6">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowCreateModal(false);
+                  setCreateError('');
+                }}
+                disabled={creating}
+                className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleCreateSimulation}
+                disabled={creating}
+                className="px-4 py-2 rounded-lg bg-highlight hover:bg-highlight-dark text-white font-semibold disabled:opacity-50"
+              >
+                {creating ? 'Creating...' : 'Create'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

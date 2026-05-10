@@ -9,13 +9,13 @@
 CREATE TABLE user (
     UserID INT AUTO_INCREMENT PRIMARY KEY,
     Name VARCHAR(100) NOT NULL,
-    Email VARCHAR(100) UNIQUE NOT NULL,
+    Username VARCHAR(100) UNIQUE NOT NULL,
     Password VARCHAR(255) NOT NULL,
     Age INT,
     EducationalBackground VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP NULL,
-    INDEX idx_email (Email)
+    INDEX idx_username (Username)
 );
 
 -- ============================================
@@ -138,8 +138,8 @@ CREATE TABLE learning_skill (
 -- ============================================
 
 -- Insert sample admin user (password should be hashed in production)
-INSERT INTO user (Name, Email, Password, Age, EducationalBackground) 
-VALUES ('Administrator', 'admin@modulearn.com', '$2a$10$example_hash_here', 30, 'Masters Degree');
+INSERT INTO user (Name, Username, Password, Age, EducationalBackground)
+VALUES ('Administrator', 'admin', '$2a$10$example_hash_here', 30, 'Masters Degree');
 
 -- Insert sample modules (TESDA CHS NC II aligned)
 INSERT INTO module (ModuleTitle, Description, LessonOrder, Tesda_Reference, Is_Unlocked) VALUES
@@ -163,7 +163,7 @@ CREATE VIEW v_user_progress_summary AS
 SELECT 
     u.UserID,
     u.Name,
-    u.Email,
+    u.Username,
     m.ModuleID,
     m.ModuleTitle,
     p.CompletionRate,

@@ -251,6 +251,31 @@ const AdminSimulationEditor = () => {
     }));
   };
 
+  const updateActivityType = async (newType) => {
+    setSimulation((previous) => (previous ? { ...previous, ActivityType: newType } : previous));
+    try {
+      await axios.patch(`/admin/simulations/${id}`, { ActivityType: newType });
+    } catch (err) {
+      console.error('Failed to update activity type:', err);
+      setError(err?.response?.data?.message || 'Failed to update activity type');
+    }
+  };
+
+  const persistSkillType = async (newSkill) => {
+    try {
+      await axios.patch(`/admin/simulations/${id}`, { SkillType: newSkill });
+      setSimulation((previous) => (previous ? { ...previous, SkillType: newSkill } : previous));
+    } catch (err) {
+      console.error('Failed to update skill type:', err);
+      setError(err?.response?.data?.message || 'Failed to update skill type');
+    }
+  };
+
+  const updateSkill = (newSkill) => {
+    updateMeta({ skill: newSkill });
+    persistSkillType(newSkill);
+  };
+
   const addMoment = () => {
     setConfig((previous) => {
       const maxOrder = previous.timeline.reduce((max, moment) => Math.max(max, Number(moment.order) || 0), 0);
@@ -634,7 +659,14 @@ const AdminSimulationEditor = () => {
                 <h3 className="text-xl font-bold text-[#0B2B4C]">Introduction Details</h3>
                 <p className="text-sm text-gray-600 mt-1">Configure title, description, skill, and instructions for learners.</p>
               </div>
-              <SimulationInfoEditor meta={meta} onUpdateMeta={updateMeta} accentColor={activityTheme.solid} />
+              <SimulationInfoEditor
+                meta={meta}
+                onUpdateMeta={updateMeta}
+                accentColor={activityTheme.solid}
+                activityType={simulation?.ActivityType || ''}
+                onUpdateActivityType={updateActivityType}
+                onUpdateSkill={updateSkill}
+              />
             </div>
 
             <PreviewCard
@@ -830,7 +862,7 @@ const StageButton = ({ active, number, title, subtitle, accentColor, onClick }) 
   );
 };
 
-const SimulationInfoEditor = ({ meta, onUpdateMeta, accentColor }) => {
+const SimulationInfoEditor = ({ meta, onUpdateMeta, accentColor, activityType, onUpdateActivityType, onUpdateSkill }) => {
   return (
     <div className="space-y-5">
       <div>
@@ -848,6 +880,22 @@ const SimulationInfoEditor = ({ meta, onUpdateMeta, accentColor }) => {
       </div>
 
       <div>
+        <label className="block text-sm font-semibold text-[#0B2B4C] mb-2">Activity Type</label>
+        <select
+          value={activityType || ''}
+          onChange={(event) => onUpdateActivityType?.(event.target.value)}
+          className="w-full h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-900 bg-white"
+          onFocus={(event) => { event.currentTarget.style.borderColor = accentColor; }}
+          onBlur={(event) => { event.currentTarget.style.borderColor = '#D1D5DB'; }}
+        >
+          <option value="" disabled>Select an activity type</option>
+          <option value="Assembling">Assembling</option>
+          <option value="Disassembling">Disassembling</option>
+          <option value="Troubleshooting">Troubleshooting</option>
+        </select>
+      </div>
+
+      <div>
         <label className="block text-sm font-semibold text-[#0B2B4C] mb-2">Description</label>
         <textarea
           rows={4}
@@ -862,15 +910,20 @@ const SimulationInfoEditor = ({ meta, onUpdateMeta, accentColor }) => {
 
       <div>
         <label className="block text-sm font-semibold text-[#0B2B4C] mb-2">Skill / Objective</label>
-        <input
-          type="text"
-          value={meta.skill}
-          onChange={(event) => onUpdateMeta({ skill: event.target.value })}
-          className="w-full h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-900"
+        <select
+          value={meta.skill || ''}
+          onChange={(event) => (onUpdateSkill ? onUpdateSkill(event.target.value) : onUpdateMeta({ skill: event.target.value }))}
+          className="w-full h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-900 bg-white"
           onFocus={(event) => { event.currentTarget.style.borderColor = accentColor; }}
           onBlur={(event) => { event.currentTarget.style.borderColor = '#D1D5DB'; }}
-          placeholder="Example: Technical Comprehension"
-        />
+        >
+          <option value="" disabled>Select a skill</option>
+          <option value="Memorization">Memorization</option>
+          <option value="Analytical Thinking">Analytical Thinking</option>
+          <option value="Critical Thinking">Critical Thinking</option>
+          <option value="Problem Solving">Problem Solving</option>
+          <option value="Technical Comprehension">Technical Comprehension</option>
+        </select>
       </div>
 
       <div>

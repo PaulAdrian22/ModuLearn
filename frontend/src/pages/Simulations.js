@@ -12,58 +12,37 @@ const getCompletionPercent = (simulation) => {
   return Math.max(0, Math.min(100, Math.round((score / maxScore) * 100)));
 };
 
+// Aligned with the Mastery Performance palette in Progress.js.
 const SKILL_TYPE_THEME = {
   Memorization: {
-    solid: '#8AB4F8',
-    soft: '#E8F0FE',
-    text: '#2C5A9E'
+    solid: '#F39C12',
+    soft: '#FEF3E0',
+    text: '#7A4D08'
   },
   'Analytical Thinking': {
-    solid: '#FFB74D',
-    soft: '#FFF3E0',
-    text: '#8B5A15'
+    solid: '#2BC4B3',
+    soft: '#E0F7F4',
+    text: '#0E5F58'
   },
   'Critical Thinking': {
-    solid: '#EF5350',
-    soft: '#FFEBEE',
-    text: '#8C2C2A'
+    solid: '#87CEEB',
+    soft: '#EAF5FA',
+    text: '#2C5C77'
   },
   'Problem Solving': {
-    solid: '#AB47BC',
-    soft: '#F3E5F5',
-    text: '#6A2D78'
+    solid: '#FF6B6B',
+    soft: '#FFEAEA',
+    text: '#7A2A2A'
   },
   'Technical Comprehension': {
-    solid: '#4DD0E1',
-    soft: '#E0F7FA',
-    text: '#176A75'
+    solid: '#9B59B6',
+    soft: '#F2E6F5',
+    text: '#52285F'
   },
   'No Skill': {
-    solid: '#6B7280',
+    solid: '#9CA3AF',
     soft: '#F3F4F6',
     text: '#374151'
-  }
-};
-
-const DOCX_SIMULATION_SKILL_MAP = {
-  3: {
-    1: 'Memorization',
-    2: 'Technical Comprehension',
-    3: 'Analytical Thinking',
-    4: 'Problem Solving',
-    5: 'Critical Thinking',
-    6: 'Memorization',
-    7: 'Technical Comprehension',
-    8: 'Analytical Thinking',
-    9: 'Problem Solving',
-    10: 'Critical Thinking'
-  },
-  4: {
-    1: 'Problem Solving',
-    2: 'Critical Thinking',
-    3: 'Analytical Thinking',
-    4: 'Technical Comprehension',
-    5: 'Memorization'
   }
 };
 
@@ -81,25 +60,29 @@ const ACTIVITY_TYPE_THEME = {
     solid: '#66BB6A',
     soft: '#E8F5E9',
     text: '#1F5E29'
+  },
+  Troubleshooting: {
+    label: 'Troubleshooting',
+    tag: 'Diagnose and fix',
+    solid: '#FFB74D',
+    soft: '#FFF3E0',
+    text: '#8B5A15'
+  },
+  Unassigned: {
+    label: 'Unassigned',
+    tag: 'No activity type set',
+    solid: '#9CA3AF',
+    soft: '#F3F4F6',
+    text: '#374151'
   }
 };
 
+const ACTIVITY_TYPE_OPTIONS = ['Assembling', 'Disassembling', 'Troubleshooting'];
+
 const getActivityType = (simulation = {}) => {
-  const moduleId = Number(simulation?.ModuleID || 0);
-  if (moduleId === 3) return 'Disassembling';
-  if (moduleId === 4) return 'Assembling';
-
-  const title = String(simulation?.SimulationTitle || '').toLowerCase();
-  if (/^\s*installing\b/.test(title) || /\bassembl/.test(title)) return 'Assembling';
-  return 'Disassembling';
-};
-
-const getDocxSkillForSimulation = (simulation = {}) => {
-  const moduleId = Number(simulation?.ModuleID || 0);
-  const simulationOrder = Number(simulation?.SimulationOrder || 0);
-  if (!moduleId || !simulationOrder) return '';
-
-  return DOCX_SIMULATION_SKILL_MAP[moduleId]?.[simulationOrder] || '';
+  const stored = String(simulation?.ActivityType || '').trim();
+  if (ACTIVITY_TYPE_OPTIONS.includes(stored)) return stored;
+  return 'Unassigned';
 };
 
 const getSkillTypeAssignedPerSimulation = (simulation = {}) => {
@@ -113,25 +96,24 @@ const getSkillTypeAssignedPerSimulation = (simulation = {}) => {
       const zoneSkillType = String(parsedZoneData?.skillType || '').trim();
       if (zoneSkillType) return zoneSkillType;
     } catch (_error) {
-      // Ignore malformed ZoneData and use DOCX fallback.
+      // Ignore malformed ZoneData.
     }
   }
 
-  return getDocxSkillForSimulation(simulation);
+  return '';
 };
 
 const getSkillTheme = (rawSkillType) => {
-  if (String(rawSkillType || '').trim().toLowerCase() === 'no skill') {
-    return {
-      skillType: 'No Skill',
-      ...SKILL_TYPE_THEME['No Skill']
-    };
+  if (!rawSkillType) {
+    return { skillType: '', ...SKILL_TYPE_THEME['No Skill'] };
   }
-
-  const normalizedSkillType = normalizeSimulationSkill(rawSkillType, 'Technical Comprehension');
+  const normalizedSkillType = normalizeSimulationSkill(rawSkillType, '');
+  if (!normalizedSkillType) {
+    return { skillType: '', ...SKILL_TYPE_THEME['No Skill'] };
+  }
   return {
     skillType: normalizedSkillType,
-    ...(SKILL_TYPE_THEME[normalizedSkillType] || SKILL_TYPE_THEME['Technical Comprehension'])
+    ...(SKILL_TYPE_THEME[normalizedSkillType] || SKILL_TYPE_THEME['No Skill'])
   };
 };
 
@@ -301,7 +283,7 @@ const Simulations = () => {
                       className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold"
                       style={{ backgroundColor: soft, color: text, border: `1px solid ${solid}40` }}
                     >
-                      Skill: {skillType}
+                      Skill: {skillType || 'Not assigned'}
                     </span>
                   </div>
 

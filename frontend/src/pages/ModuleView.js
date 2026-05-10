@@ -35,6 +35,7 @@ const ModuleView = () => {
   const [diagnosticScore, setDiagnosticScore] = useState(null);
   const [isReviewMode, setIsReviewMode] = useState(false);
   const [showReferencesPanel, setShowReferencesPanel] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [currentTopicPage, setCurrentTopicPage] = useState(0);
   const [showLessonIntro, setShowLessonIntro] = useState(true);
   const contentScrollRef = useRef(null);
@@ -908,8 +909,15 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
       });
     };
 
+    const notifyAchievementRefresh = () => {
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('achievementMetricsUpdated'));
+      }
+    };
+
     try {
       await persistProgress();
+      notifyAchievementRefresh();
 
       if (completionRate >= 100 && navigateOnComplete) {
         navigate('/dashboard');
@@ -919,6 +927,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
         try {
           await axios.post('/progress/start', { moduleId: numericModuleId });
           await persistProgress();
+          notifyAchievementRefresh();
 
           if (completionRate >= 100 && navigateOnComplete) {
             navigate('/dashboard');
@@ -1367,11 +1376,24 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
           <>
           <div className="fixed inset-0 z-40 flex">
 
-            {/* Sidebar - Always visible */}
-            <div className="w-80 min-w-[320px] bg-white shadow-2xl z-50 flex flex-col">
+            {/* Mobile backdrop */}
+            {sidebarOpen && (
+              <div
+                className="lg:hidden fixed inset-0 bg-black/50 z-40"
+                onClick={() => setSidebarOpen(false)}
+                aria-hidden="true"
+              />
+            )}
+
+            {/* Sidebar */}
+            <div
+              className={`fixed inset-y-0 left-0 w-80 max-w-[85vw] min-w-[280px] bg-white shadow-2xl z-50 flex flex-col transform transition-transform duration-200 ease-out lg:static lg:translate-x-0 lg:max-w-none lg:min-w-[320px] ${
+                sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+              }`}
+            >
               {/* Sidebar Header */}
-              <div className="p-6 border-b border-gray-200">
-                <button 
+              <div className="p-6 border-b border-gray-200 flex items-center justify-between gap-3">
+                <button
                   onClick={() => navigate('/dashboard')}
                   className="flex items-center gap-3 text-primary group hover:text-highlight-dark transition-colors"
                 >
@@ -1380,6 +1402,15 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                     <path d="M12 19l-7-7 7-7" />
                   </svg>
                   <span className="font-medium">Back to Learning Path</span>
+                </button>
+                <button
+                  onClick={() => setSidebarOpen(false)}
+                  className="lg:hidden p-2 -mr-2 text-gray-500 hover:text-gray-800"
+                  aria-label="Close menu"
+                >
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
                 </button>
               </div>
 
@@ -1511,10 +1542,19 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
             </div>
 
             {/* Main Content Area */}
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col w-full lg:w-auto min-w-0">
               {/* Header - Matching image design exactly */}
-              <div className="bg-primary text-white py-5 px-8 flex items-center gap-4 shadow-md">
-                <h1 className="text-2xl font-bold">
+              <div className="bg-primary text-white py-5 px-4 sm:px-8 flex items-center gap-3 sm:gap-4 shadow-md">
+                <button
+                  onClick={() => setSidebarOpen(true)}
+                  className="lg:hidden p-2 -ml-2 rounded-md hover:bg-white/10"
+                  aria-label="Open menu"
+                >
+                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                </button>
+                <h1 className="text-lg sm:text-xl lg:text-2xl font-bold truncate">
                   {toRoman(module.LessonOrder)}.  {toPlainText(module.ModuleTitle)}
                 </h1>
               </div>

@@ -69,7 +69,7 @@ const AdminLessons = () => {
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [activeTab, setActiveTab] = useState('english'); // 'english', 'taglish', 'deleted'
+  const [activeTab, setActiveTab] = useState('english'); // 'english', 'taglish', 'archived'
   const [lessonActionLoading, setLessonActionLoading] = useState({});
 
   useEffect(() => {
@@ -124,20 +124,20 @@ const AdminLessons = () => {
     navigate(`/admin/lessons/edit/${lesson.ModuleID}`);
   };
 
-  const handleDeleteLesson = async (lessonId) => {
+  const handleArchiveLesson = async (lessonId) => {
     if (lessons.some((lesson) => Number(lesson.ModuleID) === Number(lessonId) && isProtectedLessonFromDeletion(lesson))) {
       return;
     }
 
-    const shouldDelete = await themedConfirm({
-      title: 'Move Lesson to Recycle Bin',
-      message: 'This lesson will be moved to Deleted Lessons and can be restored later.',
-      confirmText: 'Move to Bin',
+    const shouldArchive = await themedConfirm({
+      title: 'Archive Lesson',
+      message: 'This lesson will be moved to Archived Lessons and can be restored later.',
+      confirmText: 'Archive',
       cancelText: 'Cancel',
       variant: 'danger'
     });
 
-    if (!shouldDelete) {
+    if (!shouldArchive) {
       return;
     }
 
@@ -147,14 +147,14 @@ const AdminLessons = () => {
       });
       fetchLessons();
     } catch (err) {
-      console.error('Error deleting lesson:', err);
+      console.error('Error archiving lesson:', err);
     }
   };
 
   const handleRestoreLesson = async (lessonId) => {
     const shouldRestore = await themedConfirm({
       title: 'Restore Lesson',
-      message: 'Restore this lesson from Deleted Lessons?',
+      message: 'Restore this lesson from Archived Lessons?',
       confirmText: 'Restore',
       cancelText: 'Cancel',
       variant: 'success'
@@ -293,13 +293,13 @@ const AdminLessons = () => {
   const taglishLessonsCount = lessons.filter(
     (lesson) => !toBooleanFlag(lesson.Is_Deleted) && normalizeLessonLanguage(lesson.LessonLanguage) === 'Taglish'
   ).length;
-  const deletedLessonsCount = lessons.filter((lesson) => toBooleanFlag(lesson.Is_Deleted)).length;
+  const archivedLessonsCount = lessons.filter((lesson) => toBooleanFlag(lesson.Is_Deleted)).length;
 
   // Filter lessons based on active tab
   const filteredLessons = lessons.filter(lesson => {
-    const isDeleted = toBooleanFlag(lesson.Is_Deleted);
-    if (activeTab === 'deleted') return isDeleted;
-    if (isDeleted) return false;
+    const isArchived = toBooleanFlag(lesson.Is_Deleted);
+    if (activeTab === 'archived') return isArchived;
+    if (isArchived) return false;
     if (activeTab === 'english') return normalizeLessonLanguage(lesson.LessonLanguage) === 'English';
     if (activeTab === 'taglish') return normalizeLessonLanguage(lesson.LessonLanguage) === 'Taglish';
     return false;
@@ -340,15 +340,15 @@ const AdminLessons = () => {
               )}
             </button>
             <button
-              onClick={() => setActiveTab('deleted')}
+              onClick={() => setActiveTab('archived')}
               className={`pb-3 px-2 font-bold text-lg relative ${
-                activeTab === 'deleted'
+                activeTab === 'archived'
                   ? 'text-secondary'
                   : 'text-gray-500'
               }`}
             >
-              Deleted Lessons ({deletedLessonsCount})
-              {activeTab === 'deleted' && (
+              Archived Lessons ({archivedLessonsCount})
+              {activeTab === 'archived' && (
                 <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-highlight"></div>
               )}
             </button>
@@ -367,14 +367,14 @@ const AdminLessons = () => {
           {filteredLessons.length === 0 ? (
             <div className="bg-white rounded-xl shadow-sm text-center py-16">
               <h3 className="text-xl font-bold text-gray-700 mb-2">
-                {activeTab === 'deleted' ? 'Recycle bin is empty' : 'No lessons found'}
+                {activeTab === 'archived' ? 'Archive is empty' : 'No lessons found'}
               </h3>
               <p className="text-gray-500 mb-6">
-                {activeTab === 'deleted'
-                  ? 'Deleted lessons will appear here and can be restored.'
+                {activeTab === 'archived'
+                  ? 'Archived lessons will appear here and can be restored.'
                   : `Start by creating your first ${activeTab === 'taglish' ? 'Taglish' : 'English'} supplementary lesson`}
               </p>
-              {activeTab !== 'deleted' && (
+              {activeTab !== 'archived' && (
                 <button 
                   onClick={handleAddLesson} 
                   className="px-6 py-3 bg-[#E9B766] hover:bg-[#FFA726] text-white rounded-lg font-bold transition-colors duration-200"
@@ -402,7 +402,7 @@ const AdminLessons = () => {
                 <div className="flex-1 p-6">
                   {toBooleanFlag(lesson.Is_Deleted) && (
                     <div className="mb-3 inline-flex items-center rounded-full bg-[#FDECEC] px-3 py-1 text-xs font-semibold text-[#C0392B]">
-                      In Recycle Bin
+                      Archived
                     </div>
                   )}
 
@@ -546,11 +546,11 @@ const AdminLessons = () => {
                           </button>
                           {!isDeleteProtected && (
                             <button
-                              onClick={() => handleDeleteLesson(lesson.ModuleID)}
+                              onClick={() => handleArchiveLesson(lesson.ModuleID)}
                               disabled={Boolean(lessonActionLoading[lesson.ModuleID])}
                               className="min-w-[160px] px-5 py-2 text-center bg-[#EF9A9A] hover:bg-[#E57373] text-white rounded-lg font-semibold transition-all shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
                             >
-                              Delete Lesson
+                              Archive Lesson
                             </button>
                           )}
                         </>

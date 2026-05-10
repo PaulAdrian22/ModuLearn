@@ -10,6 +10,7 @@ const Register = () => {
   const [formData, setFormData] = useState({
     name: '',
     age: '',
+    gender: '',
     username: '',
     password: '',
     confirmPassword: ''
@@ -44,19 +45,21 @@ const Register = () => {
       return;
     }
 
-    if (formData.age && (Number(formData.age) < 1 || Number(formData.age) > 120)) {
-      setError('Age must be between 1 and 120');
+    if (!formData.age || Number(formData.age) < 15 || Number(formData.age) > 65) {
+      setError('Age must be between 15 and 65');
+      setLoading(false);
+      return;
+    }
+
+    if (!formData.gender) {
+      setError('Please select a gender');
       setLoading(false);
       return;
     }
 
     try {
       const { confirmPassword, ...registerData } = formData;
-      if (!registerData.age || registerData.age.trim() === '') {
-        delete registerData.age;
-      } else {
-        registerData.age = Number(registerData.age);
-      }
+      registerData.age = Number(registerData.age);
       const response = await axios.post('/auth/register', registerData);
       navigate('/login');
     } catch (err) {
@@ -116,19 +119,39 @@ const Register = () => {
             {/* Age */}
             <div>
               <label className="block text-sm font-semibold mb-2" style={{ color: '#173F65' }}>
-                Age
+                Age <span className="text-red-500">*</span>
               </label>
               <input
                 type="number"
                 name="age"
                 value={formData.age}
                 onChange={handleChange}
-                placeholder="Enter your age"
+                placeholder="Enter your age (15-65)"
                 className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-highlight focus:outline-none transition-all placeholder-gray-400"
                 style={{ color: '#173F65' }}
-                min="1"
-                max="120"
+                min="15"
+                max="65"
+                required
               />
+            </div>
+
+            {/* Gender */}
+            <div>
+              <label className="block text-sm font-semibold mb-2" style={{ color: '#173F65' }}>
+                Gender <span className="text-red-500">*</span>
+              </label>
+              <select
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+                className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-highlight focus:outline-none transition-all bg-white"
+                style={{ color: formData.gender ? '#173F65' : '#9CA3AF' }}
+                required
+              >
+                <option value="" disabled>Select your gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
             </div>
 
             {/* Username */}

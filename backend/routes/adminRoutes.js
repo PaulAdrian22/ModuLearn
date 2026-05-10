@@ -16,6 +16,7 @@ const {
 } = require('../utils/uploadStorage');
 const { pool } = require('../config/database');
 const { clearNamespace } = require('../utils/responseCache');
+const { getUserIdentityColumn } = require('../utils/userIdentity');
 const {
   getSimulationConfig,
   normalizeStoredConfig,
@@ -1250,13 +1251,15 @@ router.get('/reports', async (req, res) => {
       )
     `);
 
+    const identityColumn = await getUserIdentityColumn();
+
     const reports = await query(`
       SELECT 
         r.ReportID,
         r.IssueType as Category,
         r.UserID,
         u.Name as Name,
-        u.Email,
+        u.${identityColumn} as Username,
         r.Status,
         r.Details,
         r.LessonTitle,
@@ -1577,6 +1580,138 @@ router.get('/simulations', async (req, res) => {
       error: 'Internal Server Error',
       message: `Failed to list simulations: ${error?.code || error?.message || 'unknown error'}`
     });
+  }
+});
+
+// POST /api/admin/simulations - Create a new simulation activity
+router.post('/simulations', [
+  body('SimulationTitle').trim().notEmpty().withMessage('Title is required').isLength({ max: 200 }),
+  body('ModuleID').optional({ nullable: true, checkFalsy: true }).isInt({ min: 1 }).withMessage('Module ID must be a positive integer'),
+  body('ActivityType').optional({ nullable: true, checkFalsy: true }).trim().isLength({ max: 100 }),
+  body('Description').optional({ nullable: true, checkFalsy: true }).trim(),
+  handleValidationErrors
+], async (req, res) => {
+  try {
+    await ensureSimulationTable();
+    const columns = await ensureSimulationAdminColumns();
+
+    const { SimulationTitle, ModuleID, ActivityType, Description } = req.body;
+
+    const [maxRows] = await pool.query('SELECT COALESCE(MAX(SimulationOrder), 0) AS maxOrder FROM simulation');
+    const nextOrder = Number(maxRows?.[0]?.maxOrder || 0) + 1;
+
+    const cols = ['SimulationTitle', 'SimulationOrder'];
+    const vals = [SimulationTitle, nextOrder];
+    const placeholders = ['?', '?'];
+
+    if (ModuleID && columns.has('ModuleID')) {
+      cols.push('ModuleID');
+      vals.push(Number(ModuleID));
+      placeholders.push('?');
+    }
+    if (ActivityType && columns.has('ActivityType')) {
+      cols.push('ActivityType');
+      vals.push(ActivityType);
+      placeholders.push('?');
+    }
+    if (Description && columns.has('Description')) {
+      cols.push('Description');
+      vals.push(Description);
+      placeholders.push('?');
+    }
+
+    const [result] = await pool.query(
+      `INSERT INTO simulation (${cols.map((c) => `\`${c}\``).join(', ')}) VALUES (${placeholders.join(', ')})`,
+      vals
+    );
+
+    clearSimulationAdminCaches();
+
+    res.status(201).json({
+      SimulationID: result.insertId,
+      SimulationTitle,
+      ModuleID: ModuleID ? Number(ModuleID) : null,
+      ActivityType: ActivityType || null,
+      Description: Description || null,
+      SimulationOrder: nextOrder
+    });
+  } catch (error) {
+    console.error('Create simulation error:', {
+      code: error?.code,
+      message: error?.message
+    });
+    res.status(500).json({
+      error: 'Internal Server Error',
+      message: `Failed to create simulation: ${error?.code || error?.message || 'unknown error'}`
+    });
+  }
+});
+
+// PATCH /api/admin/simulations/:id - Update lightweight simulation metadata (e.g. SkillType)
+router.patch('/simulations/:id', [
+  param('id').isInt({ min: 1 }).withMessage('Invalid simulation ID'),
+  body('SkillType').optional({ nullable: true }).trim().isLength({ max: 100 }),
+  body('ActivityType').optional({ nullable: true }).trim().isLength({ max: 100 }),
+  handleValidationErrors
+], async (req, res) => {
+  try {
+    await ensureSimulationTable();
+    let columns = await ensureSimulationAdminColumns();
+
+    const id = Number(req.params.id);
+    const updates = [];
+    const values = [];
+
+    if (Object.prototype.hasOwnProperty.call(req.body, 'SkillType')) {
+      if (!columns.has('SkillType')) {
+        try {
+          await pool.query('ALTER TABLE simulation ADD COLUMN SkillType VARCHAR(100) NULL');
+          columns = await getSimulationAdminColumnSet({ forceRefresh: true });
+        } catch (alterError) {
+          if (alterError?.code !== 'ER_DUP_FIELDNAME') throw alterError;
+        }
+      }
+      updates.push('`SkillType` = ?');
+      values.push(req.body.SkillType ? String(req.body.SkillType).trim() : null);
+    }
+
+    if (Object.prototype.hasOwnProperty.call(req.body, 'ActivityType')) {
+      if (!columns.has('ActivityType')) {
+        try {
+          await pool.query('ALTER TABLE simulation ADD COLUMN ActivityType VARCHAR(100) NULL');
+          columns = await getSimulationAdminColumnSet({ forceRefresh: true });
+        } catch (alterError) {
+          if (alterError?.code !== 'ER_DUP_FIELDNAME') throw alterError;
+        }
+      }
+      updates.push('`ActivityType` = ?');
+      values.push(req.body.ActivityType ? String(req.body.ActivityType).trim() : null);
+    }
+
+    if (updates.length === 0) {
+      return res.status(400).json({ error: 'Validation Error', message: 'No updatable fields provided' });
+    }
+
+    values.push(id);
+    const [result] = await pool.query(
+      `UPDATE simulation SET ${updates.join(', ')} WHERE SimulationID = ?`,
+      values
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Not Found', message: 'Simulation not found' });
+    }
+
+    clearSimulationAdminCaches();
+    res.json({
+      ok: true,
+      SimulationID: id,
+      SkillType: req.body.SkillType ?? null,
+      ActivityType: req.body.ActivityType ?? null,
+    });
+  } catch (error) {
+    console.error('Patch simulation error:', { code: error?.code, message: error?.message });
+    res.status(500).json({ error: 'Internal Server Error', message: `Failed to update simulation: ${error?.code || error?.message || 'unknown error'}` });
   }
 });
 

@@ -73,7 +73,7 @@ const Profile = () => {
   const { profile, refreshProfile } = useProfile();
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
+    username: '',
     currentPassword: '',
     newPassword: '',
     confirmPassword: ''
@@ -92,8 +92,8 @@ const Profile = () => {
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef(null);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [showDisplayNameModal, setShowDisplayNameModal] = useState(false);
   const [showUsernameModal, setShowUsernameModal] = useState(false);
-  const [showEmailModal, setShowEmailModal] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [showThemeModal, setShowThemeModal] = useState(false);
   const [showFontSizeModal, setShowFontSizeModal] = useState(false);
@@ -111,8 +111,8 @@ const Profile = () => {
       uiSizeLabel: 'Laki ng UI',
       languageLabel: 'Wika',
       accountTitle: 'Account',
+      displayNameLabel: 'Display Name',
       usernameLabel: 'Username',
-      emailLabel: 'Email',
       passwordLabel: 'Password',
       changeAvatarLabel: 'Palitan ang Avatar',
       changeAvatarHint: 'Pumili ng default avatar o mag-upload ng sarili mo',
@@ -128,8 +128,8 @@ const Profile = () => {
       uiSizeLabel: 'UI Size',
       languageLabel: 'Language',
       accountTitle: 'Account',
+      displayNameLabel: 'Display Name',
       usernameLabel: 'Username',
-      emailLabel: 'Email',
       passwordLabel: 'Password',
       changeAvatarLabel: 'Change Avatar',
       changeAvatarHint: 'Select a default avatar or upload your own',
@@ -144,7 +144,7 @@ const Profile = () => {
     if (profile) {
       setFormData({
         name: profile.Name,
-        email: profile.Email || '',
+        username: profile.Username || '',
         currentPassword: '',
         newPassword: '',
         confirmPassword: ''
@@ -230,7 +230,7 @@ const Profile = () => {
     applyAppearanceSettings({ theme: savedTheme, fontSize: savedFontSize, uiSize: savedUiSize });
     setFormData({
       name: profile?.Name || '',
-      email: profile?.Email || '',
+      username: profile?.Username || '',
       currentPassword: '',
       newPassword: '',
       confirmPassword: ''
@@ -239,25 +239,25 @@ const Profile = () => {
     setMessage({ type: '', text: '', show: false });
   };
 
-  const handleUpdateUsername = async (newName) => {
+  const handleUpdateDisplayName = async (newName) => {
     try {
       await axios.put('/users/profile', { name: newName });
+      setMessage({ type: 'success', text: 'Display name updated successfully!', show: true });
+      await refreshProfile();
+      setShowDisplayNameModal(false);
+    } catch (err) {
+      setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to update display name', show: true });
+    }
+  };
+
+  const handleUpdateUsername = async (newUsername) => {
+    try {
+      await axios.put('/users/profile', { username: newUsername });
       setMessage({ type: 'success', text: 'Username updated successfully!', show: true });
       await refreshProfile();
       setShowUsernameModal(false);
     } catch (err) {
       setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to update username', show: true });
-    }
-  };
-
-  const handleUpdateEmail = async (newEmail) => {
-    try {
-      await axios.put('/users/profile', { email: newEmail });
-      setMessage({ type: 'success', text: 'Email updated successfully!', show: true });
-      await refreshProfile();
-      setShowEmailModal(false);
-    } catch (err) {
-      setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to update email', show: true });
     }
   };
 
@@ -536,13 +536,13 @@ const Profile = () => {
           </div>
 
           <div className="space-y-4">
-            {/* Username */}
-            <div 
-              onClick={() => setShowUsernameModal(true)}
+            {/* Display Name */}
+            <div
+              onClick={() => setShowDisplayNameModal(true)}
               className="flex items-center justify-between py-3 px-4 rounded-lg cursor-pointer"
             >
               <div>
-                <h3 className="font-semibold text-gray-800">{settingsCopy.usernameLabel}</h3>
+                <h3 className="font-semibold text-gray-800">{settingsCopy.displayNameLabel}</h3>
                 <p className="text-gray-500">{profile?.Name || settingsCopy.notSet}</p>
               </div>
               <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -550,14 +550,14 @@ const Profile = () => {
               </svg>
             </div>
 
-            {/* Email */}
-            <div 
-              onClick={() => setShowEmailModal(true)}
+            {/* Username */}
+            <div
+              onClick={() => setShowUsernameModal(true)}
               className="flex items-center justify-between py-3 px-4 rounded-lg cursor-pointer"
             >
               <div>
-                <h3 className="font-semibold text-gray-800">{settingsCopy.emailLabel}</h3>
-                <p className="text-gray-500">{profile?.Email || user?.email || settingsCopy.notSet}</p>
+                <h3 className="font-semibold text-gray-800">{settingsCopy.usernameLabel}</h3>
+                <p className="text-gray-500">{profile?.Username || user?.username || settingsCopy.notSet}</p>
               </div>
               <svg className="w-6 h-6 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -674,19 +674,19 @@ const Profile = () => {
         />
       )}
 
-      {showUsernameModal && (
-        <UsernameModal
+      {showDisplayNameModal && (
+        <DisplayNameModal
           currentName={profile?.Name || ''}
-          onSave={handleUpdateUsername}
-          onClose={() => setShowUsernameModal(false)}
+          onSave={handleUpdateDisplayName}
+          onClose={() => setShowDisplayNameModal(false)}
         />
       )}
 
-      {showEmailModal && (
-        <EmailModal
-          currentEmail={profile?.Email || user?.email || ''}
-          onSave={handleUpdateEmail}
-          onClose={() => setShowEmailModal(false)}
+      {showUsernameModal && (
+        <UsernameModal
+          currentUsername={profile?.Username || user?.username || ''}
+          onSave={handleUpdateUsername}
+          onClose={() => setShowUsernameModal(false)}
         />
       )}
 
@@ -723,20 +723,20 @@ const Profile = () => {
   );
 };
 
-// Username Modal Component
-const UsernameModal = ({ currentName, onSave, onClose }) => {
+// Display Name Modal Component
+const DisplayNameModal = ({ currentName, onSave, onClose }) => {
   const [name, setName] = useState(currentName);
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
-        <h3 className="text-2xl font-bold mb-4">Change Username</h3>
+        <h3 className="text-2xl font-bold mb-4">Change Display Name</h3>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none mb-4"
-          placeholder="Enter new username"
+          placeholder="Enter new display name"
         />
         <div className="flex gap-3">
           <button
@@ -757,24 +757,24 @@ const UsernameModal = ({ currentName, onSave, onClose }) => {
   );
 };
 
-// Email Modal Component
-const EmailModal = ({ currentEmail, onSave, onClose }) => {
-  const [email, setEmail] = useState(currentEmail);
+// Username Modal Component
+const UsernameModal = ({ currentUsername, onSave, onClose }) => {
+  const [username, setUsername] = useState(currentUsername);
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
-        <h3 className="text-2xl font-bold mb-4">Change Email</h3>
+        <h3 className="text-2xl font-bold mb-4">Change Username</h3>
         <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none mb-4"
-          placeholder="Enter new email"
+          placeholder="Enter new username"
         />
         <div className="flex gap-3">
           <button
-            onClick={() => onSave(email)}
+            onClick={() => onSave(username)}
             className="flex-1 px-4 py-2 bg-highlight text-white rounded-lg font-semibold hover:bg-highlight"
           >
             Save

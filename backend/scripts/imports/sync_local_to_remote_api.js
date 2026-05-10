@@ -1,6 +1,6 @@
 const LOCAL_API_BASE = process.env.LOCAL_API_BASE || 'http://localhost:5000/api';
 const REMOTE_API_BASE = process.env.REMOTE_API_BASE || 'https://modulearn-api-260412162638.azurewebsites.net/api';
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@modulearn.com';
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 
 const normalizeLanguage = (value) => {
@@ -53,7 +53,7 @@ const requestJson = async (url, options = {}) => {
 };
 
 const login = async (apiBase) => {
-  const payload = { email: ADMIN_EMAIL, password: ADMIN_PASSWORD };
+  const payload = { username: ADMIN_USERNAME, password: ADMIN_PASSWORD };
   const data = await requestJson(`${apiBase}/auth/login`, {
     method: 'POST',
     body: JSON.stringify(payload),

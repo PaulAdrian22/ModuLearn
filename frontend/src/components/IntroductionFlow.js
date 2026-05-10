@@ -72,12 +72,12 @@ const IntroductionFlow = ({ onComplete, isNewUser = false }) => {
           /* Step 1: Welcome and Introduction */
           <div className="bg-white rounded-2xl shadow-xl w-full p-6 sm:p-8 lg:p-10 min-h-[430px] flex flex-col">
             <div className="text-center space-y-5 sm:space-y-6 flex-1">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#214f74] leading-snug break-words">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#214f74] leading-snug break-words">
                 Welcome to <span className="text-[#2f77ad] font-extrabold">ModuLearn</span>. As our new learner, we would like to know more about you. You will take an assessment so we can measure your current knowledge of <span className="font-semibold">Computer Hardware Servicing</span>.
               </h2>
-              
-              <p className="text-lg sm:text-xl text-[#31566f] leading-relaxed pt-2 break-words">
-                Maligayang pagsali sa ModuLearn! Bilang aming bagong mag-aaral, nais naming makilala ka nang mas mabuti. Sa pamamagitan ng isang pagsusuri, susuaktin namin ang iyong kasalukuyang kaalaman tungkol sa Computer Hardware Servicing.
+
+              <p className="text-xl sm:text-2xl lg:text-3xl text-[#214f74] leading-snug pt-2 break-words">
+                Maligayang pagsali sa ModuLearn! Bilang aming bagong mag-aaral, nais naming makilala ka nang mas mabuti. Sa pamamagitan ng isang pagsusuri, susukatin namin ang iyong kasalukuyang kaalaman tungkol sa Computer Hardware Servicing.
               </p>
             </div>
 
@@ -98,11 +98,11 @@ const IntroductionFlow = ({ onComplete, isNewUser = false }) => {
           /* Step 2: Language Selection */
           <div className="bg-white rounded-2xl shadow-xl w-full p-6 sm:p-8 lg:p-10 min-h-[430px] flex flex-col">
             <div className="text-center space-y-5 sm:space-y-6 flex-1">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#214f74] leading-snug break-words">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#214f74] leading-snug break-words">
                 Before we start, we would like to know what language you prefer to continue with the assessment?
               </h2>
-              
-              <p className="text-lg sm:text-xl text-[#31566f] leading-relaxed break-words">
+
+              <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#214f74] leading-snug break-words">
                 Bago tayo magsimula, nais namin malaman kung anong lingwahe ang iyong nais gamitin para sa pagsusuri?
               </p>
 

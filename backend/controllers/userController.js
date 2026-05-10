@@ -5,6 +5,7 @@ const { query } = require('../config/database');
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const path = require('path');
+const { getUserIdentityColumn } = require('../utils/userIdentity');
 const {
   getMulterProfileDestination,
   uploadProfileImageFromPath,
@@ -63,7 +64,7 @@ const ensureUserProfileColumns = async () => {
        FROM INFORMATION_SCHEMA.COLUMNS
       WHERE TABLE_SCHEMA = DATABASE()
         AND TABLE_NAME = 'user'
-        AND COLUMN_NAME IN ('preferred_language')`
+        AND COLUMN_NAME IN ('preferred_language', 'is_archived')`
   );
 
   const columnSet = new Set(existingColumns.map((column) => String(column.COLUMN_NAME || '')));
@@ -74,6 +75,14 @@ const ensureUserProfileColumns = async () => {
        ADD COLUMN preferred_language VARCHAR(20) NOT NULL DEFAULT 'English' AFTER EducationalBackground`
     );
     console.log('Added preferred_language column to user table.');
+  }
+
+  if (!columnSet.has('is_archived')) {
+    await query(
+      `ALTER TABLE user
+       ADD COLUMN is_archived BOOLEAN NOT NULL DEFAULT FALSE`
+    );
+    console.log('Added is_archived column to user table.');
   }
 
   userProfileColumnsReady = true;
@@ -125,18 +134,20 @@ const getUserProfile = async (req, res) => {
 
     await ensureUserProfileColumns();
     
+    const identityColumn = await getUserIdentityColumn();
+
     const users = await query(
-      'SELECT UserID, Name, Email, Age, EducationalBackground, preferred_language AS preferredLanguage, profile_picture, avatar_type, default_avatar, created_at, last_login FROM user WHERE UserID = ?',
+      `SELECT UserID, Name, ${identityColumn} AS Username, Age, EducationalBackground, preferred_language AS preferredLanguage, profile_picture, avatar_type, default_avatar, created_at, last_login FROM user WHERE UserID = ?`,
       [userId]
     );
-    
+
     if (users.length === 0) {
       return res.status(404).json({
         error: 'Not Found',
         message: 'User not found'
       });
     }
-    
+
     res.json(users[0]);
     
   } catch (error) {
@@ -155,7 +166,9 @@ const updateUserProfile = async (req, res) => {
 
     await ensureUserProfileColumns();
 
-    const { name, email, age, educationalBackground, preferredLanguage } = req.body;
+    const { name, username, email, age, educationalBackground, preferredLanguage } = req.body;
+    const identityColumn = await getUserIdentityColumn();
+    const identityValue = username !== undefined ? username : email;
 
     const fields = [];
     const values = [];
@@ -165,9 +178,9 @@ const updateUserProfile = async (req, res) => {
       values.push(String(name).trim());
     }
 
-    if (email !== undefined) {
-      fields.push('Email = ?');
-      values.push(String(email).trim());
+    if (identityValue !== undefined) {
+      fields.push(`${identityColumn} = ?`);
+      values.push(String(identityValue).trim());
     }
 
     if (age !== undefined) {
@@ -197,20 +210,20 @@ const updateUserProfile = async (req, res) => {
     await query(`UPDATE user SET ${fields.join(', ')} WHERE UserID = ?`, values);
     
     const updatedUser = await query(
-      'SELECT UserID, Name, Email, Age, EducationalBackground, preferred_language AS preferredLanguage FROM user WHERE UserID = ?',
+      `SELECT UserID, Name, ${identityColumn} AS Username, Age, EducationalBackground, preferred_language AS preferredLanguage FROM user WHERE UserID = ?`,
       [userId]
     );
-    
+
     res.json({
       message: 'Profile updated successfully',
       user: updatedUser[0]
     });
-    
+
   } catch (error) {
     if (error?.code === 'ER_DUP_ENTRY') {
       return res.status(409).json({
         error: 'Conflict',
-        message: 'Email is already in use'
+        message: 'Username is already in use'
       });
     }
 
@@ -794,17 +807,20 @@ const selectDefaultAvatar = async (req, res) => {
 // Get all users (admin only)
 const getAllUsers = async (req, res) => {
   try {
+    const identityColumn = await getUserIdentityColumn();
+    const identitySelect = `${identityColumn} AS Username`;
+
     // First, check if Role column exists
     let users;
     try {
       users = await query(
-        'SELECT UserID, Name, Email, Age, EducationalBackground, Role, profile_picture, avatar_type, default_avatar, created_at, last_login FROM user ORDER BY created_at DESC'
+        `SELECT UserID, Name, ${identitySelect}, Age, EducationalBackground, Role, profile_picture, avatar_type, default_avatar, created_at, last_login, is_archived FROM user ORDER BY created_at DESC`
       );
     } catch (err) {
       // If Role column doesn't exist, query without it
       console.log('Role column might not exist, querying without it');
       users = await query(
-        'SELECT UserID, Name, Email, Age, EducationalBackground, profile_picture, avatar_type, default_avatar, created_at, last_login FROM user ORDER BY created_at DESC'
+        `SELECT UserID, Name, ${identitySelect}, Age, EducationalBackground, profile_picture, avatar_type, default_avatar, created_at, last_login, is_archived FROM user ORDER BY created_at DESC`
       );
       // Add Role as 'student' by default
       users = users.map(user => ({ ...user, Role: 'student' }));
@@ -829,13 +845,16 @@ const getUserDetails = async (req, res) => {
     const { id } = req.params;
     await ensureActivityTrackingColumns();
 
+    const identityColumn = await getUserIdentityColumn();
+    const identitySelect = `${identityColumn} AS Username`;
+
     const roleColumn = await query("SHOW COLUMNS FROM user LIKE 'Role'");
     const hasRoleColumn = roleColumn.length > 0;
 
     const users = await query(
       hasRoleColumn
-        ? 'SELECT UserID, Name, Email, Age, EducationalBackground, Role, profile_picture, avatar_type, default_avatar, created_at, last_login FROM user WHERE UserID = ?'
-        : "SELECT UserID, Name, Email, Age, EducationalBackground, 'student' as Role, profile_picture, avatar_type, default_avatar, created_at, last_login FROM user WHERE UserID = ?",
+        ? `SELECT UserID, Name, ${identitySelect}, Age, EducationalBackground, Role, profile_picture, avatar_type, default_avatar, created_at, last_login FROM user WHERE UserID = ?`
+        : `SELECT UserID, Name, ${identitySelect}, Age, EducationalBackground, 'student' as Role, profile_picture, avatar_type, default_avatar, created_at, last_login FROM user WHERE UserID = ?`,
       [id]
     );
     
@@ -968,24 +987,24 @@ const getUserDetails = async (req, res) => {
   }
 };
 
-// Delete user account
-const deleteUser = async (req, res) => {
+// Archive user account
+const archiveUser = async (req, res) => {
   try {
     const { id } = req.params;
     const requesterId = req.user.userId;
     const requesterRole = req.user.role;
     
-    // Check if user is admin or deleting their own account
-    if (requesterRole !== 'admin' && requesterId !== parseInt(id)) {
+    // Check if user is admin
+    if (requesterRole !== 'admin') {
       return res.status(403).json({
         error: 'Forbidden',
-        message: 'You do not have permission to delete this account'
+        message: 'You do not have permission to archive this account'
       });
     }
     
     // Get user details to check if they're an admin
     const users = await query(
-      'SELECT UserID, Email, Role, profile_picture FROM user WHERE UserID = ?',
+      'SELECT UserID, Role FROM user WHERE UserID = ?',
       [id]
     );
     
@@ -996,8 +1015,74 @@ const deleteUser = async (req, res) => {
       });
     }
     
-    const userToDelete = users[0];
+    const userToArchive = users[0];
     
+    // Prevent admin from archiving another admin
+    if (userToArchive.Role === 'admin' && requesterId !== userToArchive.UserID) {
+      return res.status(403).json({
+        error: 'Forbidden',
+        message: 'Admins cannot archive other admins'
+      });
+    }
+
+    // Prevent admin from archiving themselves
+    if (requesterId === userToArchive.UserID) {
+      return res.status(400).json({
+        error: 'Bad Request',
+        message: 'You cannot archive your own account'
+      });
+    }
+    
+    await query(
+      'UPDATE user SET is_archived = TRUE WHERE UserID = ?',
+      [id]
+    );
+    
+    res.json({
+      message: 'User archived successfully'
+    });
+    
+  } catch (error) {
+    console.error('Archive user error:', error);
+    res.status(500).json({
+      error: 'Internal Server Error',
+      message: 'Failed to archive user'
+    });
+  }
+};
+
+// Delete user account
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const requesterId = req.user.userId;
+    const requesterRole = req.user.role;
+
+    const identityColumn = await getUserIdentityColumn();
+
+    // Check if user is admin or deleting their own account
+    if (requesterRole !== 'admin' && requesterId !== parseInt(id, 10)) {
+      return res.status(403).json({
+        error: 'Forbidden',
+        message: 'You do not have permission to delete this account'
+      });
+    }
+
+    // Get user details to check if they're an admin
+    const users = await query(
+      `SELECT UserID, ${identityColumn} AS Username, Role, profile_picture FROM user WHERE UserID = ?`,
+      [id]
+    );
+
+    if (users.length === 0) {
+      return res.status(404).json({
+        error: 'Not Found',
+        message: 'User not found'
+      });
+    }
+
+    const userToDelete = users[0];
+
     // Prevent deletion of admin accounts
     if (userToDelete.Role === 'admin') {
       return res.status(403).json({
@@ -1005,7 +1090,7 @@ const deleteUser = async (req, res) => {
         message: 'Admin accounts cannot be deleted for security reasons'
       });
     }
-    
+
     // Delete profile picture file if exists
     const profilePicture = userToDelete.profile_picture;
     if (profilePicture) {
@@ -1014,14 +1099,14 @@ const deleteUser = async (req, res) => {
         fs.unlinkSync(filePath);
       }
     }
-    
+
     // Delete user (cascades will handle related records: assessment, progress, bkt_model, learning_skill)
     await query('DELETE FROM user WHERE UserID = ?', [id]);
-    
+
     res.json({
       message: 'User account deleted successfully'
     });
-    
+
   } catch (error) {
     console.error('Delete user error:', error);
     res.status(500).json({
@@ -1059,7 +1144,6 @@ const reportIssue = async (req, res) => {
     `);
 
     console.log('Table created/verified');
-
     // Insert the report
     const result = await query(
       'INSERT INTO issue_reports (UserID, ModuleID, IssueType, Details, LessonTitle) VALUES (?, ?, ?, ?, ?)',
@@ -1093,6 +1177,7 @@ module.exports = {
   selectDefaultAvatar,
   getAllUsers,
   getUserDetails,
+  archiveUser,
   deleteUser,
   reportIssue
 };

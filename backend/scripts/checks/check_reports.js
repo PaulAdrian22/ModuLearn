@@ -31,11 +31,11 @@ async function checkReports() {
       }
       
       // Also check user table to see if users exist
-      const users = await query('SELECT UserID, Name, Email FROM user LIMIT 5');
+      const users = await query('SELECT UserID, Name, Username FROM user LIMIT 5');
       console.log('\n=== Sample Users ===');
       console.log('Total users (first 5):', users.length);
       users.forEach(u => {
-        console.log(`UserID: ${u.UserID}, Name: ${u.Name}, Email: ${u.Email}`);
+        console.log(`UserID: ${u.UserID}, Name: ${u.Name}, Username: ${u.Username}`);
       });
     } else {
       console.log('Table does not exist. It should be created automatically on first report submission.');

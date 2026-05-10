@@ -2,22 +2,22 @@ const { query } = require('../../config/database');
 
 async function checkUserProfile() {
   try {
-    // Get the user with the email from the screenshot
+    const targetUsername = process.argv[2] || 'pauladriangozo@gmail.com';
     const users = await query(
-      'SELECT UserID, Name, Email, avatar_type, default_avatar, profile_picture FROM user WHERE Email = ?',
-      ['pauladriangozo@gmail.com']
+      'SELECT UserID, Name, Username, avatar_type, default_avatar, profile_picture FROM user WHERE Username = ?',
+      [targetUsername]
     );
-    
+
     if (users.length === 0) {
-      console.log('❌ User not found');
+      console.log('User not found:', targetUsername);
       process.exit(1);
     }
-    
+
     const user = users[0];
     console.log('User Profile Data:');
     console.log('- UserID:', user.UserID);
     console.log('- Name:', user.Name);
-    console.log('- Email:', user.Email);
+    console.log('- Username:', user.Username);
     console.log('- avatar_type:', user.avatar_type);
     console.log('- default_avatar:', user.default_avatar);
     console.log('- profile_picture:', user.profile_picture);

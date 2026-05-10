@@ -573,13 +573,8 @@ const AdminDashboard = () => {
                       <span className="text-gray-700">{selectedReport.UserID}</span>
                     </div>
                     <div className="col-span-2">
-                      <span className="font-bold text-gray-800">Email : </span>
-                      <a 
-                        href={`mailto:${selectedReport.Email}`}
-                        className="text-secondary hover:underline"
-                      >
-                        {selectedReport.Email}
-                      </a>
+                      <span className="font-bold text-gray-800">Username : </span>
+                      <span className="text-gray-700">{selectedReport.Username}</span>
                     </div>
                   </div>
 
@@ -626,7 +621,7 @@ const AdminDashboard = () => {
                           <th className="text-left py-3 px-4 font-semibold text-gray-800">Category</th>
                           <th className="text-left py-3 px-4 font-semibold text-gray-800">UserID</th>
                           <th className="text-left py-3 px-4 font-semibold text-gray-800">Name</th>
-                          <th className="text-left py-3 px-4 font-semibold text-gray-800">Email</th>
+                          <th className="text-left py-3 px-4 font-semibold text-gray-800">Username</th>
                           <th className="text-left py-3 px-4 font-semibold text-gray-800">Status</th>
                           <th className="text-left py-3 px-4 font-semibold text-gray-800"></th>
                         </tr>
@@ -638,14 +633,7 @@ const AdminDashboard = () => {
                             <td className="py-3 px-4 text-gray-800">{report.Category}</td>
                             <td className="py-3 px-4 text-gray-800">{report.UserID}</td>
                             <td className="py-3 px-4 text-gray-800">{report.Name}</td>
-                            <td className="py-3 px-4">
-                              <a 
-                                href={`mailto:${report.Email}`}
-                                className="text-[#589AD7] hover:underline"
-                              >
-                                {report.Email}
-                              </a>
-                            </td>
+                            <td className="py-3 px-4 text-gray-800">{report.Username}</td>
                             <td className="py-3 px-4 text-gray-800">{getStatusDisplay(report.Status)}</td>
                             <td className="py-3 px-4">
                               <button
