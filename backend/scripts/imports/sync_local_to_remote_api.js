@@ -1,6 +1,6 @@
 const LOCAL_API_BASE = process.env.LOCAL_API_BASE || 'http://localhost:5000/api';
 const REMOTE_API_BASE = process.env.REMOTE_API_BASE || 'https://modulearn-api-260412162638.azurewebsites.net/api';
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'modulearnadmin26';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 
 const normalizeLanguage = (value) => {

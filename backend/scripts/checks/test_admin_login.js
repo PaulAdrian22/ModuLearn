@@ -6,7 +6,7 @@ const testLogin = async () => {
 
   try {
     const response = await axios.post('http://localhost:5000/api/auth/login', {
-      username: 'admin',
+      username: 'modulearnadmin26',
       password: 'admin123'
     });
 

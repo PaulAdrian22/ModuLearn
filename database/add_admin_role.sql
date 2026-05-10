@@ -10,5 +10,5 @@ UPDATE user SET Role = 'student' WHERE Role IS NULL;
 -- Create an admin user (change the username/password as needed)
 -- Password: admin123 (hashed with bcrypt)
 INSERT INTO user (Name, Username, Password, Role, Age, EducationalBackground)
-VALUES ('Admin User', 'admin', '$2b$10$YourHashedPasswordHere', 'admin', 30, 'Computer Science')
+VALUES ('Admin User', 'modulearnadmin26', '$2b$10$YourHashedPasswordHere', 'admin', 30, 'Computer Science')
 ON DUPLICATE KEY UPDATE Role = 'admin';

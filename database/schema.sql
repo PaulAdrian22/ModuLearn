@@ -139,7 +139,7 @@ CREATE TABLE learning_skill (
 
 -- Insert sample admin user (password should be hashed in production)
 INSERT INTO user (Name, Username, Password, Age, EducationalBackground)
-VALUES ('Administrator', 'admin', '$2a$10$example_hash_here', 30, 'Masters Degree');
+VALUES ('Administrator', 'modulearnadmin26', '$2a$10$example_hash_here', 30, 'Masters Degree');
 
 -- Insert sample modules (TESDA CHS NC II aligned)
 INSERT INTO module (ModuleTitle, Description, LessonOrder, Tesda_Reference, Is_Unlocked) VALUES

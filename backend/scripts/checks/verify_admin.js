@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const { query } = require('../../config/database');
 
 const verifyAndRecreateAdmin = async () => {
-  const username = 'admin';
+  const username = 'modulearnadmin26';
   const password = 'admin123';
   const name = 'Admin User';
   const age = 30;

@@ -8,7 +8,7 @@ async function testAdminPassword() {
     // Get admin user from database
     const users = await query(
       'SELECT UserID, Name, Username, Password, Role FROM user WHERE Username = ?',
-      ['admin']
+      ['modulearnadmin26']
     );
 
     if (users.length === 0) {
