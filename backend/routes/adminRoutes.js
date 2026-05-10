@@ -906,62 +906,10 @@ router.put('/modules/:id/completion', [
   }
 });
 
-// PUT /api/admin/modules/:id/lock-state - Manually lock or unlock lesson visibility
-router.put('/modules/:id/lock-state', [
-  param('id').isInt({ min: 1 }).withMessage('Invalid module ID'),
-  body('isUnlocked')
-    .custom((value) => parseBooleanFlag(value) !== null)
-    .withMessage('isUnlocked must be true or false'),
-  handleValidationErrors
-], async (req, res) => {
-  try {
-    const { id } = req.params;
-    const isUnlocked = parseBooleanFlag(req.body.isUnlocked);
-
-    const existingModules = await query(
-      'SELECT ModuleID, LessonOrder, Difficulty, Is_Deleted FROM module WHERE ModuleID = ?',
-      [id]
-    );
-
-    if (existingModules.length === 0) {
-      return res.status(404).json({
-        error: 'Not Found',
-        message: 'Module not found'
-      });
-    }
-
-    if (parseBooleanFlag(existingModules[0].Is_Deleted)) {
-      return res.status(410).json({
-        error: 'Gone',
-        message: 'This lesson is in the recycle bin. Restore it before changing lock state.'
-      });
-    }
-
-    if (Number(existingModules[0].LessonOrder) === 1 && !isUnlocked) {
-      return res.status(400).json({
-        error: 'Bad Request',
-        message: 'Lesson 1 must remain unlocked.'
-      });
-    }
-
-    await query(
-      'UPDATE module SET Is_Unlocked = ? WHERE ModuleID = ?',
-      [isUnlocked, id]
-    );
-
-    res.json({
-      message: isUnlocked ? 'Lesson unlocked' : 'Lesson locked',
-      moduleId: Number(id),
-      isUnlocked
-    });
-  } catch (error) {
-    console.error('Update module lock state error:', error);
-    res.status(500).json({
-      error: 'Internal Server Error',
-      message: error.message || 'Failed to update lesson lock state'
-    });
-  }
-});
+// (Retired) PUT /api/admin/modules/:id/lock-state — lesson unlock is now
+// derived per-user from each learner's progress, so admins no longer
+// toggle a global flag. Endpoint removed; the legacy module.Is_Unlocked
+// column is ignored at runtime (see moduleController + progressController).
 
 // DELETE /api/admin/modules/:id - Delete module
 router.delete('/modules/:id', [
@@ -1497,6 +1445,11 @@ const clearSimulationAdminCaches = () => {
   clearNamespace('simulations:item');
 };
 
+// Simulations 1..CORE_SIMULATION_LIMIT are part of the core curriculum and feed
+// the algorithm. Anything beyond is "supplementary" — admin-creatable and
+// admin-deletable, never moves the learner's mastery numbers.
+const CORE_SIMULATION_LIMIT = 20;
+
 // GET /api/admin/simulations - List all simulations (admin view)
 router.get('/simulations', async (req, res) => {
   try {
@@ -1608,8 +1561,11 @@ router.post('/simulations', [
 
     const { SimulationTitle, ModuleID, ActivityType, Description } = req.body;
 
+    // Newly created simulations are always supplementary — slot them strictly
+    // after the core range so SimulationOrder > CORE_SIMULATION_LIMIT.
     const [maxRows] = await pool.query('SELECT COALESCE(MAX(SimulationOrder), 0) AS maxOrder FROM simulation');
-    const nextOrder = Number(maxRows?.[0]?.maxOrder || 0) + 1;
+    const observedMax = Number(maxRows?.[0]?.maxOrder || 0);
+    const nextOrder = Math.max(observedMax, CORE_SIMULATION_LIMIT) + 1;
 
     const cols = ['SimulationTitle', 'SimulationOrder'];
     const vals = [SimulationTitle, nextOrder];
@@ -1902,6 +1858,42 @@ router.delete('/simulations/:id/override', [
       });
     }
     res.status(500).json({ error: 'Internal Server Error', message: 'Failed to clear override' });
+  }
+});
+
+// DELETE /api/admin/simulations/:id - Permanently delete a supplementary simulation.
+// Refuses if the simulation is part of the core curriculum (SimulationOrder <= 20).
+router.delete('/simulations/:id', [
+  param('id').isInt({ min: 1 }).withMessage('Invalid simulation ID'),
+  handleValidationErrors
+], async (req, res) => {
+  try {
+    const { id } = req.params;
+    const [rows] = await pool.query(
+      'SELECT SimulationID, SimulationOrder FROM simulation WHERE SimulationID = ?',
+      [id]
+    );
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'Not Found', message: 'Simulation not found' });
+    }
+
+    const order = Number(rows[0].SimulationOrder || 0);
+    if (order > 0 && order <= CORE_SIMULATION_LIMIT) {
+      return res.status(403).json({
+        error: 'Forbidden',
+        message: `Core simulations (1-${CORE_SIMULATION_LIMIT}) cannot be deleted; only supplementary simulations may be removed.`
+      });
+    }
+
+    await pool.query('DELETE FROM simulation WHERE SimulationID = ?', [id]);
+    clearSimulationAdminCaches();
+    res.json({ ok: true, SimulationID: Number(id) });
+  } catch (error) {
+    console.error('Delete simulation error:', { code: error?.code, message: error?.message });
+    res.status(500).json({
+      error: 'Internal Server Error',
+      message: `Failed to delete simulation: ${error?.code || error?.message || 'unknown error'}`
+    });
   }
 });
 

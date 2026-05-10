@@ -111,7 +111,7 @@ const Profile = () => {
       uiSizeLabel: 'Laki ng UI',
       languageLabel: 'Wika',
       accountTitle: 'Account',
-      displayNameLabel: 'Display Name',
+      displayNameLabel: 'Buong Pangalan',
       usernameLabel: 'Username',
       passwordLabel: 'Password',
       changeAvatarLabel: 'Palitan ang Avatar',
@@ -128,7 +128,7 @@ const Profile = () => {
       uiSizeLabel: 'UI Size',
       languageLabel: 'Language',
       accountTitle: 'Account',
-      displayNameLabel: 'Display Name',
+      displayNameLabel: 'Full Name',
       usernameLabel: 'Username',
       passwordLabel: 'Password',
       changeAvatarLabel: 'Change Avatar',
@@ -242,11 +242,11 @@ const Profile = () => {
   const handleUpdateDisplayName = async (newName) => {
     try {
       await axios.put('/users/profile', { name: newName });
-      setMessage({ type: 'success', text: 'Display name updated successfully!', show: true });
+      setMessage({ type: 'success', text: 'Full name updated successfully!', show: true });
       await refreshProfile();
       setShowDisplayNameModal(false);
     } catch (err) {
-      setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to update display name', show: true });
+      setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to update full name', show: true });
     }
   };
 
@@ -730,13 +730,13 @@ const DisplayNameModal = ({ currentName, onSave, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
-        <h3 className="text-2xl font-bold mb-4">Change Display Name</h3>
+        <h3 className="text-2xl font-bold mb-4">Change Full Name</h3>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none mb-4"
-          placeholder="Enter new display name"
+          placeholder="Enter your full name"
         />
         <div className="flex gap-3">
           <button

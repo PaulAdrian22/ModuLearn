@@ -236,9 +236,13 @@ const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null, onBack = n
             {onBack && (
               <button
                 onClick={onBack}
-                className="px-5 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-all font-medium"
+                className="flex items-center justify-center w-10 h-10 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-all"
+                title={copy.back}
+                aria-label={copy.back}
               >
-                {copy.back}
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20 11H7.83l5.58-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
               </button>
             )}
             {onSkip && (

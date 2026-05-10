@@ -25,14 +25,37 @@ const ensureGenderColumn = async () => {
       return;
     }
     console.warn('ensureGenderColumn failed:', error?.code || error?.message);
-    // Don't flip the sentinel — retry on next request.
   }
 };
 
-// Generate JWT token
-const generateToken = (userId, username, name, role = 'student') => {
+// Self-heal: ensure user.session_version exists. Single-active-session
+// enforcement (see middleware/auth.js) bumps this on every login and the
+// middleware refuses tokens whose embedded sessionVersion is stale.
+let sessionVersionColumnEnsured = false;
+const ensureSessionVersionColumn = async () => {
+  if (sessionVersionColumnEnsured) return;
+  try {
+    const cols = await query('DESCRIBE user');
+    const hasColumn = cols.some((c) => c.Field === 'session_version');
+    if (!hasColumn) {
+      await query('ALTER TABLE user ADD COLUMN session_version INT NOT NULL DEFAULT 0');
+      console.log('Added missing session_version column to user table.');
+    }
+    sessionVersionColumnEnsured = true;
+  } catch (error) {
+    if (error?.code === 'ER_DUP_FIELDNAME') {
+      sessionVersionColumnEnsured = true;
+      return;
+    }
+    console.warn('ensureSessionVersionColumn failed:', error?.code || error?.message);
+  }
+};
+
+// Generate JWT token. sessionVersion is embedded so a later login on another
+// device (which bumps the DB column) silently invalidates this token.
+const generateToken = (userId, username, name, role = 'student', sessionVersion = 0) => {
   return jwt.sign(
-    { userId, username, name, role },
+    { userId, username, name, role, sessionVersion },
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRE || '24h' }
   );
@@ -74,7 +97,10 @@ const register = async (req, res) => {
 
     const userId = result.insertId;
 
-    const token = generateToken(userId, identityValue, name, 'student');
+    // Bump session_version to 1 so the freshly issued token matches.
+    await ensureSessionVersionColumn();
+    await query('UPDATE user SET session_version = 1 WHERE UserID = ?', [userId]);
+    const token = generateToken(userId, identityValue, name, 'student', 1);
 
     res.status(201).json({
       message: 'Registration successful',
@@ -131,13 +157,22 @@ const login = async (req, res) => {
       });
     }
 
-    // Update last login
+    // Update last login AND bump session_version. Bumping invalidates any
+    // token previously issued to this user, so a second sign-in (on another
+    // device or browser) silently kicks out the first session.
+    await ensureSessionVersionColumn();
     await query(
-      'UPDATE user SET last_login = CURRENT_TIMESTAMP WHERE UserID = ?',
+      'UPDATE user SET last_login = CURRENT_TIMESTAMP, session_version = COALESCE(session_version, 0) + 1 WHERE UserID = ?',
       [user.UserID]
     );
 
-    const token = generateToken(user.UserID, user.Username, user.Name, user.Role || 'student');
+    const updatedRows = await query(
+      'SELECT session_version FROM user WHERE UserID = ?',
+      [user.UserID]
+    );
+    const newSessionVersion = Number(updatedRows?.[0]?.session_version || 1);
+
+    const token = generateToken(user.UserID, user.Username, user.Name, user.Role || 'student', newSessionVersion);
 
     // Only treat a learner as "new" on their first-ever successful login.
     // This prevents the initial assessment from reappearing for returning users.

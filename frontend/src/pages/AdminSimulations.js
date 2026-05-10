@@ -106,6 +106,9 @@ const getSkillTheme = (rawSkillType) => {
 
 const FALLBACK_SCAN_MAX_ID = 40;
 const FALLBACK_BREAK_ON_CONSECUTIVE_MISSES = 8;
+// Simulations 1..CORE_SIMULATION_LIMIT are core curriculum (algorithm-included).
+// Anything beyond is supplementary — deletable, no impact on mastery.
+const CORE_SIMULATION_LIMIT = 20;
 
 const AdminSimulations = () => {
   const { user } = useAuth();
@@ -221,6 +224,26 @@ const AdminSimulations = () => {
     navigate(`/admin/simulations/${simulationId}`);
   };
 
+  const handleDeleteSimulation = async (simulation) => {
+    const order = Number(simulation?.SimulationOrder || 0);
+    if (order > 0 && order <= CORE_SIMULATION_LIMIT) {
+      // Defensive: button shouldn't render for core sims, but block here too.
+      return;
+    }
+    const confirmed = window.confirm(
+      `Delete supplementary simulation "${simulation.SimulationTitle}"? This cannot be undone.`
+    );
+    if (!confirmed) return;
+
+    try {
+      await axios.delete(`/admin/simulations/${simulation.SimulationID}`);
+      setSimulations((prev) => prev.filter((s) => s.SimulationID !== simulation.SimulationID));
+    } catch (err) {
+      console.error('Failed to delete simulation:', err);
+      setError(err?.response?.data?.message || 'Failed to delete simulation');
+    }
+  };
+
   const sortedSimulations = useMemo(() => {
     return [...simulations].sort((a, b) => {
       const moduleDelta = Number(a.ModuleID || 0) - Number(b.ModuleID || 0);
@@ -284,7 +307,7 @@ const AdminSimulations = () => {
             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 5v14M5 12h14" />
             </svg>
-            Add Simulation
+            Add Supplementary Simulation
           </button>
         </div>
 
@@ -315,7 +338,7 @@ const AdminSimulations = () => {
               No simulations found
             </h3>
             <p className="simulation-text text-[#5d7486]">
-              Use the Add Simulation button to create one.
+              Use the Add Supplementary Simulation button to create one.
             </p>
           </div>
         )}
@@ -328,6 +351,8 @@ const AdminSimulations = () => {
               const activityOrder = index + 1;
               const resolvedSkillType = getSkillTypeAssignedPerSimulation(simulation);
               const { skillType, solid, soft, text } = getSkillTheme(resolvedSkillType);
+              const simOrder = Number(simulation.SimulationOrder || 0);
+              const isSupplementary = simOrder > CORE_SIMULATION_LIMIT;
 
               return (
                 <div
@@ -336,7 +361,7 @@ const AdminSimulations = () => {
                   style={{ borderTop: `4px solid ${solid}` }}
                 >
                   <div className="flex justify-between items-start mb-4 gap-3">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 flex-wrap">
                       <div
                         className="w-10 h-10 rounded-lg text-white flex items-center justify-center text-base font-bold"
                         style={{ backgroundColor: solid }}
@@ -349,6 +374,14 @@ const AdminSimulations = () => {
                       >
                         Available
                       </span>
+                      {isSupplementary && (
+                        <span
+                          className="px-3 py-1 text-xs font-semibold rounded-full bg-amber-100 text-amber-800 border border-amber-300"
+                          title="Supplementary simulations are practice-only and excluded from the algorithm."
+                        >
+                          Supplementary
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -397,18 +430,34 @@ const AdminSimulations = () => {
 
                   <div className="mb-6" />
 
-                  <button
-                    type="button"
-                    onClick={() => handleEdit(simulation.SimulationID)}
-                    className="w-full py-3 text-white rounded-lg font-medium text-sm flex items-center justify-center gap-2 shadow-sm"
-                    style={{ backgroundColor: solid }}
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
-                    </svg>
-                    Edit Simulation
-                  </button>
+                  <div className={`flex gap-2 ${isSupplementary ? '' : ''}`}>
+                    <button
+                      type="button"
+                      onClick={() => handleEdit(simulation.SimulationID)}
+                      className={`${isSupplementary ? 'flex-1' : 'w-full'} py-3 text-white rounded-lg font-medium text-sm flex items-center justify-center gap-2 shadow-sm`}
+                      style={{ backgroundColor: solid }}
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                      </svg>
+                      Edit Simulation
+                    </button>
+                    {isSupplementary && (
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteSimulation(simulation)}
+                        className="flex-shrink-0 px-4 py-3 text-white rounded-lg font-medium text-sm flex items-center justify-center gap-1 shadow-sm bg-[#D93B3B] hover:bg-[#B82E2E]"
+                        title="Delete this supplementary simulation"
+                        aria-label="Delete supplementary simulation"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3" />
+                        </svg>
+                        Delete
+                      </button>
+                    )}
+                  </div>
                 </div>
               );
             })}
@@ -419,8 +468,8 @@ const AdminSimulations = () => {
       {showCreateModal && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 sm:p-8">
-            <h3 className="text-2xl font-bold text-[#0B2B4C] mb-1">Add Simulation</h3>
-            <p className="text-sm text-gray-500 mb-5">Create a new simulation activity. You will be redirected to the editor after saving.</p>
+            <h3 className="text-2xl font-bold text-[#0B2B4C] mb-1">Add Supplementary Simulation</h3>
+            <p className="text-sm text-gray-500 mb-5">Supplementary simulations are practice-only and are excluded from algorithm and mastery calculations. You will be redirected to the editor after saving.</p>
 
             {createError && (
               <div className="rounded-lg bg-red-50 border border-red-200 text-red-700 px-3 py-2 mb-4 text-sm">

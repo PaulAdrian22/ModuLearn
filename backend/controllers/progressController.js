@@ -310,11 +310,26 @@ const startModule = async (req, res) => {
       });
     }
 
-    if (!moduleContext.module.Is_Unlocked) {
-      return res.status(403).json({
-        error: 'Forbidden',
-        message: 'Module is locked'
-      });
+    // Per-user unlock check: lesson 1 is always available; otherwise this
+    // learner must have completed the previous lesson. The shared
+    // module.Is_Unlocked column is intentionally ignored — it used to leak
+    // unlock state across users when one learner finished a lesson.
+    const lessonOrder = Number(moduleContext.module.LessonOrder || 0);
+    if (lessonOrder > 1) {
+      const prevRows = await query(
+        `SELECT MAX(COALESCE(p.CompletionRate, 0)) AS CompletionRate
+           FROM progress p
+           JOIN module m2 ON m2.ModuleID = p.ModuleID
+          WHERE p.UserID = ? AND m2.LessonOrder = ?`,
+        [userId, lessonOrder - 1]
+      );
+      const prevCompletion = Number(prevRows?.[0]?.CompletionRate || 0);
+      if (prevCompletion < 100) {
+        return res.status(403).json({
+          error: 'Forbidden',
+          message: 'Module is locked. Complete the previous lesson to unlock this one.'
+        });
+      }
     }
 
     const existingProgress = await getCanonicalProgressRow({
@@ -429,24 +444,13 @@ const updateProgress = async (req, res) => {
         WHERE ProgressID = ?`,
       [completionRate, canonicalProgress.ProgressID]
     );
-    
-    // If module completed, unlock next module
-    if (isCompleted) {
-      const [currentModule] = await connection.execute(
-        'SELECT LessonOrder FROM module WHERE ModuleID = ?',
-        [moduleContext.module.ModuleID]
-      );
-      
-      if (currentModule.length > 0) {
-        const nextOrder = currentModule[0].LessonOrder + 1;
 
-        await connection.execute(
-          'UPDATE module SET Is_Unlocked = TRUE WHERE LessonOrder = ?',
-          [nextOrder]
-        );
-      }
-    }
-    
+    // Unlocking the next lesson is now derived per-user at fetch time
+    // (moduleController.getAllModules), based on this learner's progress.
+    // We intentionally do NOT touch module.Is_Unlocked here — that column is
+    // shared across users and writing to it would unlock the next lesson for
+    // every learner, not just this one.
+
     await connection.commit();
     connection.release();
     

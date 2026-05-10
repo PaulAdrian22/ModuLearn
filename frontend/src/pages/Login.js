@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../App';
@@ -12,6 +12,18 @@ const Login = () => {
     password: '',
   });
   const [error, setError] = useState('');
+  const [info, setInfo] = useState('');
+
+  // Pick up a flash message left by the session-replacement interceptor.
+  useEffect(() => {
+    try {
+      const flash = sessionStorage.getItem('login_flash');
+      if (flash) {
+        setInfo(flash);
+        sessionStorage.removeItem('login_flash');
+      }
+    } catch { /* ignore */ }
+  }, []);
   const [loading, setLoading] = useState(false);
   const [clearing, setClearing] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -88,6 +100,12 @@ const Login = () => {
 
           {/* Login Heading */}
           <h2 className="text-2xl font-bold text-[#0B2B4C] text-center mb-6">Log In to Your Account</h2>
+
+          {info && !error && (
+            <div className="bg-amber-50 border-2 border-amber-300 text-amber-800 px-4 py-3 rounded-xl mb-6 text-center font-medium">
+              {info}
+            </div>
+          )}
 
           {error && (
             <div className="bg-error/10 border-2 border-error text-error px-4 py-3 rounded-xl mb-6 text-center font-medium">

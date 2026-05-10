@@ -235,26 +235,6 @@ const AdminLessons = () => {
     }
   };
 
-  const handleToggleLock = async (lesson) => {
-    const lessonId = lesson.ModuleID;
-    const isUnlocked = toBooleanFlag(lesson.Is_Unlocked);
-    const nextUnlocked = !isUnlocked;
-
-    try {
-      await withLessonAction(lessonId, async () => {
-        const response = await axios.put(`/admin/modules/${lessonId}/lock-state`, {
-          isUnlocked: nextUnlocked
-        });
-
-        updateLessonInState(lessonId, {
-          Is_Unlocked: response?.data?.isUnlocked ?? nextUnlocked
-        });
-      });
-    } catch (err) {
-      console.error('Error updating lesson lock state:', err);
-    }
-  };
-
   const formatDate = (dateString) => {
     if (!dateString) return 'Not available';
     const date = new Date(dateString);
@@ -454,16 +434,6 @@ const AdminLessons = () => {
                         {toBooleanFlag(lesson.Is_Completed) ? 'Completed' : 'Incomplete'}
                       </span>
 
-                      <span
-                        className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
-                          toBooleanFlag(lesson.Is_Unlocked)
-                            ? 'bg-[#E8F4FF] text-secondary'
-                            : 'bg-[#FDECEC] text-[#C0392B]'
-                        }`}
-                      >
-                        {toBooleanFlag(lesson.Is_Unlocked) ? 'Unlocked' : 'Locked'}
-                      </span>
-                      
                       <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
                         <span className="flex items-center gap-1">
                           <svg className="w-5 h-5 text-secondary" fill="currentColor" viewBox="0 0 24 24">
@@ -531,18 +501,6 @@ const AdminLessons = () => {
                             } disabled:opacity-60 disabled:cursor-not-allowed`}
                           >
                             {toBooleanFlag(lesson.Is_Completed) ? 'Mark Incomplete' : 'Mark Complete'}
-                          </button>
-                          <button
-                            onClick={() => handleToggleLock(lesson)}
-                            disabled={Boolean(lessonActionLoading[lesson.ModuleID]) || Number(lesson.LessonOrder) === 1}
-                            className={`min-w-[160px] px-5 py-2 text-center text-white rounded-lg font-semibold transition-all shadow-sm ${
-                              toBooleanFlag(lesson.Is_Unlocked)
-                                ? 'bg-[#E9B766] hover:bg-[#FFA726]'
-                                : 'bg-[#7986CB] hover:bg-[#5C6BC0]'
-                            } disabled:opacity-60 disabled:cursor-not-allowed`}
-                            title={Number(lesson.LessonOrder) === 1 ? 'Lesson 1 must stay unlocked' : undefined}
-                          >
-                            {toBooleanFlag(lesson.Is_Unlocked) ? 'Lock Lesson' : 'Unlock Lesson'}
                           </button>
                           {!isDeleteProtected && (
                             <button

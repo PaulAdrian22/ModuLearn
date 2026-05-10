@@ -399,6 +399,12 @@ const getAllModules = async (req, res) => {
       const modules = await query(sql, params);
       modules.sort((a, b) => Number(a.LessonOrder || 0) - Number(b.LessonOrder || 0));
 
+      // Per-user unlock: lesson 1 is always unlocked; every subsequent lesson
+      // is unlocked iff THIS user finished the previous one. The shared
+      // module.Is_Unlocked column is ignored on purpose (it used to leak
+      // unlock state across users when one learner completed a lesson).
+      let previousCompleted = true;
+
       const enrichedModules = modules.map((moduleRow) => {
         const { topicCount, assessmentCount } = getModuleCardStats(moduleRow);
         const {
@@ -418,9 +424,14 @@ const getAllModules = async (req, res) => {
             }
           : {};
 
+        const isUnlockedForThisUser = previousCompleted;
+        const completedThisLesson = Number(moduleRow.CompletionRate || 0) >= 100;
+        previousCompleted = completedThisLesson;
+
         return {
           ...moduleData,
           ...assessmentContent,
+          Is_Unlocked: isUnlockedForThisUser,
           topicCount,
           assessmentCount,
         };
@@ -559,7 +570,7 @@ const getModuleById = async (req, res) => {
       
       // MySQL JSON columns return objects directly, no need to parse
       const module = modules[0];
-      
+
       module.sections = toArray(module.sections);
       module.reviewQuestions = buildNormalizedReviewQuestions(module.reviewQuestions, module.sections);
       module.finalQuestions = toArray(module.finalQuestions);
@@ -570,6 +581,22 @@ const getModuleById = async (req, res) => {
         module.sections
       );
       module.LessonTime = toObject(module.LessonTime, null);
+
+      // Per-user unlock: lesson 1 is always unlocked. Otherwise this learner
+      // must have finished the previous lesson. Override the global column.
+      const lessonOrder = Number(module.LessonOrder || 0);
+      if (lessonOrder <= 1) {
+        module.Is_Unlocked = true;
+      } else {
+        const prevRows = await query(
+          `SELECT MAX(COALESCE(p.CompletionRate, 0)) AS CompletionRate
+             FROM progress p
+             JOIN module m2 ON m2.ModuleID = p.ModuleID
+            WHERE p.UserID = ? AND m2.LessonOrder = ?`,
+          [userId, lessonOrder - 1]
+        );
+        module.Is_Unlocked = Number(prevRows?.[0]?.CompletionRate || 0) >= 100;
+      }
 
       setCached('modules:item', requestCacheKey, module);
       

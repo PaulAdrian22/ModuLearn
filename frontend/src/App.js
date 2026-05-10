@@ -35,6 +35,37 @@ export const AuthContext = createContext();
 // Axios configuration
 axios.defaults.baseURL = API_BASE_URL;
 
+// Session-replacement handler: when the backend says this token is no longer
+// valid because the user logged in elsewhere, drop credentials and bounce
+// to /login with a flash. Registered once at module load.
+let sessionReplacedHandled = false;
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error?.response?.status;
+    const code = error?.response?.data?.code;
+    const isSessionFault = status === 401 && (code === 'SESSION_REPLACED' || code === 'TOKEN_EXPIRED' || code === 'INVALID_TOKEN' || code === 'USER_NOT_FOUND');
+    if (isSessionFault && !sessionReplacedHandled) {
+      sessionReplacedHandled = true;
+      try {
+        const flashMessage = code === 'SESSION_REPLACED'
+          ? 'You signed in on another device. Please sign in again.'
+          : 'Your session has ended. Please sign in again.';
+        sessionStorage.setItem('login_flash', flashMessage);
+      } catch { /* ignore */ }
+      try {
+        localStorage.removeItem('token');
+      } catch { /* ignore */ }
+      delete axios.defaults.headers.common['Authorization'];
+      // Replace, not push, so the user can't navigate back into the broken state.
+      if (typeof window !== 'undefined' && window.location?.pathname !== '/login') {
+        window.location.replace('/login');
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Auth Provider
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
