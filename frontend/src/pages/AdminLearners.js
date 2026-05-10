@@ -37,6 +37,8 @@ const AdminLearners = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [activeTab, setActiveTab] = useState('active');
   const [selectedMetric, setSelectedMetric] = useState('timeSpentPerLesson');
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 30;
   const [stats, setStats] = useState({
     total: 0,
     active: 0,
@@ -77,6 +79,7 @@ const AdminLearners = () => {
     }
 
     setFilteredLearners(filtered);
+    setCurrentPage(1);
   }, [searchQuery, learners, metricFilter, learnerMetricSummaries, metricFilterLoading]);
 
   const buildMetricSummary = (lessonMetrics = []) => {
@@ -157,12 +160,12 @@ const AdminLearners = () => {
       
       // Calculate stats
       const now = Date.now();
-      const sevenDaysAgo = now - (7 * 24 * 60 * 60 * 1000);
+      const thirtyDaysAgo = now - (30 * 24 * 60 * 60 * 1000);
       const activeLearners = studentLearners.filter(l => !l.is_archived);
       const activeCount = activeLearners.filter(l => {
         if (!l.last_login) return false;
         const lastLogin = new Date(l.last_login).getTime();
-        return lastLogin > sevenDaysAgo;
+        return lastLogin > thirtyDaysAgo;
       }).length;
       
       setStats({
@@ -457,9 +460,35 @@ const AdminLearners = () => {
     printWindow.document.close();
   };
 
+  const handleExportCSV = () => {
+    const rows = visibleLearners;
+    const escape = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+    const header = ['Name', 'Username', 'Age', 'Educational Background', 'Date Joined', 'Last Login'];
+    const csvRows = rows.map((l) => [
+      escape(l.Name),
+      escape(l.Username),
+      escape(l.Age || ''),
+      escape(l.EducationalBackground || ''),
+      escape(formatDate(l.created_at)),
+      escape(formatDate(l.last_login)),
+    ].join(','));
+
+    const csv = [header.join(','), ...csvRows].join('\r\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `learners_${activeTab}_${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   const activeLearners = sortLearnerList(filteredLearners.filter(l => !l.is_archived));
   const archivedLearners = sortLearnerList(filteredLearners.filter(l => l.is_archived));
   const visibleLearners = activeTab === 'archived' ? archivedLearners : activeLearners;
+  const totalPages = Math.max(1, Math.ceil(visibleLearners.length / ITEMS_PER_PAGE));
+  const safePage = Math.min(currentPage, totalPages);
+  const paginatedLearners = visibleLearners.slice((safePage - 1) * ITEMS_PER_PAGE, safePage * ITEMS_PER_PAGE);
 
   if (loading) {
     return (
@@ -481,8 +510,8 @@ const AdminLearners = () => {
         {!showDetails && (
           <div className="mb-5 border-b border-border">
             <div className="flex items-end gap-8 text-[22px] font-semibold text-text-primary">
-              <button onClick={() => setActiveTab('active')} className={`pb-3 ${activeTab === 'active' ? 'border-b-4 border-primary' : 'opacity-80'}`}>Active Learners</button>
-              <button onClick={() => setActiveTab('archived')} className={`pb-3 ${activeTab === 'archived' ? 'border-b-4 border-primary' : 'opacity-80'}`}>Archived Learners</button>
+              <button onClick={() => { setActiveTab('active'); setCurrentPage(1); }} className={`pb-3 ${activeTab === 'active' ? 'border-b-4 border-primary' : 'opacity-80'}`}>Active Learners</button>
+              <button onClick={() => { setActiveTab('archived'); setCurrentPage(1); }} className={`pb-3 ${activeTab === 'archived' ? 'border-b-4 border-primary' : 'opacity-80'}`}>Archived Learners</button>
             </div>
           </div>
         )}
@@ -611,6 +640,7 @@ const AdminLearners = () => {
                     <option value="desc">Descending</option>
                   </select>
                 </div>
+
               </div>
             </div>
 
@@ -656,7 +686,7 @@ const AdminLearners = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-border">
-                  {visibleLearners.map((learner) => (
+                  {paginatedLearners.map((learner) => (
                     <tr key={learner.UserID} className="hover:bg-background/50 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-3">
@@ -698,10 +728,29 @@ const AdminLearners = () => {
           )}
             </div>
 
-            {/* Results count */}
+            {/* Pagination */}
             {visibleLearners.length > 0 && (
-              <div className="mt-4 text-center text-sm text-text-secondary">
-                Showing {visibleLearners.length} of {learners.length} learner{learners.length !== 1 ? 's' : ''}
+              <div className="mt-4 flex items-center justify-between px-2">
+                <span className="text-sm text-text-secondary">
+                  Showing {(safePage - 1) * ITEMS_PER_PAGE + 1}–{Math.min(safePage * ITEMS_PER_PAGE, visibleLearners.length)} of {visibleLearners.length} learner{visibleLearners.length !== 1 ? 's' : ''}
+                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                    disabled={safePage <= 1}
+                    className="px-3 py-1.5 rounded-lg border border-border text-sm font-medium text-text-primary disabled:opacity-40 hover:bg-background"
+                  >
+                    Previous
+                  </button>
+                  <span className="text-sm text-text-secondary">Page {safePage} of {totalPages}</span>
+                  <button
+                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={safePage >= totalPages}
+                    className="px-3 py-1.5 rounded-lg border border-border text-sm font-medium text-text-primary disabled:opacity-40 hover:bg-background"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             )}
           </>

@@ -142,10 +142,6 @@ const SkillMasteryResults = ({ skills, masteryThreshold = 0.95 }) => {
         })}
       </div>
 
-      {/* Mastery threshold indicator */}
-      <div className="mt-3 text-center text-xs text-gray-400">
-        Mastery threshold: {(masteryThreshold * 100).toFixed(0)}%
-      </div>
     </div>
   );
 };

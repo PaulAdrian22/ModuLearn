@@ -73,7 +73,7 @@ const IntroductionFlow = ({ onComplete, isNewUser = false }) => {
           <div className="bg-white rounded-2xl shadow-xl w-full p-6 sm:p-8 lg:p-10 min-h-[430px] flex flex-col">
             <div className="text-center space-y-5 sm:space-y-6 flex-1">
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#214f74] leading-snug break-words">
-                Welcome to <span className="text-[#2f77ad] font-extrabold">ModuLearn</span>. As our new learner, we would like to know more about you. You will take an assessment so we can measure your current knowledge of <span className="font-semibold">Computer Hardware Servicing</span>.
+                Welcome to <span className="text-[#2f77ad] font-extrabold">ModuLearn</span>. As our new learner, we would like to know more about you. You will take an assessment so we can measure your current knowledge of <span className="font-bold text-xl sm:text-2xl lg:text-3xl">Computer Hardware Servicing</span>.
               </h2>
 
               <p className="text-xl sm:text-2xl lg:text-3xl text-[#214f74] leading-snug pt-2 break-words">
@@ -102,7 +102,7 @@ const IntroductionFlow = ({ onComplete, isNewUser = false }) => {
                 Before we start, we would like to know what language you prefer to continue with the assessment?
               </h2>
 
-              <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#214f74] leading-snug break-words">
+              <p className="text-xl sm:text-2xl lg:text-3xl font-normal text-[#214f74] leading-snug break-words">
                 Bago tayo magsimula, nais namin malaman kung anong lingwahe ang iyong nais gamitin para sa pagsusuri?
               </p>
 

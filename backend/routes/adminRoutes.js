@@ -1371,7 +1371,27 @@ router.get('/dashboard/notifications', async (req, res) => {
       });
     });
 
-    // TODO: password_reset_request notifications once the password-reset flow ships.
+    // Password reset requests from learners.
+    try {
+      const resetRequests = await query(`
+        SELECT r.RequestID, r.Username, r.RequestedAt
+        FROM password_reset_requests r
+        WHERE r.Resolved = FALSE
+        ORDER BY r.RequestedAt DESC
+        LIMIT 50
+      `);
+      resetRequests.forEach((r) => {
+        notifications.push({
+          id: buildId('password_reset', r.RequestID),
+          date: r.RequestedAt,
+          message: `${r.Username} requested a password reset.`,
+          type: 'password_reset',
+          requestId: r.RequestID,
+        });
+      });
+    } catch {
+      // Table may not exist yet if no request has been submitted — safe to skip.
+    }
 
     notifications.sort((a, b) => new Date(b.date) - new Date(a.date));
     const formatted = notifications.map((n) => ({
@@ -1450,36 +1470,7 @@ const clearSimulationAdminCaches = () => {
 // admin-deletable, never moves the learner's mastery numbers.
 const CORE_SIMULATION_LIMIT = 20;
 
-// Self-heal: production was missing core simulations 16-20. Run on first
-// admin simulations request, cache the result. Never deletes anything,
-// only inserts the missing core placeholders.
-let coreSimulationsBackfilled = false;
-const ensureCoreSimulationsBackfilled = async () => {
-  if (coreSimulationsBackfilled) return;
-  try {
-    const [rows] = await pool.query(
-      'SELECT SimulationOrder FROM simulation WHERE SimulationOrder BETWEEN 16 AND 20'
-    );
-    const present = new Set(rows.map((r) => Number(r.SimulationOrder)));
-    const missing = [16, 17, 18, 19, 20].filter((n) => !present.has(n));
-    for (const order of missing) {
-      await pool.query(
-        `INSERT INTO simulation
-           (SimulationTitle, Description, ActivityType, MaxScore, TimeLimit, SimulationOrder, Is_Locked)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [`Activity ${order}`, '', 'Disassembling', 10, 0, order, false]
-      );
-      console.log(`ensureCoreSimulationsBackfilled: inserted placeholder at order ${order}`);
-    }
-    coreSimulationsBackfilled = true;
-  } catch (error) {
-    console.warn('ensureCoreSimulationsBackfilled failed:', {
-      code: error?.code,
-      message: error?.message,
-    });
-    // Don't flip the sentinel — retry on next request.
-  }
-};
+const { ensureCoreSimulationPlaceholders } = require('../utils/coreSimulationBackfill');
 
 // GET /api/admin/simulations - List all simulations (admin view)
 router.get('/simulations', async (req, res) => {
@@ -1490,7 +1481,7 @@ router.get('/simulations', async (req, res) => {
       return res.json([]);
     }
 
-    await ensureCoreSimulationsBackfilled();
+    await ensureCoreSimulationPlaceholders();
     const columns = await ensureSimulationAdminColumns();
     const selectFields = [
       '`SimulationID`',
@@ -1579,12 +1570,17 @@ router.get('/simulations', async (req, res) => {
   }
 });
 
-// POST /api/admin/simulations - Create a new simulation activity
+// POST /api/admin/simulations - Create a new simulation activity.
+// mode = 'core' fills the lowest empty SimulationOrder in 1..CORE_SIMULATION_LIMIT
+//   and refuses if every core slot is already taken.
+// mode = 'supplementary' (default) slots after the core range so the new sim
+//   is excluded from the algorithm.
 router.post('/simulations', [
   body('SimulationTitle').trim().notEmpty().withMessage('Title is required').isLength({ max: 200 }),
   body('ModuleID').optional({ nullable: true, checkFalsy: true }).isInt({ min: 1 }).withMessage('Module ID must be a positive integer'),
   body('ActivityType').optional({ nullable: true, checkFalsy: true }).trim().isLength({ max: 100 }),
   body('Description').optional({ nullable: true, checkFalsy: true }).trim(),
+  body('mode').optional({ nullable: true, checkFalsy: true }).isIn(['core', 'supplementary']).withMessage("mode must be 'core' or 'supplementary'"),
   handleValidationErrors
 ], async (req, res) => {
   try {
@@ -1592,33 +1588,65 @@ router.post('/simulations', [
     const columns = await ensureSimulationAdminColumns();
 
     const { SimulationTitle, ModuleID, ActivityType, Description } = req.body;
+    const mode = String(req.body.mode || 'supplementary').toLowerCase();
 
-    // Newly created simulations are always supplementary — slot them strictly
-    // after the core range so SimulationOrder > CORE_SIMULATION_LIMIT.
-    const [maxRows] = await pool.query('SELECT COALESCE(MAX(SimulationOrder), 0) AS maxOrder FROM simulation');
-    const observedMax = Number(maxRows?.[0]?.maxOrder || 0);
-    const nextOrder = Math.max(observedMax, CORE_SIMULATION_LIMIT) + 1;
-
-    const cols = ['SimulationTitle', 'SimulationOrder'];
-    const vals = [SimulationTitle, nextOrder];
-    const placeholders = ['?', '?'];
-
-    if (ModuleID && columns.has('ModuleID')) {
-      cols.push('ModuleID');
-      vals.push(Number(ModuleID));
-      placeholders.push('?');
+    let nextOrder;
+    if (mode === 'core') {
+      // Find the lowest SimulationOrder in 1..CORE_SIMULATION_LIMIT that
+      // doesn't already exist. If every core slot is taken, refuse.
+      const [coreRows] = await pool.query(
+        'SELECT SimulationOrder FROM simulation WHERE SimulationOrder BETWEEN 1 AND ?',
+        [CORE_SIMULATION_LIMIT]
+      );
+      const coreTaken = new Set(coreRows.map((r) => Number(r.SimulationOrder)));
+      let firstFreeCoreSlot = null;
+      for (let n = 1; n <= CORE_SIMULATION_LIMIT; n += 1) {
+        if (!coreTaken.has(n)) { firstFreeCoreSlot = n; break; }
+      }
+      if (firstFreeCoreSlot === null) {
+        return res.status(409).json({
+          error: 'Conflict',
+          message: `All ${CORE_SIMULATION_LIMIT} core simulation slots are already filled. Use the supplementary option instead.`
+        });
+      }
+      nextOrder = firstFreeCoreSlot;
+    } else {
+      // Supplementary — slot strictly after the core range.
+      const [maxRows] = await pool.query('SELECT COALESCE(MAX(SimulationOrder), 0) AS maxOrder FROM simulation');
+      const observedMax = Number(maxRows?.[0]?.maxOrder || 0);
+      nextOrder = Math.max(observedMax, CORE_SIMULATION_LIMIT) + 1;
     }
-    if (ActivityType && columns.has('ActivityType')) {
-      cols.push('ActivityType');
-      vals.push(ActivityType);
-      placeholders.push('?');
-    }
-    if (Description && columns.has('Description')) {
-      cols.push('Description');
-      vals.push(Description);
-      placeholders.push('?');
+
+    // Mirror the canonical seed in ensureSimulationTable so every column the
+    // production schema marks as NOT NULL gets a value. (Production was
+    // throwing ER_NO_DEFAULT_FOR_FIELD because Instructions / etc. lacked a
+    // default and we weren't supplying one.)
+    const cols = [];
+    const vals = [];
+    const push = (name, value) => {
+      if (!columns.has(name)) return;
+      cols.push(name);
+      vals.push(value);
+    };
+
+    push('SimulationTitle', SimulationTitle);
+    push('Description', Description || '');
+    push('ActivityType', ActivityType || 'Disassembling');
+    push('MaxScore', 10);
+    push('TimeLimit', 0);
+    push('Instructions', '');
+    push('SimulationOrder', nextOrder);
+    push('Is_Locked', false);
+    if (ModuleID) push('ModuleID', Number(ModuleID));
+
+    // SimulationTitle is the one column we can't fall back on — and the
+    // schema enforces it NOT NULL — so guard explicitly.
+    if (!cols.includes('SimulationTitle')) {
+      cols.unshift('SimulationTitle');
+      vals.unshift(SimulationTitle);
     }
 
+    const placeholders = cols.map(() => '?');
     const [result] = await pool.query(
       `INSERT INTO simulation (${cols.map((c) => `\`${c}\``).join(', ')}) VALUES (${placeholders.join(', ')})`,
       vals

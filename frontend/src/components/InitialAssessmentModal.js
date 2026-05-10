@@ -3,16 +3,6 @@ import axios from 'axios';
 import { resolveCorrectAnswerText, shuffleQuestionChoicesList } from '../utils/assessmentShuffle';
 import { normalizePreferredLanguage } from '../utils/languagePreference';
 
-const SKILL_PROGRESS_COLORS = {
-  Memorization: '#F39C12',
-  'Analytical Thinking': '#2BC4B3',
-  'Critical Thinking': '#87CEEB',
-  'Problem Solving': '#FF6B6B',
-  'Technical Comprehension': '#9B59B6',
-};
-
-const DEFAULT_SKILL_PROGRESS_COLOR = '#4DD0E1';
-const OVERALL_BASELINE_GRADIENT = 'linear-gradient(90deg, #9EDAF3 0%, #4DD0E1 100%)';
 
 const InitialAssessmentModal = ({
   questions = [],
@@ -66,8 +56,6 @@ const InitialAssessmentModal = ({
   const [assessmentMessage, setAssessmentMessage] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
-  const [animatedOverallProgress, setAnimatedOverallProgress] = useState(0);
-  const [animatedSkillWidths, setAnimatedSkillWidths] = useState({});
 
   useEffect(() => {
     setAssessmentQuestions(shuffleQuestionChoicesList(questions));
@@ -114,43 +102,6 @@ const InitialAssessmentModal = ({
       .sort((left, right) => left.skillName.localeCompare(right.skillName));
   }, [masterySkills]);
 
-  useEffect(() => {
-    if (!showResults) {
-      setAnimatedOverallProgress(0);
-      setAnimatedSkillWidths({});
-      return;
-    }
-
-    const targetOverall = Math.max(0, Math.min(100, Number(score || 0)));
-
-    if (typeof window === 'undefined') {
-      setAnimatedOverallProgress(targetOverall);
-      const immediateSkillWidths = skillBreakdown.reduce((accumulator, skill) => {
-        accumulator[skill.skillName] = Math.max(0, Math.min(100, skill.initialL * 100));
-        return accumulator;
-      }, {});
-      setAnimatedSkillWidths(immediateSkillWidths);
-      return;
-    }
-
-    const rafId = window.requestAnimationFrame(() => {
-      setAnimatedOverallProgress(targetOverall);
-    });
-
-    const timers = skillBreakdown.map((skill, index) => {
-      return window.setTimeout(() => {
-        setAnimatedSkillWidths((previous) => ({
-          ...previous,
-          [skill.skillName]: Math.max(0, Math.min(100, skill.initialL * 100)),
-        }));
-      }, 240 + index * 180);
-    });
-
-    return () => {
-      window.cancelAnimationFrame(rafId);
-      timers.forEach((timerId) => window.clearTimeout(timerId));
-    };
-  }, [score, showResults, skillBreakdown]);
 
   const formatTime = (seconds) => {
     const safeSeconds = Math.max(0, Math.floor(seconds));
@@ -277,70 +228,15 @@ const InitialAssessmentModal = ({
                 <p className="text-5xl font-bold text-[#2F8F86]">{score.toFixed(0)}%</p>
               </div>
 
-              <div className="w-full max-w-md mx-auto mb-5">
-                <p className="text-xs font-semibold uppercase tracking-wide text-[#2a597d] mb-2">{copy.overallProgressLabel}</p>
-                <div className="h-3 rounded-full bg-[#dceaf4] overflow-hidden">
-                  <div
-                    className="h-full rounded-full transition-[width] duration-[1400ms] ease-out"
-                    style={{
-                      width: `${Math.max(0, Math.min(100, animatedOverallProgress))}%`,
-                      background: OVERALL_BASELINE_GRADIENT,
-                    }}
-                  ></div>
-                </div>
-              </div>
 
               <p className="text-lg text-gray-700 mb-2">
                 {copy.summaryLabel}: <span className="font-semibold">{correctCount} / {assessmentQuestions.length}</span>
               </p>
-              <p className="text-sm text-gray-500 mb-4">
+              <p className="text-base text-gray-500 mb-4">
                 {copy.timeSpent}: {formatTime(elapsedTime)}
               </p>
 
-              {assessmentMessage && (
-                <p className="text-sm text-[#284C71] bg-[#e8f6f4] border border-[#b8ebe4] rounded-lg px-3 py-2 mb-5">
-                  <span className="font-semibold">{copy.masteryMessageLabel}: </span>
-                  {assessmentMessage}
-                </p>
-              )}
 
-              {skillBreakdown.length > 0 && (
-                <div className="text-left border border-gray-200 rounded-xl px-4 py-4 mb-6 bg-gray-50">
-                  <h3 className="text-base sm:text-lg font-bold text-[#284C71]">{copy.masterySummaryTitle}</h3>
-                  <p className="text-xs sm:text-sm text-gray-600 mt-1 mb-3">{copy.masterySummarySubtitle}</p>
-
-                  <div className="space-y-3">
-                    {skillBreakdown.map((skill) => {
-                      const animatedWidth = Math.max(
-                        0,
-                        Math.min(100, Number(animatedSkillWidths[skill.skillName] || 0))
-                      );
-                      const skillBarColor = SKILL_PROGRESS_COLORS[skill.skillName] || DEFAULT_SKILL_PROGRESS_COLOR;
-
-                      return (
-                        <div key={skill.skillName} className="rounded-lg border border-gray-200 bg-white px-3 py-3">
-                          <p className="text-sm font-semibold text-[#173F65] mb-2 flex items-center justify-between gap-3">
-                            <span>{skill.skillName}</span>
-                            <span className="text-xs font-bold" style={{ color: skillBarColor }}>
-                              {animatedWidth.toFixed(1)}%
-                            </span>
-                          </p>
-                          <div className="h-2 rounded-full bg-[#dceaf4] overflow-hidden mb-2">
-                            <div
-                              className="h-full rounded-full transition-[width] duration-1000 ease-out"
-                              style={{
-                                width: `${animatedWidth}%`,
-                                backgroundColor: skillBarColor,
-                                boxShadow: `0 0 8px ${skillBarColor}55`,
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
 
               <button
                 onClick={() => onComplete?.({
@@ -374,7 +270,7 @@ const InitialAssessmentModal = ({
         <div className={`w-full rounded-2xl bg-white shadow-2xl border border-gray-200 flex flex-col overflow-hidden ${standalone ? '' : 'max-w-5xl max-h-full'}`}>
           <div className="bg-[#284C71] px-6 py-4 text-white rounded-t-2xl">
             <h2 className="text-2xl font-bold">{copy.title}</h2>
-            <p className="text-sm text-white/85 mt-1">{copy.subtitle}</p>
+            <p className="text-base text-white/85 mt-1">{copy.subtitle}</p>
           </div>
 
           <div className="px-5 sm:px-10 py-6 overflow-y-auto min-h-0">
@@ -383,7 +279,7 @@ const InitialAssessmentModal = ({
             </div>
 
             <div className="mb-6 text-right">
-              <p className="text-sm uppercase tracking-wide text-gray-500">{copy.questionLabel}</p>
+              <p className="text-base uppercase tracking-wide text-gray-500">{copy.questionLabel}</p>
               <p className="text-xl font-bold text-[#284C71]">
                 {currentQuestion + 1} / {assessmentQuestions.length}
               </p>
@@ -413,7 +309,7 @@ const InitialAssessmentModal = ({
                       <button
                         key={`${currentQuestion}-${index}`}
                         onClick={() => handleAnswerSelect(option)}
-                        className={`w-full text-left px-4 sm:px-5 py-3.5 border-l-4 transition-all text-sm sm:text-base ${
+                        className={`w-full text-left px-4 sm:px-5 py-3.5 border-l-4 transition-all text-base sm:text-lg ${
                           isSelected
                             ? 'border-l-[#2FCAB8] bg-[#2FCAB8]/20 font-medium'
                             : 'border-l-gray-200 bg-gray-50 hover:bg-gray-100'
@@ -427,7 +323,7 @@ const InitialAssessmentModal = ({
             </div>
 
             {submitError && (
-              <p className="text-sm text-red-600 mb-1 text-center">{submitError}</p>
+              <p className="text-base text-red-600 mb-1 text-center">{submitError}</p>
             )}
           </div>
 

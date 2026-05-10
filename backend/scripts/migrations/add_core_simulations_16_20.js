@@ -53,9 +53,9 @@ async function ensureCoreSimulations() {
 
     await query(
       `INSERT INTO simulation
-        (SimulationTitle, Description, ActivityType, MaxScore, TimeLimit, SimulationOrder, Is_Locked)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [meta.title, meta.description, meta.activityType, meta.maxScore, meta.timeLimit, meta.order, false]
+        (SimulationTitle, Description, ActivityType, MaxScore, TimeLimit, Instructions, SimulationOrder, Is_Locked)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [meta.title, meta.description, meta.activityType, meta.maxScore, meta.timeLimit, '', meta.order, false]
     );
     console.log(`  Inserted core simulation order ${meta.order}: ${meta.title}`);
     inserted += 1;

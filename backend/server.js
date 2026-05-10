@@ -10,6 +10,7 @@ const path = require('path');
 require('dotenv').config();
 
 const { testConnection } = require('./config/database');
+const { ensureCoreSimulationPlaceholders } = require('./utils/coreSimulationBackfill');
 
 // Import routes
 const authRoutes = require('./routes/authRoutes');
@@ -209,12 +210,24 @@ const startServer = async () => {
   try {
     // Test database connection
     const dbConnected = await testConnection();
-    
+
     if (!dbConnected) {
       console.error('Failed to connect to database. Please check your database configuration.');
       process.exit(1);
     }
-    
+
+    // Self-heal: make sure the 5 placeholder rows for core simulations 16-20
+    // exist. Idempotent. Failure is non-fatal — the admin endpoint also calls
+    // this on first request as a backstop.
+    try {
+      const result = await ensureCoreSimulationPlaceholders();
+      if (result?.inserted > 0) {
+        console.log(`Inserted ${result.inserted} core simulation placeholder(s) at startup.`);
+      }
+    } catch (error) {
+      console.warn('Core simulation backfill at startup skipped:', error?.message || error);
+    }
+
     // Start listening
     app.listen(PORT, () => {
       console.log('========================================');

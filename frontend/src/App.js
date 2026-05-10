@@ -28,6 +28,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import AdminSettings from './pages/AdminSettings';
 import AdminSimulations from './pages/AdminSimulations';
 import AdminSimulationEditor from './pages/AdminSimulationEditor';
+import ForgotPassword from './pages/ForgotPassword';
 
 // Context
 export const AuthContext = createContext();
@@ -163,7 +164,7 @@ const AppearanceManager = () => {
 
   useEffect(() => {
     const normalizedPath = location.pathname.replace(/\/+$/, '') || '/';
-    const publicRoutes = new Set(['/', '/about', '/login', '/register']);
+    const publicRoutes = new Set(['/', '/about', '/login', '/register', '/forgot-password']);
     const isPublicRoute = publicRoutes.has(normalizedPath);
 
     if (isPublicRoute) {
@@ -456,6 +457,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
 
             {/* Protected Routes */}
             <Route

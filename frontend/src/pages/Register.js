@@ -39,8 +39,14 @@ const Register = () => {
       return;
     }
 
-    if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters');
+    if (formData.password.length < 8) {
+      setError('Password must be at least 8 characters');
+      setLoading(false);
+      return;
+    }
+
+    if (!/[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]/.test(formData.password)) {
+      setError('Password must contain at least one number or special character');
       setLoading(false);
       return;
     }
@@ -188,7 +194,7 @@ const Register = () => {
                   className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-highlight focus:outline-none transition-all pr-12 placeholder-gray-400"
                   style={{ color: '#173F65' }}
                   required
-                  minLength="6"
+                  minLength="8"
                 />
                 <button
                   type="button"
@@ -221,7 +227,7 @@ const Register = () => {
                   className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-highlight focus:outline-none transition-all pr-12 placeholder-gray-400"
                   style={{ color: '#173F65' }}
                   required
-                  minLength="6"
+                  minLength="8"
                 />
                 <button
                   type="button"

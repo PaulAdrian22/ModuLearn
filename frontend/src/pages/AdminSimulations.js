@@ -118,7 +118,8 @@ const AdminSimulations = () => {
   const [error, setError] = useState('');
   const [warning, setWarning] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [createForm, setCreateForm] = useState({ SimulationTitle: '', ModuleID: '', ActivityType: '', Description: '' });
+  const [createMode, setCreateMode] = useState('supplementary'); // 'core' | 'supplementary'
+  const [createForm, setCreateForm] = useState({ SimulationTitle: '', ActivityType: '', Description: '' });
   const [createError, setCreateError] = useState('');
   const [creating, setCreating] = useState(false);
 
@@ -258,6 +259,16 @@ const AdminSimulations = () => {
 
   const filteredSimulations = sortedSimulations;
 
+  const coreSlotsTaken = simulations.filter((s) => Number(s.SimulationOrder || 0) >= 1 && Number(s.SimulationOrder || 0) <= CORE_SIMULATION_LIMIT).length;
+  const allCoreSlotsFilled = coreSlotsTaken >= CORE_SIMULATION_LIMIT;
+
+  const openCreateModal = (mode) => {
+    setCreateMode(mode);
+    setCreateForm({ SimulationTitle: '', ActivityType: '', Description: '' });
+    setCreateError('');
+    setShowCreateModal(true);
+  };
+
   const handleCreateSimulation = async () => {
     setCreateError('');
     const title = createForm.SimulationTitle.trim();
@@ -268,9 +279,9 @@ const AdminSimulations = () => {
 
     const payload = {
       SimulationTitle: title,
-      ModuleID: createForm.ModuleID ? Number(createForm.ModuleID) : null,
       ActivityType: createForm.ActivityType.trim() || null,
       Description: createForm.Description.trim() || null,
+      mode: createMode,
     };
 
     try {
@@ -278,7 +289,7 @@ const AdminSimulations = () => {
       const response = await axios.post('/admin/simulations', payload);
       const newId = response?.data?.SimulationID;
       setShowCreateModal(false);
-      setCreateForm({ SimulationTitle: '', ModuleID: '', ActivityType: '', Description: '' });
+      setCreateForm({ SimulationTitle: '', ActivityType: '', Description: '' });
       if (newId) {
         navigate(`/admin/simulations/${newId}`);
       }
@@ -299,16 +310,31 @@ const AdminSimulations = () => {
             <p className="text-sm text-gray-600 mt-1">Edit learner-facing simulation cards, timeline, and assets.</p>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setShowCreateModal(true)}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-highlight hover:bg-highlight-dark text-white font-semibold px-5 py-3 shadow-sm transition-colors"
-          >
-            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 5v14M5 12h14" />
-            </svg>
-            Add Supplementary Simulation
-          </button>
+          <div className="flex flex-wrap gap-3">
+            <button
+              type="button"
+              onClick={() => openCreateModal('core')}
+              disabled={allCoreSlotsFilled}
+              title={allCoreSlotsFilled ? `All ${CORE_SIMULATION_LIMIT} core simulation slots are filled` : `Fill the lowest empty core slot (1-${CORE_SIMULATION_LIMIT})`}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#0B2B4C] hover:bg-[#0e3a66] text-white font-semibold px-5 py-3 shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#0B2B4C]"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+              Add Simulation
+              <span className="ml-1 text-xs font-normal opacity-80">({coreSlotsTaken}/{CORE_SIMULATION_LIMIT})</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => openCreateModal('supplementary')}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-highlight hover:bg-highlight-dark text-white font-semibold px-5 py-3 shadow-sm transition-colors"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+              Add Supplementary Simulation
+            </button>
+          </div>
         </div>
 
         {loading && (
@@ -390,7 +416,7 @@ const AdminSimulations = () => {
                   </h3>
 
                   <p className="simulation-text text-[18px] leading-[1.45] text-gray-600 mb-5 min-h-[3.8rem]">
-                    {simulation.Description || 'Drag and drop component layers into masked targets, then submit your run.'}
+                    {simulation.Description || ''}
                   </p>
 
                   <div className="mb-4 flex flex-wrap gap-2">
@@ -468,8 +494,14 @@ const AdminSimulations = () => {
       {showCreateModal && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 sm:p-8">
-            <h3 className="text-2xl font-bold text-[#0B2B4C] mb-1">Add Supplementary Simulation</h3>
-            <p className="text-sm text-gray-500 mb-5">Supplementary simulations are practice-only and are excluded from algorithm and mastery calculations. You will be redirected to the editor after saving.</p>
+            <h3 className="text-2xl font-bold text-[#0B2B4C] mb-1">
+              {createMode === 'core' ? 'Add Simulation' : 'Add Supplementary Simulation'}
+            </h3>
+            <p className="text-sm text-gray-500 mb-5">
+              {createMode === 'core'
+                ? `This will fill the lowest empty core slot (1-${CORE_SIMULATION_LIMIT}). Core simulations are included in the algorithm and mastery calculations. You will be redirected to the editor after saving.`
+                : 'Supplementary simulations are practice-only and are excluded from algorithm and mastery calculations. You will be redirected to the editor after saving.'}
+            </p>
 
             {createError && (
               <div className="rounded-lg bg-red-50 border border-red-200 text-red-700 px-3 py-2 mb-4 text-sm">
@@ -490,30 +522,17 @@ const AdminSimulations = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-semibold text-[#17364f] mb-1">Module ID</label>
-                  <input
-                    type="number"
-                    min="1"
-                    value={createForm.ModuleID}
-                    onChange={(e) => setCreateForm({ ...createForm, ModuleID: e.target.value })}
-                    className="w-full rounded-lg border border-[#bed4e6] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#8bb3d8]"
-                    placeholder="Optional"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-[#17364f] mb-1">Activity Type</label>
-                  <select
-                    value={createForm.ActivityType}
-                    onChange={(e) => setCreateForm({ ...createForm, ActivityType: e.target.value })}
-                    className="w-full rounded-lg border border-[#bed4e6] px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#8bb3d8]"
-                  >
-                    <option value="">Select type</option>
-                    <option value="Assembling">Assembling</option>
-                    <option value="Disassembling">Disassembling</option>
-                  </select>
-                </div>
+              <div>
+                <label className="block text-sm font-semibold text-[#17364f] mb-1">Activity Type</label>
+                <select
+                  value={createForm.ActivityType}
+                  onChange={(e) => setCreateForm({ ...createForm, ActivityType: e.target.value })}
+                  className="w-full rounded-lg border border-[#bed4e6] px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#8bb3d8]"
+                >
+                  <option value="">Select type</option>
+                  <option value="Assembling">Assembling</option>
+                  <option value="Disassembling">Disassembling</option>
+                </select>
               </div>
 
               <div>
