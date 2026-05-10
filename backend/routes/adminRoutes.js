@@ -3,6 +3,7 @@
 
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
 const { authenticate, requireAdmin } = require('../middleware/auth');
 const { body, param } = require('express-validator');
 const { handleValidationErrors } = require('../middleware/validators');
@@ -1365,89 +1366,72 @@ router.get('/dashboard/activity', async (req, res) => {
   }
 });
 
-// GET /api/admin/dashboard/notifications - Get recent system events
+// GET /api/admin/dashboard/notifications - Rare-event admin notifications.
+// Only surfaces events that warrant admin attention:
+//   - A learner has completed and passed every active lesson (course finished)
+//   - A learner submitted an issue report
+//   - (TODO) A learner requested a password reset, once that flow exists
 router.get('/dashboard/notifications', async (req, res) => {
   try {
     await ensureModuleAdminColumns();
 
     const notifications = [];
 
-    // Recent enrollments (new progress entries)
-    const enrollments = await query(`
-      SELECT u.Name, p.DateStarted, m.ModuleTitle, m.LessonOrder
-      FROM progress p
-      JOIN user u ON p.UserID = u.UserID
+    // Stable per-event ID lets the frontend dismiss specific notifications.
+    const buildId = (type, ...parts) => `${type}:${parts.join(':')}`;
+
+    // Learners who finished every active module (one notification per learner).
+    const fullyCompleted = await query(`
+      SELECT u.UserID, u.Name, MAX(p.DateCompletion) AS LastCompletion
+      FROM user u
+      JOIN progress p ON p.UserID = u.UserID
       JOIN module m ON p.ModuleID = m.ModuleID
-      WHERE u.Role = 'student' AND m.Is_Deleted = FALSE
-      ORDER BY p.DateStarted DESC
-      LIMIT 10
+      WHERE u.Role = 'student'
+        AND m.Is_Deleted = FALSE
+        AND p.CompletionRate >= 100
+        AND p.DateCompletion IS NOT NULL
+      GROUP BY u.UserID, u.Name
+      HAVING COUNT(DISTINCT p.ModuleID) >= (
+        SELECT COUNT(*) FROM module WHERE Is_Deleted = FALSE
+      )
+      ORDER BY LastCompletion DESC
+      LIMIT 50
     `);
-    enrollments.forEach(e => {
+    fullyCompleted.forEach((r) => {
       notifications.push({
-        date: e.DateStarted,
-        message: `${e.Name} started Lesson ${e.LessonOrder}: ${e.ModuleTitle}.`,
-        type: 'enrollment'
+        id: buildId('all_lessons_completed', r.UserID),
+        date: r.LastCompletion,
+        message: `${r.Name} completed and passed every lesson.`,
+        type: 'all_lessons_completed'
       });
     });
 
-    // Recent completions
-    const completions = await query(`
-      SELECT u.Name, p.DateCompletion, m.ModuleTitle, m.LessonOrder
-      FROM progress p
-      JOIN user u ON p.UserID = u.UserID
-      JOIN module m ON p.ModuleID = m.ModuleID
-      WHERE p.CompletionRate >= 100 AND p.DateCompletion IS NOT NULL AND u.Role = 'student' AND m.Is_Deleted = FALSE
-      ORDER BY p.DateCompletion DESC
-      LIMIT 10
-    `);
-    completions.forEach(c => {
-      notifications.push({
-        date: c.DateCompletion,
-        message: `${c.Name} completed Lesson ${c.LessonOrder}: ${c.ModuleTitle}.`,
-        type: 'completion'
-      });
-    });
-
-    // Recent account registrations
-    const newUsers = await query(`
-      SELECT Name, created_at
-      FROM user
-      WHERE Role = 'student'
-      ORDER BY created_at DESC
-      LIMIT 10
-    `);
-    newUsers.forEach(u => {
-      notifications.push({
-        date: u.created_at,
-        message: `${u.Name} has enrolled in ModuLearn.`,
-        type: 'new_user'
-      });
-    });
-
-    // Recent issue reports
+    // Issue reports (rare, admin-actionable).
     const issues = await query(`
-      SELECT u.Name, r.created_at, r.IssueType, r.LessonTitle
+      SELECT r.ReportID, u.Name, r.created_at, r.IssueType, r.LessonTitle
       FROM issue_reports r
       JOIN user u ON r.UserID = u.UserID
       ORDER BY r.created_at DESC
-      LIMIT 5
+      LIMIT 50
     `);
-    issues.forEach(i => {
+    issues.forEach((i) => {
       notifications.push({
+        id: buildId('issue', i.ReportID),
         date: i.created_at,
         message: `${i.Name} reported an issue: ${i.IssueType}${i.LessonTitle ? ` in ${i.LessonTitle}` : ''}.`,
         type: 'issue'
       });
     });
 
-    // Sort all by date descending and take top 20
+    // TODO: password_reset_request notifications once the password-reset flow ships.
+
     notifications.sort((a, b) => new Date(b.date) - new Date(a.date));
-    const topNotifications = notifications.slice(0, 20).map(n => ({
+    const formatted = notifications.map((n) => ({
       ...n,
       date: new Date(n.date).toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' })
     }));
 
-    res.json(topNotifications);
+    res.json(formatted);
   } catch (error) {
     console.error('Get notifications error:', error);
     res.status(500).json({ error: 'Failed to fetch notifications' });
@@ -1474,6 +1458,33 @@ router.put('/reports/:id/resolve', [
       error: 'Internal Server Error',
       message: 'Failed to update report status'
     });
+  }
+});
+
+// POST /api/admin/users/:id/reset-password - Reset a learner's password to the default
+router.post('/users/:id/reset-password', [
+  param('id').isInt({ min: 1 }).withMessage('Invalid user ID'),
+  handleValidationErrors
+], async (req, res) => {
+  try {
+    const { id } = req.params;
+    const defaultPassword = 'user1234';
+    const rounds = parseInt(process.env.BCRYPT_ROUNDS, 10) || 10;
+    const hashedPassword = await bcrypt.hash(defaultPassword, rounds);
+
+    const result = await query(
+      'UPDATE user SET Password = ? WHERE UserID = ?',
+      [hashedPassword, id]
+    );
+
+    if (!result || result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Not Found', message: 'User not found' });
+    }
+
+    res.json({ ok: true, UserID: Number(id), defaultPassword });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ error: 'Internal Server Error', message: 'Failed to reset password' });
   }
 });
 

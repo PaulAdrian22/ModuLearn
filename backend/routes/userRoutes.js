@@ -64,6 +64,12 @@ router.get('/:id/details', authenticate, requireAdmin, userController.getUserDet
 // PUT /api/users/archive/:id - Archive user account (admin only)
 router.put('/archive/:id', authenticate, requireAdmin, userController.archiveUser);
 
+// PUT /api/users/unarchive/:id - Restore an archived user (admin only)
+router.put('/unarchive/:id', authenticate, requireAdmin, userController.unarchiveUser);
+
+// DELETE /api/users/:id - Permanently delete user (admin only; usually called from the archived list)
+router.delete('/:id', authenticate, requireAdmin, userController.deleteUser);
+
 // POST /api/users/report-issue - Submit an issue report
 router.post('/report-issue', authenticate, [
   body('issueType').notEmpty().withMessage('Issue type is required'),

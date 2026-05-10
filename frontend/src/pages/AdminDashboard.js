@@ -3,9 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../App';
 import AdminNavbar from '../components/AdminNavbar';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import * as XLSX from 'xlsx';
 
 const TOGGLE_OPTIONS = [
   { key: 'lessonProgress', label: 'Lesson Progress' },
@@ -37,6 +34,17 @@ const AdminDashboard = () => {
   });
   const [notifications, setNotifications] = useState([]);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
+  const [dismissedNotificationIds, setDismissedNotificationIds] = useState(() => {
+    try {
+      const raw = localStorage.getItem('admin_dismissed_notifications');
+      return new Set(raw ? JSON.parse(raw) : []);
+    } catch {
+      return new Set();
+    }
+  });
+  const [selectedNotificationIds, setSelectedNotificationIds] = useState(new Set());
+  const [notificationsPage, setNotificationsPage] = useState(1);
+  const NOTIFICATIONS_PER_PAGE = 20;
   const [activityData, setActivityData] = useState([]);
   const [loading, setLoading] = useState(true);
   
@@ -97,6 +105,8 @@ const AdminDashboard = () => {
 
   const handleOpenNotificationsModal = () => {
     setShowNotificationsModal(true);
+    setNotificationsPage(1);
+    setSelectedNotificationIds(new Set());
 
     const notificationsSignature = buildNotificationsSignature(notifications);
     const seenSignatureKey = user?.userId
@@ -105,6 +115,56 @@ const AdminDashboard = () => {
 
     localStorage.setItem(seenSignatureKey, notificationsSignature);
     setUnreadNotifications(0);
+  };
+
+  const persistDismissed = (idsSet) => {
+    setDismissedNotificationIds(idsSet);
+    try {
+      localStorage.setItem('admin_dismissed_notifications', JSON.stringify([...idsSet]));
+    } catch {
+      // ignore quota errors
+    }
+  };
+
+  const visibleNotifications = notifications.filter(
+    (n) => n.id && !dismissedNotificationIds.has(n.id)
+  );
+  const totalNotificationPages = Math.max(1, Math.ceil(visibleNotifications.length / NOTIFICATIONS_PER_PAGE));
+  const currentPage = Math.min(notificationsPage, totalNotificationPages);
+  const pagedNotifications = visibleNotifications.slice(
+    (currentPage - 1) * NOTIFICATIONS_PER_PAGE,
+    currentPage * NOTIFICATIONS_PER_PAGE
+  );
+  const allOnPageSelected =
+    pagedNotifications.length > 0 && pagedNotifications.every((n) => selectedNotificationIds.has(n.id));
+
+  const toggleNotificationSelected = (id) => {
+    setSelectedNotificationIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAllOnPage = () => {
+    setSelectedNotificationIds((prev) => {
+      const next = new Set(prev);
+      if (allOnPageSelected) {
+        pagedNotifications.forEach((n) => next.delete(n.id));
+      } else {
+        pagedNotifications.forEach((n) => next.add(n.id));
+      }
+      return next;
+    });
+  };
+
+  const handleClearSelectedNotifications = () => {
+    if (selectedNotificationIds.size === 0) return;
+    const next = new Set(dismissedNotificationIds);
+    selectedNotificationIds.forEach((id) => next.add(id));
+    persistDismissed(next);
+    setSelectedNotificationIds(new Set());
   };
 
   const fetchIssueReports = async () => {
@@ -205,6 +265,12 @@ const AdminDashboard = () => {
     });
   };
 
+  const allMetricsSelected = selectedExportMetrics.length === TOGGLE_OPTIONS.length;
+
+  const handleToggleSelectAll = () => {
+    setSelectedExportMetrics(allMetricsSelected ? [] : TOGGLE_OPTIONS.map((o) => o.key));
+  };
+
   const buildExportRows = () => {
     return activityData.map((item, idx) => {
       const row = {
@@ -218,35 +284,38 @@ const AdminDashboard = () => {
     });
   };
 
-  const handleDownloadExcel = () => {
+  const handlePrintReport = () => {
     if (!selectedExportMetrics.length || !activityData.length) return;
     const rows = buildExportRows();
-    const worksheet = XLSX.utils.json_to_sheet(rows);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Dashboard Report');
-    XLSX.writeFile(workbook, 'admin_dashboard_report.xlsx');
-  };
+    const headers = Object.keys(rows[0]);
 
-  const handleDownloadPDF = () => {
-    if (!selectedExportMetrics.length || !activityData.length) return;
-    const rows = buildExportRows();
-    const doc = new jsPDF('landscape');
-    doc.setFontSize(18);
-    doc.text('Dashboard Activity Report', 14, 16);
-    doc.setFontSize(11);
-    doc.text(`Generated: ${new Date().toLocaleString()}`, 14, 24);
+    const tableHeaders = headers.map((h) => `<th>${h}</th>`).join('');
+    const tableRows = rows
+      .map((row) => `<tr>${headers.map((h) => `<td>${String(row[h] ?? '')}</td>`).join('')}</tr>`)
+      .join('');
 
-    const head = [Object.keys(rows[0])];
-    const body = rows.map((row) => Object.values(row).map((val) => String(val)));
+    const printWindow = window.open('', '_blank', 'width=900,height=700');
+    if (!printWindow) return;
 
-    autoTable(doc, {
-      startY: 30,
-      head,
-      body,
-      styles: { fontSize: 9 },
-      headStyles: { fillColor: [27, 188, 199] },
-    });
-    doc.save('admin_dashboard_report.pdf');
+    printWindow.document.write(`<!doctype html>
+<html><head><title>Dashboard Activity Report</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 24px; color: #0B2B4C; }
+  h1 { margin: 0 0 8px; }
+  .meta { color: #555; font-size: 12px; margin-bottom: 16px; }
+  table { border-collapse: collapse; width: 100%; font-size: 12px; }
+  th, td { border: 1px solid #d1d5db; padding: 6px 8px; text-align: left; }
+  th { background: #1BBCC7; color: #fff; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  @media print { body { padding: 0; } }
+</style></head>
+<body>
+  <h1>Dashboard Activity Report</h1>
+  <div class="meta">Generated: ${new Date().toLocaleString()}</div>
+  <table><thead><tr>${tableHeaders}</tr></thead><tbody>${tableRows}</tbody></table>
+  <script>window.onload = function () { window.focus(); window.print(); };<\/script>
+</body></html>`);
+    printWindow.document.close();
   };
 
   if (loading) {
@@ -265,20 +334,33 @@ const AdminDashboard = () => {
     metricValue: getMetricValue(selectedToggleMetric, item, index),
   }));
 
-  // Keep a consistent Y-axis scale across all toggles so vertical numbers stay visible and stable.
-  const globalMaxMetric = activityData.length
-    ? Math.max(
-        ...TOGGLE_OPTIONS.flatMap((option) =>
-          activityData.map((item, index) => Math.abs(Number(getMetricValue(option.key, item, index) || 0)))
-        )
-      )
+  // Adaptive Y-axis: scale ticks to the current toggle's max so small values stay visible.
+  // Pick a "nice" step (1, 2, 2.5, 5 × 10^n) targeting ~5 ticks regardless of magnitude.
+  const currentMaxMetric = chartData.length
+    ? Math.max(...chartData.map((item) => Math.abs(Number(item.metricValue || 0))))
     : 0;
 
-  const yAxisMax = Math.max(5, Math.ceil(globalMaxMetric / 5) * 5);
-  const yAxisStep = yAxisMax > 100 ? 20 : yAxisMax > 50 ? 10 : 5;
+  const niceAxis = (rawMax, targetTicks = 5) => {
+    if (!Number.isFinite(rawMax) || rawMax <= 0) return { max: 5, step: 1 };
+    const rough = rawMax / targetTicks;
+    const pow = Math.pow(10, Math.floor(Math.log10(rough)));
+    const norm = rough / pow;
+    let niceNorm;
+    if (norm <= 1) niceNorm = 1;
+    else if (norm <= 2) niceNorm = 2;
+    else if (norm <= 2.5) niceNorm = 2.5;
+    else if (norm <= 5) niceNorm = 5;
+    else niceNorm = 10;
+    const step = niceNorm * pow;
+    const max = Math.ceil(rawMax / step) * step;
+    return { max, step };
+  };
+
+  const { max: yAxisMax, step: yAxisStep } = niceAxis(currentMaxMetric);
+  const formatTick = (v) => (Number.isInteger(v) ? String(v) : Number(v.toFixed(2)).toString());
   const yAxisTicks = [];
-  for (let i = yAxisMax; i >= 0; i -= yAxisStep) {
-    yAxisTicks.push(i);
+  for (let i = yAxisMax; i >= 0 - 1e-9; i -= yAxisStep) {
+    yAxisTicks.push(Math.round(i * 1e6) / 1e6);
   }
 
   return (
@@ -363,7 +445,7 @@ const AdminDashboard = () => {
                   </div>
                   <div>
                     <p className="text-sm text-gray-600 font-medium">Notifications</p>
-                    <p className="text-4xl font-bold text-text-primary">{notifications.length}</p>
+                    <p className="text-4xl font-bold text-text-primary">{visibleNotifications.length}</p>
                   </div>
                 </div>
               </div>
@@ -371,8 +453,16 @@ const AdminDashboard = () => {
 
           {/* Activity Report */}
           <div className="bg-white rounded-2xl shadow-sm p-6">
-              <h2 className="text-2xl font-bold text-secondary mb-6">Activity Report</h2>
-              
+              <div className="flex items-center justify-between mb-6 gap-3 flex-wrap">
+                <h2 className="text-2xl font-bold text-secondary">Activity Report</h2>
+                <button
+                  onClick={() => setShowExportModal(true)}
+                  className="px-6 py-2.5 bg-[#3A70A1] hover:bg-[#2A5D84] text-white rounded-xl font-semibold text-base leading-tight"
+                >
+                  Export Data
+                </button>
+              </div>
+
               {/* Legend - Single Row */}
               <div className="flex flex-wrap gap-x-5 gap-y-2 mb-6">
                 {chartData.map((item, index) => (
@@ -394,7 +484,7 @@ const AdminDashboard = () => {
                   {/* Y-Axis Labels */}
                   <div className="flex flex-col justify-between pr-3" style={{ height: '280px' }}>
                     {yAxisTicks.map((tick) => (
-                      <span key={tick} className="text-xs text-gray-500 text-right leading-none" style={{ minWidth: '20px' }}>{tick}</span>
+                      <span key={tick} className="text-xs text-gray-500 text-right leading-none" style={{ minWidth: '20px' }}>{formatTick(tick)}</span>
                     ))}
                   </div>
 
@@ -447,7 +537,7 @@ const AdminDashboard = () => {
                 )}
               </div>
 
-              {/* Toggles + Export */}
+              {/* Toggles */}
               <div className="mt-8 pt-6 border-t border-gray-100">
                 <h3 className="text-3xl md:text-4xl font-bold text-highlight-dark mb-4">Toggles</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-10 gap-y-2">
@@ -463,15 +553,6 @@ const AdminDashboard = () => {
                       <span className="text-sm md:text-base leading-tight font-medium">{option.label}</span>
                     </label>
                   ))}
-                </div>
-
-                <div className="flex justify-end mt-6">
-                  <button
-                    onClick={() => setShowExportModal(true)}
-                    className="px-6 py-2.5 bg-[#3A70A1] hover:bg-[#2A5D84] text-white rounded-xl font-semibold text-base leading-tight"
-                  >
-                    Export Data
-                  </button>
                 </div>
               </div>
           </div>
@@ -494,34 +575,85 @@ const AdminDashboard = () => {
               </button>
             </div>
 
-            <div className="p-6 overflow-y-auto max-h-[calc(80vh-80px)] custom-scrollbar">
-              {notifications.length === 0 ? (
-                <p className="text-gray-400 text-center py-10">No notifications yet</p>
+            <div className="px-6 pt-4 pb-2 border-b border-gray-100 flex items-center justify-between gap-3 flex-wrap">
+              <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={allOnPageSelected}
+                  onChange={toggleSelectAllOnPage}
+                  disabled={pagedNotifications.length === 0}
+                  className="w-4 h-4"
+                />
+                Select all on page
+              </label>
+              <button
+                onClick={handleClearSelectedNotifications}
+                disabled={selectedNotificationIds.size === 0}
+                className="px-4 py-1.5 rounded-lg bg-[#EF5350] hover:bg-[#D84545] text-white text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Clear selected ({selectedNotificationIds.size})
+              </button>
+            </div>
+
+            <div className="p-6 overflow-y-auto max-h-[calc(80vh-160px)] custom-scrollbar">
+              {visibleNotifications.length === 0 ? (
+                <p className="text-gray-400 text-center py-10">No notifications</p>
               ) : (
-                <div className="space-y-4">
-                  {notifications.map((notification, index) => {
+                <div className="space-y-3">
+                  {pagedNotifications.map((notification) => {
                     const typeColors = {
-                      new_user: '#42C5B6',
-                      enrollment: '#589AD7',
-                      completion: '#66BB6A',
-                      issue: '#EF5350'
+                      all_lessons_completed: '#66BB6A',
+                      issue: '#EF5350',
+                      password_reset_request: '#F39C12'
                     };
                     const barColor = typeColors[notification.type] || '#42C5B6';
+                    const checked = selectedNotificationIds.has(notification.id);
                     return (
-                      <div key={index} className="border-b border-gray-100 pb-4 last:border-b-0">
-                        <div className="flex gap-3">
-                          <div className="flex-shrink-0 w-1 rounded-full" style={{ backgroundColor: barColor }}></div>
-                          <div className="flex-1">
-                            <p className="text-sm font-semibold text-gray-800 mb-1">{notification.date}</p>
-                            <p className="text-sm text-gray-600">{notification.message}</p>
-                          </div>
+                      <label
+                        key={notification.id}
+                        className="flex items-start gap-3 border border-gray-100 rounded-lg p-3 hover:bg-gray-50 cursor-pointer"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={() => toggleNotificationSelected(notification.id)}
+                          className="w-4 h-4 mt-1"
+                        />
+                        <div className="flex-shrink-0 w-1 rounded-full self-stretch" style={{ backgroundColor: barColor }}></div>
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-gray-800 mb-1">{notification.date}</p>
+                          <p className="text-sm text-gray-600">{notification.message}</p>
                         </div>
-                      </div>
+                      </label>
                     );
                   })}
                 </div>
               )}
             </div>
+
+            {visibleNotifications.length > NOTIFICATIONS_PER_PAGE && (
+              <div className="px-6 py-3 border-t border-gray-100 flex items-center justify-between gap-3 flex-wrap">
+                <span className="text-xs text-gray-500">
+                  Page {currentPage} of {totalNotificationPages} &middot; {visibleNotifications.length} total
+                </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setNotificationsPage((p) => Math.max(1, p - 1))}
+                    disabled={currentPage === 1}
+                    className="px-3 py-1.5 rounded-lg border border-gray-300 text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Previous
+                  </button>
+                  <button
+                    onClick={() => setNotificationsPage((p) => Math.min(totalNotificationPages, p + 1))}
+                    disabled={currentPage === totalNotificationPages}
+                    className="px-3 py-1.5 rounded-lg border border-gray-300 text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -669,7 +801,18 @@ const AdminDashboard = () => {
             </div>
 
             <div className="p-8">
-              <p className="text-2xl md:text-3xl font-bold text-[#3A70A1] mb-5">Select the report you want to download</p>
+              <div className="flex items-center justify-between mb-5 gap-3 flex-wrap">
+                <p className="text-2xl md:text-3xl font-bold text-[#3A70A1]">Select the report you want to download</p>
+                <label className="flex items-center gap-2 text-[#3A70A1] cursor-pointer text-base font-semibold whitespace-nowrap">
+                  <input
+                    type="checkbox"
+                    checked={allMetricsSelected}
+                    onChange={handleToggleSelectAll}
+                    className="w-5 h-5"
+                  />
+                  Select All
+                </label>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-2">
                 {TOGGLE_OPTIONS.map((option) => (
                   <label key={option.key} className="flex items-center gap-3 md:gap-4 text-[#4A4A4A] cursor-pointer">
@@ -686,18 +829,11 @@ const AdminDashboard = () => {
 
               <div className="mt-8 flex justify-end gap-6">
                 <button
-                  onClick={handleDownloadPDF}
+                  onClick={handlePrintReport}
                   disabled={!selectedExportMetrics.length || !activityData.length}
                   className="px-8 py-2 rounded-xl bg-highlight hover:bg-highlight-dark text-white font-semibold text-[30px] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Download as PDF File
-                </button>
-                <button
-                  onClick={handleDownloadExcel}
-                  disabled={!selectedExportMetrics.length || !activityData.length}
-                  className="px-8 py-2 rounded-xl bg-highlight hover:bg-highlight-dark text-white font-semibold text-[30px] disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Download as Excel File
+                  Print Report
                 </button>
               </div>
             </div>

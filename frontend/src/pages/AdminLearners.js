@@ -5,9 +5,6 @@ import { useAuth } from '../App';
 import AdminNavbar from '../components/AdminNavbar';
 import Avatar from '../components/Avatar';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
-import * as XLSX from 'xlsx';
 import { themedConfirm } from '../utils/themedConfirm';
 
 const METRIC_OPTIONS = [
@@ -184,15 +181,99 @@ const AdminLearners = () => {
 
   const handleViewDetails = async (learner) => {
     try {
-      // Fetch detailed learner info including progress
+      // Fetch detailed learner info including progress.
+      // Spread `learner` first so list-only fields (e.g. is_archived) survive the merge —
+      // the detail endpoint doesn't return them and we need is_archived to switch between
+      // Archive vs Unarchive/Delete buttons.
       const response = await axios.get(`/users/${learner.UserID}/details`);
-      setSelectedLearner(response.data);
+      setSelectedLearner({ ...learner, ...response.data, is_archived: learner.is_archived });
       setShowDetails(true);
     } catch (err) {
       console.error('Error fetching learner details:', err);
       // Fallback to basic info
       setSelectedLearner(learner);
       setShowDetails(true);
+    }
+  };
+
+  const handleResetPassword = async (learnerId) => {
+    const confirmed = await themedConfirm({
+      title: 'Reset Password',
+      message: "Reset this learner's password to the default 'user1234'? They will need to log in with the new password.",
+      confirmText: 'Reset',
+      cancelText: 'Cancel',
+      variant: 'danger'
+    });
+    if (!confirmed) return;
+
+    try {
+      await axios.post(`/admin/users/${learnerId}/reset-password`);
+      await themedConfirm({
+        title: 'Password Reset',
+        message: "Password has been reset to 'user1234'. Share this with the learner so they can sign in.",
+        confirmText: 'OK',
+        showCancel: false
+      });
+    } catch (err) {
+      console.error('Error resetting password:', err);
+      await themedConfirm({
+        title: 'Reset Failed',
+        message: err?.response?.data?.message || 'Could not reset the password.',
+        confirmText: 'OK',
+        showCancel: false,
+        variant: 'danger'
+      });
+    }
+  };
+
+  const handleUnarchiveLearner = async (learnerId) => {
+    const confirmed = await themedConfirm({
+      title: 'Unarchive Learner',
+      message: 'Restore this learner so they appear under Active Learners again?',
+      confirmText: 'Unarchive',
+      cancelText: 'Cancel'
+    });
+    if (!confirmed) return;
+
+    try {
+      await axios.put(`/users/unarchive/${learnerId}`);
+      setShowDetails(false);
+      fetchLearners();
+    } catch (err) {
+      console.error('Error unarchiving learner:', err);
+      await themedConfirm({
+        title: 'Unarchive Failed',
+        message: err?.response?.data?.message || 'Could not unarchive the learner.',
+        confirmText: 'OK',
+        showCancel: false,
+        variant: 'danger'
+      });
+    }
+  };
+
+  const handleDeleteLearner = async (learnerId) => {
+    const confirmed = await themedConfirm({
+      title: 'Delete Learner',
+      message: 'Permanently delete this learner and all of their progress? This cannot be undone.',
+      confirmText: 'Delete',
+      cancelText: 'Cancel',
+      variant: 'danger'
+    });
+    if (!confirmed) return;
+
+    try {
+      await axios.delete(`/users/${learnerId}`);
+      setShowDetails(false);
+      fetchLearners();
+    } catch (err) {
+      console.error('Error deleting learner:', err);
+      await themedConfirm({
+        title: 'Delete Failed',
+        message: err?.response?.data?.message || 'Could not delete the learner.',
+        confirmText: 'OK',
+        showCancel: false,
+        variant: 'danger'
+      });
     }
   };
 
@@ -296,11 +377,31 @@ const AdminLearners = () => {
     return `${hrs} Hours ${mins} Minutes`;
   };
 
-  const getMetricMax = (data) => {
-    if (!data.length) return 10;
-    const max = Math.max(...data.map((d) => Number(d.metricValue || 0)));
-    if (max <= 10) return 10;
-    return Math.ceil(max / 10) * 10;
+  // Nice-axis: pick a step from {1, 2, 2.5, 5} × 10^n so ticks read cleanly at any magnitude.
+  const niceAxis = (rawMax, targetTicks = 5) => {
+    if (!Number.isFinite(rawMax) || rawMax <= 0) return { max: 5, step: 1 };
+    const rough = rawMax / targetTicks;
+    const pow = Math.pow(10, Math.floor(Math.log10(rough)));
+    const norm = rough / pow;
+    let niceNorm;
+    if (norm <= 1) niceNorm = 1;
+    else if (norm <= 2) niceNorm = 2;
+    else if (norm <= 2.5) niceNorm = 2.5;
+    else if (norm <= 5) niceNorm = 5;
+    else niceNorm = 10;
+    const step = niceNorm * pow;
+    const max = Math.ceil(rawMax / step) * step;
+    return { max, step };
+  };
+
+  const getMetricAxis = (data) => {
+    const rawMax = data.length ? Math.max(...data.map((d) => Number(d.metricValue || 0))) : 0;
+    const { max, step } = niceAxis(rawMax);
+    const ticks = [];
+    for (let i = 0; i <= max + 1e-9; i += step) {
+      ticks.push(Math.round(i * 1e6) / 1e6);
+    }
+    return { max, ticks };
   };
 
   const getLearnerChartData = () => {
@@ -313,56 +414,52 @@ const AdminLearners = () => {
     }));
   };
 
-  const exportAsExcel = () => {
+  const handlePrintReport = () => {
     if (!selectedLearner) return;
+    const metricLabel = METRIC_OPTIONS.find((m) => m.key === selectedMetric)?.label || selectedMetric;
     const rows = selectedLearner.lessonMetrics || [];
-    const metricLabel = METRIC_OPTIONS.find((m) => m.key === selectedMetric)?.label || selectedMetric;
+    const escapeHtml = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+    ));
+    const tableRows = rows
+      .map((r) => `<tr><td>${escapeHtml(r.lessonLabel)}</td><td>${escapeHtml(r.lessonTitle)}</td><td>${Number(r[selectedMetric] || 0)}</td></tr>`)
+      .join('');
 
-    const data = rows.map((r) => ({
-      Lesson: r.lessonLabel,
-      'Lesson Title': r.lessonTitle,
-      [metricLabel]: Number(r[selectedMetric] || 0)
-    }));
+    const printWindow = window.open('', '_blank', 'width=900,height=700');
+    if (!printWindow) return;
 
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Learner Progress');
-    XLSX.writeFile(workbook, `${selectedLearner.Name.replace(/\s+/g, '_')}_progress_report.xlsx`);
-  };
-
-  const exportAsPDF = () => {
-    if (!selectedLearner) return;
-    const doc = new jsPDF({ orientation: 'landscape' });
-    const metricLabel = METRIC_OPTIONS.find((m) => m.key === selectedMetric)?.label || selectedMetric;
-
-    doc.setFontSize(18);
-    doc.text('Learner Progress Report', 14, 16);
-    doc.setFontSize(11);
-    doc.text(`Learner: ${selectedLearner.Name}`, 14, 24);
-    doc.text(`Username: ${selectedLearner.Username}`, 14, 30);
-    doc.text(`Metric: ${metricLabel}`, 14, 36);
-
-    const tableBody = (selectedLearner.lessonMetrics || []).map((r) => ([
-      r.lessonLabel,
-      r.lessonTitle,
-      String(Number(r[selectedMetric] || 0))
-    ]));
-
-    autoTable(doc, {
-      startY: 44,
-      head: [['Lesson', 'Lesson Title', metricLabel]],
-      body: tableBody,
-      styles: { fontSize: 10 },
-      headStyles: { fillColor: [11, 43, 76] },
-    });
-
-    doc.save(`${selectedLearner.Name.replace(/\s+/g, '_')}_progress_report.pdf`);
+    printWindow.document.write(`<!doctype html>
+<html><head><title>Learner Progress Report</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 24px; color: #0B2B4C; }
+  h1 { margin: 0 0 8px; }
+  .meta { color: #555; font-size: 12px; margin-bottom: 16px; line-height: 1.6; }
+  table { border-collapse: collapse; width: 100%; font-size: 12px; margin-top: 8px; }
+  th, td { border: 1px solid #d1d5db; padding: 6px 8px; text-align: left; }
+  th { background: #0B2B4C; color: #fff; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  @media print { body { padding: 0; } }
+</style></head>
+<body>
+  <h1>Learner Progress Report</h1>
+  <div class="meta">
+    <div><strong>Learner:</strong> ${escapeHtml(selectedLearner.Name)}</div>
+    <div><strong>Username:</strong> ${escapeHtml(selectedLearner.Username || '')}</div>
+    <div><strong>Metric:</strong> ${escapeHtml(metricLabel)}</div>
+    <div><strong>Generated:</strong> ${new Date().toLocaleString()}</div>
+  </div>
+  <table>
+    <thead><tr><th>Lesson</th><th>Lesson Title</th><th>${escapeHtml(metricLabel)}</th></tr></thead>
+    <tbody>${tableRows}</tbody>
+  </table>
+  <script>window.onload = function () { window.focus(); window.print(); };<\/script>
+</body></html>`);
+    printWindow.document.close();
   };
 
   const activeLearners = sortLearnerList(filteredLearners.filter(l => !l.is_archived));
-  const suspendedLearners = sortLearnerList([]);
   const archivedLearners = sortLearnerList(filteredLearners.filter(l => l.is_archived));
-  const visibleLearners = activeTab === 'active' ? activeLearners : activeTab === 'suspended' ? suspendedLearners : archivedLearners;
+  const visibleLearners = activeTab === 'archived' ? archivedLearners : activeLearners;
 
   if (loading) {
     return (
@@ -380,14 +477,15 @@ const AdminLearners = () => {
       <AdminNavbar />
       
       <div className="w-full px-8 py-8 min-h-[calc(100vh-80px)] custom-scrollbar">
-        {/* Header Tabs */}
-        <div className="mb-5 border-b border-border">
-          <div className="flex items-end gap-8 text-[22px] font-semibold text-text-primary">
-            <button onClick={() => setActiveTab('active')} className={`pb-3 ${activeTab === 'active' ? 'border-b-4 border-primary' : 'opacity-80'}`}>Active Learners</button>
-            <button onClick={() => setActiveTab('suspended')} className={`pb-3 ${activeTab === 'suspended' ? 'border-b-4 border-primary' : 'opacity-80'}`}>Suspended Learners</button>
-            <button onClick={() => setActiveTab('archived')} className={`pb-3 ${activeTab === 'archived' ? 'border-b-4 border-primary' : 'opacity-80'}`}>Archived Learners</button>
+        {/* Header Tabs (hidden in detail view to maximize screen space) */}
+        {!showDetails && (
+          <div className="mb-5 border-b border-border">
+            <div className="flex items-end gap-8 text-[22px] font-semibold text-text-primary">
+              <button onClick={() => setActiveTab('active')} className={`pb-3 ${activeTab === 'active' ? 'border-b-4 border-primary' : 'opacity-80'}`}>Active Learners</button>
+              <button onClick={() => setActiveTab('archived')} className={`pb-3 ${activeTab === 'archived' ? 'border-b-4 border-primary' : 'opacity-80'}`}>Archived Learners</button>
+            </div>
           </div>
-        </div>
+        )}
 
         {!showDetails && (
           <>
@@ -633,9 +731,36 @@ const AdminLearners = () => {
                 </div>
 
                 <div className="min-w-[300px]">
-                  <div className="flex flex-wrap gap-3 mb-3">
-                    <button className="px-5 py-2 bg-highlight text-white rounded-lg font-semibold">Enrolled Lessons</button>
-                    <button onClick={() => handleArchiveLearner(selectedLearner.UserID)} className="px-5 py-2 bg-[#FF7D7D] text-white rounded-lg font-semibold">Archive Learner</button>
+                  <div className="flex flex-wrap gap-3 mb-3 justify-end">
+                    <button
+                      onClick={() => handleResetPassword(selectedLearner.UserID)}
+                      className="px-5 py-2 bg-[#3A70A1] hover:bg-[#2A5D84] text-white rounded-lg font-semibold"
+                    >
+                      Reset Password
+                    </button>
+                    {selectedLearner.is_archived ? (
+                      <>
+                        <button
+                          onClick={() => handleUnarchiveLearner(selectedLearner.UserID)}
+                          className="px-5 py-2 bg-highlight hover:bg-highlight-dark text-white rounded-lg font-semibold"
+                        >
+                          Unarchive
+                        </button>
+                        <button
+                          onClick={() => handleDeleteLearner(selectedLearner.UserID)}
+                          className="px-5 py-2 bg-[#D93B3B] hover:bg-[#B82E2E] text-white rounded-lg font-semibold"
+                        >
+                          Delete Learner
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        onClick={() => handleArchiveLearner(selectedLearner.UserID)}
+                        className="px-5 py-2 bg-[#FF7D7D] hover:bg-[#E56B6B] text-white rounded-lg font-semibold"
+                      >
+                        Archive Learner
+                      </button>
+                    )}
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-4 text-base md:text-lg text-text-primary">
                     <p><span className="font-bold">📘 Lessons Enrolled :</span> {selectedLearner.summary?.lessonsEnrolled || 0}</p>
@@ -662,7 +787,12 @@ const AdminLearners = () => {
                     <BarChart data={getLearnerChartData()} margin={{ top: 8, right: 16, left: 0, bottom: 8 }}>
                       <CartesianGrid strokeDasharray="0" stroke="#D1D5DB" vertical={false} />
                       <XAxis dataKey="lessonLabel" tick={{ fontSize: 13, fill: '#374151' }} />
-                      <YAxis domain={[0, getMetricMax(getLearnerChartData())]} label={{ value: METRIC_OPTIONS.find((m) => m.key === selectedMetric)?.yLabel || 'Value', angle: -90, position: 'insideLeft', dx: -4 }} />
+                      <YAxis
+                        domain={[0, getMetricAxis(getLearnerChartData()).max]}
+                        ticks={getMetricAxis(getLearnerChartData()).ticks}
+                        allowDecimals
+                        label={{ value: METRIC_OPTIONS.find((m) => m.key === selectedMetric)?.yLabel || 'Value', angle: -90, position: 'insideLeft', dx: -4 }}
+                      />
                       <Tooltip formatter={(val) => [val, METRIC_OPTIONS.find((m) => m.key === selectedMetric)?.label || 'Metric']} labelFormatter={(label) => label} />
                       <Bar dataKey="metricValue" radius={[6, 6, 0, 0]}>
                         {getLearnerChartData().map((entry, index) => (
@@ -692,8 +822,12 @@ const AdminLearners = () => {
               </div>
 
               <div className="mt-5 flex flex-wrap justify-end gap-4">
-                <button onClick={exportAsPDF} className="px-6 py-2 bg-[#3A70A1] text-white rounded-lg text-sm md:text-2xl leading-tight">Download as PDF File</button>
-                <button onClick={exportAsExcel} className="px-6 py-2 bg-[#3A70A1] text-white rounded-lg text-sm md:text-2xl leading-tight">Download as Excel File</button>
+                <button
+                  onClick={handlePrintReport}
+                  className="px-6 py-2 bg-[#3A70A1] hover:bg-[#2A5D84] text-white rounded-lg text-sm md:text-2xl leading-tight"
+                >
+                  Print Report
+                </button>
               </div>
             </div>
           </div>

@@ -1037,17 +1037,35 @@ const archiveUser = async (req, res) => {
       'UPDATE user SET is_archived = TRUE WHERE UserID = ?',
       [id]
     );
-    
+
     res.json({
       message: 'User archived successfully'
     });
-    
+
   } catch (error) {
     console.error('Archive user error:', error);
     res.status(500).json({
       error: 'Internal Server Error',
       message: 'Failed to archive user'
     });
+  }
+};
+
+// Restore an archived user
+const unarchiveUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const users = await query('SELECT UserID FROM user WHERE UserID = ?', [id]);
+    if (users.length === 0) {
+      return res.status(404).json({ error: 'Not Found', message: 'User not found' });
+    }
+
+    await query('UPDATE user SET is_archived = FALSE WHERE UserID = ?', [id]);
+    res.json({ message: 'User unarchived successfully' });
+  } catch (error) {
+    console.error('Unarchive user error:', error);
+    res.status(500).json({ error: 'Internal Server Error', message: 'Failed to unarchive user' });
   }
 };
 
@@ -1178,6 +1196,7 @@ module.exports = {
   getAllUsers,
   getUserDetails,
   archiveUser,
+  unarchiveUser,
   deleteUser,
   reportIssue
 };
