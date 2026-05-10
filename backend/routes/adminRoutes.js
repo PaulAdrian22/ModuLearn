@@ -1450,6 +1450,37 @@ const clearSimulationAdminCaches = () => {
 // admin-deletable, never moves the learner's mastery numbers.
 const CORE_SIMULATION_LIMIT = 20;
 
+// Self-heal: production was missing core simulations 16-20. Run on first
+// admin simulations request, cache the result. Never deletes anything,
+// only inserts the missing core placeholders.
+let coreSimulationsBackfilled = false;
+const ensureCoreSimulationsBackfilled = async () => {
+  if (coreSimulationsBackfilled) return;
+  try {
+    const [rows] = await pool.query(
+      'SELECT SimulationOrder FROM simulation WHERE SimulationOrder BETWEEN 16 AND 20'
+    );
+    const present = new Set(rows.map((r) => Number(r.SimulationOrder)));
+    const missing = [16, 17, 18, 19, 20].filter((n) => !present.has(n));
+    for (const order of missing) {
+      await pool.query(
+        `INSERT INTO simulation
+           (SimulationTitle, Description, ActivityType, MaxScore, TimeLimit, SimulationOrder, Is_Locked)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [`Activity ${order}`, '', 'Disassembling', 10, 0, order, false]
+      );
+      console.log(`ensureCoreSimulationsBackfilled: inserted placeholder at order ${order}`);
+    }
+    coreSimulationsBackfilled = true;
+  } catch (error) {
+    console.warn('ensureCoreSimulationsBackfilled failed:', {
+      code: error?.code,
+      message: error?.message,
+    });
+    // Don't flip the sentinel — retry on next request.
+  }
+};
+
 // GET /api/admin/simulations - List all simulations (admin view)
 router.get('/simulations', async (req, res) => {
   try {
@@ -1459,6 +1490,7 @@ router.get('/simulations', async (req, res) => {
       return res.json([]);
     }
 
+    await ensureCoreSimulationsBackfilled();
     const columns = await ensureSimulationAdminColumns();
     const selectFields = [
       '`SimulationID`',
