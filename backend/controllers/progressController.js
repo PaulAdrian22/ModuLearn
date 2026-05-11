@@ -156,7 +156,7 @@ const getAccessibleModuleContext = async ({ userId, moduleId }) => {
   };
 };
 
-const getCanonicalProgressRow = async ({ userId, preferredModuleId }) => {
+const getCanonicalProgressRow = async ({ userId, lessonOrder, preferredModuleId }) => {
   const rows = await query(
     `SELECT
         p.ProgressID,
@@ -166,10 +166,14 @@ const getCanonicalProgressRow = async ({ userId, preferredModuleId }) => {
         p.DateCompletion,
         COALESCE(p.ActiveSeconds, 0) AS ActiveSeconds
        FROM progress p
+       JOIN module m ON m.ModuleID = p.ModuleID
       WHERE p.UserID = ?
-        AND p.ModuleID = ?
+        AND m.LessonOrder = ?
+      ORDER BY (p.ModuleID = ?) DESC,
+               COALESCE(p.DateStarted, p.DateCompletion) DESC,
+               p.ProgressID DESC
       LIMIT 1`,
-    [userId, preferredModuleId]
+    [userId, lessonOrder, preferredModuleId]
   );
 
   return rows[0] || null;
@@ -208,12 +212,11 @@ const getUserProgress = async (req, res) => {
             FROM progress p1
             JOIN module m2 ON m2.ModuleID = p1.ModuleID
            WHERE p1.UserID = ?
-             AND ${getLanguagePredicate('m2')}
            GROUP BY m2.LessonOrder
          ) p ON p.LessonOrder = m.LessonOrder
          WHERE ${getLanguagePredicate('m')}
          ORDER BY m.LessonOrder`;
-      params = [userId, preferredLanguage, preferredLanguage];
+      params = [userId, preferredLanguage];
     } else {
       sql =
         `SELECT p.*, m.ModuleTitle, m.LessonOrder, m.Description
@@ -313,19 +316,12 @@ const startModule = async (req, res) => {
     // unlock state across users when one learner finished a lesson.
     const lessonOrder = Number(moduleContext.module.LessonOrder || 0);
     if (lessonOrder > 1) {
-      const { hasLessonLanguage, preferredLanguage } = moduleContext;
-      const langClause = hasLessonLanguage && preferredLanguage
-        ? ` AND ${getLanguagePredicate('m2')}`
-        : '';
-      const lockParams = hasLessonLanguage && preferredLanguage
-        ? [userId, lessonOrder - 1, preferredLanguage]
-        : [userId, lessonOrder - 1];
       const prevRows = await query(
         `SELECT MAX(COALESCE(p.CompletionRate, 0)) AS CompletionRate
            FROM progress p
            JOIN module m2 ON m2.ModuleID = p.ModuleID
-          WHERE p.UserID = ? AND m2.LessonOrder = ?${langClause}`,
-        lockParams
+          WHERE p.UserID = ? AND m2.LessonOrder = ?`,
+        [userId, lessonOrder - 1]
       );
       const prevCompletion = Number(prevRows?.[0]?.CompletionRate || 0);
       if (prevCompletion < 100) {
@@ -417,10 +413,14 @@ const updateProgress = async (req, res) => {
           p.ModuleID,
           p.CompletionRate
          FROM progress p
+         JOIN module m ON m.ModuleID = p.ModuleID
         WHERE p.UserID = ?
-          AND p.ModuleID = ?
+          AND m.LessonOrder = ?
+        ORDER BY (p.ModuleID = ?) DESC,
+                 COALESCE(p.DateStarted, p.DateCompletion) DESC,
+                 p.ProgressID DESC
         LIMIT 1`,
-      [userId, moduleContext.module.ModuleID]
+      [userId, moduleContext.module.LessonOrder, Number(moduleId)]
     );
 
     if (progressRows.length === 0) {
