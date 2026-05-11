@@ -650,6 +650,317 @@
   color: #94a3b8;
 }
 
+/* ── Dark mode: semantic color overrides ───────────────────────────────── */
+
+/* text-primary (#0B2B4C) is too dark on dark backgrounds */
+.theme-dark .text-primary {
+  color: #4DD0E1 !important;
+}
+
+/* btn-outline uses border-primary + text-primary which are invisible on dark */
+.theme-dark .btn-outline {
+  border-color: #4DD0E1 !important;
+  color: #4DD0E1 !important;
+}
+.theme-dark .btn-outline:hover {
+  background-color: #2BC4B3 !important;
+  color: #ffffff !important;
+  border-color: #2BC4B3 !important;
+}
+
+/* border-primary used for left-border accents on cards */
+.theme-dark .border-primary {
+  border-color: #4DD0E1 !important;
+}
+
+/* Hardcoded #E5E7EB borders (used in Assessment.js cards) */
+.theme-dark .border-\[\#E5E7EB\] {
+  border-color: #334155 !important;
+}
+
+/* Selected answer option background in Assessment.js */
+.theme-dark .bg-\[\#E8F8F5\] {
+  background-color: #0d3330 !important;
+}
+
+/* Table header accent used inside lesson tables */
+.theme-dark .bg-primary-light\/10 {
+  background-color: #1e3a4d !important;
+}
+
+/* Lesson content: ensure rich-text rendered HTML is readable */
+.theme-dark .lesson-content {
+  color: #e2e8f0;
+}
+.theme-dark .lesson-content h1,
+.theme-dark .lesson-content h2,
+.theme-dark .lesson-content h3,
+.theme-dark .lesson-content h4,
+.theme-dark .lesson-content h5,
+.theme-dark .lesson-content h6 {
+  color: #e2e8f0 !important;
+}
+.theme-dark .lesson-content table {
+  background-color: #162234;
+  border-color: #334155;
+}
+.theme-dark .lesson-content table th,
+.theme-dark .lesson-content table td {
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+.theme-dark .lesson-content table thead tr,
+.theme-dark .lesson-content table tr:nth-child(even) {
+  background-color: #1e2e45 !important;
+}
+.theme-dark .lesson-content table tr {
+  background-color: #162234 !important;
+}
+
+/* Inline table sections rendered from lesson paragraphs */
+.theme-dark .border-gray-100 {
+  border-color: #334155 !important;
+}
+
+/* Assessment result & quiz panels: fix hardcoded borders */
+.theme-dark .border-2.border-\[\#E5E7EB\] {
+  border-color: #334155 !important;
+}
+
+/* Reference sidebar panel */
+.theme-dark .bg-surface-light.rounded-xl {
+  background-color: #1c2a3d !important;
+  border-color: #334155 !important;
+}
+
+/* Review quiz modal inner containers */
+.theme-dark .border-gray-200.rounded-lg {
+  background-color: #1c2a3d !important;
+  border-color: #334155 !important;
+}
+.theme-dark .bg-gray-50.border-2 {
+  background-color: #273449 !important;
+}
+.theme-dark .bg-highlight\/10 {
+  background-color: rgba(43, 196, 179, 0.2) !important;
+}
+
+/* Progress page: hardcoded color classes */
+.theme-dark .text-\[\#0B2B4C\] {
+  color: #e2e8f0 !important;
+}
+.theme-dark .border-gray-300 {
+  border-color: #334155 !important;
+}
+.theme-dark .bg-\[\#2BC4B3\] {
+  background-color: #1a7a72 !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   COMPREHENSIVE DARK MODE — hardcoded-colour patches (all pages/components)
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Dark navy / dark-blue hardcoded text → readable light ──────────────── */
+.theme-dark .text-\[\#214f74\],
+.theme-dark .text-\[\#1f4c72\],
+.theme-dark .text-\[\#1e4f74\],
+.theme-dark .text-\[\#20557e\],
+.theme-dark .text-\[\#2f77ad\],
+.theme-dark .text-\[\#2C5A9E\],
+.theme-dark .text-\[\#2c5a9e\],
+.theme-dark .text-\[\#2b4254\],
+.theme-dark .text-\[\#5d7486\],
+.theme-dark .text-\[\#334155\],
+.theme-dark .text-\[\#17364f\],
+.theme-dark .text-\[\#17364F\] {
+  color: #cbd5e1 !important;
+}
+
+/* Medium-gray hardcoded → muted light */
+.theme-dark .text-\[\#9bb4c7\],
+.theme-dark .text-\[\#7890a2\],
+.theme-dark .text-\[\#6b7280\] {
+  color: #94a3b8 !important;
+}
+
+/* Dark-red hardcoded → light red */
+.theme-dark .text-\[\#a03333\] {
+  color: #fca5a5 !important;
+}
+
+/* ── Light panel backgrounds → dark equivalents ─────────────────────────── */
+.theme-dark .bg-\[\#f0faf9\],
+.theme-dark .bg-\[\#e9f2f8\],
+.theme-dark .bg-\[\#f3faff\],
+.theme-dark .bg-\[\#F8FBFF\],
+.theme-dark .bg-\[\#f8fbff\] {
+  background-color: #1c2a3d !important;
+}
+
+/* Opacity-based white backgrounds bypass the .bg-white rule */
+.theme-dark .bg-white\/70 {
+  background-color: rgba(30, 41, 59, 0.85) !important;
+}
+.theme-dark .bg-white\/80 {
+  background-color: rgba(30, 41, 59, 0.9) !important;
+}
+.theme-dark .bg-white\/95 {
+  background-color: rgba(30, 41, 59, 0.97) !important;
+}
+
+/* ── Light borders → dark ───────────────────────────────────────────────── */
+.theme-dark .border-\[\#c7deee\],
+.theme-dark .border-\[\#cde3f1\],
+.theme-dark .border-\[\#e4ebf2\],
+.theme-dark .border-\[\#dce8f0\],
+.theme-dark .border-\[\#D7E6F5\],
+.theme-dark .border-\[\#d7e6f5\],
+.theme-dark .border-\[\#f4c7c7\],
+.theme-dark .border-\[\#bed4e6\],
+.theme-dark .border-\[\#E5E7EB\],
+.theme-dark .border-\[\#e5e7eb\] {
+  border-color: #334155 !important;
+}
+
+/* ── Hover states ───────────────────────────────────────────────────────── */
+.theme-dark .hover\:bg-gray-100:hover,
+.theme-dark .hover\:bg-gray-50:hover {
+  background-color: #273449 !important;
+}
+.theme-dark .hover\:text-gray-800:hover {
+  color: #e2e8f0 !important;
+}
+.theme-dark .hover\:text-gray-700:hover {
+  color: #cbd5e1 !important;
+}
+
+/* ── Disabled / inactive button states ──────────────────────────────────── */
+.theme-dark .bg-gray-300 {
+  background-color: #334155 !important;
+}
+.theme-dark .bg-gray-400 {
+  background-color: #475569 !important;
+}
+.theme-dark .text-gray-300 {
+  color: #64748b !important;
+}
+
+/* ── Amber / warning panels ─────────────────────────────────────────────── */
+.theme-dark .bg-amber-50 {
+  background-color: #2a1f0d !important;
+}
+.theme-dark .border-amber-200 {
+  border-color: #78350f !important;
+}
+.theme-dark .text-amber-700 {
+  color: #fbbf24 !important;
+}
+.theme-dark .text-amber-500 {
+  color: #f59e0b !important;
+}
+
+/* ── Green / success panels ─────────────────────────────────────────────── */
+.theme-dark .bg-green-50 {
+  background-color: #0d2e1a !important;
+}
+.theme-dark .border-green-300 {
+  border-color: #166534 !important;
+}
+.theme-dark .text-green-700,
+.theme-dark .text-green-600 {
+  color: #4ade80 !important;
+}
+.theme-dark .text-green-500 {
+  color: #22c55e !important;
+}
+
+/* ── Emerald panels (simulation completion, review) ─────────────────────── */
+.theme-dark .bg-emerald-50 {
+  background-color: #0d2e1a !important;
+}
+.theme-dark .border-emerald-200 {
+  border-color: #065f46 !important;
+}
+.theme-dark .text-emerald-700,
+.theme-dark .text-emerald-600 {
+  color: #34d399 !important;
+}
+
+/* ── Red / error panels ─────────────────────────────────────────────────── */
+.theme-dark .bg-red-100 {
+  background-color: #2d0f0f !important;
+}
+.theme-dark .text-red-500 {
+  color: #f87171 !important;
+}
+
+/* ── Difficulty-mode coloured panels (ModuleView lesson adaptive) ────────── */
+.theme-dark .bg-blue-500\/20 {
+  background-color: rgba(59, 130, 246, 0.15) !important;
+}
+.theme-dark .text-blue-400 {
+  color: #93c5fd !important;
+}
+.theme-dark .border-blue-500\/30 {
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
+.theme-dark .bg-purple-500\/20 {
+  background-color: rgba(168, 85, 247, 0.15) !important;
+}
+.theme-dark .text-purple-400 {
+  color: #c084fc !important;
+}
+.theme-dark .border-purple-500\/30 {
+  border-color: rgba(168, 85, 247, 0.3) !important;
+}
+.theme-dark .bg-orange-500\/20 {
+  background-color: rgba(249, 115, 22, 0.15) !important;
+}
+.theme-dark .text-orange-400 {
+  color: #fb923c !important;
+}
+.theme-dark .border-orange-500\/30 {
+  border-color: rgba(249, 115, 22, 0.3) !important;
+}
+
+/* ── Skill/token pastel backgrounds (Progress, SkillMasteryResults) ──────── */
+.theme-dark .bg-\[\#E8F0FE\],
+.theme-dark .bg-\[\#E0F7FA\],
+.theme-dark .bg-\[\#FEF3E0\],
+.theme-dark .bg-\[\#FFEAEA\],
+.theme-dark .bg-\[\#F2E6F5\],
+.theme-dark .bg-\[\#E8F5E9\],
+.theme-dark .bg-\[\#EAF5FA\],
+.theme-dark .bg-\[\#FDECEA\],
+.theme-dark .bg-\[\#E8F5E9\] {
+  background-color: #1c2a3d !important;
+}
+
+/* ── SimulationActivity intro page ──────────────────────────────────────── */
+.theme-dark .text-\[\#2C5A9E\] {
+  color: #93c5fd !important;
+}
+
+/* ── Navbar guide / hint panels ─────────────────────────────────────────── */
+.theme-dark .bg-\[\#f0faf9\] {
+  background-color: #162234 !important;
+}
+
+/* ── InitialAssessment feedback banners ─────────────────────────────────── */
+.theme-dark .text-\[\#1f4c72\] {
+  color: #93c5fd !important;
+}
+
+/* ── Simulation card borders (Simulations.js, SimulationActivity.js) ─────── */
+.theme-dark .border-\[\#e4ebf2\] {
+  border-color: #334155 !important;
+}
+.theme-dark .border-\[\#dce8f0\] {
+  border-color: #2d3f55 !important;
+}
+
+/* ── End dark mode overrides ─────────────────────────────────────────────── */
+
 .font-size-small {
   --font-scale: 0.82;
 }

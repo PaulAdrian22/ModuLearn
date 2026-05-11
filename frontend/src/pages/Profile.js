@@ -608,6 +608,9 @@ const Profile = () => {
             setTheme(newTheme);
             saveAppearanceSettings({ isAdmin: false, theme: newTheme });
             applyAppearanceSettings({ theme: newTheme, fontSize, uiSize });
+            if (user?.userId) {
+              localStorage.setItem(`userTheme:${user.userId}`, newTheme);
+            }
             setHasChanges(true);
             setShowThemeModal(false);
             setMessage({ type: 'success', text: 'Theme updated!', show: true });

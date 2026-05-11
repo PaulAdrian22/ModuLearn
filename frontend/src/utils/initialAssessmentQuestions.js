@@ -23,7 +23,12 @@ const isSituationalQuestion = (question = {}) => {
     question?.questionType || question?.QuestionType || question?.type || ''
   ).trim().toLowerCase();
 
-  return typeValue.includes('situational') || typeValue.includes('sitwasyonal') || typeValue.includes('situwasyonal');
+  return (
+    typeValue.includes('situational') ||
+    typeValue.includes('situasyonal') ||
+    typeValue.includes('sitwasyonal') ||
+    typeValue.includes('situwasyonal')
+  );
 };
 
 const normalizeLessonLanguage = (value = '') => {
@@ -73,6 +78,13 @@ export const buildInitialAssessmentQuestions = (moduleList = [], preferredLangua
 
       if (matchedLanguageModule) {
         return matchedLanguageModule;
+      }
+
+      // For English (the default), fall back to untagged modules (backward compat with
+      // lessons that predate the LessonLanguage column). For other languages (e.g. Taglish),
+      // do NOT silently fall back to English content — skip this lesson slot instead.
+      if (preferredLessonLanguage !== 'English') {
+        return null;
       }
 
       const variantWithoutLanguage = lessonVariants.find(

@@ -500,23 +500,26 @@ const AdminDashboard = () => {
                     ))}
 
                     {/* Bars */}
-                    <div className="flex items-end justify-around h-full relative z-10 px-2">
+                    <div className="flex justify-around h-full relative z-10 px-2 gap-1">
                       {chartData.map((item, index) => {
                         const metric = Math.max(0, Number(item.metricValue || 0));
                         const heightPercent = yAxisMax > 0 ? (metric / yAxisMax) * 100 : 0;
                         return (
-                          <div key={index} className="flex flex-col items-center flex-1" style={{ maxWidth: '80px' }} title={`${item.title || item.lesson}: ${metric}`}>
-                            <div className="w-full relative h-full flex items-end justify-center">
-                              <div 
-                                className="rounded-t-md transition-all duration-300 hover:opacity-80 cursor-pointer"
-                                style={{ 
-                                  backgroundColor: item.color,
-                                  height: `${heightPercent}%`,
-                                  width: '70%',
-                                  minHeight: metric > 0 ? '4px' : '0px'
-                                }}
-                              ></div>
-                            </div>
+                          <div
+                            key={index}
+                            className="flex-1 flex flex-col items-center justify-end"
+                            style={{ maxWidth: '80px', alignSelf: 'stretch' }}
+                            title={`${item.title || item.lesson}: ${metric}`}
+                          >
+                            <div
+                              className="rounded-t-md transition-all duration-500 hover:opacity-80 cursor-pointer"
+                              style={{
+                                backgroundColor: item.color,
+                                height: `${heightPercent}%`,
+                                width: '70%',
+                                minHeight: metric > 0 ? '4px' : '0px'
+                              }}
+                            />
                           </div>
                         );
                       })}

@@ -390,7 +390,7 @@ const Navbar = ({ suppressAutoTour = false }) => {
             }`}
           >
             <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 5H17A2 2 0 0 1 19 7V17A2 2 0 0 1 17 19H7A2 2 0 0 1 5 17V7A2 2 0 0 1 7 5ZM9 5V2M12 5V2M15 5V2M9 19V22M12 19V22M15 19V22M5 9H2M5 12H2M5 15H2M19 9H22M19 12H22M19 15H22M10 10H14V14H10V10Z" />
             </svg>
             <span>{uiText.simulations}</span>
             {location.pathname === '/simulations' && (

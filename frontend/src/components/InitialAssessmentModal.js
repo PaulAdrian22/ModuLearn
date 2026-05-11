@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { resolveCorrectAnswerText, shuffleQuestionChoicesList } from '../utils/assessmentShuffle';
 import { normalizePreferredLanguage } from '../utils/languagePreference';
+import SkillMasteryResults from './SkillMasteryResults';
 
 
 const InitialAssessmentModal = ({
@@ -74,6 +75,28 @@ const InitialAssessmentModal = ({
     if (showResults || assessmentQuestions.length === 0) return;
     setQuestionStartTime(Date.now());
   }, [showResults, currentQuestion, assessmentQuestions.length]);
+
+  // Lock browser back button and refresh while assessment is active to prevent cheating.
+  const assessmentIsActive = !showResults && assessmentQuestions.length > 0 && !submitting;
+  useEffect(() => {
+    if (!assessmentIsActive) return;
+    window.history.pushState(null, '', window.location.href);
+    const handlePopState = () => {
+      window.history.pushState(null, '', window.location.href);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [assessmentIsActive]);
+
+  useEffect(() => {
+    if (!assessmentIsActive) return;
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [assessmentIsActive]);
 
   const toNumberOrNull = (value) => {
     const numeric = Number(value);
@@ -236,7 +259,12 @@ const InitialAssessmentModal = ({
                 {copy.timeSpent}: {formatTime(elapsedTime)}
               </p>
 
-
+              {masterySkills.length > 0 && (
+                <SkillMasteryResults
+                  skills={masterySkills}
+                  masteryThreshold={0.95}
+                />
+              )}
 
               <button
                 onClick={() => onComplete?.({
@@ -245,7 +273,7 @@ const InitialAssessmentModal = ({
                   elapsedTime,
                   masterySkills: skillBreakdown,
                 })}
-                className="px-8 py-3 bg-[#42C5B6] hover:bg-[#37A89C] text-white rounded-full text-lg font-semibold shadow-lg transition-all hover:scale-105"
+                className="mt-6 px-8 py-3 bg-[#42C5B6] hover:bg-[#37A89C] text-white rounded-full text-lg font-semibold shadow-lg transition-all hover:scale-105"
               >
                 {copy.continueButton}
               </button>

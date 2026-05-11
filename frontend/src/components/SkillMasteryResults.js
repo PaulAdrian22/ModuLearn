@@ -47,7 +47,7 @@ const SkillMasteryResults = ({ skills, masteryThreshold = 0.95 }) => {
         Skill Mastery Progress
       </h3>
 
-      <div className="space-y-3">
+      <div className="space-y-3 max-h-72 overflow-y-auto custom-scrollbar pr-1">
         {skills.map((skill, index) => {
           const colors = SKILL_COLORS[skill.skillName] || { bar: '#9E9E9E', bg: '#F5F5F5', icon: '📝' };
           const prevWidth = skill.previousPKnown * 100;

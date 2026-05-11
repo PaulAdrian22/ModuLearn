@@ -6,7 +6,6 @@ import { useAuth } from '../App';
 const Register = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const registerScale = 'min(1, calc((100dvh - 56px) / 980))';
   const [formData, setFormData] = useState({
     name: '',
     age: '',
@@ -81,8 +80,8 @@ const Register = () => {
   };
 
   return (
-    <div 
-      className="h-[100dvh] w-full relative overflow-hidden"
+    <div
+      className="min-h-screen w-full relative"
       style={{
         backgroundImage: 'url(/images/register-bg.webp)',
         backgroundSize: 'cover',
@@ -90,9 +89,8 @@ const Register = () => {
         backgroundRepeat: 'no-repeat'
       }}
     >
-      {/* Register Form - Responsive placement keeps design intent while avoiding zoom clipping */}
-      <div className="h-[100dvh] flex items-center justify-center lg:justify-end px-4 py-4 lg:pr-[8vw]">
-      <div className="w-full max-w-[470px]" style={{ transform: `scale(${registerScale})`, transformOrigin: 'center center' }}>
+      <div className="min-h-screen flex items-center justify-center lg:justify-end px-4 py-8 lg:pr-[8vw] overflow-y-auto">
+      <div className="w-full max-w-[470px]">
         <div className="bg-white rounded-3xl shadow-2xl p-7" style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}>
           {/* Register Title */}
           <h2 className="text-4xl font-bold text-center mb-2" style={{ color: '#173F65' }}>Register</h2>

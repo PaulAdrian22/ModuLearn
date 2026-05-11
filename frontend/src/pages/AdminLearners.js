@@ -38,7 +38,8 @@ const AdminLearners = () => {
   const [activeTab, setActiveTab] = useState('active');
   const [selectedMetric, setSelectedMetric] = useState('timeSpentPerLesson');
   const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 30;
+  const [genderFilter, setGenderFilter] = useState('all');
+  const ITEMS_PER_PAGE = 20;
   const [stats, setStats] = useState({
     total: 0,
     active: 0,
@@ -66,6 +67,12 @@ const AdminLearners = () => {
       );
     }
 
+    if (genderFilter !== 'all') {
+      filtered = filtered.filter((learner) =>
+        (learner.Gender || '').toLowerCase() === genderFilter.toLowerCase()
+      );
+    }
+
     if (metricFilter !== 'all') {
       filtered = filtered.filter((learner) => {
         const summary = learnerMetricSummaries[learner.UserID];
@@ -80,7 +87,7 @@ const AdminLearners = () => {
 
     setFilteredLearners(filtered);
     setCurrentPage(1);
-  }, [searchQuery, learners, metricFilter, learnerMetricSummaries, metricFilterLoading]);
+  }, [searchQuery, learners, metricFilter, genderFilter, learnerMetricSummaries, metricFilterLoading]);
 
   const buildMetricSummary = (lessonMetrics = []) => {
     const metricTotals = METRIC_OPTIONS.reduce((acc, metric) => {
@@ -463,10 +470,11 @@ const AdminLearners = () => {
   const handleExportCSV = () => {
     const rows = visibleLearners;
     const escape = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
-    const header = ['Name', 'Username', 'Age', 'Educational Background', 'Date Joined', 'Last Login'];
+    const header = ['Name', 'Username', 'Gender', 'Age', 'Educational Background', 'Date Joined', 'Last Login'];
     const csvRows = rows.map((l) => [
       escape(l.Name),
       escape(l.Username),
+      escape(l.Gender || ''),
       escape(l.Age || ''),
       escape(l.EducationalBackground || ''),
       escape(formatDate(l.created_at)),
@@ -591,6 +599,22 @@ const AdminLearners = () => {
 
               <div className="flex flex-col sm:flex-row gap-3 sm:items-center xl:justify-end">
                 <div className="flex items-center gap-2">
+                  <label htmlFor="learner-gender-filter" className="text-sm font-medium text-text-secondary whitespace-nowrap">
+                    Gender
+                  </label>
+                  <select
+                    id="learner-gender-filter"
+                    value={genderFilter}
+                    onChange={(e) => setGenderFilter(e.target.value)}
+                    className="px-3 py-2 rounded-lg border border-border bg-white text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+                  >
+                    <option value="all">All</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                </div>
+
+                <div className="flex items-center gap-2">
                   <label htmlFor="learner-metric-filter" className="text-sm font-medium text-text-secondary whitespace-nowrap">
                     Metric Filter
                   </label>
@@ -675,6 +699,9 @@ const AdminLearners = () => {
                       Background
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">
+                      Gender
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">
                       Age
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">
@@ -703,6 +730,9 @@ const AdminLearners = () => {
                         <p className="text-text-primary text-sm">
                           {learner.EducationalBackground || 'Not specified'}
                         </p>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <p className="text-text-primary text-sm">{learner.Gender || 'N/A'}</p>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <p className="text-text-primary text-sm">{learner.Age || 'N/A'}</p>
@@ -823,8 +853,8 @@ const AdminLearners = () => {
 
             <div className="bg-background border border-border rounded p-4">
               <div className="grid grid-cols-1 xl:grid-cols-[1fr_300px] gap-4 items-start">
-                <div className="h-[320px]">
-                  <div className="flex flex-wrap gap-4 mb-2 text-sm text-text-secondary">
+                <div className="flex flex-col" style={{ minHeight: '320px' }}>
+                  <div className="flex-shrink-0 flex flex-wrap gap-4 mb-2 text-sm text-text-secondary">
                     {getLearnerChartData().map((d, i) => (
                       <div key={`${d.lessonLabel}-${i}`} className="flex items-center gap-2">
                         <span className="w-3 h-3 rounded-full" style={{ backgroundColor: d.fill }}></span>
@@ -832,6 +862,7 @@ const AdminLearners = () => {
                       </div>
                     ))}
                   </div>
+                  <div className="flex-1 min-h-0" style={{ minHeight: '260px' }}>
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={getLearnerChartData()} margin={{ top: 8, right: 16, left: 0, bottom: 8 }}>
                       <CartesianGrid strokeDasharray="0" stroke="#D1D5DB" vertical={false} />
@@ -850,6 +881,7 @@ const AdminLearners = () => {
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
+                  </div>
                 </div>
 
                 <div className="pt-4 pl-2">

@@ -358,6 +358,28 @@ const FinalAssessment = () => {
     setQuestionStartTime(Date.now());
   }, [currentQuestion, examStarted, showResults, loading, questions.length]);
 
+  // Lock browser back button and refresh while exam is active to prevent cheating.
+  const examIsActive = examStarted && !showResults && questions.length > 0;
+  useEffect(() => {
+    if (!examIsActive) return;
+    window.history.pushState(null, '', window.location.href);
+    const handlePopState = () => {
+      window.history.pushState(null, '', window.location.href);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [examIsActive]);
+
+  useEffect(() => {
+    if (!examIsActive) return;
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [examIsActive]);
+
   const updateCurrentQuestionTime = (existingTimes = questionTimes) => {
     const accumulated = existingTimes[currentQuestion] || 0;
     const additional = questionStartTime

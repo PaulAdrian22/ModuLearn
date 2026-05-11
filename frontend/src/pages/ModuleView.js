@@ -94,6 +94,17 @@ const ModuleView = () => {
     setActiveReviewQuestionStartTime(Date.now());
   }, [activeReview, activeReviewQuestionIndex]);
 
+  // Block browser back/forward navigation while a review assessment is open.
+  useEffect(() => {
+    if (!activeReview) return;
+    window.history.pushState(null, '');
+    const handlePopState = () => {
+      window.history.pushState(null, '');
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [activeReview]);
+
   const updateActiveReviewQuestionTime = (existingTimes = activeReviewQuestionTimes) => {
     const accumulated = existingTimes[activeReviewQuestionIndex] || 0;
     const additional = activeReviewQuestionStartTime
@@ -2531,7 +2542,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                             <span className="absolute top-3 left-3 inline-flex items-center justify-center min-w-[24px] h-6 px-2 rounded-full bg-primary/10 text-primary text-xs font-bold">
                               {refIndex + 1}
                             </span>
-                            <div className="min-w-0">
+                            <div className="min-w-0 pl-8">
                               <p className="text-sm font-semibold text-primary break-words">
                                 {reference.apaCitation}
                               </p>

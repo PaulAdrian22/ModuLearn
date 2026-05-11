@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 import SkeletonLoader from '../components/SkeletonLoader';
+import { normalizePreferredLanguage } from '../utils/languagePreference';
+
+const resolveLanguage = () =>
+  normalizePreferredLanguage(window.localStorage.getItem('preferredLanguage') || 'English');
 
 const Progress = () => {
   const navigate = useNavigate();
+  const [preferredLanguage, setPreferredLanguage] = useState(resolveLanguage);
   const [progressData, setProgressData] = useState(null);
   const [bktData, setBktData] = useState([]);
   const [skillsData, setSkillsData] = useState([]);
@@ -18,6 +23,16 @@ const Progress = () => {
   const scrollThumbRef = React.useRef(null);
   const dragStartY = React.useRef(0);
   const dragStartScrollTop = React.useRef(0);
+
+  useEffect(() => {
+    const handleLangChange = () => setPreferredLanguage(resolveLanguage());
+    window.addEventListener('preferredLanguageChanged', handleLangChange);
+    window.addEventListener('storage', handleLangChange);
+    return () => {
+      window.removeEventListener('preferredLanguageChanged', handleLangChange);
+      window.removeEventListener('storage', handleLangChange);
+    };
+  }, []);
 
   useEffect(() => {
     fetchProgressData();
@@ -393,15 +408,38 @@ const Progress = () => {
   const achievementTokens = iconTokens.filter((token) => token.unlocked);
   const lockedIconTokens = iconTokens.filter((token) => !token.unlocked);
 
+  const isTaglish = preferredLanguage === 'Taglish';
+
+  const uiText = useMemo(() => ({
+    pageTitle:          isTaglish ? 'Iyong mga Kahusayan' : 'Your Proficiencies',
+    pageSubtitle:       isTaglish ? 'Suriin ang iyong performance at subaybayan ang iyong pag-unlad dito. Magpatuloy sa mahusay na gawa!' : 'Check your performance and track your progress here. Keep up the great work!',
+    achievementTokens:  isTaglish ? 'Mga Achievement Token' : 'Achievement Tokens',
+    tokenSubtitle:      isTaglish ? 'Awtomatikong naa-unlock ang mga token batay sa iyong kasalukuyang progreso at mastery.' : 'Tokens unlock automatically based on your current progress and mastery.',
+    learningPathProgress: isTaglish ? 'Pag-unlad ng Landas ng Pagkatuto' : 'Learning Path Progress',
+    lessonsCompleted:   isTaglish ? 'Mga Leksyon na Nakumpleto:' : 'Lessons Completed:',
+    lessonPerformance:  isTaglish ? 'Pagganap sa Leksyon' : 'Lesson Performance',
+    learningTime:       isTaglish ? 'Oras ng Pagkatuto' : 'Learning Time',
+    avgTimePerLesson:   isTaglish ? 'Average na Oras Bawat Leksyon' : 'Average Time Per Lesson',
+    lessonLevel:        isTaglish ? 'Antas ng Leksyon' : 'Lesson Level',
+    mostChallenged:     isTaglish ? 'Pinaka-mahirap na Leksyon' : 'Most Challenged Lesson',
+    wellGrasped:        isTaglish ? 'Leksyon na Mahusay na Naunawaan' : 'Well Grasped Lesson',
+    masteryLevel:       isTaglish ? 'Antas ng Mastery' : 'Mastery Level',
+    assessment:         isTaglish ? 'Assessment' : 'Assessment',
+    reviewTaken:        isTaglish ? 'Kabuuang Review Assessment na Kinuha:' : 'Total Review Assessment Taken:',
+    reviewAvg:          isTaglish ? 'Average na Marka sa Review Assessment:' : 'Average Review Assessment Score:',
+    finalTaken:         isTaglish ? 'Kabuuang Final Assessment na Kinuha:' : 'Total Final Assessment Score:',
+    finalAvg:           isTaglish ? 'Average na Marka sa Final Assessment:' : 'Average Final Assessment Score:',
+  }), [isTaglish]);
+
   return (
     <div className="min-h-screen bg-[#F5F7FA]">
       <Navbar />
-      
+
       <div className="w-full px-8 py-8 min-h-[calc(100vh-80px)] custom-scrollbar">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-[#0B2B4C] mb-2">Your Proficiencies</h1>
-          <p className="text-gray-600 text-lg">Check your performance and track your progress here. Keep up the great work!</p>
+          <h1 className="text-4xl font-bold text-[#0B2B4C] mb-2">{uiText.pageTitle}</h1>
+          <p className="text-gray-600 text-lg">{uiText.pageSubtitle}</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -416,7 +454,7 @@ const Progress = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                     </svg>
                   </div>
-                  <h2 className="text-3xl font-bold text-[#0B2B4C]">Achievement Tokens</h2>
+                  <h2 className="text-3xl font-bold text-[#0B2B4C]">{uiText.achievementTokens}</h2>
                 </div>
                 <div className="text-xl font-bold text-gray-600">
                   {achievementTokens.length}
@@ -424,7 +462,7 @@ const Progress = () => {
                 </div>
               </div>
               <p className="text-[18px] leading-[1.45] text-gray-500 mt-2">
-                Tokens unlock automatically based on your current progress and mastery.
+                {uiText.tokenSubtitle}
               </p>
             </div>
 
@@ -594,7 +632,7 @@ const Progress = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
               </svg>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900">Learning Path Progress</h2>
+            <h2 className="text-3xl font-bold text-gray-900">{uiText.learningPathProgress}</h2>
           </div>
 
           <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden mb-2">
@@ -605,7 +643,7 @@ const Progress = () => {
           </div>
 
           <p className="text-base md:text-lg text-gray-700 mb-6 leading-snug">
-            Lessons Completed:{' '}
+            {uiText.lessonsCompleted}{' '}
             <span className="text-[#4DD0E1] font-semibold">{summary.learningPathProgress.completedLessons}</span>
             {' / '}
             <span className="font-semibold">{summary.learningPathProgress.totalLessons}</span>
@@ -613,43 +651,43 @@ const Progress = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Lesson Performance</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">{uiText.lessonPerformance}</h3>
               <div className="space-y-1 text-base md:text-lg leading-snug text-gray-700">
                 <p>
-                  Learning Time : <span className="text-[#4DD0E1] font-semibold">{formatMinutesToHoursAndMinutes(summary.lessonPerformance.learningTimeMinutes)}</span>
+                  {uiText.learningTime} : <span className="text-[#4DD0E1] font-semibold">{formatMinutesToHoursAndMinutes(summary.lessonPerformance.learningTimeMinutes)}</span>
                 </p>
                 <p>
-                  Average Time Per Lesson : <span className="text-[#4DD0E1] font-semibold">{formatMinutesToHoursAndMinutes(summary.lessonPerformance.averageTimePerLessonMinutes)}</span>
+                  {uiText.avgTimePerLesson} : <span className="text-[#4DD0E1] font-semibold">{formatMinutesToHoursAndMinutes(summary.lessonPerformance.averageTimePerLessonMinutes)}</span>
                 </p>
                 <p>
-                  Lesson Level : <span className="text-[#4DD0E1] font-semibold">{summary.lessonPerformance.lessonLevel}</span>
+                  {uiText.lessonLevel} : <span className="text-[#4DD0E1] font-semibold">{summary.lessonPerformance.lessonLevel}</span>
                 </p>
                 <p>
-                  Most Challenged Lesson : <span className="text-[#4DD0E1] font-semibold">{toPlainText(summary.lessonPerformance.mostChallengedLesson)}</span>
+                  {uiText.mostChallenged} : <span className="text-[#4DD0E1] font-semibold">{toPlainText(summary.lessonPerformance.mostChallengedLesson)}</span>
                 </p>
                 <p>
-                  Well Grasped Lesson : <span className="text-[#4DD0E1] font-semibold">{toPlainText(summary.lessonPerformance.wellGraspedLesson)}</span>
+                  {uiText.wellGrasped} : <span className="text-[#4DD0E1] font-semibold">{toPlainText(summary.lessonPerformance.wellGraspedLesson)}</span>
                 </p>
                 <p>
-                  Mastery Level : <span className="text-[#4DD0E1] font-semibold">{summary.lessonPerformance.masteryLevelPercent}%</span>
+                  {uiText.masteryLevel} : <span className="text-[#4DD0E1] font-semibold">{summary.lessonPerformance.masteryLevelPercent}%</span>
                 </p>
               </div>
             </div>
 
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Assessment</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">{uiText.assessment}</h3>
               <div className="space-y-1 text-base md:text-lg leading-snug text-gray-700">
                 <p>
-                  Total Review Assessment Taken: <span className="text-[#4DD0E1] font-semibold">{summary.assessment.totalReviewAssessmentsTaken}</span>
+                  {uiText.reviewTaken} <span className="text-[#4DD0E1] font-semibold">{summary.assessment.totalReviewAssessmentsTaken}</span>
                 </p>
                 <p>
-                  Average Review Assessment Score: <span className="text-[#4DD0E1] font-semibold">{summary.assessment.averageReviewAssessmentScore}</span>
+                  {uiText.reviewAvg} <span className="text-[#4DD0E1] font-semibold">{summary.assessment.averageReviewAssessmentScore}</span>
                 </p>
                 <p>
-                  Total Final Assessment Score: <span className="text-[#4DD0E1] font-semibold">{summary.assessment.totalFinalAssessmentsTaken}</span>
+                  {uiText.finalTaken} <span className="text-[#4DD0E1] font-semibold">{summary.assessment.totalFinalAssessmentsTaken}</span>
                 </p>
                 <p>
-                  Average Final Assessment Score: <span className="text-[#4DD0E1] font-semibold">{summary.assessment.averageFinalAssessmentScore}</span>
+                  {uiText.finalAvg} <span className="text-[#4DD0E1] font-semibold">{summary.assessment.averageFinalAssessmentScore}</span>
                 </p>
               </div>
             </div>

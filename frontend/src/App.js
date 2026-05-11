@@ -95,6 +95,14 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
     setToken(authToken);
     localStorage.setItem('token', authToken);
+    // Restore this user's saved theme so their preference persists across sessions.
+    // Falls back to the current shared value (Light Mode after logout) if no per-user
+    // preference is stored yet (i.e. brand-new account).
+    const perUserTheme = localStorage.getItem(`userTheme:${userData.userId}`);
+    if (perUserTheme) {
+      localStorage.setItem('theme', perUserTheme);
+      localStorage.setItem('adminTheme', perUserTheme);
+    }
     axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
   };
 
@@ -102,6 +110,9 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     setToken(null);
     localStorage.removeItem('token');
+    // Reset appearance to Light Mode so the next user (or new account) starts fresh.
+    localStorage.setItem('theme', 'Light Mode');
+    localStorage.setItem('adminTheme', 'Light Mode');
     delete axios.defaults.headers.common['Authorization'];
   };
 
@@ -374,7 +385,12 @@ const GlobalTokenUnlockTracker = () => {
     return () => clearTimeout(timerId);
   }, [activeUnlockToken]);
 
-  if (!activeUnlockToken) {
+  const animationAllowedPaths = ['/dashboard', '/progress'];
+  const isOnAnimationAllowedPage = animationAllowedPaths.some(
+    (p) => location.pathname === p || location.pathname.startsWith(p + '/')
+  );
+
+  if (!activeUnlockToken || !isOnAnimationAllowedPage) {
     return null;
   }
 

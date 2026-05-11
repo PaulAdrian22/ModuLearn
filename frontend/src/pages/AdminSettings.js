@@ -53,6 +53,9 @@ const AdminSettings = () => {
     setTheme(newTheme);
     saveAppearanceSettings({ isAdmin: true, theme: newTheme });
     applyAppearanceSettings({ theme: newTheme, fontSize, uiSize });
+    if (user?.userId) {
+      localStorage.setItem(`userTheme:${user.userId}`, newTheme);
+    }
     setShowThemeModal(false);
     showNotification('Theme updated successfully');
   };

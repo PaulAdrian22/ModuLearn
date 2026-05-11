@@ -347,6 +347,10 @@ const getAllModules = async (req, res) => {
     
     // If userId provided, include progress
     if (userId) {
+      const innerLangClause = hasLessonLanguage && languageFilter
+        ? " AND COALESCE(NULLIF(TRIM(m2.LessonLanguage), ''), 'English') = ?"
+        : '';
+
       sql += `,
         p.ProgressID,
         p.CompletionRate,
@@ -375,13 +379,13 @@ const getAllModules = async (req, res) => {
           ) AS LastOpenedAt
         FROM progress p1
         JOIN module m2 ON m2.ModuleID = p1.ModuleID
-        WHERE p1.UserID = ?
+        WHERE p1.UserID = ?${innerLangClause}
         GROUP BY m2.LessonOrder
       ) p ON p.LessonOrder = m.LessonOrder
       `;
 
       const filters = [];
-      const params = [userId];
+      const params = hasLessonLanguage && languageFilter ? [userId, languageFilter] : [userId];
 
       if (hasDeletedFlag) {
         filters.push('m.Is_Deleted = FALSE');
@@ -530,6 +534,10 @@ const getModuleById = async (req, res) => {
     }
     
     if (userId) {
+      const innerLangClause = hasLessonLanguage && languageFilter
+        ? " AND COALESCE(NULLIF(TRIM(m2.LessonLanguage), ''), 'English') = ?"
+        : '';
+
       sql += `,
         p.CompletionRate,
         p.DateStarted,
@@ -543,12 +551,12 @@ const getModuleById = async (req, res) => {
           MAX(p1.DateCompletion) AS DateCompletion
         FROM progress p1
         JOIN module m2 ON m2.ModuleID = p1.ModuleID
-        WHERE p1.UserID = ?
+        WHERE p1.UserID = ?${innerLangClause}
         GROUP BY m2.LessonOrder
       ) p ON p.LessonOrder = m.LessonOrder
       WHERE m.ModuleID = ?`;
 
-      const params = [userId, id];
+      const params = hasLessonLanguage && languageFilter ? [userId, languageFilter, id] : [userId, id];
 
       if (hasDeletedFlag) {
         sql += ' AND m.Is_Deleted = FALSE';
@@ -588,12 +596,18 @@ const getModuleById = async (req, res) => {
       if (lessonOrder <= 1) {
         module.Is_Unlocked = true;
       } else {
+        const prevLangClause = hasLessonLanguage && languageFilter
+          ? " AND COALESCE(NULLIF(TRIM(m2.LessonLanguage), ''), 'English') = ?"
+          : '';
+        const prevParams = hasLessonLanguage && languageFilter
+          ? [userId, lessonOrder - 1, languageFilter]
+          : [userId, lessonOrder - 1];
         const prevRows = await query(
           `SELECT MAX(COALESCE(p.CompletionRate, 0)) AS CompletionRate
              FROM progress p
              JOIN module m2 ON m2.ModuleID = p.ModuleID
-            WHERE p.UserID = ? AND m2.LessonOrder = ?`,
-          [userId, lessonOrder - 1]
+            WHERE p.UserID = ? AND m2.LessonOrder = ?${prevLangClause}`,
+          prevParams
         );
         module.Is_Unlocked = Number(prevRows?.[0]?.CompletionRate || 0) >= 100;
       }

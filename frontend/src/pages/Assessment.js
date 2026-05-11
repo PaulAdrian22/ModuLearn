@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../App';
@@ -6,11 +6,16 @@ import Navbar from '../components/Navbar';
 import { trackFinalAssessment } from '../services/adaptiveLearning';
 import { themedConfirm } from '../utils/themedConfirm';
 import { normalizeQuestionOptionList, shuffleArray } from '../utils/assessmentShuffle';
+import { normalizePreferredLanguage } from '../utils/languagePreference';
+
+const resolveLanguage = () =>
+  normalizePreferredLanguage(window.localStorage.getItem('preferredLanguage') || 'English');
 
 const Assessment = () => {
   const { assessmentId } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [preferredLanguage, setPreferredLanguage] = useState(resolveLanguage);
   const [assessment, setAssessment] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -24,6 +29,45 @@ const Assessment = () => {
   const [elapsedTime, setElapsedTime] = useState(0);
   const [shuffledOptionsByQuestion, setShuffledOptionsByQuestion] = useState({});
 
+  const isTaglish = preferredLanguage === 'Taglish';
+
+  const uiText = useMemo(() => ({
+    submitTitle:      isTaglish ? 'Isumite ang Assessment?' : 'Submit Assessment?',
+    submitMessage:    isTaglish ? 'Sigurado ka bang gusto mong isumite ang iyong assessment?' : 'Are you sure you want to submit your assessment?',
+    submitConfirm:    isTaglish ? 'Isumite' : 'Submit',
+    reviewAnswers:    isTaglish ? 'Suriin ang Mga Sagot' : 'Review Answers',
+    congratulations:  isTaglish ? 'Maligayang pagbati! 🎉' : 'Congratulations! 🎉',
+    assessmentComplete: isTaglish ? 'Kumpleto ang Assessment' : 'Assessment Complete',
+    questionsCorrect: (c, t) => isTaglish ? `Nakakuha ka ng ${c} sa ${t} na tamang sagot` : `You got ${c} out of ${t} questions correct`,
+    timeSpent:        isTaglish ? 'Oras na ginamit:' : 'Time spent:',
+    passedMsg:        (s) => isTaglish ? `Maligayang pagbati! Pumasa ka sa assessment na ito na may markang ${s}%` : `Congratulations! You have passed this assessment with a score of ${s}%`,
+    failedMsg:        isTaglish ? 'Kailangan mo ng hindi bababa sa 75% upang pumasa. Suriin ang modyul at subukang muli.' : 'You need at least 75% to pass. Review the module and try again.',
+    backToDashboard:  isTaglish ? 'Bumalik sa Dashboard' : 'Back to Dashboard',
+    reviewModule:     isTaglish ? 'Suriin ang Modyul' : 'Review Module',
+    detailedResults:  isTaglish ? 'Detalyadong Mga Resulta' : 'Detailed Results',
+    yourAnswer:       isTaglish ? 'Ang iyong sagot:' : 'Your answer:',
+    correctAnswer:    isTaglish ? 'Tamang sagot:' : 'Correct answer:',
+    questionOf:       (c, t) => isTaglish ? `Tanong ${c} ng ${t}` : `Question ${c} of ${t}`,
+    answeredOf:       (a, t) => isTaglish ? `${a}/${t} nasagot` : `${a}/${t} answered`,
+    answerInstruction: isTaglish ? 'Sagutin ang lahat ng tanong nang buong husay' : 'Answer all questions to the best of your ability',
+    answerAll:        isTaglish ? 'Mangyaring sagutin ang lahat ng tanong bago isumite' : 'Please answer all questions before submitting',
+    previous:         isTaglish ? '← Nakaraan' : '← Previous',
+    next:             isTaglish ? 'Susunod →' : 'Next →',
+    submitBtn:        isTaglish ? 'Isumite ang Assessment' : 'Submit Assessment',
+    submittingBtn:    isTaglish ? 'Isinusumite...' : 'Submitting...',
+    notFound:         isTaglish ? 'Hindi nahanap ang assessment o walang available na tanong' : 'Assessment not found or no questions available',
+  }), [isTaglish]);
+
+  useEffect(() => {
+    const handleLangChange = () => setPreferredLanguage(resolveLanguage());
+    window.addEventListener('preferredLanguageChanged', handleLangChange);
+    window.addEventListener('storage', handleLangChange);
+    return () => {
+      window.removeEventListener('preferredLanguageChanged', handleLangChange);
+      window.removeEventListener('storage', handleLangChange);
+    };
+  }, []);
+
   useEffect(() => {
     fetchAssessment();
   }, [assessmentId]);
@@ -32,6 +76,28 @@ const Assessment = () => {
     if (loading || showResults || questions.length === 0) return;
     setQuestionStartTime(Date.now());
   }, [currentQuestion, loading, showResults, questions.length]);
+
+  // Lock browser back button and refresh while assessment is active to prevent cheating.
+  const assessmentIsActive = !loading && !showResults && questions.length > 0;
+  useEffect(() => {
+    if (!assessmentIsActive) return;
+    window.history.pushState(null, '', window.location.href);
+    const handlePopState = () => {
+      window.history.pushState(null, '', window.location.href);
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [assessmentIsActive]);
+
+  useEffect(() => {
+    if (!assessmentIsActive) return;
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [assessmentIsActive]);
 
   const updateCurrentQuestionTime = (existingTimes = questionTimes) => {
     const currentQuestionId = questions[currentQuestion]?.QuestionID;
@@ -117,10 +183,10 @@ const Assessment = () => {
 
   const handleSubmit = async () => {
     const shouldSubmit = await themedConfirm({
-      title: 'Submit Assessment?',
-      message: 'Are you sure you want to submit your assessment?',
-      confirmText: 'Submit',
-      cancelText: 'Review Answers'
+      title: uiText.submitTitle,
+      message: uiText.submitMessage,
+      confirmText: uiText.submitConfirm,
+      cancelText: uiText.reviewAnswers,
     });
 
     if (!shouldSubmit) {
@@ -146,18 +212,28 @@ const Assessment = () => {
 
       // Grade the assessment
       const gradeResponse = await axios.post(`/assessments/grade/${assessmentId}`);
-      setResults(gradeResponse.data);
+      const gradeData = gradeResponse.data;
+      setResults(gradeData);
       const totalTimeSpent = Object.values(updatedQuestionTimes).reduce(
         (total, seconds) => total + Number(seconds || 0),
         0
       );
       setElapsedTime(totalTimeSpent);
       setShowResults(true);
-      
+
+      // Update lesson progress: 100 if passed, 80 if failed
+      if (assessment?.ModuleID) {
+        const passed = (gradeData.score || 0) >= 75;
+        axios.put('/progress/update', {
+          moduleId: assessment.ModuleID,
+          completionRate: passed ? 100 : 80,
+        }).catch(() => {});
+      }
+
       // Track final assessment performance for adaptive learning (Lessons 1-4 only)
       if (assessment && assessment.ModuleID && assessment.ModuleID <= 4) {
         trackFinalAssessment(assessment.ModuleID, {
-          score: gradeResponse.data.score || 0
+          score: gradeData.score || 0
         });
       }
 
@@ -186,7 +262,7 @@ const Assessment = () => {
         <Navbar />
         <div className="w-full px-8 py-8">
           <div className="bg-error/20 border border-error text-error px-4 py-3 rounded-lg">
-            Assessment not found or no questions available
+            {uiText.notFound}
           </div>
         </div>
       </div>
@@ -217,7 +293,7 @@ const Assessment = () => {
             </div>
 
             <h1 className="text-5xl font-bold mb-4 text-text-primary">
-              {passed ? 'Congratulations! 🎉' : 'Assessment Complete'}
+              {passed ? uiText.congratulations : uiText.assessmentComplete}
             </h1>
 
             <div className="mb-6">
@@ -225,24 +301,24 @@ const Assessment = () => {
                 {results.score.toFixed(0)}%
               </p>
               <p className="text-text-secondary">
-                You got {results.correct} out of {results.total} questions correct
+                {uiText.questionsCorrect(results.correct, results.total)}
               </p>
               <div className="flex items-center justify-center gap-2 mt-3 text-text-secondary">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span className="text-base">Time spent: {Math.floor(elapsedTime / 60)}m {elapsedTime % 60}s</span>
+                <span className="text-base">{uiText.timeSpent} {Math.floor(elapsedTime / 60)}m {elapsedTime % 60}s</span>
               </div>
             </div>
 
             <div className="mb-8">
               {passed ? (
                 <div className="bg-success/20 border border-success text-success p-4 rounded-lg">
-                  Congratulations! You have passed this assessment with a score of {results.score.toFixed(0)}%
+                  {uiText.passedMsg(results.score.toFixed(0))}
                 </div>
               ) : (
                 <div className="bg-warning/20 border border-warning text-warning p-4 rounded-lg">
-                  You need at least 75% to pass. Review the module and try again.
+                  {uiText.failedMsg}
                 </div>
               )}
             </div>
@@ -252,14 +328,14 @@ const Assessment = () => {
                 onClick={() => navigate('/')}
                 className="btn btn-primary"
               >
-                Back to Dashboard
+                {uiText.backToDashboard}
               </button>
               {!passed && (
                 <button
                   onClick={() => navigate(`/module/${assessment.ModuleID}`)}
                   className="btn btn-outline"
                 >
-                  Review Module
+                  {uiText.reviewModule}
                 </button>
               )}
             </div>
@@ -267,12 +343,12 @@ const Assessment = () => {
 
           {/* Detailed Results */}
           <div className="card mt-8">
-            <h2 className="text-2xl font-bold mb-6">Detailed Results</h2>
-            
+            <h2 className="text-2xl font-bold mb-6">{uiText.detailedResults}</h2>
+
             <div className="space-y-4">
               {results.details.map((detail, index) => {
                 const isCorrect = detail.isCorrect;
-                
+
                 return (
                   <div key={index} className="bg-background-light p-4 rounded-lg">
                     <div className="flex items-start gap-3 mb-2">
@@ -285,13 +361,13 @@ const Assessment = () => {
                         <p className="font-medium mb-2">{detail.question}</p>
                         <div className="text-sm space-y-1">
                           <p className="text-text-secondary">
-                            Your answer: <span className={isCorrect ? 'text-success' : 'text-error'}>
+                            {uiText.yourAnswer} <span className={isCorrect ? 'text-success' : 'text-error'}>
                               {detail.userAnswer}
                             </span>
                           </p>
                           {!isCorrect && (
                             <p className="text-text-secondary">
-                              Correct answer: <span className="text-success">{detail.correctAnswer}</span>
+                              {uiText.correctAnswer} <span className="text-success">{detail.correctAnswer}</span>
                             </p>
                           )}
                         </div>
@@ -318,16 +394,16 @@ const Assessment = () => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-text-primary mb-2">{assessment.AssessmentType} Assessment</h1>
-          <p className="text-gray-600 text-lg">Answer all questions to the best of your ability</p>
+          <p className="text-gray-600 text-lg">{uiText.answerInstruction}</p>
         </div>
 
         {/* Progress */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border-2 border-[#E5E7EB]">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="font-bold text-lg text-text-primary">Question {currentQuestion + 1} of {questions.length}</h3>
+            <h3 className="font-bold text-lg text-text-primary">{uiText.questionOf(currentQuestion + 1, questions.length)}</h3>
             <div className="text-right">
               <span className="text-gray-600 font-medium block">
-                {Object.keys(answers).length}/{questions.length} answered
+                {uiText.answeredOf(Object.keys(answers).length, questions.length)}
               </span>
             </div>
           </div>
@@ -386,7 +462,7 @@ const Assessment = () => {
             disabled={currentQuestion === 0}
             className="btn btn-outline disabled:opacity-50"
           >
-            ← Previous
+            {uiText.previous}
           </button>
 
           <div className="flex gap-2">
@@ -411,21 +487,21 @@ const Assessment = () => {
               disabled={submitting || Object.keys(answers).length < questions.length}
               className="btn btn-primary disabled:opacity-50"
             >
-              {submitting ? 'Submitting...' : 'Submit Assessment'}
+              {submitting ? uiText.submittingBtn : uiText.submitBtn}
             </button>
           ) : (
             <button
               onClick={handleNext}
               className="btn btn-primary"
             >
-              Next →
+              {uiText.next}
             </button>
           )}
         </div>
 
         {Object.keys(answers).length < questions.length && (
           <p className="text-center text-text-secondary text-sm mt-4">
-            Please answer all questions before submitting
+            {uiText.answerAll}
           </p>
         )}
       </div>

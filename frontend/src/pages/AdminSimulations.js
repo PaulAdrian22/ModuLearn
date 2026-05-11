@@ -311,12 +311,12 @@ const AdminSimulations = () => {
           </div>
 
           <div className="flex flex-wrap gap-3">
+            {!allCoreSlotsFilled && (
             <button
               type="button"
               onClick={() => openCreateModal('core')}
-              disabled={allCoreSlotsFilled}
-              title={allCoreSlotsFilled ? `All ${CORE_SIMULATION_LIMIT} core simulation slots are filled` : `Fill the lowest empty core slot (1-${CORE_SIMULATION_LIMIT})`}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#0B2B4C] hover:bg-[#0e3a66] text-white font-semibold px-5 py-3 shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#0B2B4C]"
+              title={`Fill the lowest empty core slot (1-${CORE_SIMULATION_LIMIT})`}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#0B2B4C] hover:bg-[#0e3a66] text-white font-semibold px-5 py-3 shadow-sm transition-colors"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 5v14M5 12h14" />
@@ -324,6 +324,7 @@ const AdminSimulations = () => {
               Add Simulation
               <span className="ml-1 text-xs font-normal opacity-80">({coreSlotsTaken}/{CORE_SIMULATION_LIMIT})</span>
             </button>
+            )}
             <button
               type="button"
               onClick={() => openCreateModal('supplementary')}
@@ -372,11 +373,9 @@ const AdminSimulations = () => {
         {!loading && !error && filteredSimulations.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {filteredSimulations.map((simulation, index) => {
-              const activityType = getActivityType(simulation);
-              const activityTheme = ACTIVITY_TYPE_THEME[activityType] || ACTIVITY_TYPE_THEME.Disassembling;
               const activityOrder = index + 1;
               const resolvedSkillType = getSkillTypeAssignedPerSimulation(simulation);
-              const { skillType, solid, soft, text } = getSkillTheme(resolvedSkillType);
+              const { solid, soft, text } = getSkillTheme(resolvedSkillType);
               const simOrder = Number(simulation.SimulationOrder || 0);
               const isSupplementary = simOrder > CORE_SIMULATION_LIMIT;
 
@@ -394,10 +393,7 @@ const AdminSimulations = () => {
                       >
                         {activityOrder}
                       </div>
-                      <span
-                        className="px-3 py-1 text-xs font-semibold rounded-full"
-                        style={{ backgroundColor: activityTheme.soft, color: activityTheme.text }}
-                      >
+                      <span className="px-3 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800">
                         Available
                       </span>
                       {isSupplementary && (
@@ -420,29 +416,6 @@ const AdminSimulations = () => {
                   </p>
 
                   <div className="mb-4 flex flex-wrap gap-2">
-                    <span
-                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold"
-                      style={{
-                        backgroundColor: activityTheme.soft,
-                        color: activityTheme.text,
-                        border: `1px solid ${activityTheme.solid}66`,
-                      }}
-                      title={activityTheme.tag}
-                    >
-                      <span
-                        className="inline-block w-1.5 h-1.5 rounded-full"
-                        style={{ backgroundColor: activityTheme.solid }}
-                      />
-                      {activityTheme.label}
-                    </span>
-
-                    <span
-                      className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold"
-                      style={{ backgroundColor: soft, color: text, border: `1px solid ${solid}40` }}
-                    >
-                      Skill: {skillType || 'Not assigned'}
-                    </span>
-
                     <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
                       Max Score: {simulation.MaxScore}
                     </span>

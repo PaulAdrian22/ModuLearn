@@ -5645,9 +5645,8 @@ const AddLesson = () => {
               value={lessonData.ReferenceLinks}
               onChange={handleReferenceLinksChange}
               onFocus={() => setActiveTextarea('textarea-reference-links')}
-              rows={1}
               placeholder="Type links and press Enter for next item"
-              className="w-full h-14 px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-700 font-mono text-sm leading-4 resize-none overflow-hidden"
+              className="w-full min-h-[140px] px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-700 font-mono text-sm leading-relaxed resize-y overflow-y-auto custom-scrollbar"
             />
             <p className="text-xs text-gray-500 mt-2">
               This references list is always available for learners in the sidebar References panel.
@@ -7352,8 +7351,41 @@ const AddLesson = () => {
         {/* Review Assessment Stage */}
         {hasMountedStage('review') && (
         <div className={`bg-white rounded-xl shadow-sm p-8 space-y-6 ${activeStage === 'review' ? '' : 'hidden'}`}>
-          <h2 className="text-2xl font-bold text-secondary mb-4">Review Assessment for {stripHtml(lessonData.ModuleTitle) || 'New Lesson'}</h2>
-          
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+            <h2 className="text-2xl font-bold text-secondary">Review Assessment for {stripHtml(lessonData.ModuleTitle) || 'New Lesson'}</h2>
+            <div className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 text-sm font-semibold flex-shrink-0 ${
+              isReviewQuestionCountValid
+                ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
+                : 'bg-amber-50 border-amber-300 text-amber-700'
+            }`}>
+              <span className="text-lg">{isReviewQuestionCountValid ? '✓' : '⚠'}</span>
+              <span>{reviewQuestionCount} question{reviewQuestionCount !== 1 ? 's' : ''}</span>
+              <span className="opacity-60">—</span>
+              <span>{isReviewQuestionCountValid ? 'Valid' : 'Must be exactly 10 or 20'}</span>
+            </div>
+          </div>
+
+          {!isReviewQuestionCountValid && reviewQuestionCount > 0 && (
+            <div className="flex items-start gap-3 px-4 py-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
+              <svg className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" />
+              </svg>
+              <span>
+                Review Assessment must contain exactly <strong>10 or 20 questions</strong>. You currently have <strong>{reviewQuestionCount}</strong>.
+                {reviewQuestionCount < 10 ? ` Add ${10 - reviewQuestionCount} more to reach 10.` : reviewQuestionCount < 20 ? ` Add ${20 - reviewQuestionCount} more to reach 20, or remove ${reviewQuestionCount - 10} to reach 10.` : ` Remove ${reviewQuestionCount - 20} to reach 20.`}
+              </span>
+            </div>
+          )}
+
+          {reviewQuestionCount === 0 && (
+            <div className="flex items-center gap-3 px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
+              <svg className="w-5 h-5 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>Add questions below. Review Assessment must have exactly <strong>10 or 20 questions</strong> before saving.</span>
+            </div>
+          )}
+
           {/* Questions List */}
           <div className="space-y-6 max-h-[600px] overflow-y-auto pr-4">
             {reviewQuestions.map((question, index) => (

@@ -264,8 +264,9 @@ const SimulationActivity = () => {
           className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
           aria-label="Back to simulations"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6h16M4 12h16M4 18h16" />
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 12H5" />
+            <path d="M12 19l-7-7 7-7" />
           </svg>
         </button>
         <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight">{displayedTitle}</h1>

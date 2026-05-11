@@ -6,7 +6,6 @@ import { useAuth } from '../App';
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const loginScale = 'min(1, calc((100dvh - 72px) / 760))';
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -64,7 +63,7 @@ const Login = () => {
   };
 
   return (
-    <div className="h-[100dvh] flex items-center justify-center px-4 pt-14 pb-4 relative overflow-hidden" style={{
+    <div className="min-h-screen flex items-center justify-center px-4 py-14 relative overflow-y-auto" style={{
       backgroundImage: 'url(/images/login-bg.webp)',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
@@ -83,7 +82,7 @@ const Login = () => {
         Back to Home
       </button>
 
-      <div className="max-w-md w-full relative z-10" style={{ transform: `scale(${loginScale})`, transformOrigin: 'center top' }}>
+      <div className="max-w-md w-full relative z-10">
         {/* Login Card */}
         <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 pt-6 sm:pt-7" style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}>
           {/* Logo */}

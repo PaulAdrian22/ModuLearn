@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../App';
 import Navbar from '../components/Navbar';
@@ -119,15 +119,15 @@ const getSkillTheme = (rawSkillType) => {
 
 const Simulations = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const [simulations, setSimulations] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     if (!user?.userId) return;
     fetchSimulations();
-  }, [user?.userId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [user?.userId, location.key]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const fetchSimulations = async () => {
     try {
@@ -159,17 +159,6 @@ const Simulations = () => {
     });
   }, [simulations]);
 
-  const filteredSimulations = useMemo(() => {
-    const normalizedSearch = searchTerm.trim().toLowerCase();
-    if (!normalizedSearch) return sortedSimulations;
-
-    return sortedSimulations.filter((simulation) => {
-      const title = String(simulation.SimulationTitle || '').toLowerCase();
-      const description = String(simulation.Description || '').toLowerCase();
-      return title.includes(normalizedSearch) || description.includes(normalizedSearch);
-    });
-  }, [searchTerm, sortedSimulations]);
-
   if (loading) {
     return (
       <div className="simulation-theme min-h-screen bg-[#F5F7FA]">
@@ -186,39 +175,27 @@ const Simulations = () => {
       <Navbar />
 
       <div className="w-full px-5 md:px-8 py-8 min-h-[calc(100vh-80px)] custom-scrollbar">
-        <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="mb-6">
           <h1 className="simulation-title text-4xl font-bold text-[#0B2B4C]">Simulation</h1>
-
-          <div className="relative w-full md:w-96">
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(event) => setSearchTerm(event.target.value)}
-              placeholder="Search simulation title or topic..."
-              className="w-full rounded-xl border border-[#bed4e6] bg-white px-4 py-3 text-sm text-[#17364f] placeholder:text-[#7890a2] focus:outline-none focus:ring-2 focus:ring-[#8bb3d8]"
-            />
-          </div>
         </div>
 
-        {filteredSimulations.length === 0 ? (
+        {sortedSimulations.length === 0 ? (
           <div className="simulation-surface bg-white rounded-3xl shadow-sm text-center py-16 border border-[#dce8f0]">
             <svg className="w-16 h-16 text-[#9bb4c7] mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
             </svg>
-            <h3 className="simulation-title text-xl font-bold text-[#2b4254] mb-2">No simulation matched your search</h3>
-            <p className="simulation-text text-[#5d7486]">Try another keyword or clear the search bar.</p>
+            <h3 className="simulation-title text-xl font-bold text-[#2b4254] mb-2">No simulations available</h3>
+            <p className="simulation-text text-[#5d7486]">Check back later for assigned simulations.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {filteredSimulations.map((simulation, index) => {
+            {sortedSimulations.map((simulation, index) => {
               const isCompleted = simulation.CompletionStatus === 'completed';
               const score = simulation.Score || 0;
               const maxScore = simulation.MaxScore || 100;
               const scorePercent = getCompletionPercent(simulation);
               const resolvedSkillType = getSkillTypeAssignedPerSimulation(simulation);
-              const { skillType, solid, soft, text } = getSkillTheme(resolvedSkillType);
-              const activityType = getActivityType(simulation);
-              const activityTheme = ACTIVITY_TYPE_THEME[activityType];
+              const { solid, soft, text } = getSkillTheme(resolvedSkillType);
 
               return (
                 <div
@@ -262,30 +239,6 @@ const Simulations = () => {
                   <p className="simulation-text text-[18px] leading-[1.45] text-gray-600 mb-5 min-h-[3.8rem]">
                     {simulation.Description || 'Drag and drop component layers into masked targets, then submit your run.'}
                   </p>
-
-                  <div className="mb-4 flex flex-wrap gap-2">
-                    <span
-                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold"
-                      style={{
-                        backgroundColor: activityTheme.soft,
-                        color: activityTheme.text,
-                        border: `1px solid ${activityTheme.solid}66`
-                      }}
-                      title={activityTheme.tag}
-                    >
-                      <span
-                        className="inline-block w-1.5 h-1.5 rounded-full"
-                        style={{ backgroundColor: activityTheme.solid }}
-                      />
-                      {activityTheme.label}
-                    </span>
-                    <span
-                      className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold"
-                      style={{ backgroundColor: soft, color: text, border: `1px solid ${solid}40` }}
-                    >
-                      Skill: {skillType || 'Not assigned'}
-                    </span>
-                  </div>
 
                   <div className="mb-4">
                     <div className="flex justify-between items-center mb-2">

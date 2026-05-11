@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import SkillMasteryResults from './SkillMasteryResults';
 import { resolveCorrectAnswerText, shuffleQuestionChoicesList } from '../utils/assessmentShuffle';
 import { getPreferredLanguage, normalizePreferredLanguage } from '../utils/languagePreference';
 
@@ -33,7 +31,6 @@ const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null, onBack = n
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [showResults, setShowResults] = useState(false);
   const [score, setScore] = useState(0);
-  const [skillResults, setSkillResults] = useState(null);
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
   const [questionTimes, setQuestionTimes] = useState({});
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -52,7 +49,6 @@ const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null, onBack = n
     setSelectedAnswers({});
     setShowResults(false);
     setScore(0);
-    setSkillResults(null);
     setQuestionTimes({});
     setElapsedTime(0);
   }, [questions]);
@@ -92,24 +88,15 @@ const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null, onBack = n
     }
   };
 
-  const handleSubmit = async (finalQuestionTimes) => {
+  const handleSubmit = (finalQuestionTimes) => {
     const updatedQuestionTimes = finalQuestionTimes || updateCurrentQuestionTime();
     setQuestionTimes(updatedQuestionTimes);
 
-    // Calculate score
     let correct = 0;
-    const answers = [];
     assessmentQuestions.forEach((q, index) => {
       const userAnswer = selectedAnswers[index];
       const correctAnswerText = resolveCorrectAnswerText(q);
-      const isCorrect = userAnswer === correctAnswerText;
-      if (isCorrect) correct++;
-      answers.push({
-        skill: q.skill || 'Memorization',
-        isCorrect,
-        responseTime: updatedQuestionTimes[index] || 0,
-        questionType: q.questionType || q.type || 'Easy'
-      });
+      if (userAnswer === correctAnswerText) correct++;
     });
     const finalScore = assessmentQuestions.length > 0
       ? (correct / assessmentQuestions.length) * 100
@@ -121,22 +108,6 @@ const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null, onBack = n
     );
     setElapsedTime(totalTimeSpent);
     setShowResults(true);
-
-    // Batch update BKT skill mastery (exclude No Skill questions)
-    try {
-      const skillAnswers = answers.filter(a => a.skill !== 'No Skill');
-      if (skillAnswers.length > 0) {
-        const res = await axios.post('/bkt/batch-update', {
-          answers: skillAnswers,
-          assessmentType: 'Diagnostic',
-          moduleId: Number.isFinite(Number(moduleId)) ? Number(moduleId) : null,
-          timeSpentSeconds: totalTimeSpent
-        });
-        setSkillResults(res.data);
-      }
-    } catch (err) {
-      console.error('Error updating skill mastery:', err);
-    }
   };
 
   const currentQ = assessmentQuestions[currentQuestion];
@@ -152,17 +123,6 @@ const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null, onBack = n
         {/* Header */}
         <div className="bg-[#1e3a5f] text-white py-4 px-6 sticky top-0 z-10">
           <div className="flex items-center gap-3">
-            <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <circle cx="12" cy="12" r="3" fill="currentColor"/>
-              <circle cx="12" cy="4" r="2" fill="currentColor"/>
-              <circle cx="12" cy="20" r="2" fill="currentColor"/>
-              <circle cx="4" cy="12" r="2" fill="currentColor"/>
-              <circle cx="20" cy="12" r="2" fill="currentColor"/>
-              <line x1="12" y1="7" x2="12" y2="9" stroke="currentColor" strokeWidth="2"/>
-              <line x1="12" y1="15" x2="12" y2="17" stroke="currentColor" strokeWidth="2"/>
-              <line x1="7" y1="12" x2="9" y2="12" stroke="currentColor" strokeWidth="2"/>
-              <line x1="15" y1="12" x2="17" y2="12" stroke="currentColor" strokeWidth="2"/>
-            </svg>
             <h1 className="text-2xl font-semibold">{copy.diagnosticScore}</h1>
           </div>
         </div>
@@ -194,13 +154,6 @@ const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null, onBack = n
               {copy.basedOnPerformance}
             </p>
 
-            {skillResults && skillResults.skills && skillResults.skills.length > 0 && (
-              <SkillMasteryResults
-                skills={skillResults.skills}
-                masteryThreshold={skillResults.masteryThreshold}
-              />
-            )}
-
             <button
               onClick={() => onComplete(score)}
               className="px-10 py-3 bg-[#2BC4B3] hover:bg-[#1a9d8f] text-white rounded-full text-lg font-semibold shadow-lg transition-all hover:scale-105"
@@ -219,20 +172,6 @@ const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null, onBack = n
       <div className="bg-[#1e3a5f] text-white py-4 px-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <svg className="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <circle cx="12" cy="12" r="3" fill="currentColor"/>
-              <circle cx="12" cy="4" r="2" fill="currentColor"/>
-              <circle cx="12" cy="20" r="2" fill="currentColor"/>
-              <circle cx="4" cy="12" r="2" fill="currentColor"/>
-              <circle cx="20" cy="12" r="2" fill="currentColor"/>
-              <line x1="12" y1="7" x2="12" y2="9" stroke="currentColor" strokeWidth="2"/>
-              <line x1="12" y1="15" x2="12" y2="17" stroke="currentColor" strokeWidth="2"/>
-              <line x1="7" y1="12" x2="9" y2="12" stroke="currentColor" strokeWidth="2"/>
-              <line x1="15" y1="12" x2="17" y2="12" stroke="currentColor" strokeWidth="2"/>
-            </svg>
-            <h1 className="text-2xl font-semibold">{copy.diagnostic}</h1>
-          </div>
-          <div className="flex items-center gap-2">
             {onBack && (
               <button
                 onClick={onBack}
@@ -240,11 +179,14 @@ const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null, onBack = n
                 title={copy.back}
                 aria-label={copy.back}
               >
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M20 11H7.83l5.58-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 12H5" />
+                  <path d="M12 19l-7-7 7-7" />
                 </svg>
               </button>
             )}
+          </div>
+          <div className="flex items-center gap-2">
             {onSkip && (
               <button
                 onClick={onSkip}
