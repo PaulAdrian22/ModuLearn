@@ -62,8 +62,7 @@ const AdminLearners = () => {
     if (query !== '') {
       filtered = filtered.filter((learner) =>
         learner.Name.toLowerCase().includes(query) ||
-        learner.Username.toLowerCase().includes(query) ||
-        learner.EducationalBackground?.toLowerCase().includes(query)
+        learner.Username.toLowerCase().includes(query)
       );
     }
 
@@ -345,7 +344,7 @@ const AdminLearners = () => {
       case 'age':
         return { type: 'number', value: parseNumberValue(learner.Age) };
       case 'background':
-        return { type: 'text', value: parseTextValue(learner.EducationalBackground) };
+        return { type: 'text', value: null };
       case 'selectedMetric': {
         const metricKey = metricFilter === 'all' ? 'lessonProgress' : metricFilter;
         const metricValue = learnerMetricSummaries[learner.UserID]?.[metricKey];
@@ -470,13 +469,12 @@ const AdminLearners = () => {
   const handleExportCSV = () => {
     const rows = visibleLearners;
     const escape = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
-    const header = ['Name', 'Username', 'Gender', 'Age', 'Educational Background', 'Date Joined', 'Last Login'];
+    const header = ['Name', 'Username', 'Gender', 'Age', 'Date Joined', 'Last Login'];
     const csvRows = rows.map((l) => [
       escape(l.Name),
       escape(l.Username),
-      escape(l.Gender || ''),
-      escape(l.Age || ''),
-      escape(l.EducationalBackground || ''),
+      escape(['Male', 'Female'].includes(l.Gender) ? l.Gender : 'N/A'),
+      escape(l.Age || 'N/A'),
       escape(formatDate(l.created_at)),
       escape(formatDate(l.last_login)),
     ].join(','));
@@ -580,7 +578,7 @@ const AdminLearners = () => {
                 </svg>
                 <input
                   type="text"
-                  placeholder="Search learners by name, username, or background..."
+                  placeholder="Search learners by name or username..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="flex-1 border-none focus:outline-none focus:ring-0 bg-transparent text-text-primary"
@@ -645,7 +643,6 @@ const AdminLearners = () => {
                     <option value="dateJoined">Date Joined</option>
                     <option value="lastOnline">Last Online</option>
                     <option value="age">Age</option>
-                    <option value="background">Background</option>
                     <option value="selectedMetric">Selected Metric</option>
                   </select>
                 </div>
@@ -696,9 +693,6 @@ const AdminLearners = () => {
                       Username
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">
-                      Background
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">
                       Gender
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-semibold text-text-secondary uppercase tracking-wider">
@@ -728,11 +722,8 @@ const AdminLearners = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <p className="text-text-primary text-sm">
-                          {learner.EducationalBackground || 'Not specified'}
+                          {['Male', 'Female'].includes(learner.Gender) ? learner.Gender : 'N/A'}
                         </p>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <p className="text-text-primary text-sm">{learner.Gender || 'N/A'}</p>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <p className="text-text-primary text-sm">{learner.Age || 'N/A'}</p>
@@ -863,7 +854,7 @@ const AdminLearners = () => {
                     ))}
                   </div>
                   <div className="flex-1 min-h-0" style={{ minHeight: '260px' }}>
-                  <ResponsiveContainer width="100%" height="100%">
+                  <ResponsiveContainer width="100%" height={260}>
                     <BarChart data={getLearnerChartData()} margin={{ top: 8, right: 16, left: 0, bottom: 8 }}>
                       <CartesianGrid strokeDasharray="0" stroke="#D1D5DB" vertical={false} />
                       <XAxis dataKey="lessonLabel" tick={{ fontSize: 13, fill: '#374151' }} />

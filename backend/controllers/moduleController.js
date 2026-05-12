@@ -424,9 +424,12 @@ const getAllModules = async (req, res) => {
             }
           : {};
 
-        const isUnlockedForThisUser = previousCompleted;
+        const isSupplementary = String(moduleRow.Difficulty || '').trim().toLowerCase() === 'supplementary';
+        const isUnlockedForThisUser = isSupplementary ? true : previousCompleted;
         const completedThisLesson = Number(moduleRow.CompletionRate || 0) >= 100;
-        previousCompleted = completedThisLesson;
+        if (!isSupplementary) {
+          previousCompleted = completedThisLesson;
+        }
 
         return {
           ...moduleData,
@@ -582,10 +585,11 @@ const getModuleById = async (req, res) => {
       );
       module.LessonTime = toObject(module.LessonTime, null);
 
-      // Per-user unlock: lesson 1 is always unlocked. Otherwise this learner
-      // must have finished the previous lesson. Override the global column.
+      // Per-user unlock: lesson 1 always unlocked; supplementary lessons always
+      // unlocked; otherwise this learner must have finished the previous lesson.
       const lessonOrder = Number(module.LessonOrder || 0);
-      if (lessonOrder <= 1) {
+      const isModuleSupplementary = String(module.Difficulty || '').trim().toLowerCase() === 'supplementary';
+      if (lessonOrder <= 1 || isModuleSupplementary) {
         module.Is_Unlocked = true;
       } else {
         const prevRows = await query(

@@ -7962,11 +7962,6 @@ const AddLesson = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
                   </svg>
                 )},
-                { type: 'simulation', label: 'Simulation', desc: 'Import an existing interactive simulation', icon: (
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-                  </svg>
-                )},
               ].map(option => {
                 const alreadyAdded = isStageTypeInRoadmap(option.type);
 
@@ -8020,17 +8015,24 @@ const AddLesson = () => {
                 </svg>
               </button>
             </div>
-            {availableSimulations.length === 0 ? (
+            {(() => {
+              const CORE_LIMIT = 20;
+              const filteredSims = availableSimulations.filter((sim) =>
+                isSupplementaryLesson
+                  ? Number(sim.SimulationOrder || 0) > CORE_LIMIT
+                  : Number(sim.SimulationOrder || 0) <= CORE_LIMIT
+              );
+              return filteredSims.length === 0 ? (
               <div className="text-center py-12">
                 <svg className="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
                 </svg>
-                <p className="text-gray-500 text-lg">No simulations available</p>
-                <p className="text-gray-400 text-sm mt-2">Create simulations first in the Simulations section</p>
+                <p className="text-gray-500 text-lg">No {isSupplementaryLesson ? 'supplementary' : 'core'} simulations available</p>
+                <p className="text-gray-400 text-sm mt-2">{isSupplementaryLesson ? 'Create supplementary simulations in the Simulations section' : 'Core simulations (1–20) must be set up in the Simulations section'}</p>
               </div>
             ) : (
               <div className="space-y-3 overflow-y-auto flex-1 pr-2">
-                {availableSimulations.map(sim => (
+                {filteredSims.map(sim => (
                   <button
                     key={sim.SimulationID}
                     onClick={() => handleSimulationPicked(sim)}
@@ -8052,7 +8054,8 @@ const AddLesson = () => {
                   </button>
                 ))}
               </div>
-            )}
+            );
+            })()}
           </div>
         </>
       )}

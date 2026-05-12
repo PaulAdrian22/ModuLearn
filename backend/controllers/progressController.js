@@ -113,7 +113,7 @@ const getAccessibleModuleContext = async ({ userId, moduleId }) => {
   const { hasLessonLanguage, preferredLanguage } = await getLanguageFilterContext(userId);
 
   let moduleSql =
-    'SELECT ModuleID, ModuleTitle, LessonOrder, Is_Unlocked FROM module WHERE ModuleID = ?';
+    'SELECT ModuleID, ModuleTitle, LessonOrder, Is_Unlocked, Difficulty FROM module WHERE ModuleID = ?';
   const moduleParams = [moduleId];
 
   if (hasLessonLanguage && preferredLanguage) {
@@ -315,7 +315,8 @@ const startModule = async (req, res) => {
     // module.Is_Unlocked column is intentionally ignored — it used to leak
     // unlock state across users when one learner finished a lesson.
     const lessonOrder = Number(moduleContext.module.LessonOrder || 0);
-    if (lessonOrder > 1) {
+    const isModuleSupplementary = String(moduleContext.module.Difficulty || '').trim().toLowerCase() === 'supplementary';
+    if (lessonOrder > 1 && !isModuleSupplementary) {
       const prevRows = await query(
         `SELECT MAX(COALESCE(p.CompletionRate, 0)) AS CompletionRate
            FROM progress p

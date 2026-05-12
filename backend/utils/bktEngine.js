@@ -166,7 +166,10 @@ const computeTransitionL = (currentL, skillName, isCorrect) => {
  * @param {string} skillName - Skill name to get T param
  * @returns {number} Post-Test L value
  */
-const computePostTestL = (transitionL, skillName) => {
+const computePostTestL = (transitionL, skillName, isCorrect) => {
+  // Learning transition only applies on correct answers; wrong answers don't advance mastery.
+  if (!isCorrect) return transitionL;
+
   const params = getSkillParams(skillName);
   const T = params.pLearn;
 
@@ -194,7 +197,7 @@ const itemInteraction = (currentL, skillName, isCorrect) => {
   const transitionL = computeTransitionL(currentL, skillName, isCorrect);
 
   // Step 2: Compute Post-Test L
-  const postTestL = computePostTestL(transitionL, skillName);
+  const postTestL = computePostTestL(transitionL, skillName, isCorrect);
 
   // Step 3: Set Current L = Post-Test L for next iteration
   const currentL_after = postTestL;
@@ -913,7 +916,7 @@ const updateKnowledgeState = (pKnown, pLearn, pSlip, pGuess, isCorrect) => {
     transitionL = denominator > 0 ? numerator / denominator : pKnown;
   }
 
-  const postTestL = transitionL + (1 - transitionL) * pLearn;
+  const postTestL = isCorrect ? transitionL + (1 - transitionL) * pLearn : transitionL;
   return round6(clamp(postTestL));
 };
 

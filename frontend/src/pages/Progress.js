@@ -604,17 +604,18 @@ const Progress = () => {
                           {skill.percentage}%
                         </span>
                       </div>
-                      
+
                       <div className="w-full bg-gray-200 rounded-full h-2.5 mb-2">
-                        <div 
-                          className="h-2.5 rounded-full duration-500"
-                          style={{ 
+                        <div
+                          className="h-2.5 rounded-full"
+                          style={{
                             width: `${skill.percentage}%`,
-                            backgroundColor: skill.color
+                            backgroundColor: skill.color,
+                            transition: `width ${1200 + index * 200}ms ease-out`,
                           }}
                         ></div>
                       </div>
-                      
+
                       <p className="text-[18px] leading-[1.45] text-gray-600 font-poppins">{skill.description}</p>
                     </div>
                   </div>

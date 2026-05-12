@@ -203,6 +203,10 @@ const SimulationActivity = () => {
   }
 
   if (!hasActivityStarted) {
+    const alreadyCompleted = simulation?.CompletionStatus === 'completed';
+    const prevScore = Number(simulation?.Score || 0);
+    const prevScorePercent = maxScore > 0 ? Math.round((prevScore / maxScore) * 100) : 0;
+
     return (
       <div className="simulation-theme min-h-screen bg-[#F5F7FA] flex items-center justify-center px-6">
         <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl border border-gray-200 p-10 relative">
@@ -217,35 +221,55 @@ const SimulationActivity = () => {
             </svg>
           </button>
 
-          <div className="pt-6 pb-20">
-            <p className="text-sm font-semibold text-[#2C5A9E] uppercase tracking-wider mb-3 text-center">
-              Simulation Activity
-            </p>
-            <h1 className="text-4xl font-bold text-[#0B2B4C] mb-5 max-w-3xl mx-auto text-center">
-              {displayedTitle || 'Simulation'}
-            </h1>
-            <p className="text-lg text-gray-600 leading-relaxed max-w-3xl mx-auto text-center mb-6">
-              {meta?.description || simulation?.Description || 'Follow the guided simulation steps and complete all moments to finish the activity.'}
-            </p>
-
-            {(meta?.steps || []).length > 0 && (
-              <div className="max-w-3xl mx-auto bg-[#F8FBFF] border border-[#D7E6F5] rounded-xl p-5">
-                <h2 className="text-base font-semibold text-[#0B2B4C] mb-2">What you will do</h2>
-                <ol className="list-decimal pl-5 space-y-1.5 text-sm text-[#334155] max-h-56 overflow-y-auto custom-scrollbar pr-1">
-                  {meta.steps.map((step, index) => (
-                    <li key={index}>{step}</li>
-                  ))}
-                </ol>
+          {alreadyCompleted ? (
+            <div className="pt-6 pb-20 flex flex-col items-center text-center">
+              <p className="text-sm font-semibold text-[#2C5A9E] uppercase tracking-wider mb-3">
+                Simulation Activity
+              </p>
+              <h1 className="text-4xl font-bold text-[#0B2B4C] mb-6 max-w-3xl">
+                {displayedTitle || 'Simulation'}
+              </h1>
+              <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-8 w-full max-w-md mb-6">
+                <h3 className="text-2xl font-bold text-[#0B2B4C] mb-2">Activity Complete!</h3>
+                <p className="text-base text-gray-600 mb-1">
+                  Score: <span className="font-bold text-[#0B2B4C]">{prevScore}/{maxScore}</span>
+                </p>
+                <p className="text-base text-gray-600 mb-4">
+                  Result: <span className="font-bold text-[#0B2B4C]">{prevScorePercent}%</span>
+                </p>
               </div>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className="pt-6 pb-20">
+              <p className="text-sm font-semibold text-[#2C5A9E] uppercase tracking-wider mb-3 text-center">
+                Simulation Activity
+              </p>
+              <h1 className="text-4xl font-bold text-[#0B2B4C] mb-5 max-w-3xl mx-auto text-center">
+                {displayedTitle || 'Simulation'}
+              </h1>
+              <p className="text-lg text-gray-600 leading-relaxed max-w-3xl mx-auto text-center mb-6">
+                {meta?.description || simulation?.Description || 'Follow the guided simulation steps and complete all moments to finish the activity.'}
+              </p>
+
+              {(meta?.steps || []).length > 0 && (
+                <div className="max-w-3xl mx-auto bg-[#F8FBFF] border border-[#D7E6F5] rounded-xl p-5">
+                  <h2 className="text-base font-semibold text-[#0B2B4C] mb-2">What you will do</h2>
+                  <ol className="list-decimal pl-5 space-y-1.5 text-sm text-[#334155] max-h-56 overflow-y-auto custom-scrollbar pr-1">
+                    {meta.steps.map((step, index) => (
+                      <li key={index}>{step}</li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="absolute bottom-6 right-6">
             <button
               onClick={handleStartActivity}
               className="px-8 py-3 bg-[#0B2B4C] hover:bg-[#143a63] text-white rounded-xl font-semibold shadow-lg transition-colors flex items-center gap-2"
             >
-              Start Activity
+              {alreadyCompleted ? 'Try Again' : 'Start Activity'}
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
               </svg>
