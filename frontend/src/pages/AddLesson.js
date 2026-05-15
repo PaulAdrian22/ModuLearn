@@ -1253,8 +1253,14 @@ const AddLesson = () => {
   useEffect(() => {
     const fetchSimulations = async () => {
       try {
-        const response = await axios.get('/simulations');
-        setAvailableSimulations(response.data || []);
+        const response = await axios.get('/admin/simulations');
+        const data = Array.isArray(response.data) ? response.data : [];
+        const sorted = [...data].sort((a, b) => {
+          const orderDelta = Number(a.SimulationOrder || 0) - Number(b.SimulationOrder || 0);
+          if (orderDelta !== 0) return orderDelta;
+          return Number(a.SimulationID || 0) - Number(b.SimulationID || 0);
+        });
+        setAvailableSimulations(sorted);
       } catch (err) {
         console.error('Error fetching simulations:', err);
       }
@@ -2043,7 +2049,8 @@ const AddLesson = () => {
 
     const cleanNode = (node) => {
       if (node.nodeType === Node.TEXT_NODE) {
-        return escapeHtmlEntities(node.textContent || '');
+        // Preserve non-breaking spaces (typed indentation) as &nbsp; entities
+        return escapeHtmlEntities(node.textContent || '').replace(/ /g, '&nbsp;');
       }
       if (node.nodeType === Node.ELEMENT_NODE) {
         const tagName = node.tagName.toUpperCase();
@@ -5153,9 +5160,9 @@ const AddLesson = () => {
 
         {/* Roadmap */}
         <div className="bg-white rounded-xl shadow-sm p-8 mb-6">
-          <div className="flex items-center relative">
+          <div className="flex items-start relative">
             {/* Connecting Line */}
-            <div className="absolute top-6 left-0 right-0 h-0.5 bg-gray-300 z-0" 
+            <div className="absolute top-6 left-0 right-0 h-0.5 bg-gray-300 z-0"
                  style={{ left: '2%', right: '2%' }}></div>
             
             {/* Dynamic Stages */}
@@ -5209,6 +5216,11 @@ const AddLesson = () => {
                       {stage.type === 'review' && (
                         <span className="text-[10px] mt-0.5 whitespace-nowrap text-gray-400">
                           review questions must be 10 or 20
+                        </span>
+                      )}
+                      {stage.type === 'lesson' && (
+                        <span className="text-[10px] mt-0.5 text-center text-gray-400" style={{maxWidth: '8rem'}}>
+                          need 10 or 20 review questions
                         </span>
                       )}
                     </>
@@ -7215,13 +7227,6 @@ const AddLesson = () => {
                 </span>
               </button>
             </div>
-          </div>
-
-          {/* Note */}
-          <div className="mt-6 bg-blue-50 border-l-4 border-[#346C9A] p-4">
-            <p className="text-sm text-gray-700">
-              <span className="font-bold">Note:</span> Include at least 10 total review sections to generate a diagnostic for the lesson
-            </p>
           </div>
 
           {/* Action Buttons */}

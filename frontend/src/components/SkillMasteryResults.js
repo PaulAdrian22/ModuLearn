@@ -18,12 +18,15 @@ const SkillMasteryResults = ({ skills, masteryThreshold = 0.95 }) => {
     // Start animation after a short delay
     const timer1 = setTimeout(() => setShowBars(true), 300);
 
-    // Animate bars sequentially
+    // Animate bars sequentially — show correct/total ratio, not BKT PKnown
     skills.forEach((skill, index) => {
+      const targetWidth = skill.questionsAnswered > 0
+        ? (skill.correctCount / skill.questionsAnswered) * 100
+        : 0;
       setTimeout(() => {
         setAnimatedWidths(prev => ({
           ...prev,
-          [skill.skillName]: skill.newPKnown * 100
+          [skill.skillName]: targetWidth
         }));
       }, 500 + index * 400);
     });
@@ -50,8 +53,13 @@ const SkillMasteryResults = ({ skills, masteryThreshold = 0.95 }) => {
       <div className="space-y-3 max-h-72 overflow-y-auto custom-scrollbar pr-1">
         {skills.map((skill, index) => {
           const colors = SKILL_COLORS[skill.skillName] || { bar: '#9E9E9E', bg: '#F5F5F5', icon: '📝' };
+          const rawCorrectRatio = skill.questionsAnswered > 0
+            ? (skill.correctCount / skill.questionsAnswered) * 100
+            : 0;
           const prevWidth = skill.previousPKnown * 100;
-          const newWidth = animatedWidths[skill.skillName] || prevWidth;
+          const newWidth = animatedWidths[skill.skillName] !== undefined
+            ? animatedWidths[skill.skillName]
+            : rawCorrectRatio;
           const gained = skill.newPKnown - skill.previousPKnown;
           const proficiency = getProficiencyLabel(skill.newPKnown);
 
@@ -114,7 +122,7 @@ const SkillMasteryResults = ({ skills, masteryThreshold = 0.95 }) => {
                   <span className="text-xs font-bold text-white drop-shadow-sm"
                     style={{ opacity: newWidth > 8 ? 1 : 0 }}
                   >
-                    {newWidth.toFixed(1)}%
+                    {Math.round(newWidth)}%
                   </span>
                 </div>
               </div>

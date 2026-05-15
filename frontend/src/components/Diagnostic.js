@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { resolveCorrectAnswerText, shuffleQuestionChoicesList } from '../utils/assessmentShuffle';
+import { resolveCorrectAnswerText, shuffleArray, shuffleQuestionChoicesList } from '../utils/assessmentShuffle';
 import { getPreferredLanguage, normalizePreferredLanguage } from '../utils/languagePreference';
 
 const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null, onBack = null, preferredLanguage = null }) => {
@@ -34,7 +34,7 @@ const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null, onBack = n
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
   const [questionTimes, setQuestionTimes] = useState({});
   const [elapsedTime, setElapsedTime] = useState(0);
-  const [assessmentQuestions, setAssessmentQuestions] = useState(() => shuffleQuestionChoicesList(questions));
+  const [assessmentQuestions, setAssessmentQuestions] = useState(() => shuffleQuestionChoicesList(shuffleArray(questions)));
 
   const formatTime = (seconds) => {
     const safeSeconds = Math.max(0, Math.floor(seconds));
@@ -44,7 +44,7 @@ const Diagnostic = ({ questions, onComplete, onSkip, moduleId = null, onBack = n
   };
 
   useEffect(() => {
-    setAssessmentQuestions(shuffleQuestionChoicesList(questions));
+    setAssessmentQuestions(shuffleQuestionChoicesList(shuffleArray(questions)));
     setCurrentQuestion(0);
     setSelectedAnswers({});
     setShowResults(false);

@@ -4,6 +4,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const fs = require('fs');
 const { authenticate, requireAdmin } = require('../middleware/auth');
 const { body, param } = require('express-validator');
 const { handleValidationErrors } = require('../middleware/validators');
@@ -25,6 +26,7 @@ const {
   resolveActivityOrder,
   FALLBACK_META
 } = require('../utils/simulationConfig');
+const { clearSimulationColumnCache } = require('../controllers/simulationController');
 
 // Configure multer for media uploads
 const storage = multer.diskStorage({
@@ -304,6 +306,7 @@ const ensureSimulationAdminColumns = async () => {
     try {
       await pool.query('ALTER TABLE simulation ADD COLUMN ZoneData LONGTEXT NULL');
       console.log('Added ZoneData column to simulation table.');
+      clearSimulationColumnCache();
       return getSimulationAdminColumnSet({ forceRefresh: true });
     } catch (error) {
       if (error?.code !== 'ER_DUP_FIELDNAME') {
@@ -1345,14 +1348,56 @@ router.get('/dashboard/notifications', async (req, res) => {
       ORDER BY LastCompletion DESC
       LIMIT 50
     `);
-    fullyCompleted.forEach((r) => {
-      notifications.push({
-        id: buildId('all_lessons_completed', r.UserID),
-        date: r.LastCompletion,
-        message: `${r.Name} completed and passed every lesson.`,
-        type: 'all_lessons_completed'
-      });
-    });
+
+    // Check which of those learners also completed all core simulations
+    const CERT_SIM_LIMIT = 20;
+    let simTableAvailable = false;
+    let totalCoreSims = 0;
+    try {
+      const simCheck = await query('SHOW TABLES LIKE \'simulation_progress\'');
+      simTableAvailable = simCheck.length > 0;
+      if (simTableAvailable) {
+        const [{ cnt }] = await query(
+          'SELECT COUNT(*) AS cnt FROM simulation WHERE SimulationOrder > 0 AND SimulationOrder <= ?',
+          [CERT_SIM_LIMIT]
+        );
+        totalCoreSims = Number(cnt);
+      }
+    } catch {}
+
+    for (const r of fullyCompleted) {
+      let certEligible = false;
+      if (simTableAvailable && totalCoreSims > 0) {
+        try {
+          const [{ completedSims }] = await query(`
+            SELECT COUNT(*) AS completedSims
+            FROM simulation_progress sp
+            JOIN simulation s ON s.SimulationID = sp.SimulationID
+            WHERE sp.UserID = ? AND s.SimulationOrder > 0 AND s.SimulationOrder <= ?
+              AND sp.CompletionStatus = 'completed'
+          `, [r.UserID, CERT_SIM_LIMIT]);
+          certEligible = Number(completedSims) >= totalCoreSims;
+        } catch {}
+      } else {
+        certEligible = true; // No sim table yet — lesson completion is sufficient
+      }
+
+      if (certEligible) {
+        notifications.push({
+          id: buildId('cert_eligible', r.UserID),
+          date: r.LastCompletion,
+          message: `${r.Name} is eligible for certification — completed all lessons and simulations.`,
+          type: 'cert_eligible'
+        });
+      } else {
+        notifications.push({
+          id: buildId('all_lessons_completed', r.UserID),
+          date: r.LastCompletion,
+          message: `${r.Name} completed and passed every lesson.`,
+          type: 'all_lessons_completed'
+        });
+      }
+    }
 
     // Issue reports (rare, admin-actionable).
     const issues = await query(`
@@ -1413,12 +1458,41 @@ router.put('/reports/:id/resolve', [
 ], async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     await query(
       'UPDATE issue_reports SET Status = ? WHERE ReportID = ?',
       ['resolved', id]
     );
-    
+
+    // Create a notification for the user who submitted the report
+    const reports = await query('SELECT UserID, IssueType FROM issue_reports WHERE ReportID = ?', [id]);
+    if (reports.length > 0) {
+      const { UserID, IssueType } = reports[0];
+      await query(`
+        CREATE TABLE IF NOT EXISTS user_notifications (
+          NotificationID INT AUTO_INCREMENT PRIMARY KEY,
+          UserID INT NOT NULL,
+          Type VARCHAR(50) NOT NULL,
+          Title VARCHAR(255) NOT NULL,
+          Message TEXT NOT NULL,
+          IsRead BOOLEAN DEFAULT FALSE,
+          ReferenceID INT,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (UserID) REFERENCES user(UserID) ON DELETE CASCADE
+        )
+      `);
+      await query(
+        'INSERT INTO user_notifications (UserID, Type, Title, Message, ReferenceID) VALUES (?, ?, ?, ?, ?)',
+        [
+          UserID,
+          'report_resolved',
+          'Problem Report Resolved',
+          `Your reported issue (${IssueType}) has been reviewed and resolved by the admin.`,
+          Number(id),
+        ]
+      );
+    }
+
     res.json({ message: 'Report marked as resolved' });
   } catch (error) {
     console.error('Resolve report error:', error);
@@ -1448,6 +1522,30 @@ router.post('/users/:id/reset-password', [
     if (!result || result.affectedRows === 0) {
       return res.status(404).json({ error: 'Not Found', message: 'User not found' });
     }
+
+    // Create a notification reminding the user to change their default password
+    await query(`
+      CREATE TABLE IF NOT EXISTS user_notifications (
+        NotificationID INT AUTO_INCREMENT PRIMARY KEY,
+        UserID INT NOT NULL,
+        Type VARCHAR(50) NOT NULL,
+        Title VARCHAR(255) NOT NULL,
+        Message TEXT NOT NULL,
+        IsRead BOOLEAN DEFAULT FALSE,
+        ReferenceID INT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (UserID) REFERENCES user(UserID) ON DELETE CASCADE
+      )
+    `);
+    await query(
+      'INSERT INTO user_notifications (UserID, Type, Title, Message) VALUES (?, ?, ?, ?)',
+      [
+        Number(id),
+        'password_reset',
+        'Password Has Been Reset',
+        'Your account password was reset to the default by an admin. Please go to your Profile settings and change your password to keep your account secure.',
+      ]
+    );
 
     res.json({ ok: true, UserID: Number(id), defaultPassword });
   } catch (error) {
@@ -1481,7 +1579,10 @@ router.get('/simulations', async (req, res) => {
       return res.json([]);
     }
 
-    await ensureCoreSimulationPlaceholders();
+    const backfillResult = await ensureCoreSimulationPlaceholders();
+    if (backfillResult?.inserted > 0) {
+      clearNamespace('simulations:list');
+    }
     const columns = await ensureSimulationAdminColumns();
     const selectFields = [
       '`SimulationID`',
@@ -1493,6 +1594,7 @@ router.get('/simulations', async (req, res) => {
       simulationSelectField(columns, 'MaxScore', '0'),
       simulationSelectField(columns, 'TimeLimit', '0'),
       simulationSelectField(columns, 'SimulationOrder', '0'),
+      simulationSelectField(columns, 'LessonNumber', 'NULL'),
       columns.has('ZoneData')
         ? "(CASE WHEN `ZoneData` IS NULL OR TRIM(`ZoneData`) = '' THEN 0 ELSE 1 END) AS `HasAdminOverride`"
         : '0 AS `HasAdminOverride`'
@@ -1535,6 +1637,7 @@ router.get('/simulations', async (req, res) => {
         MaxScore: row.MaxScore,
         TimeLimit: row.TimeLimit,
         SimulationOrder: row.SimulationOrder,
+        LessonNumber: row.LessonNumber != null ? Number(row.LessonNumber) : null,
         activityOrder,
         hasAdminOverride: Boolean(Number(row.HasAdminOverride || 0))
       };
@@ -1679,6 +1782,7 @@ router.patch('/simulations/:id', [
   param('id').isInt({ min: 1 }).withMessage('Invalid simulation ID'),
   body('SkillType').optional({ nullable: true }).trim().isLength({ max: 100 }),
   body('ActivityType').optional({ nullable: true }).trim().isLength({ max: 100 }),
+  body('LessonNumber').optional({ nullable: true }).isInt({ min: 1 }).withMessage('LessonNumber must be a positive integer'),
   handleValidationErrors
 ], async (req, res) => {
   try {
@@ -1715,6 +1819,20 @@ router.patch('/simulations/:id', [
       values.push(req.body.ActivityType ? String(req.body.ActivityType).trim() : null);
     }
 
+    if (Object.prototype.hasOwnProperty.call(req.body, 'LessonNumber')) {
+      if (!columns.has('LessonNumber')) {
+        try {
+          await pool.query('ALTER TABLE simulation ADD COLUMN LessonNumber INT NULL');
+          columns = await getSimulationAdminColumnSet({ forceRefresh: true });
+        } catch (alterError) {
+          if (alterError?.code !== 'ER_DUP_FIELDNAME') throw alterError;
+        }
+      }
+      updates.push('`LessonNumber` = ?');
+      const ln = req.body.LessonNumber;
+      values.push(ln != null ? Number(ln) : null);
+    }
+
     if (updates.length === 0) {
       return res.status(400).json({ error: 'Validation Error', message: 'No updatable fields provided' });
     }
@@ -1735,6 +1853,7 @@ router.patch('/simulations/:id', [
       SimulationID: id,
       SkillType: req.body.SkillType ?? null,
       ActivityType: req.body.ActivityType ?? null,
+      LessonNumber: req.body.LessonNumber != null ? Number(req.body.LessonNumber) : null,
     });
   } catch (error) {
     console.error('Patch simulation error:', { code: error?.code, message: error?.message });
@@ -1761,6 +1880,7 @@ router.get('/simulations/:id', [
       simulationSelectField(columns, 'MaxScore', '0'),
       simulationSelectField(columns, 'TimeLimit', '0'),
       simulationSelectField(columns, 'SimulationOrder', '0'),
+      simulationSelectField(columns, 'LessonNumber', 'NULL'),
       simulationSelectField(columns, 'ZoneData', 'NULL')
     ];
 
@@ -1785,7 +1905,8 @@ router.get('/simulations/:id', [
         SkillType: simulation.SkillType,
         MaxScore: simulation.MaxScore,
         TimeLimit: simulation.TimeLimit,
-        SimulationOrder: simulation.SimulationOrder
+        SimulationOrder: simulation.SimulationOrder,
+        LessonNumber: simulation.LessonNumber != null ? Number(simulation.LessonNumber) : null,
       },
       activityOrder,
       source,
@@ -1983,6 +2104,266 @@ router.get('/simulations/:id/assets', [
       });
     }
     res.status(500).json({ error: 'Internal Server Error', message: 'Failed to list assets' });
+  }
+});
+
+// ─── Certificate Template ────────────────────────────────────────────────────
+
+const CERT_TEMPLATE_DIR = path.join(__dirname, '..', 'uploads', 'cert-template');
+const CERT_META_FILE = path.join(CERT_TEMPLATE_DIR, 'meta.json');
+const CORE_SIM_LIMIT = 20;
+
+const ensureCertDir = () => fs.mkdirSync(CERT_TEMPLATE_DIR, { recursive: true });
+
+const getCertMeta = () => {
+  try {
+    if (fs.existsSync(CERT_META_FILE)) {
+      return JSON.parse(fs.readFileSync(CERT_META_FILE, 'utf8'));
+    }
+  } catch {}
+  return null;
+};
+
+const certStorage = multer.diskStorage({
+  destination: (req, file, cb) => { ensureCertDir(); cb(null, CERT_TEMPLATE_DIR); },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    cb(null, `template${ext}`);
+  }
+});
+
+const certUpload = multer({
+  storage: certStorage,
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
+  fileFilter: (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+    const mime = file.mimetype;
+    const okPdf = ext === '.pdf' && mime === 'application/pdf';
+    const okImage = /^\.(webp|png|jpe?g|gif|bmp|tiff?)$/.test(ext) && mime.startsWith('image/');
+    if (okPdf || okImage) return cb(null, true);
+    cb(new Error('Only PDF or image files (WebP, PNG, JPG, GIF, BMP, TIFF) are allowed (max 10 MB).'));
+  }
+});
+
+// GET /api/admin/certificate/template — current template metadata
+router.get('/certificate/template', authenticate, requireAdmin, (req, res) => {
+  const meta = getCertMeta();
+  if (!meta) return res.json({ template: null });
+  res.json({ template: meta });
+});
+
+// POST /api/admin/certificate/template — upload / replace template
+router.post('/certificate/template', authenticate, requireAdmin,
+  (req, res, next) => {
+    certUpload.single('template')(req, res, (err) => {
+      if (err) {
+        const msg = err.code === 'LIMIT_FILE_SIZE'
+          ? 'File exceeds the 10 MB limit.'
+          : (err.message || 'Upload failed.');
+        return res.status(400).json({ error: msg });
+      }
+      next();
+    });
+  },
+  (req, res) => {
+    if (!req.file) return res.status(400).json({ error: 'No file uploaded.' });
+    const meta = {
+      filename: req.file.filename,
+      originalName: req.file.originalname,
+      mimetype: req.file.mimetype,
+      size: req.file.size,
+      uploadedAt: new Date().toISOString()
+    };
+    ensureCertDir();
+    fs.writeFileSync(CERT_META_FILE, JSON.stringify(meta, null, 2));
+    res.json({ message: 'Certificate template uploaded.', template: meta });
+  }
+);
+
+// DELETE /api/admin/certificate/template — remove template
+router.delete('/certificate/template', authenticate, requireAdmin, (req, res) => {
+  const meta = getCertMeta();
+  if (!meta) return res.status(404).json({ error: 'No template found.' });
+  const filePath = path.join(CERT_TEMPLATE_DIR, meta.filename);
+  try { fs.unlinkSync(filePath); } catch {}
+  try { fs.unlinkSync(CERT_META_FILE); } catch {}
+  res.json({ message: 'Certificate template removed.' });
+});
+
+// GET /api/admin/certificate/eligible — list users eligible for certification
+router.get('/certificate/eligible', authenticate, requireAdmin, async (req, res) => {
+  try {
+    // Count total non-supplementary active modules
+    const [{ totalModules }] = await query(`
+      SELECT COUNT(DISTINCT LessonOrder) AS totalModules
+      FROM module
+      WHERE Is_Deleted = FALSE AND (Difficulty IS NULL OR LOWER(Difficulty) != 'supplementary')
+    `);
+
+    // Count core simulations
+    const simCheck = await query('SHOW TABLES LIKE \'simulation_progress\'');
+    const hasSimTable = simCheck.length > 0;
+
+    let totalSims = 0;
+    if (hasSimTable) {
+      const [{ cnt }] = await query(
+        `SELECT COUNT(*) AS cnt FROM simulation WHERE SimulationOrder > 0 AND SimulationOrder <= ?`,
+        [CORE_SIM_LIMIT]
+      );
+      totalSims = cnt;
+    }
+
+    // Learners who completed all modules
+    const lessonEligible = await query(`
+      SELECT u.UserID, u.Name
+      FROM user u
+      WHERE u.Role = 'student' AND u.is_archived = FALSE
+        AND (
+          SELECT COUNT(DISTINCT m.LessonOrder)
+          FROM progress p
+          JOIN module m ON m.ModuleID = p.ModuleID
+          WHERE p.UserID = u.UserID
+            AND p.CompletionRate >= 100
+            AND m.Is_Deleted = FALSE
+            AND (m.Difficulty IS NULL OR LOWER(m.Difficulty) != 'supplementary')
+        ) >= ?
+    `, [totalModules]);
+
+    if (!hasSimTable || totalSims === 0) {
+      return res.json({ eligible: lessonEligible, totalModules, totalSims });
+    }
+
+    // Filter by simulation completion
+    const eligible = [];
+    for (const u of lessonEligible) {
+      const [{ completedSims }] = await query(`
+        SELECT COUNT(*) AS completedSims
+        FROM simulation_progress sp
+        JOIN simulation s ON s.SimulationID = sp.SimulationID
+        WHERE sp.UserID = ? AND s.SimulationOrder > 0 AND s.SimulationOrder <= ?
+          AND sp.CompletionStatus = 'completed'
+      `, [u.UserID, CORE_SIM_LIMIT]);
+      if (Number(completedSims) >= totalSims) eligible.push(u);
+    }
+
+    res.json({ eligible, totalModules, totalSims });
+  } catch (err) {
+    console.error('Certificate eligibility error:', err);
+    res.status(500).json({ error: 'Failed to fetch eligibility data.' });
+  }
+});
+
+const DEFAULT_CERT_TEXT_CONFIG = {
+  name: { x: 15, y: 42, width: 70, height: 12 },
+  date: { x: 25, y: 57, width: 50, height: 8 }
+};
+
+const hexToRgbPdf = (hex = '#000000') => {
+  const h = hex.replace('#', '').padEnd(6, '0');
+  return {
+    r: parseInt(h.slice(0, 2), 16) / 255,
+    g: parseInt(h.slice(2, 4), 16) / 255,
+    b: parseInt(h.slice(4, 6), 16) / 255
+  };
+};
+
+// PUT /api/admin/certificate/template/config — save text placement config
+router.put('/certificate/template/config', authenticate, requireAdmin, async (req, res) => {
+  const meta = getCertMeta();
+  if (!meta) return res.status(404).json({ error: 'No template uploaded yet.' });
+
+  const { textConfig } = req.body;
+  if (!textConfig || typeof textConfig !== 'object') {
+    return res.status(400).json({ error: 'textConfig is required.' });
+  }
+
+  const updated = { ...meta, textConfig };
+  ensureCertDir();
+  fs.writeFileSync(CERT_META_FILE, JSON.stringify(updated, null, 2));
+  res.json({ message: 'Text positions saved.', template: updated });
+});
+
+// GET /api/admin/certificate/generate/:userId — return filled certificate
+// For image templates: returns { type:'image', templateUrl, userName, date, textConfig }
+// For PDF: streams the pdf-lib-stamped PDF using saved textConfig positions
+router.get('/certificate/generate/:userId', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    if (!/^\d+$/.test(userId)) return res.status(400).json({ error: 'Invalid user ID.' });
+
+    const meta = getCertMeta();
+    if (!meta) return res.status(404).json({ error: 'No certificate template uploaded yet. Go to Admin Settings to upload one.' });
+
+    const users = await query('SELECT Name FROM user WHERE UserID = ?', [userId]);
+    if (!users.length) return res.status(404).json({ error: 'User not found.' });
+    const userName = users[0].Name;
+    const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    const templatePath = path.join(CERT_TEMPLATE_DIR, meta.filename);
+    if (!fs.existsSync(templatePath)) return res.status(404).json({ error: 'Template file missing on server. Please re-upload.' });
+
+    const saved = meta.textConfig || {};
+    const textConfig = {
+      name: { ...DEFAULT_CERT_TEXT_CONFIG.name, ...(saved.name || {}) },
+      date: { ...DEFAULT_CERT_TEXT_CONFIG.date, ...(saved.date || {}) }
+    };
+
+    if (meta.mimetype.startsWith('image/')) {
+      return res.json({
+        type: 'image',
+        templateUrl: `/uploads/cert-template/${meta.filename}`,
+        userName,
+        date,
+        textConfig
+      });
+    }
+
+    // PDF: stamp name + date using pdf-lib at saved positions
+    let PDFDocument, rgb, StandardFonts;
+    try {
+      ({ PDFDocument, rgb, StandardFonts } = require('pdf-lib'));
+    } catch {
+      return res.status(500).json({ error: 'pdf-lib is not installed. Run: npm install pdf-lib in the backend directory.' });
+    }
+
+    const existingBytes = fs.readFileSync(templatePath);
+    const pdfDoc = await PDFDocument.load(existingBytes);
+
+    const boldFont = await pdfDoc.embedFont(StandardFonts.TimesRomanBold);
+
+    const pages = pdfDoc.getPages();
+    const page = pages[0];
+    const { width, height } = page.getSize();
+
+    const drawField = (text, zone) => {
+      // zone: { x, y, width, height } all percentages (0-100), origin top-left
+      const zoneLeft   = (zone.x / 100) * width;
+      const zoneW      = (zone.width  / 100) * width;
+      const zoneH      = (zone.height / 100) * height;
+      // PDF y-axis is bottom-up, so convert the bottom edge of the zone
+      const pdfYBottom = (1 - (zone.y + zone.height) / 100) * height;
+
+      // Auto-size font to ~55% of zone height (clamped 8–120)
+      const autoSize = Math.max(8, Math.min(120, Math.floor(zoneH * 0.55)));
+      const textWidth = boldFont.widthOfTextAtSize(text, autoSize);
+
+      // Center text horizontally and vertically within the zone
+      const drawX = zoneLeft + Math.max(0, (zoneW - textWidth) / 2);
+      const drawY = pdfYBottom + (zoneH - autoSize) / 2;
+
+      page.drawText(text, { x: Math.max(0, drawX), y: Math.max(0, drawY), size: autoSize, font: boldFont, color: rgb(0, 0, 0) });
+    };
+
+    drawField(userName, textConfig.name);
+    drawField(date, textConfig.date);
+
+    const pdfBytes = await pdfDoc.save();
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `inline; filename="certificate_${userId}.pdf"`);
+    res.send(Buffer.from(pdfBytes));
+  } catch (err) {
+    console.error('Certificate generate error:', err);
+    res.status(500).json({ error: 'Failed to generate certificate.' });
   }
 });
 

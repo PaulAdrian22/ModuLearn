@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../App';
 import { useProfile } from '../contexts/ProfileContext';
 import Avatar from './Avatar';
 import { themedConfirm } from '../utils/themedConfirm';
 import { normalizePreferredLanguage } from '../utils/languagePreference';
+import { API_SERVER_URL } from '../config/api';
 
 const resolvePreferredLanguage = () => {
   if (typeof window === 'undefined') return 'English';
@@ -22,6 +23,92 @@ const Navbar = ({ suppressAutoTour = false }) => {
   const [isTourActive, setIsTourActive] = useState(false);
   const [tourStepIndex, setTourStepIndex] = useState(0);
   const [tourRect, setTourRect] = useState(null);
+
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
+  const notifPanelRef = useRef(null);
+  const notifButtonRef = useRef(null);
+
+  const fetchNotifications = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const res = await fetch(`${API_SERVER_URL}/api/users/notifications`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      setNotifications(data.notifications || []);
+      setUnreadCount(data.unreadCount || 0);
+    } catch {
+      // silently ignore network errors
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+    const interval = setInterval(fetchNotifications, 60000);
+    return () => clearInterval(interval);
+  }, [user]);
+
+  useEffect(() => {
+    if (!isNotifOpen) return;
+    const handleClickOutside = (e) => {
+      if (
+        notifPanelRef.current &&
+        !notifPanelRef.current.contains(e.target) &&
+        notifButtonRef.current &&
+        !notifButtonRef.current.contains(e.target)
+      ) {
+        setIsNotifOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isNotifOpen]);
+
+  const handleMarkRead = async (notifId) => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      await fetch(`${API_SERVER_URL}/api/users/notifications/${notifId}/read`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setNotifications((prev) =>
+        prev.map((n) => (n.NotificationID === notifId ? { ...n, IsRead: true } : n))
+      );
+      setUnreadCount((prev) => Math.max(0, prev - 1));
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleMarkAllRead = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      await fetch(`${API_SERVER_URL}/api/users/notifications/read-all`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setNotifications((prev) => prev.map((n) => ({ ...n, IsRead: true })));
+      setUnreadCount(0);
+    } catch {
+      // ignore
+    }
+  };
+
+  const formatNotifTime = (ts) => {
+    const diff = Date.now() - new Date(ts).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'Just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    return `${Math.floor(hrs / 24)}d ago`;
+  };
 
   const isTaglish = preferredLanguage === 'Taglish';
 
@@ -443,6 +530,95 @@ const Navbar = ({ suppressAutoTour = false }) => {
               />
             </svg>
           </button>
+          {/* Notification Bell */}
+          <div className="relative">
+            <button
+              ref={notifButtonRef}
+              onClick={() => setIsNotifOpen((prev) => !prev)}
+              className={`flex items-center transition-colors duration-200 p-3 rounded-lg ${
+                isNotifOpen
+                  ? 'text-[#2BC4B3] bg-[#2BC4B3]/10'
+                  : 'text-gray-400 hover:text-[#2BC4B3] hover:bg-[#2BC4B3]/10'
+              }`}
+              title="Notifications"
+              aria-label="Notifications"
+            >
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+              {unreadCount > 0 && (
+                <span className="absolute top-1.5 right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] font-bold leading-none">
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
+              )}
+            </button>
+
+            {isNotifOpen && (
+              <div
+                ref={notifPanelRef}
+                className="absolute right-0 top-full mt-2 w-[360px] bg-white rounded-2xl shadow-2xl border border-gray-100 z-[200] overflow-hidden"
+              >
+                <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+                  <h3 className="text-sm font-bold text-[#0B2B4C]">Notifications</h3>
+                  {unreadCount > 0 && (
+                    <button
+                      onClick={handleMarkAllRead}
+                      className="text-xs text-[#2BC4B3] hover:underline font-semibold"
+                    >
+                      Mark all as read
+                    </button>
+                  )}
+                </div>
+
+                <div className="max-h-[420px] overflow-y-auto divide-y divide-gray-50">
+                  {notifications.length === 0 ? (
+                    <div className="px-4 py-10 text-center text-sm text-gray-400">
+                      No notifications yet.
+                    </div>
+                  ) : (
+                    notifications.map((notif) => (
+                      <button
+                        key={notif.NotificationID}
+                        onClick={() => !notif.IsRead && handleMarkRead(notif.NotificationID)}
+                        className={`w-full text-left px-4 py-3 flex gap-3 items-start transition-colors hover:bg-gray-50 ${
+                          notif.IsRead ? 'opacity-60' : ''
+                        }`}
+                      >
+                        <span
+                          className={`mt-0.5 flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+                            notif.Type === 'password_reset'
+                              ? 'bg-amber-100 text-amber-600'
+                              : 'bg-emerald-100 text-emerald-600'
+                          }`}
+                        >
+                          {notif.Type === 'password_reset' ? (
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                            </svg>
+                          ) : (
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          )}
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <p className={`text-sm font-semibold text-[#0B2B4C] ${!notif.IsRead ? '' : 'font-medium'}`}>
+                            {notif.Title}
+                          </p>
+                          <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{notif.Message}</p>
+                          <p className="text-[11px] text-gray-400 mt-1">{formatNotifTime(notif.created_at)}</p>
+                        </div>
+                        {!notif.IsRead && (
+                          <span className="flex-shrink-0 mt-1.5 w-2 h-2 rounded-full bg-[#2BC4B3]" />
+                        )}
+                      </button>
+                    ))
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
           <button
             data-tour-target="settings"
             onClick={() => navigate('/profile')}

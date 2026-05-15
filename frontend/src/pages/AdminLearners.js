@@ -423,6 +423,115 @@ const AdminLearners = () => {
     }));
   };
 
+  const handlePrintCertificate = async () => {
+    if (!selectedLearner) return;
+    try {
+      const token = localStorage.getItem('token');
+      const res = await axios.get(`/admin/certificate/generate/${selectedLearner.UserID}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        responseType: 'arraybuffer',
+        validateStatus: null
+      });
+
+      const contentType = res.headers['content-type'] || '';
+
+      // Image template path: backend returns JSON with templateUrl + name + date + textConfig
+      if (contentType.includes('application/json')) {
+        const text = new TextDecoder().decode(res.data);
+        const data = JSON.parse(text);
+
+        if (res.status !== 200) {
+          await import('../utils/themedConfirm').then(({ themedConfirm }) =>
+            themedConfirm({
+              title: 'Cannot Print Certificate',
+              message: data.error || 'An error occurred.',
+              confirmText: 'OK',
+              showCancel: false,
+              variant: 'danger'
+            })
+          );
+          return;
+        }
+
+        const escHtml = (s) => String(s ?? '').replace(/[&<>"']/g, (c) =>
+          ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])
+        );
+
+        const DEFAULT_CERT_ZONES = {
+          name: { x: 15, y: 42, width: 70, height: 12 },
+          date: { x: 25, y: 57, width: 50, height: 8 }
+        };
+        const nameCfg = { ...DEFAULT_CERT_ZONES.name, ...(data.textConfig?.name || {}) };
+        const dateCfg = { ...DEFAULT_CERT_ZONES.date, ...(data.textConfig?.date || {}) };
+
+        // Zone-based: text fills zone area, centered both axes, font scales with zone height
+        const zoneStyle = (z) =>
+          `position:absolute;left:${z.x}%;top:${z.y}%;width:${z.width}%;height:${z.height}%;` +
+          `display:flex;align-items:center;justify-content:center;text-align:center;` +
+          `font-family:'Times New Roman',Times,serif;font-weight:700;` +
+          `font-size:${(z.height * 0.55).toFixed(2)}vh;color:#000;` +
+          `pointer-events:none;white-space:nowrap;letter-spacing:0.04em;overflow:hidden;`;
+
+        const backendOrigin = `${window.location.protocol}//${window.location.hostname}:5000`;
+        const imgUrl = `${backendOrigin}${data.templateUrl}`;
+
+        const printWindow = window.open('', '_blank', 'width=1100,height=800');
+        if (!printWindow) return;
+        printWindow.document.write(`<!doctype html>
+<html><head><title>Certificate — ${escHtml(data.userName)}</title>
+<style>
+  @page { margin: 0; size: A4 landscape; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 100vw; height: 100vh; overflow: hidden; position: relative; background: #fff; }
+  .cert-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
+</style></head>
+<body>
+  <img class="cert-img" src="${escHtml(imgUrl)}" alt="Certificate" crossorigin="anonymous" />
+  <div style="${zoneStyle(nameCfg)}">${escHtml(data.userName)}</div>
+  <div style="${zoneStyle(dateCfg)}">${escHtml(data.date)}</div>
+  <script>
+    var img = document.querySelector('.cert-img');
+    function doPrint() { window.focus(); window.print(); }
+    img.onload = doPrint;
+    img.onerror = doPrint;
+    setTimeout(doPrint, 3500);
+  <\/script>
+</body></html>`);
+        printWindow.document.close();
+        return;
+      }
+
+      // PDF path: backend returns PDF bytes
+      if (contentType.includes('application/pdf')) {
+        const blob = new Blob([res.data], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const printWindow = window.open(url, '_blank', 'width=1100,height=800');
+        if (printWindow) {
+          printWindow.onload = () => { printWindow.focus(); printWindow.print(); };
+          setTimeout(() => URL.revokeObjectURL(url), 60000);
+        }
+        return;
+      }
+
+      // Fallback: try to parse as JSON error
+      const text = new TextDecoder().decode(res.data);
+      try {
+        const data = JSON.parse(text);
+        await import('../utils/themedConfirm').then(({ themedConfirm }) =>
+          themedConfirm({
+            title: 'Certificate Error',
+            message: data.error || 'Unexpected response from server.',
+            confirmText: 'OK',
+            showCancel: false,
+            variant: 'danger'
+          })
+        );
+      } catch {}
+    } catch (err) {
+      console.error('Print certificate error:', err);
+    }
+  };
+
   const handlePrintReport = () => {
     if (!selectedLearner) return;
     const metricLabel = METRIC_OPTIONS.find((m) => m.key === selectedMetric)?.label || selectedMetric;
@@ -801,7 +910,26 @@ const AdminLearners = () => {
                 </div>
 
                 <div className="min-w-[300px]">
+                  {selectedLearner.isCertificateEligible && (
+                    <div className="flex items-center gap-2 justify-end mb-3">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-green-100 text-green-800 text-sm font-semibold border border-green-300">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                        Eligible for Certification
+                      </span>
+                    </div>
+                  )}
                   <div className="flex flex-wrap gap-3 mb-3 justify-end">
+                    <button
+                      onClick={handlePrintCertificate}
+                      className="px-5 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold flex items-center gap-2"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                      </svg>
+                      Print Certificate
+                    </button>
                     <button
                       onClick={() => handleResetPassword(selectedLearner.UserID)}
                       className="px-5 py-2 bg-[#3A70A1] hover:bg-[#2A5D84] text-white rounded-lg font-semibold"

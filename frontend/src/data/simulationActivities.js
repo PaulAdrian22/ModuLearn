@@ -301,9 +301,9 @@ export const normalizeConfig = (raw = {}, { activityOrder, fallbackManifest } = 
     title: safeString(rawMeta.title) || fallbackMeta.title || `Activity ${activityOrder || ''}`.trim(),
     description: safeString(rawMeta.description) || fallbackMeta.description || '',
     skill: safeString(rawMeta.skill) || fallbackMeta.skill || '',
-    steps: Array.isArray(rawMeta.steps) && rawMeta.steps.length > 0
+    steps: Array.isArray(rawMeta.steps)
       ? rawMeta.steps.map((s) => safeString(s)).filter(Boolean)
-      : [...(fallbackMeta.steps || [])]
+      : []
   };
 
   let timeline = Array.isArray(raw?.timeline) ? raw.timeline : [];
@@ -324,21 +324,25 @@ export const normalizeConfig = (raw = {}, { activityOrder, fallbackManifest } = 
         category: categoryForPerspective(perspective),
         layers: layers
           .map((layer, layerIdx) => {
-            const assetPath = safeString(layer?.assetPath);
+            const rawAsset = safeString(layer?.assetPath);
+            const rawTarget = safeString(layer?.targetPath);
+            const assetPath = rawAsset || rawTarget;
             if (!assetPath) return null;
             const kind = safeString(layer?.kind).toLowerCase() === 'scene' ? 'scene' : 'focus';
             const clickArea = normalizeZoomArea(layer?.clickArea);
             const zoomArea = normalizeZoomArea(layer?.zoomArea);
+            const wrongClickArea = normalizeZoomArea(layer?.wrongClickArea);
             return {
               id: safeString(layer?.id) || makeLayerId(id, layerIdx),
               assetPath,
-              targetPath: safeString(layer?.targetPath) || assetPath,
+              targetPath: rawTarget || assetPath,
               group: safeString(layer?.group),
               label: safeString(layer?.label) || componentLabelFromFilename(assetPath),
               kind,
               animation: normalizeLayerAnimation(layer?.animation),
               clickArea,
-              zoomArea
+              zoomArea,
+              wrongClickArea
             };
           })
           .filter(Boolean)

@@ -606,6 +606,7 @@ const AdminDashboard = () => {
                   {pagedNotifications.map((notification) => {
                     const typeColors = {
                       all_lessons_completed: '#66BB6A',
+                      cert_eligible: '#2E7D32',
                       issue: '#EF5350',
                       password_reset_request: '#F39C12'
                     };

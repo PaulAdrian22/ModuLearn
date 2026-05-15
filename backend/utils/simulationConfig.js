@@ -278,10 +278,6 @@ const parseStoredConfig = (zoneData) => {
 };
 
 const normalizeStoredConfig = (raw, activityOrder) => {
-  console.log('=== normalizeStoredConfig called ===');
-  console.log('Input raw config:', JSON.stringify(raw).substring(0, 500));
-  console.log('Activity order:', activityOrder);
-  
   const fallback = buildFallbackConfig(activityOrder);
   const rawMeta = raw?.meta || {};
 
@@ -289,13 +285,20 @@ const normalizeStoredConfig = (raw, activityOrder) => {
     title: safeString(rawMeta.title) || fallback.meta.title,
     description: safeString(rawMeta.description) || fallback.meta.description,
     skill: safeString(rawMeta.skill) || fallback.meta.skill,
-    steps: Array.isArray(rawMeta.steps) && rawMeta.steps.length > 0
+    steps: Array.isArray(rawMeta.steps)
       ? rawMeta.steps.map(safeString).filter(Boolean)
-      : [...fallback.meta.steps]
+      : []
   };
 
-  const rawTimeline = Array.isArray(raw?.timeline) ? raw.timeline : [];
-  const timeline = (rawTimeline.length > 0 ? rawTimeline : fallback.timeline)
+  // Use manifest timeline as fallback only when raw.timeline is absent (undefined/null),
+  // not when it was explicitly saved as an empty array by the admin.
+  const rawTimeline = raw?.timeline;
+  const timelineSource = Array.isArray(rawTimeline) && rawTimeline.length > 0
+    ? rawTimeline
+    : Array.isArray(rawTimeline)
+      ? []
+      : fallback.timeline;
+  const timeline = timelineSource
     .map((moment, momentIdx) => {
       const order = Number(moment?.order) || (momentIdx + 1);
       const id = safeString(moment?.id) || `moment-${order}-${momentIdx}`;
@@ -308,19 +311,22 @@ const normalizeStoredConfig = (raw, activityOrder) => {
         category: categoryForPerspective(perspective),
         layers: layers
           .map((layer, layerIdx) => {
-            const assetPath = safeString(layer?.assetPath);
+            const rawAsset = safeString(layer?.assetPath);
+            const rawTarget = safeString(layer?.targetPath);
+            const assetPath = rawAsset || rawTarget;
             if (!assetPath) return null;
             const kind = safeString(layer?.kind).toLowerCase() === 'scene' ? 'scene' : 'focus';
             const result = {
               id: safeString(layer?.id) || `${id}-layer-${layerIdx}`,
               assetPath,
-              targetPath: safeString(layer?.targetPath) || assetPath,
+              targetPath: rawTarget || assetPath,
               group: safeString(layer?.group),
               label: safeString(layer?.label) || componentLabelFromFilename(assetPath),
               kind
             };
             if (layer?.clickArea) result.clickArea = layer.clickArea;
             if (layer?.zoomArea) result.zoomArea = layer.zoomArea;
+            if (layer?.wrongClickArea) result.wrongClickArea = layer.wrongClickArea;
             if (layer?.animation) {
               const animation = String(layer.animation).toLowerCase().trim();
               const validAnimations = ['zoom-in', 'zoom-out', 'move-away-left', 'move-away-right', 'wipe', 'none'];
@@ -335,11 +341,6 @@ const normalizeStoredConfig = (raw, activityOrder) => {
     })
     .filter((moment) => moment.layers.length > 0)
     .sort((a, b) => a.order - b.order);
-
-  console.log('=== normalizeStoredConfig output ===');
-  const layerAnimationCounts = timeline.reduce((acc, m) => acc + m.layers.filter(l => l.animation).length, 0);
-  const layerClickAreaCounts = timeline.reduce((acc, m) => acc + m.layers.filter(l => l.clickArea).length, 0);
-  console.log(`Layers with animation: ${layerAnimationCounts}, Layers with clickArea: ${layerClickAreaCounts}`);
 
   return { meta, timeline };
 };

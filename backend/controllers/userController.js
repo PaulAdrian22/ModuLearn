@@ -964,9 +964,52 @@ const getUserDetails = async (req, res) => {
     const enrolledLessons = progressRows.length;
     const completedModules = lessonMetrics.filter((m) => m.lessonsMastered === 1).length;
 
+    // Certificate eligibility: all non-supplementary lessons + all core simulations completed
+    const CORE_SIM_LIMIT = 20;
+    const [{ totalModules }] = await query(`
+      SELECT COUNT(DISTINCT LessonOrder) AS totalModules
+      FROM module
+      WHERE Is_Deleted = FALSE AND (Difficulty IS NULL OR LOWER(Difficulty) != 'supplementary')
+    `);
+
+    const [{ completedLessonCount }] = await query(`
+      SELECT COUNT(DISTINCT m.LessonOrder) AS completedLessonCount
+      FROM progress p
+      JOIN module m ON m.ModuleID = p.ModuleID
+      WHERE p.UserID = ? AND p.CompletionRate >= 100
+        AND m.Is_Deleted = FALSE
+        AND (m.Difficulty IS NULL OR LOWER(m.Difficulty) != 'supplementary')
+    `, [id]);
+
+    let simEligible = true;
+    try {
+      const simTableExists = await query('SHOW TABLES LIKE \'simulation_progress\'');
+      if (simTableExists.length > 0) {
+        const [{ totalSims }] = await query(
+          'SELECT COUNT(*) AS totalSims FROM simulation WHERE SimulationOrder > 0 AND SimulationOrder <= ?',
+          [CORE_SIM_LIMIT]
+        );
+        if (Number(totalSims) > 0) {
+          const [{ completedSims }] = await query(`
+            SELECT COUNT(*) AS completedSims
+            FROM simulation_progress sp
+            JOIN simulation s ON s.SimulationID = sp.SimulationID
+            WHERE sp.UserID = ? AND s.SimulationOrder > 0 AND s.SimulationOrder <= ?
+              AND sp.CompletionStatus = 'completed'
+          `, [id, CORE_SIM_LIMIT]);
+          simEligible = Number(completedSims) >= Number(totalSims);
+        }
+      }
+    } catch {}
+
+    const isCertificateEligible = Number(totalModules) > 0
+      && Number(completedLessonCount) >= Number(totalModules)
+      && simEligible;
+
     const userDetails = {
       ...users[0],
       passwordMasked: '********',
+      isCertificateEligible,
       summary: {
         lessonsEnrolled: enrolledLessons,
         accountCreation: users[0].created_at,
@@ -975,7 +1018,7 @@ const getUserDetails = async (req, res) => {
       },
       lessonMetrics
     };
-    
+
     res.json(userDetails);
     
   } catch (error) {
@@ -1184,6 +1227,69 @@ const reportIssue = async (req, res) => {
   }
 };
 
+const ensureNotificationsTable = async () => {
+  await query(`
+    CREATE TABLE IF NOT EXISTS user_notifications (
+      NotificationID INT AUTO_INCREMENT PRIMARY KEY,
+      UserID INT NOT NULL,
+      Type VARCHAR(50) NOT NULL,
+      Title VARCHAR(255) NOT NULL,
+      Message TEXT NOT NULL,
+      IsRead BOOLEAN DEFAULT FALSE,
+      ReferenceID INT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (UserID) REFERENCES user(UserID) ON DELETE CASCADE
+    )
+  `);
+};
+
+const getUserNotifications = async (req, res) => {
+  try {
+    await ensureNotificationsTable();
+    const userId = req.user.userId;
+    const notifications = await query(
+      'SELECT * FROM user_notifications WHERE UserID = ? ORDER BY created_at DESC LIMIT 50',
+      [userId]
+    );
+    const unreadCount = notifications.filter((n) => !n.IsRead).length;
+    res.json({ notifications, unreadCount });
+  } catch (error) {
+    console.error('Get notifications error:', error);
+    res.status(500).json({ error: 'Internal Server Error', message: 'Failed to fetch notifications' });
+  }
+};
+
+const markNotificationRead = async (req, res) => {
+  try {
+    await ensureNotificationsTable();
+    const userId = req.user.userId;
+    const { id } = req.params;
+    await query(
+      'UPDATE user_notifications SET IsRead = TRUE WHERE NotificationID = ? AND UserID = ?',
+      [id, userId]
+    );
+    res.json({ ok: true });
+  } catch (error) {
+    console.error('Mark notification read error:', error);
+    res.status(500).json({ error: 'Internal Server Error', message: 'Failed to update notification' });
+  }
+};
+
+const markAllNotificationsRead = async (req, res) => {
+  try {
+    await ensureNotificationsTable();
+    const userId = req.user.userId;
+    await query(
+      'UPDATE user_notifications SET IsRead = TRUE WHERE UserID = ?',
+      [userId]
+    );
+    res.json({ ok: true });
+  } catch (error) {
+    console.error('Mark all notifications read error:', error);
+    res.status(500).json({ error: 'Internal Server Error', message: 'Failed to update notifications' });
+  }
+};
+
 module.exports = {
   getUserProfile,
   updateUserProfile,
@@ -1198,5 +1304,9 @@ module.exports = {
   archiveUser,
   unarchiveUser,
   deleteUser,
-  reportIssue
+  reportIssue,
+  ensureNotificationsTable,
+  getUserNotifications,
+  markNotificationRead,
+  markAllNotificationsRead,
 };

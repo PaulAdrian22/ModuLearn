@@ -14,6 +14,10 @@ const clearSimulationCaches = () => {
   clearNamespace('simulations:progress');
 };
 
+// Allow admin routes to bust the column cache when they add columns
+// (e.g. ZoneData added by ensureSimulationAdminColumns after startup).
+const clearSimulationColumnCache = () => { simulationColumnCache = null; };
+
 const getSimulationColumnSet = async () => {
   if (simulationColumnCache) return simulationColumnCache;
 
@@ -52,6 +56,7 @@ const getAllSimulations = async (req, res) => {
       simulationSelectField(columns, 'Instructions', "''"),
       simulationSelectField(columns, 'SimulationOrder', '0'),
       simulationSelectField(columns, 'Is_Locked', '0'),
+      simulationSelectField(columns, 'LessonNumber', 'NULL'),
       simulationSelectField(columns, 'created_at', 'NULL'),
       simulationSelectField(columns, 'updated_at', 'NULL')
     ];
@@ -63,7 +68,8 @@ const getAllSimulations = async (req, res) => {
         sp.Attempts,
         sp.TimeSpent,
         sp.CompletionStatus,
-        sp.DateCompleted
+        sp.DateCompleted,
+        COALESCE(sp.AttemptedFromLesson, 0) AS AttemptedFromLesson
       FROM simulation s
       LEFT JOIN simulation_progress sp ON s.SimulationID = sp.SimulationID
         ${userId ? 'AND sp.UserID = ?' : ''}
@@ -108,6 +114,7 @@ const getSimulationsByModule = async (req, res) => {
       simulationSelectField(columns, 'Instructions', "''"),
       simulationSelectField(columns, 'SimulationOrder', '0'),
       simulationSelectField(columns, 'Is_Locked', '0'),
+      simulationSelectField(columns, 'LessonNumber', 'NULL'),
       simulationSelectField(columns, 'created_at', 'NULL'),
       simulationSelectField(columns, 'updated_at', 'NULL')
     ];
@@ -371,34 +378,42 @@ const getSimulationRuntimeConfig = async (req, res) => {
 // Start simulation
 const startSimulation = async (req, res) => {
   try {
-    const { simulationId, userId } = req.body;
-    
+    const { simulationId, userId, fromLesson } = req.body;
+    const isFromLesson = Boolean(fromLesson);
+
     // Check if progress exists
     const [existing] = await pool.query(
       'SELECT * FROM simulation_progress WHERE UserID = ? AND SimulationID = ?',
       [userId, simulationId]
     );
-    
+
     if (existing.length > 0) {
-      // Update existing
-      await pool.query(
-        `UPDATE simulation_progress 
-         SET CompletionStatus = 'in_progress'
-         WHERE UserID = ? AND SimulationID = ?`,
-        [userId, simulationId]
-      );
+      // Only move to in_progress if not already completed — preserve best score/status during replay.
+      // Always update AttemptedFromLesson if this call comes from a lesson (latch: once true, stays true).
+      const statusClause = existing[0].CompletionStatus !== 'completed'
+        ? "CompletionStatus = 'in_progress',"
+        : '';
+      const lessonClause = isFromLesson && !existing[0].AttemptedFromLesson
+        ? 'AttemptedFromLesson = 1,'
+        : '';
+      const setClause = (statusClause + ' ' + lessonClause).replace(/,\s*$/, '').trim();
+
+      if (setClause) {
+        await pool.query(
+          `UPDATE simulation_progress SET ${setClause} WHERE UserID = ? AND SimulationID = ?`,
+          [userId, simulationId]
+        );
+      }
     } else {
-      // Create new
       await pool.query(
-        `INSERT INTO simulation_progress 
-         (UserID, SimulationID, CompletionStatus)
-         VALUES (?, ?, 'in_progress')`,
-        [userId, simulationId]
+        `INSERT INTO simulation_progress
+           (UserID, SimulationID, CompletionStatus, AttemptedFromLesson)
+         VALUES (?, ?, 'in_progress', ?)`,
+        [userId, simulationId, isFromLesson ? 1 : 0]
       );
     }
 
     clearSimulationCaches();
-    
     res.json({ message: 'Simulation started successfully' });
   } catch (error) {
     console.error('Error starting simulation:', error);
@@ -409,32 +424,35 @@ const startSimulation = async (req, res) => {
 // Complete simulation
 const completeSimulation = async (req, res) => {
   try {
-    const { simulationId, userId, score, timeSpent } = req.body;
+    const { simulationId, userId, score, timeSpent, fromLesson } = req.body;
     const safeTimeSpent = Math.max(0, Math.floor(Number(timeSpent || 0)));
-    
+    const isFromLesson = Boolean(fromLesson);
+
     // Ensure progress row exists (in case start failed)
     const [existing] = await pool.query(
       'SELECT * FROM simulation_progress WHERE UserID = ? AND SimulationID = ?',
       [userId, simulationId]
     );
-    
+
     if (existing.length === 0) {
-      // Create the row first
       await pool.query(
-        `INSERT INTO simulation_progress 
-         (UserID, SimulationID, Score, Attempts, TimeSpent, CompletionStatus, DateCompleted)
-         VALUES (?, ?, ?, 1, ?, 'completed', CURRENT_TIMESTAMP)`,
-        [userId, simulationId, score, safeTimeSpent]
+        `INSERT INTO simulation_progress
+         (UserID, SimulationID, Score, Attempts, TimeSpent, CompletionStatus, DateCompleted, AttemptedFromLesson)
+         VALUES (?, ?, ?, 1, ?, 'completed', CURRENT_TIMESTAMP, ?)`,
+        [userId, simulationId, score, safeTimeSpent, isFromLesson ? 1 : 0]
       );
     } else {
-      // Update existing
+      const lessonLatch = isFromLesson && !existing[0].AttemptedFromLesson
+        ? ', AttemptedFromLesson = 1'
+        : '';
       await pool.query(
-        `UPDATE simulation_progress 
+        `UPDATE simulation_progress
          SET Score = ?,
              Attempts = Attempts + 1,
              TimeSpent = TimeSpent + ?,
              CompletionStatus = 'completed',
              DateCompleted = CURRENT_TIMESTAMP
+             ${lessonLatch}
          WHERE UserID = ? AND SimulationID = ?`,
         [score, safeTimeSpent, userId, simulationId]
       );
@@ -490,5 +508,6 @@ module.exports = {
   deleteSimulation,
   startSimulation,
   completeSimulation,
-  getUserProgress
+  getUserProgress,
+  clearSimulationColumnCache
 };

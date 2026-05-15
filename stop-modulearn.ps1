@@ -21,6 +21,7 @@ if ($backend) {
     Write-Host "  Backend was not running" -ForegroundColor Gray
 }
 
+
 # Stop frontend (port 3000)
 Write-Host "Stopping Frontend Server (port 3000)..." -ForegroundColor Yellow
 $frontend = Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue

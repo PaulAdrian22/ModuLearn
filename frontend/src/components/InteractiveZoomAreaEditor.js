@@ -104,21 +104,32 @@ const InteractiveZoomAreaEditor = ({
   if (!zoomArea) return null;
 
   const isClickTheme = colorTheme === 'click';
-  const handleClassName = isClickTheme
-    ? 'absolute bg-amber-500 hover:bg-amber-600 transition-colors cursor-grab active:cursor-grabbing'
-    : 'absolute bg-emerald-500 hover:bg-emerald-600 transition-colors cursor-grab active:cursor-grabbing';
-  const areaClassName = isClickTheme
-    ? 'absolute border-2 border-amber-500 bg-amber-200/30 rounded-sm hover:bg-amber-200/40 transition-colors'
-    : 'absolute border-2 border-emerald-500 bg-emerald-200/30 rounded-sm hover:bg-emerald-200/40 transition-colors';
-  const centerLabelClassName = isClickTheme
-    ? 'text-xs font-semibold text-amber-800 bg-white/80 px-1.5 py-0.5 rounded'
-    : 'text-xs font-semibold text-emerald-700 bg-white/80 px-1.5 py-0.5 rounded';
-  const dragButtonClassName = isClickTheme
-    ? 'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-7 px-2 rounded-md bg-amber-600/90 text-white text-xs font-semibold cursor-move border border-amber-700/60 shadow-sm'
-    : 'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-7 px-2 rounded-md bg-emerald-600/90 text-white text-xs font-semibold cursor-move border border-emerald-700/60 shadow-sm';
-  const inputClassName = isClickTheme
-    ? 'w-full h-[34px] px-2 py-1 border border-gray-300 rounded-md text-xs focus:outline-none focus:ring-2 focus:ring-amber-400'
-    : 'w-full h-[34px] px-2 py-1 border border-gray-300 rounded-md text-xs focus:outline-none focus:ring-2 focus:ring-emerald-400';
+  const isWrongClickTheme = colorTheme === 'wrong-click';
+  const handleClassName = isWrongClickTheme
+    ? 'absolute bg-red-500 hover:bg-red-600 transition-colors cursor-grab active:cursor-grabbing'
+    : isClickTheme
+      ? 'absolute bg-amber-500 hover:bg-amber-600 transition-colors cursor-grab active:cursor-grabbing'
+      : 'absolute bg-emerald-500 hover:bg-emerald-600 transition-colors cursor-grab active:cursor-grabbing';
+  const areaClassName = isWrongClickTheme
+    ? 'absolute border-2 border-red-500 bg-red-200/30 rounded-sm hover:bg-red-200/40 transition-colors'
+    : isClickTheme
+      ? 'absolute border-2 border-amber-500 bg-amber-200/30 rounded-sm hover:bg-amber-200/40 transition-colors'
+      : 'absolute border-2 border-emerald-500 bg-emerald-200/30 rounded-sm hover:bg-emerald-200/40 transition-colors';
+  const centerLabelClassName = isWrongClickTheme
+    ? 'text-xs font-semibold text-red-800 bg-white/80 px-1.5 py-0.5 rounded'
+    : isClickTheme
+      ? 'text-xs font-semibold text-amber-800 bg-white/80 px-1.5 py-0.5 rounded'
+      : 'text-xs font-semibold text-emerald-700 bg-white/80 px-1.5 py-0.5 rounded';
+  const dragButtonClassName = isWrongClickTheme
+    ? 'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-7 px-2 rounded-md bg-red-600/90 text-white text-xs font-semibold cursor-move border border-red-700/60 shadow-sm'
+    : isClickTheme
+      ? 'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-7 px-2 rounded-md bg-amber-600/90 text-white text-xs font-semibold cursor-move border border-amber-700/60 shadow-sm'
+      : 'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-7 px-2 rounded-md bg-emerald-600/90 text-white text-xs font-semibold cursor-move border border-emerald-700/60 shadow-sm';
+  const inputClassName = isWrongClickTheme
+    ? 'w-full h-[34px] px-2 py-1 border border-gray-300 rounded-md text-xs focus:outline-none focus:ring-2 focus:ring-red-400'
+    : isClickTheme
+      ? 'w-full h-[34px] px-2 py-1 border border-gray-300 rounded-md text-xs focus:outline-none focus:ring-2 focus:ring-amber-400'
+      : 'w-full h-[34px] px-2 py-1 border border-gray-300 rounded-md text-xs focus:outline-none focus:ring-2 focus:ring-emerald-400';
 
   const ResizeHandle = ({ position, cursor }) => (
     <div

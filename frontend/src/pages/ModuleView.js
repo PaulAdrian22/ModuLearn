@@ -46,6 +46,8 @@ const ModuleView = () => {
   const [showReportSuccess, setShowReportSuccess] = useState(false);
   const [reportError, setReportError] = useState('');
   const [completedReviews, setCompletedReviews] = useState({});
+  const [simProgressMap, setSimProgressMap] = useState({});
+  const [simConfigMap, setSimConfigMap] = useState({});
   const [activeReview, setActiveReview] = useState(null);
   const [reviewAnswers, setReviewAnswers] = useState({});
   const [reviewScore, setReviewScore] = useState(null);
@@ -282,9 +284,10 @@ const ModuleView = () => {
         .replace(/^<(p|div)>\s*(?:<br\s*\/?>\s*)*<\/\1>\s*/i, '');
     }
 
-    // Remove accidental leading tabs/spaces inside common block tags from imported content.
+    // Remove accidental leading newlines/tabs inside common block tags from imported content.
+    // Only strip tab/newline whitespace — preserve spaces and &nbsp; (admin indentation).
     return html.replace(
-      /<(p|li|h[1-6]|td|th|blockquote)([^>]*)>\s+/gi,
+      /<(p|li|h[1-6]|td|th|blockquote)([^>]*)>[\t\n\r\f\v]+/gi,
       '<$1$2>'
     );
   };
@@ -605,9 +608,28 @@ const ModuleView = () => {
     return diagnosticIndex < introductionIndex;
   };
 
-  const readSavedLessonProgress = () => {
-    if (!lessonProgressStorageKey) return null;
+  // Canonical key shared across all language variants of the same lesson (English & Taglish).
+  // Keyed by LessonOrder so switching language never loses progress.
+  const getCanonicalLessonKey = (lessonOrder) => {
+    if (!lessonOrder || !user?.userId) return null;
+    return `lesson_progress_u${user.userId}_lo${lessonOrder}`;
+  };
 
+  const readSavedLessonProgress = (lessonOrder) => {
+    // Try canonical LessonOrder-based key first (shared across languages)
+    const canonicalKey = getCanonicalLessonKey(lessonOrder);
+    if (canonicalKey) {
+      try {
+        const raw = localStorage.getItem(canonicalKey);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) return parsed;
+        }
+      } catch {}
+    }
+
+    // Fall back to legacy module+language key (backwards compatibility)
+    if (!lessonProgressStorageKey) return null;
     try {
       const raw = localStorage.getItem(lessonProgressStorageKey);
       if (!raw) return null;
@@ -784,10 +806,23 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
         console.error('Error opening module progress:', progressStartError);
       }
 
-      const savedLessonProgress = readSavedLessonProgress();
-      
+      const savedLessonProgress = readSavedLessonProgress(response.data.LessonOrder);
+
       setModule(response.data);
-      
+
+      // Pre-load simulation progress so attempt counts show in simulation modals.
+      try {
+        const simRes = await axios.get(`/simulations?userId=${user.userId}`);
+        const simList = Array.isArray(simRes.data) ? simRes.data : [];
+        const progressMap = {};
+        simList.forEach((sim) => {
+          if (sim.SimulationID) progressMap[sim.SimulationID] = sim;
+        });
+        setSimProgressMap(progressMap);
+      } catch (_) {
+        // Non-critical — modal still opens without attempt count.
+      }
+
       console.log('Fetched module data:', response.data);
       console.log('Sections:', response.data.sections);
       console.log('Diagnostic Questions:', response.data.diagnosticQuestions);
@@ -1081,7 +1116,12 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
   }, [moduleId]);
 
   useEffect(() => {
-    if (!lessonProgressStorageKey || !module || loading || !progressHydratedRef.current) return;
+    if (!module || loading || !progressHydratedRef.current) return;
+
+    // Always save under the canonical LessonOrder-based key so progress is shared
+    // across English and Taglish variants of the same lesson.
+    const saveKey = getCanonicalLessonKey(module.LessonOrder) || lessonProgressStorageKey;
+    if (!saveKey) return;
 
     const snapshot = {
       moduleId: Number(moduleId),
@@ -1100,7 +1140,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
     };
 
     try {
-      localStorage.setItem(lessonProgressStorageKey, JSON.stringify(snapshot));
+      localStorage.setItem(saveKey, JSON.stringify(snapshot));
     } catch (err) {
       console.warn('Failed to save lesson progress snapshot:', err);
     }
@@ -1193,11 +1233,11 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
     for (const section of page) {
       const sType = normalizeLessonSectionType(section?.type);
       if (sType === 'review' || sType === 'review - multiple choice' || sType === 'review-multiple-choice') {
-        const reviewId = section.id || `review-mc-${section.originalIndex}`;
+        const reviewId = `review-mc-${section.originalIndex}`;
         if (!completedReviews[reviewId]) return false;
       }
       if (sType === 'review - drag and drop' || sType === 'review-drag-drop' || sType === 'simulation') {
-        const dndId = section.id || `review-dnd-${section.originalIndex}`;
+        const dndId = `review-dnd-${section.originalIndex}`;
         if (!completedReviews[dndId]) return false;
       }
     }
@@ -1938,7 +1978,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                       case 'review':
                       case 'review - multiple choice':
                       case 'review-multiple-choice': {
-                        const reviewId = section.id || `review-mc-${index}`;
+                        const reviewId = `review-mc-${section.originalIndex}`;
                         const isCompleted = completedReviews[reviewId];
                         const reviewResult = reviewResults[reviewId];
                         const isPerfectScore = typeof reviewResult?.score === 'number' && reviewResult.score === 100;
@@ -2262,13 +2302,22 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                       case 'review - drag and drop':
                       case 'review-drag-drop':
                       case 'simulation': {
-                        const dndReviewId = section.id || `review-dnd-${index}`;
+                        const dndReviewId = `review-dnd-${section.originalIndex}`;
                         const simulationId = section.simulationId || section.simulation?.SimulationID || section.simulation?.id;
                         const simulationTitle = section.simulation?.SimulationTitle || 'Interactive Exercise';
                         const simulationDescription = section.simulation?.Description || 'Complete this interactive exercise to continue.';
                         const isDndCompleted = completedReviews[dndReviewId];
                         const cooldownSecondsLeft = getCooldownSecondsLeft(dndReviewId);
                         const isCooldownActive = cooldownSecondsLeft > 0;
+                        const simProgress = simProgressMap[simulationId];
+                        const simAttempts = Number(simProgress?.Attempts || 0);
+                        const simScore = simAttempts > 0 ? Number(simProgress?.Score || 0) : null;
+                        const simMaxScore = Number(simProgress?.MaxScore || section.simulation?.MaxScore || 100);
+                        const simTimeSpent = simAttempts > 0 ? Number(simProgress?.TimeSpent || 0) : null;
+                        const formatSimTime = (secs) => {
+                          const s = Math.max(0, Math.floor(secs));
+                          return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+                        };
 
                         if (!simulationId && !section.simulation) return null;
 
@@ -2281,12 +2330,26 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                   Simulation <span className="text-sm font-semibold ml-1">✓ Completed</span>
                                 </h4>
                                 <p className="text-sm text-green-600 mt-1">{simulationTitle}</p>
+                                {simAttempts > 0 && (
+                                  <div className="mt-2 flex flex-wrap gap-4 text-xs text-green-700">
+                                    <span>Score: <strong>{simScore} / {simMaxScore}</strong></span>
+                                    {simTimeSpent !== null && <span>Time: <strong>{formatSimTime(simTimeSpent)}</strong></span>}
+                                    <span>Attempts: <strong>{simAttempts}</strong></span>
+                                  </div>
+                                )}
                               </div>
                             ) : (
                               <div
                                 onClick={() => {
                                   if (isCooldownActive) return;
                                   setActiveReview(dndReviewId);
+                                  if (simulationId && !simConfigMap[simulationId]) {
+                                    axios.get(`/simulations/${simulationId}/config`)
+                                      .then((r) => {
+                                        setSimConfigMap((prev) => ({ ...prev, [simulationId]: r.data?.config }));
+                                      })
+                                      .catch(() => {});
+                                  }
                                 }}
                                 className={`mb-8 relative rounded-xl overflow-hidden ${isCooldownActive ? 'cursor-not-allowed' : 'cursor-pointer group'}`}
                                 style={{ animation: 'reviewGlowPurple 2s ease-in-out infinite alternate' }}
@@ -2306,6 +2369,13 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                   <div className="flex-1">
                                     <h4 className="text-lg font-bold text-purple-800">Simulation</h4>
                                     <p className="text-sm text-purple-600">{simulationTitle} — Click to open</p>
+                                    {simAttempts > 0 && (
+                                      <div className="mt-1 flex flex-wrap gap-3 text-xs text-purple-500">
+                                        <span>Score: <strong className="text-purple-700">{simScore} / {simMaxScore}</strong></span>
+                                        {simTimeSpent !== null && <span>Time: <strong className="text-purple-700">{formatSimTime(simTimeSpent)}</strong></span>}
+                                        <span>Attempts: <strong className="text-purple-700">{simAttempts}</strong></span>
+                                      </div>
+                                    )}
                                   </div>
                                   <svg className="w-6 h-6 text-purple-400 group-hover:text-purple-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -2338,7 +2408,28 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                       </svg>
                                     </div>
                                     <h3 className="text-2xl font-bold text-primary mb-2">{simulationTitle}</h3>
-                                    <p className="text-gray-600 mb-6">{simulationDescription}</p>
+                                    {(() => {
+                                      const cfg = simConfigMap[simulationId];
+                                      const desc = cfg?.meta?.description || simulationDescription;
+                                      const steps = Array.isArray(cfg?.meta?.steps) ? cfg.meta.steps : [];
+                                      const attempts = Number(simProgressMap[simulationId]?.Attempts || 0);
+                                      return (
+                                        <>
+                                          <p className="text-gray-600 mb-3">{desc}</p>
+                                          {steps.length > 0 && (
+                                            <div className="text-left bg-[#F8FBFF] border border-[#D7E6F5] rounded-xl p-5 mb-4">
+                                              <h4 className="text-base font-semibold text-[#0B2B4C] mb-2">What you will do</h4>
+                                              <ol className="list-decimal pl-4 space-y-1.5 text-base text-[#334155] max-h-48 overflow-y-auto">
+                                                {steps.map((step, i) => <li key={i}>{step}</li>)}
+                                              </ol>
+                                            </div>
+                                          )}
+                                          <p className="text-sm text-gray-500 mb-6">
+                                            Attempts: <span className="font-semibold text-gray-700">{attempts}</span>
+                                          </p>
+                                        </>
+                                      );
+                                    })()}
                                     <div className="flex gap-4 justify-center flex-wrap">
                                       <button
                                         onClick={() => {
@@ -2347,25 +2438,11 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                             [dndReviewId]: Date.now() + 30000,
                                           }));
                                           setActiveReview(null);
-                                          if (simulationId) navigate(`/simulation/${simulationId}`);
+                                          if (simulationId) navigate(`/simulation/${simulationId}?from=lesson&moduleId=${moduleId}&autostart=1`);
                                         }}
                                         className="px-8 py-3 bg-purple-500 text-white rounded-lg font-semibold shadow-lg hover:bg-purple-600"
                                       >
                                         Start Activity
-                                      </button>
-                                      <button
-                                        onClick={() => {
-                                          setCompletedReviews((prevReviews) => ({ ...prevReviews, [dndReviewId]: true }));
-                                          setReviewCooldowns((prevCooldowns) => {
-                                            const nextCooldowns = { ...prevCooldowns };
-                                            delete nextCooldowns[dndReviewId];
-                                            return nextCooldowns;
-                                          });
-                                          setActiveReview(null);
-                                        }}
-                                        className="px-8 py-3 bg-green-500 text-white rounded-lg font-semibold shadow-lg hover:bg-green-600"
-                                      >
-                                        Mark as Completed
                                       </button>
                                       <button
                                         onClick={() => setActiveReview(null)}

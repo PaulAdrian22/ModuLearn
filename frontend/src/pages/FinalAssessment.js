@@ -454,7 +454,7 @@ const FinalAssessment = () => {
 
   const handleStartExam = () => {
     const now = Date.now();
-    setQuestions((previousQuestions) => shuffleQuestionChoicesList(previousQuestions));
+    setQuestions((previousQuestions) => shuffleQuestionChoicesList(shuffleArray(previousQuestions)));
     setCurrentQuestion(0);
     setSelectedAnswers({});
     setQuestionStartTime(now);

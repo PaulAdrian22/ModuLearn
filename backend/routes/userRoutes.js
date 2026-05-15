@@ -79,4 +79,13 @@ router.post('/report-issue', authenticate, [
   handleValidationErrors
 ], userController.reportIssue);
 
+// GET /api/users/notifications - Get user notifications
+router.get('/notifications', authenticate, userController.getUserNotifications);
+
+// PUT /api/users/notifications/read-all - Mark all notifications as read
+router.put('/notifications/read-all', authenticate, userController.markAllNotificationsRead);
+
+// PUT /api/users/notifications/:id/read - Mark a single notification as read
+router.put('/notifications/:id/read', authenticate, userController.markNotificationRead);
+
 module.exports = router;

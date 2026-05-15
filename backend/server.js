@@ -11,6 +11,7 @@ require('dotenv').config();
 
 const { testConnection } = require('./config/database');
 const { ensureCoreSimulationPlaceholders } = require('./utils/coreSimulationBackfill');
+const { ensureSimulationProgressColumns } = require('./utils/simulationProgressMigration');
 
 // Import routes
 const authRoutes = require('./routes/authRoutes');
@@ -226,6 +227,12 @@ const startServer = async () => {
       }
     } catch (error) {
       console.warn('Core simulation backfill at startup skipped:', error?.message || error);
+    }
+
+    try {
+      await ensureSimulationProgressColumns();
+    } catch (error) {
+      console.warn('Simulation progress migration at startup skipped:', error?.message || error);
     }
 
     // Start listening

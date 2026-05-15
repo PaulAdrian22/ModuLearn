@@ -611,7 +611,7 @@ const Progress = () => {
                           style={{
                             width: `${skill.percentage}%`,
                             backgroundColor: skill.color,
-                            transition: `width ${1200 + index * 200}ms ease-out`,
+                            transition: `width ${600 + (summary.learningPathProgress.totalLessons || 7) * 150 + index * 120}ms ease-out`,
                           }}
                         ></div>
                       </div>
