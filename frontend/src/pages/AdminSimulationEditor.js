@@ -100,10 +100,18 @@ const ACTIVITY_TYPE_THEME = {
     soft: '#E8F5E9',
     text: '#1F5E29',
   },
+  Troubleshooting: {
+    label: 'Troubleshooting',
+    tag: 'Identify faulty parts',
+    solid: '#FFB74D',
+    soft: '#FFF3E0',
+    text: '#7A4A00',
+  },
 };
 
 const getActivityType = (simulation = {}) => {
   const rawType = String(simulation?.ActivityType || '').trim().toLowerCase();
+  if (rawType.includes('troubleshoot')) return 'Troubleshooting';
   if (rawType.includes('disassembl')) return 'Disassembling';
   if (rawType.includes('assembl')) return 'Assembling';
 
@@ -128,6 +136,8 @@ const getDocxSkillForSimulation = (simulation = {}) => {
   return DOCX_SIMULATION_SKILL_MAP[moduleId]?.[simulationOrder] || '';
 };
 
+const ADMIN_ACCENT = '#3A70A1';
+
 const uid = () => `id-${Math.random().toString(36).slice(2, 10)}`;
 
 const AdminSimulationEditor = () => {
@@ -143,6 +153,7 @@ const AdminSimulationEditor = () => {
   const [simulation, setSimulation] = useState(null);
   const [activityOrder, setActivityOrder] = useState(0);
   const [config, setConfig] = useState(null);
+  const [lessons, setLessons] = useState([]);
 
   const [selectedMomentId, setSelectedMomentId] = useState(null);
   const [selectedLayerId, setSelectedLayerId] = useState(null);
@@ -173,6 +184,23 @@ const AdminSimulationEditor = () => {
         setConfig(normalized);
         setSelectedMomentId(normalized.timeline[0]?.id || null);
         setPreviewIndex(0);
+
+        try {
+          const lessonsResponse = await axios.get('/admin/modules');
+          const seen = new Set();
+          const uniqueLessons = (lessonsResponse?.data || [])
+            .filter((m) => m.LessonOrder)
+            .sort((a, b) => Number(a.LessonOrder) - Number(b.LessonOrder))
+            .filter((m) => {
+              const order = Number(m.LessonOrder);
+              if (seen.has(order)) return false;
+              seen.add(order);
+              return true;
+            });
+          setLessons(uniqueLessons);
+        } catch {
+          // lessons dropdown is non-critical
+        }
       } catch (loadError) {
         console.error('Failed to load simulation editor:', loadError);
         setError(loadError?.response?.data?.message || 'Failed to load simulation editor.');
@@ -271,6 +299,15 @@ const AdminSimulationEditor = () => {
     }
   };
 
+  const updateLessonNumber = async (newLessonNumber) => {
+    setSimulation((previous) => (previous ? { ...previous, LessonNumber: newLessonNumber } : previous));
+    try {
+      await axios.patch(`/admin/simulations/${id}`, { LessonNumber: newLessonNumber });
+    } catch (err) {
+      console.error('Failed to update lesson number:', err);
+    }
+  };
+
   const updateSkill = (newSkill) => {
     updateMeta({ skill: newSkill });
     persistSkillType(newSkill);
@@ -299,17 +336,7 @@ const AdminSimulationEditor = () => {
     });
   };
 
-  const removeMoment = async (momentId) => {
-    const shouldRemove = await themedConfirm({
-      title: 'Delete Step?',
-      message: 'This step and all of its components will be removed.',
-      confirmText: 'Delete',
-      cancelText: 'Keep',
-      variant: 'danger',
-    });
-
-    if (!shouldRemove) return;
-
+  const removeMoment = (momentId) => {
     setConfig((previous) => {
       const filtered = previous.timeline
         .filter((moment) => moment.id !== momentId)
@@ -403,33 +430,8 @@ const AdminSimulationEditor = () => {
       setSaving(true);
       setError('');
 
-      // Debug: Log what we're sending
-      console.log('=== SAVING SIMULATION CONFIG ===');
-      console.log('Full config being sent:', config);
-      console.log('Timeline:', config.timeline);
-      config.timeline.forEach((moment, momentIdx) => {
-        console.log(`  Moment ${momentIdx} (${moment.id}):`, moment);
-        moment.layers.forEach((layer, layerIdx) => {
-          console.log(`    Layer ${layerIdx} (${layer.id}):`, {
-            assetPath: layer.assetPath,
-            label: layer.label,
-            kind: layer.kind,
-            animation: layer.animation,
-            clickArea: layer.clickArea,
-            zoomArea: layer.zoomArea
-          });
-        });
-      });
-
       const saveResponse = await axios.put(`/admin/simulations/${id}`, { config });
-      
-      // Debug: Log what we received back
-      console.log('Response from backend:', saveResponse?.data);
-      console.log('Normalized config in response:', saveResponse?.data?.config);
-      
       const normalized = normalizeConfig(saveResponse?.data?.config || {}, { activityOrder });
-      
-      console.log('Normalized config after normalizeConfig:', normalized);
 
       setConfig(normalized);
       setSaveNotice('Simulation saved successfully.');
@@ -547,7 +549,7 @@ const AdminSimulationEditor = () => {
         <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[100]">
           <div
             className="text-white px-7 py-3 rounded-lg shadow-lg flex items-center gap-3"
-            style={{ backgroundColor: activityTheme.solid }}
+            style={{ backgroundColor: '#16A34A' }}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -577,7 +579,7 @@ const AdminSimulationEditor = () => {
           </div>
         </div>
 
-        <div className="simulation-surface bg-white rounded-2xl shadow-sm p-6 mb-6 border border-[#e4ebf2]" style={{ borderTop: `4px solid ${skillTheme.solid}` }}>
+        <div className="simulation-surface bg-white rounded-2xl shadow-sm p-6 mb-6 border border-[#e4ebf2]" style={{ borderTop: `4px solid ${ADMIN_ACCENT}` }}>
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="text-xs uppercase tracking-wide text-gray-500">Simulation</p>
@@ -620,7 +622,7 @@ const AdminSimulationEditor = () => {
               onClick={handleSave}
               disabled={saving}
               className="px-6 py-2.5 text-white rounded-lg font-semibold transition-all disabled:opacity-60 disabled:cursor-not-allowed"
-              style={{ backgroundColor: skillTheme.solid }}
+              style={{ backgroundColor: ADMIN_ACCENT }}
             >
               {saving ? 'Saving...' : 'Save Simulation'}
             </button>
@@ -639,7 +641,7 @@ const AdminSimulationEditor = () => {
             number={1}
             title="Introduction, Details & Preview"
             subtitle="Meta, objective, and learner preview"
-            accentColor={activityTheme.solid}
+            accentColor={ADMIN_ACCENT}
             onClick={() => setEditStage('overview')}
           />
           <StageButton
@@ -647,7 +649,7 @@ const AdminSimulationEditor = () => {
             number={2}
             title="Main Area + Side Panel"
             subtitle="Select step and add components"
-            accentColor={activityTheme.solid}
+            accentColor={ADMIN_ACCENT}
             onClick={() => setEditStage('builder')}
           />
         </div>
@@ -662,10 +664,13 @@ const AdminSimulationEditor = () => {
               <SimulationInfoEditor
                 meta={meta}
                 onUpdateMeta={updateMeta}
-                accentColor={activityTheme.solid}
+                accentColor={ADMIN_ACCENT}
                 activityType={simulation?.ActivityType || ''}
                 onUpdateActivityType={updateActivityType}
                 onUpdateSkill={updateSkill}
+                lessonNumber={simulation?.LessonNumber ?? null}
+                onUpdateLessonNumber={updateLessonNumber}
+                lessons={lessons}
               />
             </div>
 
@@ -677,7 +682,8 @@ const AdminSimulationEditor = () => {
               previewIndex={previewIndex}
               onPreviewIndexChange={setPreviewIndex}
               previewRevealedIds={previewRevealedIds}
-              accentColor={activityTheme.solid}
+              accentColor={ADMIN_ACCENT}
+              activityType={activityType}
               sticky
             />
           </div>
@@ -692,7 +698,8 @@ const AdminSimulationEditor = () => {
                 previewIndex={previewIndex}
                 onPreviewIndexChange={setPreviewIndex}
                 previewRevealedIds={previewRevealedIds}
-                accentColor={activityTheme.solid}
+                accentColor={ADMIN_ACCENT}
+                activityType={activityType}
                 selectedLayer={selectedLayer}
                 onEditImage={openMainAreaImageEditor}
                 onAddZoomArea={() => {
@@ -711,6 +718,10 @@ const AdminSimulationEditor = () => {
                   if (!selectedMoment || !selectedLayer) return;
                   updateLayer(selectedMoment.id, selectedLayer.id, { clickArea: normalizeZoomArea(updatedClickArea) });
                 }}
+                onUpdateWrongClickArea={(updatedWrongClickArea) => {
+                  if (!selectedMoment || !selectedLayer) return;
+                  updateLayer(selectedMoment.id, selectedLayer.id, { wrongClickArea: normalizeZoomArea(updatedWrongClickArea) });
+                }}
                 embedded
               />
             </div>
@@ -724,17 +735,32 @@ const AdminSimulationEditor = () => {
               <div className="mb-5 rounded-lg border border-gray-200 p-3">
                 <div className="flex items-center justify-between gap-3 mb-3">
                   <p className="text-sm font-semibold text-[#0B2B4C]">Steps</p>
-                  <button
-                    type="button"
-                    onClick={addMoment}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-white rounded-md text-xs font-semibold"
-                    style={{ backgroundColor: activityTheme.solid }}
-                  >
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
-                    </svg>
-                    Add Step
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={addMoment}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-white rounded-md text-xs font-semibold"
+                      style={{ backgroundColor: ADMIN_ACCENT }}
+                    >
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                      </svg>
+                      Add Step
+                    </button>
+                    {selectedMoment && (
+                      <button
+                        type="button"
+                        onClick={() => removeMoment(selectedMoment.id)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-white rounded-md text-xs font-semibold"
+                        style={{ backgroundColor: '#DC2626' }}
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3" />
+                        </svg>
+                        Delete Step
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 {timeline.length === 0 ? (
@@ -754,9 +780,9 @@ const AdminSimulationEditor = () => {
                           className="px-3 py-1.5 rounded-md text-xs font-semibold border transition-all"
                           style={active
                             ? {
-                              backgroundColor: activityTheme.solid,
+                              backgroundColor: ADMIN_ACCENT,
                               color: '#fff',
-                              borderColor: activityTheme.solid,
+                              borderColor: ADMIN_ACCENT,
                             }
                             : {
                               backgroundColor: '#fff',
@@ -771,22 +797,11 @@ const AdminSimulationEditor = () => {
                   </div>
                 )}
 
-                {selectedMoment && timeline.length > 0 && (
-                  <div className="mt-3">
-                    <button
-                      type="button"
-                      onClick={() => removeMoment(selectedMoment.id)}
-                      className="px-2.5 py-1 text-xs border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100"
-                    >
-                      Delete Selected Step
-                    </button>
-                  </div>
-                )}
               </div>
 
               <MomentDetailEditor
                 moment={selectedMoment}
-                accentColor={activityTheme.solid}
+                accentColor={ADMIN_ACCENT}
                 selectedLayerId={selectedLayerId}
                 onSelectLayer={setSelectedLayerId}
                 onAddLayer={() => {
@@ -862,7 +877,7 @@ const StageButton = ({ active, number, title, subtitle, accentColor, onClick }) 
   );
 };
 
-const SimulationInfoEditor = ({ meta, onUpdateMeta, accentColor, activityType, onUpdateActivityType, onUpdateSkill }) => {
+const SimulationInfoEditor = ({ meta, onUpdateMeta, accentColor, activityType, onUpdateActivityType, onUpdateSkill, lessonNumber, onUpdateLessonNumber, lessons }) => {
   return (
     <div className="space-y-5">
       <div>
@@ -892,6 +907,24 @@ const SimulationInfoEditor = ({ meta, onUpdateMeta, accentColor, activityType, o
           <option value="Assembling">Assembling</option>
           <option value="Disassembling">Disassembling</option>
           <option value="Troubleshooting">Troubleshooting</option>
+        </select>
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-[#0B2B4C] mb-2">Found in Lesson</label>
+        <select
+          value={lessonNumber ?? ''}
+          onChange={(event) => onUpdateLessonNumber?.(event.target.value === '' ? null : Number(event.target.value))}
+          className="w-full h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-900 bg-white"
+          onFocus={(event) => { event.currentTarget.style.borderColor = accentColor; }}
+          onBlur={(event) => { event.currentTarget.style.borderColor = '#D1D5DB'; }}
+        >
+          <option value="">— Not assigned to a lesson —</option>
+          {(lessons || []).map((lesson) => (
+            <option key={lesson.ModuleID} value={lesson.LessonOrder}>
+              Lesson {lesson.LessonOrder}: {lesson.ModuleTitle}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -1015,6 +1048,7 @@ const MomentDetailEditor = ({
 const LayerEditorCard = ({ layer, index, accentColor, selected, onSelect, onUpdate, onRemove }) => {
   const kindLabel = layer.kind === 'scene' ? 'Background' : 'Clickable Part';
   const clickArea = useMemo(() => normalizeZoomArea(layer.clickArea), [layer.clickArea]);
+  const wrongClickArea = useMemo(() => normalizeZoomArea(layer.wrongClickArea), [layer.wrongClickArea]);
   const zoomArea = useMemo(() => normalizeZoomArea(layer.zoomArea), [layer.zoomArea]);
   const canUseZoomArea = true;
   const fileInputRef = React.useRef(null);
@@ -1149,31 +1183,54 @@ const LayerEditorCard = ({ layer, index, accentColor, selected, onSelect, onUpda
           </div>
 
           {canUseZoomArea && (
-            <div className="space-y-3">
-              <div className="flex items-center justify-end gap-2">
+            <div className="space-y-2">
+              <div className="flex flex-wrap gap-2">
                 {!clickArea ? (
                   <button
                     type="button"
                     onClick={() => onUpdate({ clickArea: { ...DEFAULT_ZOOM_AREA } })}
-                    className="px-2.5 py-1 text-[11px] rounded-md text-white font-semibold"
-                    style={{ backgroundColor: accentColor }}
+                    className="px-2.5 py-1 text-[11px] rounded-md text-white font-semibold flex items-center gap-1"
+                    style={{ backgroundColor: '#16A34A' }}
                   >
-                    Add Click Area
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                    Correct Area
                   </button>
                 ) : (
                   <button
                     type="button"
                     onClick={() => onUpdate({ clickArea: null })}
-                    className="px-2.5 py-1 text-xs rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 font-semibold"
+                    className="px-2.5 py-1 text-[11px] rounded-md font-semibold border flex items-center gap-1"
+                    style={{ backgroundColor: '#DCFCE7', color: '#166534', borderColor: '#86EFAC' }}
                   >
-                    Remove Click
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" /></svg>
+                    Remove Correct
+                  </button>
+                )}
+                {!wrongClickArea ? (
+                  <button
+                    type="button"
+                    onClick={() => onUpdate({ wrongClickArea: { ...DEFAULT_ZOOM_AREA } })}
+                    className="px-2.5 py-1 text-[11px] rounded-md text-white font-semibold flex items-center gap-1"
+                    style={{ backgroundColor: '#DC2626' }}
+                  >
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+                    Wrong Area
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => onUpdate({ wrongClickArea: null })}
+                    className="px-2.5 py-1 text-[11px] rounded-md font-semibold border flex items-center gap-1"
+                    style={{ backgroundColor: '#FEE2E2', color: '#991B1B', borderColor: '#FCA5A5' }}
+                  >
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
+                    Remove Wrong
                   </button>
                 )}
               </div>
-
-              {clickArea && (
+              {(clickArea || wrongClickArea) && (
                 <p className="text-[11px] text-gray-500">
-                  Drag and resize this click area directly on the Main Area preview.
+                  Drag and resize areas directly on the Main Area preview.
                 </p>
               )}
             </div>
@@ -1193,18 +1250,21 @@ const PreviewCard = ({
   onPreviewIndexChange,
   previewRevealedIds,
   accentColor,
+  activityType,
   selectedLayer,
   onEditImage,
   onAddZoomArea,
   onRemoveZoomArea,
   onUpdateZoomArea,
   onUpdateClickArea,
+  onUpdateWrongClickArea,
   sticky = false,
   embedded = false,
 }) => {
   const canGoBack = previewIndex > 0;
   const canGoNext = previewIndex < timeline.length - 1;
   const selectedClickArea = useMemo(() => normalizeZoomArea(selectedLayer?.clickArea), [selectedLayer?.clickArea]);
+  const selectedWrongClickArea = useMemo(() => normalizeZoomArea(selectedLayer?.wrongClickArea), [selectedLayer?.wrongClickArea]);
   const selectedZoomArea = useMemo(() => normalizeZoomArea(selectedLayer?.zoomArea), [selectedLayer?.zoomArea]);
 
   const content = (
@@ -1253,6 +1313,8 @@ const PreviewCard = ({
               revealedIds={previewRevealedIds}
               readOnly
               showInstructions
+              disassembly={activityType === 'Disassembling' || activityType === 'Troubleshooting'}
+              assembling={activityType === 'Assembling'}
             />
 
             {embedded && (
@@ -1290,8 +1352,22 @@ const PreviewCard = ({
                   showInputs={false}
                   showCanvasChrome={false}
                   containerClassName="h-full"
-                  centerLabel="Drag click area"
+                  centerLabel="✓ Correct area"
                   colorTheme="click"
+                />
+              </div>
+            )}
+
+            {embedded && selectedLayer && selectedWrongClickArea && (
+              <div className="absolute inset-0 z-20">
+                <InteractiveZoomAreaEditor
+                  zoomArea={selectedWrongClickArea}
+                  onChange={onUpdateWrongClickArea}
+                  showInputs={false}
+                  showCanvasChrome={false}
+                  containerClassName="h-full"
+                  centerLabel="✗ Wrong area"
+                  colorTheme="wrong-click"
                 />
               </div>
             )}
