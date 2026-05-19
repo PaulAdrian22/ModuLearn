@@ -162,6 +162,8 @@ const AdminSimulationEditor = () => {
   const [showCropper, setShowCropper] = useState(false);
   const [imageToCrop, setImageToCrop] = useState(null);
   const [cropTarget, setCropTarget] = useState(null);
+  const [draggedMomentId, setDraggedMomentId] = useState(null);
+  const [dragOverMomentId, setDragOverMomentId] = useState(null);
 
   useEffect(() => {
     if (user && user.role !== 'admin') {
@@ -332,6 +334,36 @@ const AdminSimulationEditor = () => {
       return {
         ...previous,
         timeline: [...previous.timeline, newMoment],
+      };
+    });
+  };
+
+  const reorderMoments = (fromId, toId) => {
+    if (!fromId || !toId || fromId === toId) return;
+
+    setConfig((previous) => {
+      const timelineCopy = [...previous.timeline];
+      const fromIndex = timelineCopy.findIndex((moment) => moment.id === fromId);
+      const toIndex = timelineCopy.findIndex((moment) => moment.id === toId);
+
+      if (fromIndex < 0 || toIndex < 0) return previous;
+
+      const [moved] = timelineCopy.splice(fromIndex, 1);
+      timelineCopy.splice(toIndex, 0, moved);
+
+      const normalizedTimeline = timelineCopy.map((moment, index) => ({
+        ...moment,
+        order: index + 1,
+      }));
+
+      const nextSelectedId = selectedMomentId || moved.id;
+      const nextPreviewIndex = normalizedTimeline.findIndex((moment) => moment.id === nextSelectedId);
+      setSelectedMomentId(nextSelectedId);
+      setPreviewIndex(nextPreviewIndex >= 0 ? nextPreviewIndex : 0);
+
+      return {
+        ...previous,
+        timeline: normalizedTimeline,
       };
     });
   };
@@ -769,13 +801,38 @@ const AdminSimulationEditor = () => {
                   <div className="flex flex-wrap gap-2">
                     {timeline.map((moment, index) => {
                       const active = moment.id === selectedMomentId;
+                      const isDragged = moment.id === draggedMomentId;
+                      const isDragOver = moment.id === dragOverMomentId;
                       return (
                         <button
                           key={moment.id}
                           type="button"
+                          draggable={timeline.length > 1}
                           onClick={() => {
                             setSelectedMomentId(moment.id);
                             setPreviewIndex(index);
+                          }}
+                          onDragStart={() => {
+                            setDraggedMomentId(moment.id);
+                          }}
+                          onDragOver={(event) => {
+                            if (moment.id === draggedMomentId) return;
+                            event.preventDefault();
+                            setDragOverMomentId(moment.id);
+                          }}
+                          onDragLeave={() => {
+                            setDragOverMomentId((current) => (current === moment.id ? null : current));
+                          }}
+                          onDrop={(event) => {
+                            event.preventDefault();
+                            if (!draggedMomentId || draggedMomentId === moment.id) return;
+                            reorderMoments(draggedMomentId, moment.id);
+                            setDraggedMomentId(null);
+                            setDragOverMomentId(null);
+                          }}
+                          onDragEnd={() => {
+                            setDraggedMomentId(null);
+                            setDragOverMomentId(null);
                           }}
                           className="px-3 py-1.5 rounded-md text-xs font-semibold border transition-all"
                           style={active
@@ -783,12 +840,17 @@ const AdminSimulationEditor = () => {
                               backgroundColor: ADMIN_ACCENT,
                               color: '#fff',
                               borderColor: ADMIN_ACCENT,
+                              transform: isDragged ? 'scale(0.98)' : undefined,
+                              opacity: isDragged ? 0.7 : 1,
                             }
                             : {
-                              backgroundColor: '#fff',
+                              backgroundColor: isDragOver ? '#EFF6FF' : '#fff',
                               color: '#4B5563',
-                              borderColor: '#D1D5DB',
+                              borderColor: isDragOver ? ADMIN_ACCENT : '#D1D5DB',
+                              transform: isDragged ? 'scale(0.98)' : undefined,
+                              opacity: isDragged ? 0.7 : 1,
                             }}
+                          title={timeline.length > 1 ? 'Drag to reorder steps' : undefined}
                         >
                           Step {index + 1}
                         </button>

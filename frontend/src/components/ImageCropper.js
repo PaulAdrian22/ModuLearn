@@ -190,9 +190,18 @@ const getCroppedImg = (imageSrc, pixelCrop, options = {}) => {
       canvas.width = targetWidth;
       canvas.height = targetHeight;
 
-      // Fill canvas with white background
-      ctx.fillStyle = '#FFFFFF';
-      ctx.fillRect(0, 0, targetWidth, targetHeight);
+      if (!ctx) {
+        reject(new Error('Canvas context is unavailable'));
+        return;
+      }
+
+      // Preserve transparency for PNG/WebP/GIF; only fill for JPEG outputs.
+      if (mimeType === 'image/jpeg' || mimeType === 'image/jpg') {
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, targetWidth, targetHeight);
+      } else {
+        ctx.clearRect(0, 0, targetWidth, targetHeight);
+      }
 
       // Draw the cropped image
       ctx.drawImage(

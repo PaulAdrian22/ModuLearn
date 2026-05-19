@@ -1234,11 +1234,15 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
       const sType = normalizeLessonSectionType(section?.type);
       if (sType === 'review' || sType === 'review - multiple choice' || sType === 'review-multiple-choice') {
         const reviewId = `review-mc-${section.originalIndex}`;
-        if (!completedReviews[reviewId]) return false;
+        const hasAttempt = !!reviewResults[reviewId];
+        if (!completedReviews[reviewId] && !hasAttempt) return false;
       }
       if (sType === 'review - drag and drop' || sType === 'review-drag-drop' || sType === 'simulation') {
         const dndId = `review-dnd-${section.originalIndex}`;
-        if (!completedReviews[dndId]) return false;
+        const simulationId = section.simulationId || section.simulation?.SimulationID || section.simulation?.id;
+        const simAttempts = simulationId ? Number(simProgressMap?.[simulationId]?.Attempts || 0) : 0;
+        const hasSimAttempt = simulationId && simAttempts > 0;
+        if (!completedReviews[dndId] && !hasSimAttempt) return false;
       }
     }
     return true;
@@ -2306,11 +2310,11 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                         const simulationId = section.simulationId || section.simulation?.SimulationID || section.simulation?.id;
                         const simulationTitle = section.simulation?.SimulationTitle || 'Interactive Exercise';
                         const simulationDescription = section.simulation?.Description || 'Complete this interactive exercise to continue.';
-                        const isDndCompleted = completedReviews[dndReviewId];
-                        const cooldownSecondsLeft = getCooldownSecondsLeft(dndReviewId);
-                        const isCooldownActive = cooldownSecondsLeft > 0;
                         const simProgress = simProgressMap[simulationId];
                         const simAttempts = Number(simProgress?.Attempts || 0);
+                        const isDndCompleted = completedReviews[dndReviewId] || simAttempts > 0;
+                        const cooldownSecondsLeft = getCooldownSecondsLeft(dndReviewId);
+                        const isCooldownActive = cooldownSecondsLeft > 0;
                         const simScore = simAttempts > 0 ? Number(simProgress?.Score || 0) : null;
                         const simMaxScore = Number(simProgress?.MaxScore || section.simulation?.MaxScore || 100);
                         const simTimeSpent = simAttempts > 0 ? Number(simProgress?.TimeSpent || 0) : null;
