@@ -197,6 +197,13 @@ const SimulationActivity = () => {
     }
   }, [hasActivityStarted, isCompleted, currentMoment, currentIndex, handleAdvance]);
 
+  // Assembling steps are independent; reset revealed parts when the step changes
+  // so components remain hidden until the correct area is satisfied in each step.
+  useEffect(() => {
+    if (!hasActivityStarted || !isAssembling) return;
+    setRevealedIds(new Set());
+  }, [hasActivityStarted, isAssembling, currentIndex]);
+
   const handleExit = () => {
     if (fromLesson && fromModuleId) {
       navigate(`/module/${fromModuleId}`);
@@ -410,6 +417,8 @@ const SimulationActivity = () => {
             onWrongClick={isCompleted ? undefined : handleWrongClick}
             disassembly={disassembly}
             assembling={isAssembling}
+            assemblingAnchor="background"
+            persistFocusLayers={false}
             canvasOverlay={wrongFlash ? (
               <div className="absolute inset-0 rounded-xl border-4 border-red-500 bg-red-500/10 flex items-center justify-center pointer-events-none z-20 animate-pulse">
                 <div className="bg-red-600 text-white text-sm font-bold px-4 py-2 rounded-lg shadow-lg">

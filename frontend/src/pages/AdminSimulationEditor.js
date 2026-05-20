@@ -1379,6 +1379,7 @@ const PreviewCard = ({
               showInstructions
               disassembly={activityType === 'Disassembling' || activityType === 'Troubleshooting'}
               assembling={activityType === 'Assembling'}
+              assemblingAnchor="background"
               onImageBoxChange={setEditorImageBox}
             />
 

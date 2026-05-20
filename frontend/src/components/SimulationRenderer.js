@@ -50,6 +50,8 @@ const SimulationRenderer = ({
   readOnly = false,
   showInstructions = true,
   assembling = false,
+  assemblingAnchor = 'zone-top-left',
+  persistFocusLayers,
   disassembly: disassemblyProp,
   canvasOverlay = null,
   onImageBoxChange,
@@ -217,6 +219,9 @@ const SimulationRenderer = ({
   };
 
   const focusLayers = scene.focusLayers;
+  const anchorMode = assemblingAnchor || 'zone-top-left';
+  const anchorToBackground = anchorMode === 'background';
+  const allowPastFocusLayers = !readOnly && (persistFocusLayers !== undefined ? persistFocusLayers : assembling);
 
   const mapAreaToCanvas = (area) => {
     if (!area) return null;
@@ -329,7 +334,7 @@ const SimulationRenderer = ({
 
         {/* Previously-revealed focus layers from earlier moments (same perspective) */}
         {/* Skip in editor — each step is previewed independently */}
-        {!readOnly && timeline.slice(0, currentIndex).map((moment) => {
+        {allowPastFocusLayers && timeline.slice(0, currentIndex).map((moment) => {
           if (moment.perspective !== scene.perspective) return null;
           return moment.layers
             .filter((layer) => layer.kind === 'focus')
@@ -341,9 +346,20 @@ const SimulationRenderer = ({
             )
             .map((layer) => {
               if (assembling) {
-                // In assembling mode, treat placed parts like background overlays:
-                // anchor to the displayed background instead of the drop zone.
-                const anchor = imageBoxLocal || { x: 0, y: 0 };
+                const pastClickArea = normalizeZoomArea(layer.clickArea);
+                const pastZoomArea = normalizeZoomArea(layer.zoomArea);
+                const pastZone = pastClickArea || pastZoomArea;
+                const anchor = imageBoxLocal || { x: 0, y: 0, width: 0, height: 0 };
+                const canvasPast = pastZone ? (mapAreaToCanvas(pastZone) || pastZone) : null;
+                const useBackground = anchorToBackground || !canvasPast;
+                const useCenter = anchorMode === 'zone-center';
+                const left = useBackground
+                  ? anchor.x
+                  : (useCenter ? (canvasPast.x + canvasPast.width / 2) : canvasPast.x);
+                const top = useBackground
+                  ? anchor.y
+                  : (useCenter ? (canvasPast.y + canvasPast.height / 2) : canvasPast.y);
+                const transform = !useBackground && useCenter ? 'translate(-50%, -50%)' : undefined;
                 return (
                   <img
                     key={`past-${layer.id}`}
@@ -353,8 +369,9 @@ const SimulationRenderer = ({
                     draggable={false}
                     className="absolute object-contain pointer-events-none"
                     style={{
-                      left: `${anchor.x}%`,
-                      top: `${anchor.y}%`,
+                      left: `${left}%`,
+                      top: `${top}%`,
+                      transform,
                       width: naturalPixelSizes[layer.id]?.naturalWidth
                         ? `${naturalPixelSizes[layer.id].naturalWidth * backgroundScale.scaleX}px`
                         : 'auto',
@@ -394,9 +411,17 @@ const SimulationRenderer = ({
               {/* Placed/revealed image */}
               {/* Assembling: part snaps into the zone area. Other modes: full-canvas overlay. */}
               {visible && assembling && (() => {
-                // In assembling mode, placed images behave like background layers
-                // and should not move/scale with the correct area.
-                const anchor = imageBoxLocal || { x: 0, y: 0 };
+                const anchor = imageBoxLocal || { x: 0, y: 0, width: 0, height: 0 };
+                const canvasArea = hotspotArea ? (mapAreaToCanvas(hotspotArea) || hotspotArea) : null;
+                const useBackground = anchorToBackground || !canvasArea;
+                const useCenter = anchorMode === 'zone-center';
+                const left = useBackground
+                  ? anchor.x
+                  : (useCenter ? (canvasArea.x + canvasArea.width / 2) : canvasArea.x);
+                const top = useBackground
+                  ? anchor.y
+                  : (useCenter ? (canvasArea.y + canvasArea.height / 2) : canvasArea.y);
+                const transform = !useBackground && useCenter ? 'translate(-50%, -50%)' : undefined;
                 return (
                   <img
                     ref={(el) => { if (el) registerNaturalSize(layer.id, el); }}
@@ -405,8 +430,9 @@ const SimulationRenderer = ({
                     draggable={false}
                     className="absolute object-contain pointer-events-none"
                     style={{
-                      left: `${anchor.x}%`,
-                      top: `${anchor.y}%`,
+                      left: `${left}%`,
+                      top: `${top}%`,
+                      transform,
                       width: naturalPixelSizes[layer.id]?.naturalWidth
                         ? `${naturalPixelSizes[layer.id].naturalWidth * backgroundScale.scaleX}px`
                         : 'auto',
