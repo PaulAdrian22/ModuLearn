@@ -12,6 +12,10 @@ const getCompletionPercent = (simulation) => {
   return Math.max(0, Math.min(100, Math.round((score / maxScore) * 100)));
 };
 
+const getNormalizedCompletionStatus = (simulation = {}) => {
+  return String(simulation?.CompletionStatus || '').trim().toLowerCase();
+};
+
 // Aligned with the Mastery Performance palette in Progress.js.
 const SKILL_TYPE_THEME = {
   Memorization: {
@@ -145,7 +149,9 @@ const Simulations = () => {
   };
 
   const handleOpenSimulation = (simulation) => {
-    const isCompleted = simulation.CompletionStatus === 'completed';
+    const completionStatus = getNormalizedCompletionStatus(simulation);
+    const scorePercent = getCompletionPercent(simulation);
+    const isCompleted = completionStatus === 'completed' || scorePercent >= 100;
     const url = isCompleted
       ? `/simulation/${simulation.SimulationID}?autostart=1`
       : `/simulation/${simulation.SimulationID}`;
@@ -192,10 +198,15 @@ const Simulations = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {sortedSimulations.map((simulation, index) => {
-              const isCompleted = simulation.CompletionStatus === 'completed';
+              const completionStatus = getNormalizedCompletionStatus(simulation);
               const score = simulation.Score || 0;
               const maxScore = simulation.MaxScore || 100;
               const scorePercent = getCompletionPercent(simulation);
+              const hasStarted = completionStatus === 'in_progress'
+                || completionStatus === 'completed'
+                || Number(simulation.Attempts || 0) > 0
+                || Number(score) > 0;
+              const isCompleted = completionStatus === 'completed' || scorePercent >= 100;
               const resolvedSkillType = getSkillTypeAssignedPerSimulation(simulation);
               const { solid, soft, text } = getSkillTheme(resolvedSkillType);
 
@@ -277,7 +288,7 @@ const Simulations = () => {
                     <div className="mb-4">
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-xs font-semibold" style={{ color: isCompleted ? solid : '#6b7280' }}>
-                          {isCompleted ? `${scorePercent}% Score` : 'Not started'}
+                          {hasStarted ? `${scorePercent}% Score` : 'Not started'}
                         </span>
                         <span className="text-xs text-gray-600">{score} / {maxScore} pts</span>
                       </div>
@@ -285,8 +296,8 @@ const Simulations = () => {
                         <div
                           className="h-2 rounded-full transition-all"
                           style={{
-                            width: `${isCompleted ? scorePercent : 0}%`,
-                            backgroundColor: isCompleted ? solid : '#9CA3AF'
+                            width: `${hasStarted ? scorePercent : 0}%`,
+                            backgroundColor: hasStarted ? solid : '#9CA3AF'
                           }}
                         ></div>
                       </div>

@@ -277,8 +277,14 @@ const parseStoredConfig = (zoneData) => {
   return parsed;
 };
 
-const normalizeStoredConfig = (raw, activityOrder) => {
-  const fallback = buildFallbackConfig(activityOrder);
+const normalizeStoredConfig = (raw, activityOrder, options = {}) => {
+  const useFallback = options.useFallback !== false;
+  const fallback = useFallback
+    ? buildFallbackConfig(activityOrder)
+    : {
+        meta: { title: '', description: '', skill: '', steps: [] },
+        timeline: []
+      };
   const rawMeta = raw?.meta || {};
 
   const meta = {
@@ -346,16 +352,31 @@ const normalizeStoredConfig = (raw, activityOrder) => {
 };
 
 // Public API: given a simulation row, return its merged config.
-const getSimulationConfig = (simulation) => {
+const getSimulationConfig = (simulation, options = {}) => {
+  const preferStoredOnly = options.preferStoredOnly === true;
   const activityOrder = resolveActivityOrder(simulation);
   const stored = parseStoredConfig(simulation?.ZoneData);
   if (stored) {
     return {
       activityOrder,
       source: 'override',
-      config: normalizeStoredConfig(stored, activityOrder)
+      config: normalizeStoredConfig(stored, activityOrder, {
+        useFallback: !preferStoredOnly
+      })
     };
   }
+
+  if (preferStoredOnly) {
+    return {
+      activityOrder,
+      source: 'missing',
+      config: {
+        meta: { title: '', description: '', skill: '', steps: [] },
+        timeline: []
+      }
+    };
+  }
+
   return {
     activityOrder,
     source: 'manifest',

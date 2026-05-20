@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { API_SERVER_URL } from '../config/api';
 import { composeScene, isDisassemblyActivity, normalizeZoomArea } from '../data/simulationActivities';
 
@@ -52,13 +52,19 @@ const SimulationRenderer = ({
   assembling = false,
   disassembly: disassemblyProp,
   canvasOverlay = null,
+  onImageBoxChange,
 }) => {
+  const canvasRef = useRef(null);
+  const firstImageRef = useRef(null);
   const [isAdvancing, setIsAdvancing] = useState(false);
   const [activeAnimationLayerId, setActiveAnimationLayerId] = useState('');
   const [hoveredLayerId, setHoveredLayerId] = useState('');
   const [draggingLayerId, setDraggingLayerId] = useState(null);
   const [dragOverZoneId, setDragOverZoneId] = useState(null);
   const revealTimerRef = useRef(null);
+  const [naturalPixelSizes, setNaturalPixelSizes] = useState({}); // { layerId: { widthPx, heightPx } }
+  const [imageBoxLocal, setImageBoxLocal] = useState(null);
+  const [backgroundScale, setBackgroundScale] = useState({ scaleX: 1, scaleY: 1 });
 
   const timeline = useMemo(() => config?.timeline || [], [config]);
   const meta = useMemo(() => config?.meta || {}, [config]);
@@ -82,6 +88,46 @@ const SimulationRenderer = ({
     if (revealTimerRef.current) clearTimeout(revealTimerRef.current);
   }, []);
 
+  // Report the displayed image bounding box (relative to canvas) when layout changes.
+  useEffect(() => {
+    const report = () => {
+      try {
+        const canvas = canvasRef.current;
+        const img = firstImageRef.current || (canvas && canvas.querySelector('img')) || null;
+        if (!canvas || !img) {
+          setImageBoxLocal(null);
+          if (typeof onImageBoxChange === 'function') onImageBoxChange(null);
+          return;
+        }
+        const iRect = img.getBoundingClientRect();
+        const cRect = canvas.getBoundingClientRect();
+        const left = ((iRect.left - cRect.left) / cRect.width) * 100;
+        const top = ((iRect.top - cRect.top) / cRect.height) * 100;
+        const width = (iRect.width / cRect.width) * 100;
+        const height = (iRect.height / cRect.height) * 100;
+        const box = { x: left, y: top, width, height };
+        setImageBoxLocal((prev) => {
+          if (!prev) return box;
+          if (
+            Math.abs(prev.x - box.x) < 0.01
+            && Math.abs(prev.y - box.y) < 0.01
+            && Math.abs(prev.width - box.width) < 0.01
+            && Math.abs(prev.height - box.height) < 0.01
+          ) {
+            return prev;
+          }
+          return box;
+        });
+        if (typeof onImageBoxChange === 'function') onImageBoxChange(box);
+      } catch (e) {
+        // ignore
+      }
+    };
+    report();
+    window.addEventListener('resize', report);
+    return () => window.removeEventListener('resize', report);
+  }, [currentIndex, onImageBoxChange]);
+
   useEffect(() => {
     setIsAdvancing(false);
     setActiveAnimationLayerId('');
@@ -89,6 +135,53 @@ const SimulationRenderer = ({
     setDraggingLayerId(null);
     setDragOverZoneId(null);
   }, [currentIndex]);
+
+  const updateBackgroundScale = useCallback(() => {
+    const img = firstImageRef.current;
+    if (!img) return;
+    const naturalWidth = img.naturalWidth || img.width || 1;
+    const naturalHeight = img.naturalHeight || img.height || 1;
+    const rect = img.getBoundingClientRect();
+    const scaleX = rect.width / naturalWidth;
+    const scaleY = rect.height / naturalHeight;
+    setBackgroundScale((prev) => {
+      if (prev.scaleX === scaleX && prev.scaleY === scaleY) return prev;
+      return { scaleX, scaleY };
+    });
+  }, []);
+
+  // Track background display scale relative to its natural size.
+  useEffect(() => {
+    updateBackgroundScale();
+    window.addEventListener('resize', updateBackgroundScale);
+    return () => window.removeEventListener('resize', updateBackgroundScale);
+  }, [currentIndex, updateBackgroundScale]);
+
+  const registerNaturalSize = (layerId, imgEl) => {
+    if (!imgEl || !canvasRef.current) return;
+    const naturalWidth = imgEl.naturalWidth || imgEl.width || 0;
+    const naturalHeight = imgEl.naturalHeight || imgEl.height || 0;
+    if (!naturalWidth || !naturalHeight) return;
+    setNaturalPixelSizes((p) => {
+      const current = p[layerId];
+      if (
+        current
+        && current.widthPx === naturalWidth
+        && current.heightPx === naturalHeight
+      ) {
+        return p;
+      }
+      return {
+        ...p,
+        [layerId]: {
+          naturalWidth,
+          naturalHeight,
+          widthPx: naturalWidth,
+          heightPx: naturalHeight,
+        },
+      };
+    });
+  };
 
   const handleWrongClick = () => {
     if (readOnly || isAdvancing) return;
@@ -125,6 +218,16 @@ const SimulationRenderer = ({
 
   const focusLayers = scene.focusLayers;
 
+  const mapAreaToCanvas = (area) => {
+    if (!area) return null;
+    if (!imageBoxLocal) return area;
+    const left = imageBoxLocal.x + (area.x * (imageBoxLocal.width / 100));
+    const top = imageBoxLocal.y + (area.y * (imageBoxLocal.height / 100));
+    const width = area.width * (imageBoxLocal.width / 100);
+    const height = area.height * (imageBoxLocal.height / 100);
+    return { x: left, y: top, width, height };
+  };
+
   // Assembling: hidden until correctly dropped (or animating into place).
   // Disassembly: visible until removed.
   // Exploration: hidden until clicked.
@@ -144,10 +247,10 @@ const SimulationRenderer = ({
   const sceneHotspotsEnabled = !readOnly && !isAdvancing && unrevealedFocusCount === 0;
   const currentSceneLayers = currentMoment?.layers.filter((layer) => layer.kind === 'scene') || [];
 
-  // Parts that still need to be placed in assembling mode.
-  // Exclude the layer currently animating into place so it doesn't flicker in both tray and canvas.
-  const unplacedFocusLayers = assembling && !readOnly
-    ? focusLayers.filter((l) => !revealedIds.has(l.id) && activeAnimationLayerId !== l.id)
+  // Parts tray: include all focus layers (so the draggable icon remains visible
+  // even after placement). Disable dragging for already-placed parts.
+  const partsTrayLayers = assembling && !readOnly
+    ? focusLayers.filter((l) => activeAnimationLayerId !== l.id)
     : [];
 
   const hotspotBaseClass = 'absolute border-0 p-0 cursor-pointer focus:outline-none transition-all duration-150';
@@ -157,6 +260,7 @@ const SimulationRenderer = ({
     <div className="w-full">
       {/* ── Main canvas ── */}
       <div
+        ref={canvasRef}
         className="relative w-full max-w-full mx-auto aspect-[16/10] max-h-[55vh] sm:max-h-[65vh] lg:max-h-none rounded-xl bg-[#f3f5f8] border-2 border-transparent overflow-hidden select-none transition-transform duration-500 ease-out scale-100"
         onDragOver={assembling && !readOnly ? (e) => e.preventDefault() : undefined}
         onDrop={assembling && !readOnly ? (e) => {
@@ -174,14 +278,16 @@ const SimulationRenderer = ({
         } : undefined}
       >
         {/* Scene backdrops */}
-        {backdrops.map((layer) => (
+        {backdrops.map((layer, idx) => (
           <img
+            ref={idx === 0 ? ((el) => { firstImageRef.current = el; }) : undefined}
             key={`bg-${layer.id}`}
             src={simAssetUrl(layer.targetPath || layer.assetPath)}
             alt=""
             draggable={false}
             className="absolute inset-0 w-full h-full object-contain pointer-events-none"
             style={activeAnimationLayerId === layer.id ? layerAnimationStyle(layer) : undefined}
+            onLoad={idx === 0 ? updateBackgroundScale : undefined}
           />
         ))}
 
@@ -191,6 +297,7 @@ const SimulationRenderer = ({
           const zoomArea = normalizeZoomArea(layer.zoomArea);
           const hotspotArea = clickArea || zoomArea;
           if (!hotspotArea) return null;
+          const sceneHotspot = mapAreaToCanvas(hotspotArea) || hotspotArea;
           return (
             <React.Fragment key={`scene-${layer.id}`}>
               {sceneHotspotsEnabled && (
@@ -202,8 +309,8 @@ const SimulationRenderer = ({
                   aria-label={`Interact with ${layer.label}`}
                   className={`${hotspotBaseClass} ${hoveredLayerId === layer.id ? hotspotHoverClass : 'bg-transparent'}`}
                   style={{
-                    left: `${hotspotArea.x}%`, top: `${hotspotArea.y}%`,
-                    width: `${hotspotArea.width}%`, height: `${hotspotArea.height}%`,
+                    left: `${sceneHotspot.x}%`, top: `${sceneHotspot.y}%`,
+                    width: `${sceneHotspot.width}%`, height: `${sceneHotspot.height}%`,
                   }}
                 />
               )}
@@ -211,8 +318,8 @@ const SimulationRenderer = ({
                 <div
                   className="absolute rounded-md border-2 border-emerald-400/80 bg-emerald-100/15 pointer-events-none"
                   style={{
-                    left: `${hotspotArea.x}%`, top: `${hotspotArea.y}%`,
-                    width: `${hotspotArea.width}%`, height: `${hotspotArea.height}%`,
+                    left: `${sceneHotspot.x}%`, top: `${sceneHotspot.y}%`,
+                    width: `${sceneHotspot.width}%`, height: `${sceneHotspot.height}%`,
                   }}
                 />
               )}
@@ -233,20 +340,27 @@ const SimulationRenderer = ({
                 : revealedIds.has(layer.id)
             )
             .map((layer) => {
-              const pastClickArea = normalizeZoomArea(layer.clickArea);
-              const pastZoomArea = normalizeZoomArea(layer.zoomArea);
-              const pastZone = pastClickArea || pastZoomArea;
-              if (assembling && pastZone) {
+              if (assembling) {
+                // In assembling mode, treat placed parts like background overlays:
+                // anchor to the displayed background instead of the drop zone.
+                const anchor = imageBoxLocal || { x: 0, y: 0 };
                 return (
                   <img
                     key={`past-${layer.id}`}
-                    src={simAssetUrl(layer.targetPath || layer.assetPath)}
+                    ref={(el) => { if (el) registerNaturalSize(layer.id, el); }}
+                    src={simAssetUrl(layer.assetPath || layer.targetPath)}
                     alt={layer.label}
                     draggable={false}
                     className="absolute object-contain pointer-events-none"
                     style={{
-                      left: `${pastZone.x}%`, top: `${pastZone.y}%`,
-                      width: `${pastZone.width}%`, height: `${pastZone.height}%`,
+                      left: `${anchor.x}%`,
+                      top: `${anchor.y}%`,
+                      width: naturalPixelSizes[layer.id]?.naturalWidth
+                        ? `${naturalPixelSizes[layer.id].naturalWidth * backgroundScale.scaleX}px`
+                        : 'auto',
+                      height: naturalPixelSizes[layer.id]?.naturalHeight
+                        ? `${naturalPixelSizes[layer.id].naturalHeight * backgroundScale.scaleY}px`
+                        : 'auto',
                     }}
                   />
                 );
@@ -279,21 +393,31 @@ const SimulationRenderer = ({
             <React.Fragment key={`focus-${layer.id}`}>
               {/* Placed/revealed image */}
               {/* Assembling: part snaps into the zone area. Other modes: full-canvas overlay. */}
-              {visible && assembling && hotspotArea && (
-                <img
-                  src={simAssetUrl(layer.targetPath || layer.assetPath)}
-                  alt={layer.label}
-                  draggable={false}
-                  className="absolute object-contain pointer-events-none"
-                  style={{
-                    left: `${hotspotArea.x}%`,
-                    top: `${hotspotArea.y}%`,
-                    width: `${hotspotArea.width}%`,
-                    height: `${hotspotArea.height}%`,
-                    ...(activeAnimationLayerId === layer.id ? layerAnimationStyle(layer) : undefined),
-                  }}
-                />
-              )}
+              {visible && assembling && (() => {
+                // In assembling mode, placed images behave like background layers
+                // and should not move/scale with the correct area.
+                const anchor = imageBoxLocal || { x: 0, y: 0 };
+                return (
+                  <img
+                    ref={(el) => { if (el) registerNaturalSize(layer.id, el); }}
+                    src={simAssetUrl(layer.assetPath || layer.targetPath)}
+                    alt={layer.label}
+                    draggable={false}
+                    className="absolute object-contain pointer-events-none"
+                    style={{
+                      left: `${anchor.x}%`,
+                      top: `${anchor.y}%`,
+                      width: naturalPixelSizes[layer.id]?.naturalWidth
+                        ? `${naturalPixelSizes[layer.id].naturalWidth * backgroundScale.scaleX}px`
+                        : 'auto',
+                      height: naturalPixelSizes[layer.id]?.naturalHeight
+                        ? `${naturalPixelSizes[layer.id].naturalHeight * backgroundScale.scaleY}px`
+                        : 'auto',
+                      ...(activeAnimationLayerId === layer.id ? layerAnimationStyle(layer) : undefined),
+                    }}
+                  />
+                );
+              })()}
               {visible && (!assembling || !hotspotArea) && (
                 <img
                   src={simAssetUrl(layer.targetPath || layer.assetPath)}
@@ -310,30 +434,36 @@ const SimulationRenderer = ({
               {/* The invisible hit-target is always present so drops register even when
                   the visual indicator is hidden. The visible border only shows during
                   an active drag so the "empty slot" doesn't look like a placed part. */}
-              {isActive && assembling && hotspotArea && (
-                <div
-                  className={`absolute rounded-lg border-2 border-dashed transition-all duration-200 flex items-center justify-center ${
-                    dragOverZoneId === layer.id
-                      ? 'border-emerald-400 bg-emerald-400/20 scale-[1.03]'
-                      : draggingLayerId
-                        ? 'border-emerald-300 bg-emerald-100/20 animate-pulse'
-                        : 'border-transparent bg-transparent'
-                  }`}
-                  style={{
-                    left: `${hotspotArea.x}%`, top: `${hotspotArea.y}%`,
-                    width: `${hotspotArea.width}%`, height: `${hotspotArea.height}%`,
-                  }}
-                  onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); setDragOverZoneId(layer.id); }}
-                  onDragLeave={() => setDragOverZoneId((p) => (p === layer.id ? null : p))}
-                  onDrop={(e) => { e.stopPropagation(); e.preventDefault(); handleDrop(layer); }}
-                >
-                  {draggingLayerId && (
-                    <span className="text-emerald-600 text-[10px] font-bold pointer-events-none select-none drop-shadow">
-                      Drop here
-                    </span>
-                  )}
-                </div>
-              )}
+              {isActive && assembling && hotspotArea && (() => {
+                const ZONE_FIXED_PCT = 12; // fixed hit-area size in percent of canvas
+                const canvasArea = mapAreaToCanvas(hotspotArea) || hotspotArea;
+                const centerX = canvasArea.x + canvasArea.width / 2;
+                const centerY = canvasArea.y + canvasArea.height / 2;
+                return (
+                  <div
+                    className={`absolute rounded-lg border-2 border-dashed transition-all duration-200 flex items-center justify-center ${
+                      dragOverZoneId === layer.id
+                        ? 'border-emerald-400 bg-emerald-400/20 scale-[1.03]'
+                        : draggingLayerId
+                          ? 'border-emerald-300 bg-emerald-100/20 animate-pulse'
+                          : 'border-transparent bg-transparent'
+                    }`}
+                    style={{
+                      left: `${centerX}%`, top: `${centerY}%`, transform: 'translate(-50%, -50%)',
+                      width: `${ZONE_FIXED_PCT}%`, height: `${ZONE_FIXED_PCT}%`,
+                    }}
+                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); setDragOverZoneId(layer.id); }}
+                    onDragLeave={() => setDragOverZoneId((p) => (p === layer.id ? null : p))}
+                    onDrop={(e) => { e.stopPropagation(); e.preventDefault(); handleDrop(layer); }}
+                  >
+                    {draggingLayerId && (
+                      <span className="text-emerald-600 text-[10px] font-bold pointer-events-none select-none drop-shadow">
+                        Drop here
+                      </span>
+                    )}
+                  </div>
+                );
+              })()}
 
               {/* ── Assembling mode: canvas-level zone for layers without a defined target ── */}
               {/* (handled by canvas onDrop above; nothing to render here) */}
@@ -350,24 +480,28 @@ const SimulationRenderer = ({
                 />
               )}
 
-              {isActive && !assembling && hotspotArea && (
-                <button
-                  type="button"
-                  onClick={() => handleFocusClick(layer)}
-                  onMouseEnter={() => setHoveredLayerId(layer.id)}
-                  onMouseLeave={() => setHoveredLayerId((p) => (p === layer.id ? '' : p))}
-                  aria-label={`Interact with ${layer.label}`}
-                  className={`${hotspotBaseClass} ${hoveredLayerId === layer.id ? hotspotHoverClass : 'bg-transparent'}`}
-                  style={{
-                    left: `${hotspotArea.x}%`, top: `${hotspotArea.y}%`,
-                    width: `${hotspotArea.width}%`, height: `${hotspotArea.height}%`,
-                  }}
-                />
-              )}
+              {isActive && !assembling && hotspotArea && (() => {
+                const activeArea = mapAreaToCanvas(hotspotArea) || hotspotArea;
+                return (
+                  <button
+                    type="button"
+                    onClick={() => handleFocusClick(layer)}
+                    onMouseEnter={() => setHoveredLayerId(layer.id)}
+                    onMouseLeave={() => setHoveredLayerId((p) => (p === layer.id ? '' : p))}
+                    aria-label={`Interact with ${layer.label}`}
+                    className={`${hotspotBaseClass} ${hoveredLayerId === layer.id ? hotspotHoverClass : 'bg-transparent'}`}
+                    style={{
+                      left: `${activeArea.x}%`, top: `${activeArea.y}%`,
+                      width: `${activeArea.width}%`, height: `${activeArea.height}%`,
+                    }}
+                  />
+                );
+              })()}
 
               {/* Wrong-click zone (disassembly/exploration only) */}
               {isActive && !assembling && normalizeZoomArea(layer.wrongClickArea) && (() => {
-                const wrongArea = normalizeZoomArea(layer.wrongClickArea);
+                const wrongAreaRaw = normalizeZoomArea(layer.wrongClickArea);
+                const wrongArea = mapAreaToCanvas(wrongAreaRaw) || wrongAreaRaw;
                 const wrongHoverId = `wrong-${layer.id}`;
                 return (
                   <button
@@ -387,15 +521,18 @@ const SimulationRenderer = ({
               })()}
 
               {/* Editor zone overlays */}
-              {readOnly && hotspotArea && (
-                <div
-                  className="absolute rounded-md border-2 border-emerald-400/80 bg-emerald-100/15 pointer-events-none"
-                  style={{
-                    left: `${hotspotArea.x}%`, top: `${hotspotArea.y}%`,
-                    width: `${hotspotArea.width}%`, height: `${hotspotArea.height}%`,
-                  }}
-                />
-              )}
+              {readOnly && hotspotArea && (() => {
+                const editorArea = mapAreaToCanvas(hotspotArea) || hotspotArea;
+                return (
+                  <div
+                    className="absolute rounded-md border-2 border-emerald-400/80 bg-emerald-100/15 pointer-events-none"
+                    style={{
+                      left: `${editorArea.x}%`, top: `${editorArea.y}%`,
+                      width: `${editorArea.width}%`, height: `${editorArea.height}%`,
+                    }}
+                  />
+                );
+              })()}
               {readOnly && normalizeZoomArea(layer.wrongClickArea) && (() => {
                 const wrongArea = normalizeZoomArea(layer.wrongClickArea);
                 return (
@@ -447,30 +584,32 @@ const SimulationRenderer = ({
       </div>
 
       {/* ── Parts tray (assembling mode only) ── */}
-      {assembling && !readOnly && unplacedFocusLayers.length > 0 && (
+      {assembling && !readOnly && partsTrayLayers.length > 0 && (
         <div className="mt-3 px-3 py-3 bg-[#EEF3F9] rounded-xl border border-[#D1DFF0]">
           <p className="text-[11px] font-semibold text-[#4A6B8A] uppercase tracking-wide mb-2 select-none">
             Parts to assemble — drag to the target zone above
           </p>
           <div className="grid gap-2.5" style={{ gridTemplateColumns: `repeat(auto-fill, minmax(min(110px, 100%), 1fr))` }}>
-            {unplacedFocusLayers.map((layer) => (
+              {partsTrayLayers.map((layer) => (
               <div
                 key={`tray-${layer.id}`}
-                draggable={!isAdvancing}
-                onDragStart={(e) => {
-                  if (isAdvancing) { e.preventDefault(); return; }
-                  setDraggingLayerId(layer.id);
-                  e.dataTransfer.effectAllowed = 'move';
-                  e.dataTransfer.setData('text/plain', layer.id);
-                }}
+                  draggable={!isAdvancing && !revealedIds.has(layer.id)}
+                  onDragStart={(e) => {
+                    if (isAdvancing || revealedIds.has(layer.id)) { e.preventDefault(); return; }
+                    setDraggingLayerId(layer.id);
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/plain', layer.id);
+                  }}
                 onDragEnd={() => { setDraggingLayerId(null); setDragOverZoneId(null); }}
                 title={layer.label}
                 className={`relative rounded-lg overflow-hidden border-2 select-none transition-all duration-150 aspect-[16/10] ${
-                  isAdvancing
-                    ? 'opacity-40 cursor-not-allowed border-gray-300'
-                    : draggingLayerId === layer.id
-                      ? 'opacity-40 scale-95 border-emerald-400 cursor-grabbing shadow-lg'
-                      : 'border-[#BDD0E4] hover:border-emerald-400 hover:scale-105 cursor-grab shadow-sm hover:shadow-md'
+                    revealedIds.has(layer.id)
+                      ? 'opacity-40 cursor-not-allowed border-gray-300'
+                      : isAdvancing
+                        ? 'opacity-40 cursor-not-allowed border-gray-300'
+                        : draggingLayerId === layer.id
+                          ? 'opacity-40 scale-95 border-emerald-400 cursor-grabbing shadow-lg'
+                          : 'border-[#BDD0E4] hover:border-emerald-400 hover:scale-105 cursor-grab shadow-sm hover:shadow-md'
                 }`}
               >
                 <img
@@ -479,7 +618,7 @@ const SimulationRenderer = ({
                   draggable={false}
                   className="w-full h-full object-contain bg-white"
                 />
-                <div className="absolute bottom-0 left-0 right-0 bg-[#0B2B4C]/75 text-white text-[9px] text-center py-0.5 truncate px-1 pointer-events-none select-none">
+                  <div className="absolute bottom-0 left-0 right-0 bg-[#0B2B4C]/75 text-white text-[9px] text-center py-0.5 truncate px-1 pointer-events-none select-none">
                   {layer.label}
                 </div>
               </div>

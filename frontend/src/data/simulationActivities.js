@@ -293,8 +293,10 @@ export const configFromManifest = (activityOrder, manifest) => {
 
 // Defensive normalizer — accepts any reasonable shape and returns a valid config.
 // Used both when loading persisted admin overrides and when repairing partials.
-export const normalizeConfig = (raw = {}, { activityOrder, fallbackManifest } = {}) => {
-  const fallbackMeta = ACTIVITY_META[activityOrder] || { title: '', description: '', skill: '', steps: [] };
+export const normalizeConfig = (raw = {}, { activityOrder, fallbackManifest, useActivityFallback = true } = {}) => {
+  const fallbackMeta = useActivityFallback
+    ? (ACTIVITY_META[activityOrder] || { title: '', description: '', skill: '', steps: [] })
+    : { title: '', description: '', skill: '', steps: [] };
   const rawMeta = raw?.meta || {};
 
   const meta = {
@@ -307,7 +309,7 @@ export const normalizeConfig = (raw = {}, { activityOrder, fallbackManifest } = 
   };
 
   let timeline = Array.isArray(raw?.timeline) ? raw.timeline : [];
-  if (timeline.length === 0 && fallbackManifest) {
+  if (timeline.length === 0 && fallbackManifest && useActivityFallback) {
     timeline = timelineFromManifest(fallbackManifest);
   }
 

@@ -11,11 +11,6 @@ on:
           - start
           - stop
         default: stop
-  schedule:
-    # 08:30 local (UTC+8) Monday-Friday
-    - cron: '30 0 * * 1-5'
-    # 22:00 local (UTC+8) Monday-Friday
-    - cron: '0 14 * * 1-5'
 
 permissions:
   contents: read

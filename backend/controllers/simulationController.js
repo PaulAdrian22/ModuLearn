@@ -346,7 +346,7 @@ const deleteSimulation = async (req, res) => {
 };
 
 // Get the runtime config (meta + timeline) for a simulation.
-// Falls back to the on-disk manifest when no admin override is saved.
+// Runtime is editor-driven only; no manifest fallback here.
 const getSimulationRuntimeConfig = async (req, res) => {
   try {
     const { id } = req.params;
@@ -366,7 +366,15 @@ const getSimulationRuntimeConfig = async (req, res) => {
     }
 
     const simulation = rows[0];
-    const { activityOrder, source, config } = getSimulationConfig(simulation);
+    const { activityOrder, source, config } = getSimulationConfig(simulation, {
+      preferStoredOnly: true
+    });
+
+    if (source === 'missing' || !Array.isArray(config?.timeline) || config.timeline.length === 0) {
+      return res.status(409).json({
+        message: 'Simulation has no editor configuration yet. Open Simulation Editor and save at least one step.'
+      });
+    }
 
     res.json({ activityOrder, source, config });
   } catch (error) {

@@ -814,13 +814,13 @@ const getAllUsers = async (req, res) => {
     let users;
     try {
       users = await query(
-        `SELECT UserID, Name, ${identitySelect}, Age, EducationalBackground, Role, profile_picture, avatar_type, default_avatar, created_at, last_login, is_archived FROM user ORDER BY created_at DESC`
+        `SELECT UserID, Name, ${identitySelect}, Age, Gender, EducationalBackground, Role, profile_picture, avatar_type, default_avatar, created_at, last_login, is_archived FROM user ORDER BY created_at DESC`
       );
     } catch (err) {
       // If Role column doesn't exist, query without it
       console.log('Role column might not exist, querying without it');
       users = await query(
-        `SELECT UserID, Name, ${identitySelect}, Age, EducationalBackground, profile_picture, avatar_type, default_avatar, created_at, last_login, is_archived FROM user ORDER BY created_at DESC`
+        `SELECT UserID, Name, ${identitySelect}, Age, Gender, EducationalBackground, profile_picture, avatar_type, default_avatar, created_at, last_login, is_archived FROM user ORDER BY created_at DESC`
       );
       // Add Role as 'student' by default
       users = users.map(user => ({ ...user, Role: 'student' }));
@@ -853,8 +853,8 @@ const getUserDetails = async (req, res) => {
 
     const users = await query(
       hasRoleColumn
-        ? `SELECT UserID, Name, ${identitySelect}, Age, EducationalBackground, Role, profile_picture, avatar_type, default_avatar, created_at, last_login FROM user WHERE UserID = ?`
-        : `SELECT UserID, Name, ${identitySelect}, Age, EducationalBackground, 'student' as Role, profile_picture, avatar_type, default_avatar, created_at, last_login FROM user WHERE UserID = ?`,
+        ? `SELECT UserID, Name, ${identitySelect}, Age, Gender, EducationalBackground, Role, profile_picture, avatar_type, default_avatar, created_at, last_login FROM user WHERE UserID = ?`
+        : `SELECT UserID, Name, ${identitySelect}, Age, Gender, EducationalBackground, 'student' as Role, profile_picture, avatar_type, default_avatar, created_at, last_login FROM user WHERE UserID = ?`,
       [id]
     );
     

@@ -760,11 +760,20 @@ router.put('/modules/:id', [
     if (normalizationWarnings.length > 0) {
       console.warn('Update module payload normalized with warnings:', normalizationWarnings);
     }
-    
+
+    // SAFEGUARD: Preserve user progress before updating lesson
+    // This ensures that admin edits don't accidentally reset user progress
+    const existingProgress = await query(
+      `SELECT ProgressID, UserID, CompletionRate, DateStarted, DateCompletion
+         FROM progress WHERE ModuleID = ?`,
+      [id]
+    );
+    console.log(`Found ${existingProgress.length} user progress records for module ${id}`);
+
     // Build dynamic update query
     const fields = [];
     const values = [];
-    
+
     if (ModuleTitle !== undefined) {
       fields.push('ModuleTitle = ?');
       values.push(ModuleTitle);
@@ -817,33 +826,62 @@ router.put('/modules/:id', [
       fields.push('roadmapStages = ?');
       values.push(normalizedRoadmapStages.value);
     }
-    
+
     if (fields.length === 0) {
       return res.status(400).json({
         error: 'Bad Request',
         message: 'No valid fields to update'
       });
     }
-    
+
     values.push(id);
-    
+
     const result = await query(
       `UPDATE module SET ${fields.join(', ')} WHERE ModuleID = ?`,
       values
     );
-    
+
     if (result.affectedRows === 0) {
       return res.status(404).json({
         error: 'Not Found',
         message: 'Module not found'
       });
     }
-    
+
+    // SAFEGUARD: Verify progress records are still intact after module update
+    // If any progress records were lost, this is a critical error
+    const progressAfterUpdate = await query(
+      `SELECT COUNT(*) as count FROM progress WHERE ModuleID = ?`,
+      [id]
+    );
+    const progressCountAfter = progressAfterUpdate[0]?.count || 0;
+
+    if (existingProgress.length > 0 && progressCountAfter === 0) {
+      console.error(`CRITICAL: User progress was lost during module ${id} update. ${existingProgress.length} progress records were deleted.`);
+      // Attempt to restore progress records if they were accidentally deleted
+      for (const progressRecord of existingProgress) {
+        try {
+          await query(
+            `INSERT IGNORE INTO progress (ProgressID, UserID, ModuleID, CompletionRate, DateStarted, DateCompletion)
+             VALUES (?, ?, ?, ?, ?, ?)`,
+            [progressRecord.ProgressID, progressRecord.UserID, id, progressRecord.CompletionRate, progressRecord.DateStarted, progressRecord.DateCompletion]
+          );
+          console.log(`Restored progress record ${progressRecord.ProgressID} for user ${progressRecord.UserID}`);
+        } catch (restoreErr) {
+          console.error(`Failed to restore progress record ${progressRecord.ProgressID}:`, restoreErr.message);
+        }
+      }
+    }
+
     console.log('Module updated successfully');
     
     res.json({
       message: 'Module updated successfully',
-      normalizationWarnings
+      normalizationWarnings,
+      progressPreserved: {
+        count: existingProgress.length,
+        status: progressCountAfter > 0 ? 'preserved' : (existingProgress.length === 0 ? 'none' : 'warning')
+      }
     });
   } catch (error) {
     console.error('Update module error:', error);

@@ -157,6 +157,7 @@ const AdminSimulationEditor = () => {
 
   const [selectedMomentId, setSelectedMomentId] = useState(null);
   const [selectedLayerId, setSelectedLayerId] = useState(null);
+  const [editorImageBox, setEditorImageBox] = useState(null);
   const [previewIndex, setPreviewIndex] = useState(0);
   const [editStage, setEditStage] = useState('overview');
   const [showCropper, setShowCropper] = useState(false);
@@ -1325,6 +1326,7 @@ const PreviewCard = ({
 }) => {
   const canGoBack = previewIndex > 0;
   const canGoNext = previewIndex < timeline.length - 1;
+  const [editorImageBox, setEditorImageBox] = useState(null);
   const selectedClickArea = useMemo(() => normalizeZoomArea(selectedLayer?.clickArea), [selectedLayer?.clickArea]);
   const selectedWrongClickArea = useMemo(() => normalizeZoomArea(selectedLayer?.wrongClickArea), [selectedLayer?.wrongClickArea]);
   const selectedZoomArea = useMemo(() => normalizeZoomArea(selectedLayer?.zoomArea), [selectedLayer?.zoomArea]);
@@ -1377,6 +1379,7 @@ const PreviewCard = ({
               showInstructions
               disassembly={activityType === 'Disassembling' || activityType === 'Troubleshooting'}
               assembling={activityType === 'Assembling'}
+              onImageBoxChange={setEditorImageBox}
             />
 
             {embedded && (
@@ -1393,8 +1396,14 @@ const PreviewCard = ({
               </div>
             )}
 
-            {embedded && selectedLayer && selectedZoomArea && (
-              <div className="absolute inset-0 z-10">
+            {embedded && selectedLayer && selectedZoomArea && editorImageBox && (
+              <div
+                className="absolute z-10"
+                style={{
+                  left: `${editorImageBox.x}%`, top: `${editorImageBox.y}%`,
+                  width: `${editorImageBox.width}%`, height: `${editorImageBox.height}%`,
+                }}
+              >
                 <InteractiveZoomAreaEditor
                   zoomArea={selectedZoomArea}
                   onChange={onUpdateZoomArea}
@@ -1406,8 +1415,14 @@ const PreviewCard = ({
               </div>
             )}
 
-            {embedded && selectedLayer && selectedClickArea && (
-              <div className="absolute inset-0 z-20">
+            {embedded && selectedLayer && selectedClickArea && editorImageBox && (
+              <div
+                className="absolute z-20"
+                style={{
+                  left: `${editorImageBox.x}%`, top: `${editorImageBox.y}%`,
+                  width: `${editorImageBox.width}%`, height: `${editorImageBox.height}%`,
+                }}
+              >
                 <InteractiveZoomAreaEditor
                   zoomArea={selectedClickArea}
                   onChange={onUpdateClickArea}
@@ -1420,8 +1435,14 @@ const PreviewCard = ({
               </div>
             )}
 
-            {embedded && selectedLayer && selectedWrongClickArea && (
-              <div className="absolute inset-0 z-20">
+            {embedded && selectedLayer && selectedWrongClickArea && editorImageBox && (
+              <div
+                className="absolute z-20"
+                style={{
+                  left: `${editorImageBox.x}%`, top: `${editorImageBox.y}%`,
+                  width: `${editorImageBox.width}%`, height: `${editorImageBox.height}%`,
+                }}
+              >
                 <InteractiveZoomAreaEditor
                   zoomArea={selectedWrongClickArea}
                   onChange={onUpdateWrongClickArea}

@@ -1372,8 +1372,53 @@ const completeLessonAssessment = async (req, res) => {
     await connection.commit();
     connection.release();
 
+    // AUTO-TRIGGER LESSON MASTERY COMPUTATION (NEW)
+    if (!moduleContext.isSupplementary && ['Review', 'Simulation', 'Final'].includes(assessmentType)) {
+      setImmediate(async () => {
+        try {
+          const computeConnection = await getConnection();
+
+          const [lessonMasteries] = await computeConnection.execute(
+            'SELECT * FROM bkt_lesson_mastery WHERE UserID = ? AND ModuleID = ?',
+            [userId, moduleId]
+          );
+
+          const wLesson = bkt.computeWLesson();
+          let needsRetake = false;
+
+          for (const lm of lessonMasteries) {
+            const reviewL = parseFloat(lm.ReviewL) || 0;
+            const simulationL = parseFloat(lm.SimulationL) || 0;
+            const finalL = parseFloat(lm.FinalL) || 0;
+            const mastery = bkt.computeLessonMastery(reviewL, simulationL, finalL);
+
+            await computeConnection.execute(
+              `UPDATE bkt_lesson_mastery SET MLesson = ?, WLesson = ?, WMLesson = ?, IsPassed = ?
+               WHERE UserID = ? AND ModuleID = ? AND SkillName = ?`,
+              [mastery.mLesson, mastery.wLesson, mastery.wmLesson, mastery.isPassed,
+               userId, moduleId, lm.SkillName]
+            );
+
+            if (!mastery.isPassed) needsRetake = true;
+          }
+
+          if (needsRetake) {
+            await computeConnection.execute(
+              `UPDATE bkt_lesson_mastery SET RetakeCount = RetakeCount + 1
+               WHERE UserID = ? AND ModuleID = ? AND IsPassed = FALSE`,
+              [userId, moduleId]
+            );
+          }
+
+          computeConnection.release();
+        } catch (autoComputeError) {
+          console.error('Auto-compute lesson mastery error (non-blocking):', autoComputeError.message);
+        }
+      });
+    }
+
     res.json({
-      message: `${assessmentType} assessment completed`,
+      message: `${assessmentType} assessment completed. Lesson mastery will be computed shortly.`,
       sessionId,
       moduleId,
       assessmentType,
@@ -1991,11 +2036,70 @@ const batchUpdateKnowledge = async (req, res) => {
     }
     connection.release();
 
+    // AUTO-TRIGGER MASTERY COMPUTATION (NEW)
+    if (!skipBktUpdates && normalizedAssessmentType === 'Initial') {
+      // For initial assessment, auto-compute overall mastery in background
+      setImmediate(async () => {
+        try {
+          const computeConnection = await getConnection();
+          const [skillStates] = await computeConnection.execute(
+            'SELECT SkillName FROM bkt_model WHERE UserID = ?',
+            [userId]
+          );
+
+          for (const state of skillStates) {
+            const [overallRecords] = await computeConnection.execute(
+              'SELECT * FROM bkt_overall_mastery WHERE UserID = ? AND SkillName = ?',
+              [userId, state.SkillName]
+            );
+
+            if (overallRecords.length > 0) {
+              const record = overallRecords[0];
+              const wmInitial = parseFloat(record.WMInitial) || 0;
+              const [lessonMasteries] = await computeConnection.execute(
+                `SELECT lm.WMLesson FROM bkt_lesson_mastery lm
+                 LEFT JOIN module m ON lm.ModuleID = m.ModuleID
+                 WHERE lm.UserID = ? AND lm.SkillName = ? AND lm.IsPassed = TRUE
+                 AND (m.ModuleID IS NULL OR LOWER(COALESCE(m.Difficulty, '')) <> 'supplementary')`,
+                [userId, state.SkillName]
+              );
+
+              const wmLessonValues = lessonMasteries.map(lm => parseFloat(lm.WMLesson) || 0);
+              const tmLesson = wmLessonValues.reduce((a, b) => a + b, 0);
+              const overallMastery = wmInitial + tmLesson;
+              const isMastered = overallMastery >= bkt.CONSTANTS.MASTERY_THRESHOLD;
+
+              const [questionStats] = await computeConnection.execute(
+                `SELECT COUNT(*) as totalQuestions, SUM(CASE WHEN ir.IsCorrect = 1 THEN 1 ELSE 0 END) as totalMastered
+                 FROM bkt_item_response ir
+                 WHERE ir.UserID = ? AND ir.SkillName = ?`,
+                [userId, state.SkillName]
+              );
+
+              const totalQuestions = questionStats[0].totalQuestions || 0;
+              const totalMastered = questionStats[0].totalMastered || 0;
+              const masteryPercent = totalQuestions > 0 ? (totalMastered / totalQuestions) * 100 : 0;
+
+              await computeConnection.execute(
+                `UPDATE bkt_overall_mastery SET TMLesson = ?, OverallMastery = ?, IsMastered = ?,
+                 TotalQuestionsMastered = ?, TotalQuestions = ?, OverallMasteryPercent = ?,
+                 updated_at = CURRENT_TIMESTAMP WHERE UserID = ? AND SkillName = ?`,
+                [tmLesson, overallMastery, isMastered, totalMastered, totalQuestions, masteryPercent, userId, state.SkillName]
+              );
+            }
+          }
+          computeConnection.release();
+        } catch (autoComputeError) {
+          console.error('Auto-compute overall mastery error (non-blocking):', autoComputeError.message);
+        }
+      });
+    }
+
     res.json({
       message: skipBktUpdates
         ? 'Supplementary lesson assessment recorded. BKT update skipped.'
         : normalizedAssessmentType === 'Initial'
-          ? 'Initial assessment recorded. Baseline mastery values were computed while mastery status remains unchanged until lesson assessments.'
+          ? 'Initial assessment recorded. Overall mastery values computed and will be available shortly.'
           : 'Knowledge states updated',
       bktSkipped: skipBktUpdates,
       masteryThreshold: bkt.CONSTANTS.MASTERY_THRESHOLD,

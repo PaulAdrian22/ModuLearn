@@ -78,7 +78,10 @@ const SimulationActivity = () => {
         ]);
         if (!mounted) return;
         setSimulation(simRes.data || null);
-        const normalized = normalizeConfig(configRes.data?.config || {});
+        const normalized = normalizeConfig(
+          configRes.data?.config || {},
+          { useActivityFallback: false }
+        );
         setConfig(normalized);
         setHasActivityStarted(false);
         setCurrentIndex(0);
