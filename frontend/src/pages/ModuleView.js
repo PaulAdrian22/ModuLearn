@@ -1234,15 +1234,11 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
       const sType = normalizeLessonSectionType(section?.type);
       if (sType === 'review' || sType === 'review - multiple choice' || sType === 'review-multiple-choice') {
         const reviewId = `review-mc-${section.originalIndex}`;
-        const hasAttempt = !!reviewResults[reviewId];
-        if (!completedReviews[reviewId] && !hasAttempt) return false;
+        if (!completedReviews[reviewId]) return false;
       }
       if (sType === 'review - drag and drop' || sType === 'review-drag-drop' || sType === 'simulation') {
         const dndId = `review-dnd-${section.originalIndex}`;
-        const simulationId = section.simulationId || section.simulation?.SimulationID || section.simulation?.id;
-        const simAttempts = simulationId ? Number(simProgressMap?.[simulationId]?.Attempts || 0) : 0;
-        const hasSimAttempt = simulationId && simAttempts > 0;
-        if (!completedReviews[dndId] && !hasSimAttempt) return false;
+        if (!completedReviews[dndId]) return false;
       }
     }
     return true;

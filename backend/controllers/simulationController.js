@@ -1,6 +1,6 @@
 const { pool } = require('../config/database');
 const { getCached, setCached, clearNamespace } = require('../utils/responseCache');
-const { getSimulationConfig } = require('../utils/simulationConfig');
+const { getSimulationConfig, readSimulationOverride } = require('../utils/simulationConfig');
 
 let simulationColumnCache = null;
 
@@ -367,7 +367,8 @@ const getSimulationRuntimeConfig = async (req, res) => {
 
     const simulation = rows[0];
     const { activityOrder, source, config } = getSimulationConfig(simulation, {
-      preferStoredOnly: true
+      preferStoredOnly: true,
+      overrideZoneData: simulation.ZoneData || readSimulationOverride(id)
     });
 
     if (source === 'missing' || !Array.isArray(config?.timeline) || config.timeline.length === 0) {

@@ -24,7 +24,11 @@ const {
   normalizeStoredConfig,
   listActivityAssets,
   resolveActivityOrder,
-  FALLBACK_META
+  FALLBACK_META,
+  readSimulationOverride,
+  writeSimulationOverride,
+  clearSimulationOverride,
+  hasSimulationOverride
 } = require('../utils/simulationConfig');
 const { clearSimulationColumnCache } = require('../controllers/simulationController');
 
@@ -1677,7 +1681,7 @@ router.get('/simulations', async (req, res) => {
         SimulationOrder: row.SimulationOrder,
         LessonNumber: row.LessonNumber != null ? Number(row.LessonNumber) : null,
         activityOrder,
-        hasAdminOverride: Boolean(Number(row.HasAdminOverride || 0))
+        hasAdminOverride: Boolean(Number(row.HasAdminOverride || 0)) || hasSimulationOverride(row.SimulationID)
       };
     });
 
@@ -1931,7 +1935,8 @@ router.get('/simulations/:id', [
     }
 
     const simulation = rows[0];
-    const { activityOrder, source, config } = getSimulationConfig(simulation);
+    const overrideZoneData = simulation.ZoneData || readSimulationOverride(id);
+    const { activityOrder, source, config } = getSimulationConfig(simulation, { overrideZoneData });
 
     res.json({
       simulation: {
@@ -1994,10 +1999,13 @@ router.put('/simulations/:id', [
 
     const fields = [];
     const values = [];
+    const hasZoneDataColumn = columns.has('ZoneData');
 
-    if (columns.has('ZoneData')) {
+    if (hasZoneDataColumn) {
       fields.push('ZoneData = ?');
       values.push(JSON.stringify(normalized));
+    } else {
+      writeSimulationOverride(id, normalized);
     }
 
     if (simPatch && typeof simPatch === 'object') {
@@ -2019,23 +2027,20 @@ router.put('/simulations/:id', [
       }
     }
 
-    if (fields.length === 0) {
-      return res.status(409).json({
-        error: 'Database schema not ready',
-        message: 'Simulation editor changes cannot be saved yet. Run the simulation migration to add the ZoneData column.'
-      });
+    if (fields.length > 0) {
+      values.push(id);
+      await pool.query(`UPDATE simulation SET ${fields.join(', ')} WHERE SimulationID = ?`, values);
     }
-
-    values.push(id);
-    await pool.query(`UPDATE simulation SET ${fields.join(', ')} WHERE SimulationID = ?`, values);
     clearSimulationAdminCaches();
 
-    if (!columns.has('ZoneData')) {
+    if (hasZoneDataColumn) {
+      clearSimulationOverride(id);
+    } else {
       return res.json({
-        message: 'Simulation details saved (ZoneData is unavailable on this database).',
+        message: 'Simulation saved using local override storage.',
         activityOrder,
         config: normalized,
-        warning: 'Timeline and step edits were not persisted because ZoneData is missing.'
+        source: 'file-override'
       });
     }
 
@@ -2061,11 +2066,11 @@ router.delete('/simulations/:id/override', [
     const { id } = req.params;
     const columns = await ensureSimulationAdminColumns();
 
-    if (!columns.has('ZoneData')) {
-      return res.json({ message: 'Override storage is not available on this database; manifest fallback is already active.' });
+    if (columns.has('ZoneData')) {
+      await pool.query('UPDATE simulation SET ZoneData = NULL WHERE SimulationID = ?', [id]);
     }
 
-    await pool.query('UPDATE simulation SET ZoneData = NULL WHERE SimulationID = ?', [id]);
+    clearSimulationOverride(id);
     clearSimulationAdminCaches();
     res.json({ message: 'Override cleared — simulation will use the on-disk manifest again.' });
   } catch (error) {

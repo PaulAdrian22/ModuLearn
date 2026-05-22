@@ -7,6 +7,48 @@ const fs = require('fs');
 const path = require('path');
 
 const SIM_ASSETS_ROOT = path.join(__dirname, '..', 'sim-assets');
+const SIMULATION_OVERRIDE_DIR = path.join(__dirname, '..', '.simulation-overrides');
+
+const getSimulationOverridePath = (simulationId) => {
+  const safeId = Number(simulationId);
+  if (!Number.isFinite(safeId) || safeId <= 0) return null;
+  return path.join(SIMULATION_OVERRIDE_DIR, `${safeId}.json`);
+};
+
+const readSimulationOverride = (simulationId) => {
+  const overridePath = getSimulationOverridePath(simulationId);
+  if (!overridePath || !fs.existsSync(overridePath)) return null;
+
+  try {
+    const raw = fs.readFileSync(overridePath, 'utf8');
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === 'object' ? parsed : null;
+  } catch {
+    return null;
+  }
+};
+
+const writeSimulationOverride = (simulationId, config) => {
+  const overridePath = getSimulationOverridePath(simulationId);
+  if (!overridePath) return false;
+
+  fs.mkdirSync(SIMULATION_OVERRIDE_DIR, { recursive: true });
+  fs.writeFileSync(overridePath, JSON.stringify(config, null, 2));
+  return true;
+};
+
+const clearSimulationOverride = (simulationId) => {
+  const overridePath = getSimulationOverridePath(simulationId);
+  if (!overridePath || !fs.existsSync(overridePath)) return false;
+
+  fs.unlinkSync(overridePath);
+  return true;
+};
+
+const hasSimulationOverride = (simulationId) => {
+  const overridePath = getSimulationOverridePath(simulationId);
+  return Boolean(overridePath && fs.existsSync(overridePath));
+};
 
 const PERSPECTIVE_CATEGORY_MAP = {
   'Front Panel': 'Front',
@@ -355,7 +397,8 @@ const normalizeStoredConfig = (raw, activityOrder, options = {}) => {
 const getSimulationConfig = (simulation, options = {}) => {
   const preferStoredOnly = options.preferStoredOnly === true;
   const activityOrder = resolveActivityOrder(simulation);
-  const stored = parseStoredConfig(simulation?.ZoneData);
+  const hasOverrideZoneData = Object.prototype.hasOwnProperty.call(options, 'overrideZoneData');
+  const stored = parseStoredConfig(hasOverrideZoneData ? options.overrideZoneData : simulation?.ZoneData);
   if (stored) {
     return {
       activityOrder,
@@ -435,5 +478,9 @@ module.exports = {
   listActivityAssets,
   categoryForPerspective,
   PERSPECTIVE_CATEGORY_MAP,
-  FALLBACK_META
+  FALLBACK_META,
+  readSimulationOverride,
+  writeSimulationOverride,
+  clearSimulationOverride,
+  hasSimulationOverride
 };

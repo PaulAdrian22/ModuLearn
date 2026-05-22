@@ -2049,8 +2049,9 @@ const AddLesson = () => {
 
     const cleanNode = (node) => {
       if (node.nodeType === Node.TEXT_NODE) {
-        // Preserve non-breaking spaces (typed indentation) as &nbsp; entities
-        return escapeHtmlEntities(node.textContent || '').replace(/ /g, '&nbsp;');
+        // Preserve manual indentation and repeated spacing from the editor.
+        const escapedText = escapeHtmlEntities(node.textContent || '').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+        return escapedText.replace(/(^ +| +$| {2,})/g, (spaces) => '&nbsp;'.repeat(spaces.length));
       }
       if (node.nodeType === Node.ELEMENT_NODE) {
         const tagName = node.tagName.toUpperCase();
