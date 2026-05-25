@@ -257,9 +257,8 @@ const AdminSimulations = () => {
   const handleQuickCreateSimulation = async (mode) => {
     try {
       setError('');
-      // Generate a default title with timestamp for uniqueness
-      const timestamp = new Date().toLocaleTimeString('en-US', { hour12: false });
-      const defaultTitle = `New Simulation - ${timestamp}`;
+      // Generate a default title
+      const defaultTitle = 'New Simulation';
 
       const payload = {
         SimulationTitle: defaultTitle,

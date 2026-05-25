@@ -296,6 +296,8 @@ const getSimulationAdminColumnSet = async ({ forceRefresh = false } = {}) => {
       'ActivityType',
       'MaxScore',
       'TimeLimit',
+      'Instructions',
+      'Is_Locked',
       'SimulationOrder'
     ]);
   }

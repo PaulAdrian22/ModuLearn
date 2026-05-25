@@ -507,21 +507,16 @@ const getSimulationConfig = (simulation, options = {}) => {
     };
   }
 
-  if (preferStoredOnly) {
-    return {
-      activityOrder,
-      source: 'missing',
-      config: {
-        meta: { title: '', description: '', skill: '', steps: [] },
-        timeline: []
-      }
-    };
-  }
-
+  // For new simulations without any stored config, return completely empty config
+  // (no fallback manifest, no fallback metadata). This ensures new simulations
+  // start completely blank.
   return {
     activityOrder,
-    source: 'manifest',
-    config: buildFallbackConfig(activityOrder)
+    source: 'missing',
+    config: {
+      meta: { title: '', description: '', skill: '', steps: [] },
+      timeline: []
+    }
   };
 };
 
