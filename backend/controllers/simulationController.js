@@ -1,4 +1,4 @@
-const { pool } = require('../config/database');
+const { pool, query } = require('../config/database');
 const { getCached, setCached, clearNamespace } = require('../utils/responseCache');
 const { getSimulationConfig, readSimulationOverride } = require('../utils/simulationConfig');
 
@@ -280,12 +280,12 @@ const createSimulation = async (req, res) => {
     const insertValues = insertColumns.map((column) => insertPayload[column]);
     const placeholders = insertColumns.map(() => '?').join(', ');
 
-    const query = `
+    const sqlQuery = `
       INSERT INTO simulation (${insertColumns.join(', ')})
       VALUES (${placeholders})
     `;
 
-    const [result] = await pool.query(query, insertValues);
+    const result = await query(sqlQuery, insertValues);
     clearSimulationCaches();
     
     res.status(201).json({
