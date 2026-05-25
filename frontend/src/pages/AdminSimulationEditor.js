@@ -555,7 +555,11 @@ const AdminSimulationEditor = () => {
       setError('');
 
       const savePayload = compactConfigForSave(config);
-      const saveResponse = await axios.put(`/admin/simulations/${id}`, { config: savePayload });
+      const simPatch = {
+        SimulationTitle: meta.title,
+        Description: meta.description,
+      };
+      const saveResponse = await axios.put(`/admin/simulations/${id}`, { config: savePayload, simulation: simPatch });
       const normalized = normalizeConfig(saveResponse?.data?.config || {}, { activityOrder });
 
       setConfig(normalized);
@@ -927,7 +931,7 @@ const AdminSimulationEditor = () => {
                             setDraggedMomentId(null);
                             setDragOverMomentId(null);
                           }}
-                          className="px-3 py-1.5 rounded-md text-xs font-semibold border transition-all"
+                          className="px-3 py-1.5 rounded-md text-xs font-semibold border transition-all whitespace-nowrap"
                           style={active
                             ? {
                               backgroundColor: ADMIN_ACCENT,
@@ -1033,19 +1037,100 @@ const StageButton = ({ active, number, title, subtitle, accentColor, onClick }) 
 };
 
 const SimulationInfoEditor = ({ meta, onUpdateMeta, accentColor, activityType, onUpdateActivityType, onUpdateSkill, lessonNumber, onUpdateLessonNumber, lessons }) => {
+  const titleRef = React.useRef(null);
+  const stepsRef = React.useRef(null);
+  const [activeTextarea, setActiveTextarea] = useState(null);
+
+  // Keep contentEditable elements in sync with state
+  useEffect(() => {
+    const titleEl = titleRef.current;
+    if (titleEl && document.activeElement !== titleEl) {
+      const targetText = meta.title || '';
+      if (titleEl.textContent !== targetText) {
+        titleEl.textContent = targetText;
+      }
+    }
+
+    const stepsEl = stepsRef.current;
+    if (stepsEl && document.activeElement !== stepsEl) {
+      const targetText = (meta.steps || []).join('\n');
+      if (stepsEl.textContent !== targetText) {
+        stepsEl.textContent = targetText;
+      }
+    }
+  }, [meta.title, meta.steps]);
+
+  // Handle Tab key for indentation
+  useEffect(() => {
+    const handleTabKey = (e) => {
+      if (e.key !== 'Tab') return;
+      const el = e.target;
+      if (!el || el.contentEditable !== 'true') return;
+
+      e.preventDefault();
+      document.execCommand('insertText', false, '\t');
+    };
+
+    document.addEventListener('keydown', handleTabKey);
+    return () => document.removeEventListener('keydown', handleTabKey);
+  }, []);
+
+  // Handle Undo/Redo
+  useEffect(() => {
+    const handleUndoRedoKey = (e) => {
+      const isModifier = e.ctrlKey || e.metaKey;
+      if (!isModifier) return;
+
+      const key = (e.key || '').toLowerCase();
+      if (key !== 'z' && key !== 'y') return;
+
+      const activeEl = document.activeElement;
+      const isContentEditable = activeEl && activeEl.getAttribute && activeEl.getAttribute('contenteditable') === 'true';
+      if (!isContentEditable) return;
+
+      e.preventDefault();
+      if (key === 'z' && !e.shiftKey) {
+        document.execCommand('undo', false);
+      } else if (key === 'z' && e.shiftKey) {
+        document.execCommand('redo', false);
+      } else if (key === 'y') {
+        document.execCommand('redo', false);
+      }
+    };
+
+    document.addEventListener('keydown', handleUndoRedoKey);
+    return () => document.removeEventListener('keydown', handleUndoRedoKey);
+  }, []);
+
   return (
     <div className="space-y-5">
       <div>
         <label className="block text-sm font-semibold text-[#0B2B4C] mb-2">Activity Title</label>
-        <input
-          type="text"
-          value={meta.title}
-          onChange={(event) => onUpdateMeta({ title: event.target.value })}
-          className="w-full h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-900"
-          style={{ '--focus-border': accentColor }}
-          onFocus={(event) => { event.currentTarget.style.borderColor = accentColor; }}
-          onBlur={(event) => { event.currentTarget.style.borderColor = '#D1D5DB'; }}
-          placeholder="Example: Activity 1 - Identify Computer Parts"
+        <div
+          ref={titleRef}
+          id="input-simulation-title"
+          contentEditable
+          suppressContentEditableWarning
+          onInput={(e) => {
+            if (e.currentTarget) {
+              const newValue = e.currentTarget.textContent || '';
+              onUpdateMeta({ title: newValue });
+            }
+          }}
+          onBlur={(e) => {
+            e.currentTarget.style.borderColor = '#D1D5DB';
+            if (e.currentTarget) {
+              const newValue = e.currentTarget.textContent || '';
+              onUpdateMeta({ title: newValue });
+            }
+          }}
+          onFocus={(e) => {
+            e.currentTarget.style.borderColor = accentColor;
+            setActiveTextarea('input-simulation-title');
+          }}
+          data-placeholder="Example: Activity 1 - Identify Computer Parts"
+          className="w-full min-h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-900 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+          style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
         />
       </div>
 
@@ -1119,20 +1204,37 @@ const SimulationInfoEditor = ({ meta, onUpdateMeta, accentColor, activityType, o
           Instruction Steps
           <span className="ml-2 text-xs text-gray-500 font-normal">One step per line</span>
         </label>
-        <textarea
-          rows={10}
-          value={(meta.steps || []).join('\n')}
-          onChange={(event) => {
-            const steps = event.target.value
-              .split('\n')
-              .map((step) => step.trim())
-              .filter(Boolean);
-            onUpdateMeta({ steps });
+        <div
+          ref={stepsRef}
+          id="textarea-simulation-steps"
+          contentEditable
+          suppressContentEditableWarning
+          onInput={(e) => {
+            if (e.currentTarget) {
+              const steps = (e.currentTarget.textContent || '')
+                .split('\n')
+                .map((step) => step.trim())
+                .filter(Boolean);
+              onUpdateMeta({ steps });
+            }
           }}
-          className="w-full h-48 px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-700 font-mono text-sm leading-5 resize-none"
-          onFocus={(event) => { event.currentTarget.style.borderColor = accentColor; }}
-          onBlur={(event) => { event.currentTarget.style.borderColor = '#D1D5DB'; }}
-          placeholder={'Step 1: ...\nStep 2: ...\nStep 3: ...'}
+          onBlur={(e) => {
+            e.currentTarget.style.borderColor = '#D1D5DB';
+            if (e.currentTarget) {
+              const steps = (e.currentTarget.textContent || '')
+                .split('\n')
+                .map((step) => step.trim())
+                .filter(Boolean);
+              onUpdateMeta({ steps });
+            }
+          }}
+          onFocus={(e) => {
+            e.currentTarget.style.borderColor = accentColor;
+            setActiveTextarea('textarea-simulation-steps');
+          }}
+          data-placeholder="Step 1: ...\nStep 2: ...\nStep 3: ..."
+          className="w-full min-h-[200px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-700 font-mono text-sm leading-5 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+          style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
         />
       </div>
     </div>
@@ -1457,9 +1559,6 @@ const PreviewCard = ({
             >
               {'<'}
             </button>
-            <span className="text-sm font-semibold text-[#0B2B4C] min-w-[68px] text-center">
-              {timeline.length > 0 ? `${previewIndex + 1} / ${timeline.length}` : '0 / 0'}
-            </span>
             <button
               type="button"
               onClick={() => onPreviewIndexChange(Math.min(timeline.length - 1, previewIndex + 1))}

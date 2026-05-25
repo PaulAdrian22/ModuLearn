@@ -797,6 +797,10 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
   const fetchModuleData = async () => {
     try {
       setLoading(true);
+      // Preserve current progress state to restore if needed after refetch
+      const prevTopicCompleted = { ...topicCompleted };
+      const prevCompletedReviews = { ...completedReviews };
+
       const response = await axios.get(withPreferredLanguage(`/modules/${moduleId}?userId=${user.userId}`));
       const diagnosticBeforeIntro = shouldRunDiagnosticBeforeIntro(response.data.roadmapStages);
 
@@ -830,6 +834,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
       console.log('Final Questions:', response.data.finalQuestions);
 
       // Restore saved local lesson session state (topic/page/review progress) when available.
+      // Progress caches are kept separate from content caches to ensure data integrity.
       if (savedLessonProgress) {
         const toObject = (value) => (value && typeof value === 'object' && !Array.isArray(value) ? value : {});
         const hardcodedTopicCount = moduleContent[moduleId]?.topics?.length || 0;
@@ -857,7 +862,14 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
         }, {});
         setReviewCooldowns(restoredCooldowns);
       } else {
-        setShowLessonIntro(!diagnosticBeforeIntro);
+        // Only show lesson intro for new users (no prior topic completion)
+        const isNewUser = Object.keys(prevTopicCompleted).length === 0;
+        setShowLessonIntro(isNewUser ? !diagnosticBeforeIntro : false);
+        // Preserve topicCompleted from before the refetch (e.g., after admin cache invalidation)
+        if (Object.keys(prevTopicCompleted).length > 0) {
+          setTopicCompleted(prevTopicCompleted);
+          setCompletedReviews(prevCompletedReviews);
+        }
       }
       
       // Check if this is review mode (from URL param)

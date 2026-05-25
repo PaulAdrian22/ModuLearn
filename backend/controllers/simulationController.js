@@ -9,9 +9,10 @@ const getRequestCacheKey = (req) => {
 };
 
 const clearSimulationCaches = () => {
+  // Only clear content caches, NOT progress caches
+  // Progress should persist independently of content updates
   clearNamespace('simulations:list');
   clearNamespace('simulations:item');
-  clearNamespace('simulations:progress');
 };
 
 // Allow admin routes to bust the column cache when they add columns
@@ -456,7 +457,7 @@ const completeSimulation = async (req, res) => {
         : '';
       await pool.query(
         `UPDATE simulation_progress
-         SET Score = ?,
+         SET Score = GREATEST(Score, ?),
              Attempts = Attempts + 1,
              TimeSpent = TimeSpent + ?,
              CompletionStatus = 'completed',

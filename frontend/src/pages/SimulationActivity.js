@@ -65,6 +65,7 @@ const SimulationActivity = () => {
     : (isCompleted ? 100 : 0);
 
   // Fetch simulation + merged config.
+  // Preserve progress state if activity already started (defensive measure to prevent accidental resets).
   useEffect(() => {
     let mounted = true;
     const run = async () => {
@@ -83,13 +84,16 @@ const SimulationActivity = () => {
           { useActivityFallback: false }
         );
         setConfig(normalized);
-        setHasActivityStarted(false);
-        setCurrentIndex(0);
-        setRevealedIds(new Set());
-        setMistakes(0);
-        setElapsed(0);
-        setIsCompleted(false);
-        startedRef.current = false;
+        // Only reset progress on initial load; preserve if activity already started
+        if (!hasActivityStarted) {
+          setHasActivityStarted(false);
+          setCurrentIndex(0);
+          setRevealedIds(new Set());
+          setMistakes(0);
+          setElapsed(0);
+          setIsCompleted(false);
+          startedRef.current = false;
+        }
       } catch (error) {
         console.error('Failed to load simulation:', error);
         if (mounted) setLoadError(error.response?.data?.message || error.message || 'Unable to load simulation.');
@@ -99,7 +103,16 @@ const SimulationActivity = () => {
     };
     run();
     return () => { mounted = false; };
-  }, [id, user?.userId]);
+  }, [id, user?.userId, hasActivityStarted]);
+
+  // Ensure currentIndex doesn't exceed timeline bounds if simulation structure changes
+  useEffect(() => {
+    if (currentIndex >= totalSteps && totalSteps > 0 && !isCompleted) {
+      setCurrentIndex(Math.max(0, totalSteps - 1));
+    } else if (totalSteps === 0 && !isCompleted) {
+      setCurrentIndex(0);
+    }
+  }, [totalSteps, currentIndex, isCompleted]);
 
   // Auto-start when navigated from lesson or replay.
   useEffect(() => {
@@ -435,7 +448,6 @@ const SimulationActivity = () => {
           <div className="mt-4">
             <div className="flex justify-between items-center text-xs font-semibold text-[#334155] mb-1">
               <span>Progress</span>
-              <span>{Math.min(currentIndex, totalSteps)} / {totalSteps} moments</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
               <div
@@ -449,7 +461,7 @@ const SimulationActivity = () => {
         <div className="flex flex-col gap-6">
           <div className="bg-white rounded-2xl shadow-sm border border-[#e4ebf2] p-5 md:p-6">
             <h3 className="text-lg font-bold text-[#0B2B4C] mb-3">Instructions</h3>
-            <ol className="list-decimal pl-5 space-y-1.5 text-sm text-[#334155] max-h-[260px] overflow-y-auto custom-scrollbar pr-1">
+            <ol className="list-decimal pl-8 space-y-1.5 text-sm text-[#334155] max-h-[260px] overflow-y-auto custom-scrollbar pr-1">
               {(meta?.steps || []).map((step, index) => (
                 <li key={index} className="leading-snug">{step}</li>
               ))}
