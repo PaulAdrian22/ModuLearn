@@ -28,7 +28,8 @@ const {
   readSimulationOverride,
   writeSimulationOverride,
   clearSimulationOverride,
-  hasSimulationOverride
+  hasSimulationOverride,
+  compactStoredConfig
 } = require('../utils/simulationConfig');
 const { clearSimulationColumnCache } = require('../controllers/simulationController');
 
@@ -1984,10 +1985,17 @@ router.put('/simulations/:id', [
   try {
     const { id } = req.params;
     const { config, simulation: simPatch } = req.body;
+    await ensureSimulationTable();
     const columns = await ensureSimulationAdminColumns();
 
+    const selectFields = [
+      '`SimulationID`',
+      '`SimulationTitle`',
+      simulationSelectField(columns, 'SimulationOrder', '0')
+    ];
+
     const [rows] = await pool.query(
-      'SELECT SimulationID, SimulationTitle, SimulationOrder FROM simulation WHERE SimulationID = ?',
+      `SELECT ${selectFields.join(', ')} FROM simulation WHERE SimulationID = ?`,
       [id]
     );
     if (rows.length === 0) {
@@ -1996,16 +2004,26 @@ router.put('/simulations/:id', [
 
     const activityOrder = resolveActivityOrder(rows[0]);
     const normalized = normalizeStoredConfig(config, activityOrder);
+    const compacted = compactStoredConfig(normalized);
 
     const fields = [];
     const values = [];
     const hasZoneDataColumn = columns.has('ZoneData');
+    let overrideWritten = false;
+
+    try {
+      overrideWritten = writeSimulationOverride(id, compacted);
+    } catch (writeError) {
+      console.warn('Simulation override write failed; continuing with database save when possible:', {
+        code: writeError?.code,
+        errno: writeError?.errno,
+        message: writeError?.message
+      });
+    }
 
     if (hasZoneDataColumn) {
       fields.push('ZoneData = ?');
-      values.push(JSON.stringify(normalized));
-    } else {
-      writeSimulationOverride(id, normalized);
+      values.push(JSON.stringify(compacted));
     }
 
     if (simPatch && typeof simPatch === 'object') {
@@ -2029,22 +2047,50 @@ router.put('/simulations/:id', [
 
     if (fields.length > 0) {
       values.push(id);
-      await pool.query(`UPDATE simulation SET ${fields.join(', ')} WHERE SimulationID = ?`, values);
+      try {
+        await pool.query(`UPDATE simulation SET ${fields.join(', ')} WHERE SimulationID = ?`, values);
+      } catch (updateError) {
+        console.warn('Simulation DB save failed; keeping file override fallback:', {
+          code: updateError?.code,
+          errno: updateError?.errno,
+          message: updateError?.message
+        });
+
+        if (overrideWritten) {
+          return res.json({
+            message: 'Simulation saved using local override storage.',
+            activityOrder,
+            config: compacted,
+            source: 'file-override',
+            fallbackReason: updateError?.code || updateError?.message || 'database-save-failed'
+          });
+        }
+
+        throw updateError;
+      }
     }
     clearSimulationAdminCaches();
 
     if (hasZoneDataColumn) {
-      clearSimulationOverride(id);
+      try {
+        clearSimulationOverride(id);
+      } catch (clearError) {
+        console.warn('Simulation override cleanup failed after database save:', {
+          code: clearError?.code,
+          errno: clearError?.errno,
+          message: clearError?.message
+        });
+      }
     } else {
       return res.json({
         message: 'Simulation saved using local override storage.',
         activityOrder,
-        config: normalized,
+        config: compacted,
         source: 'file-override'
       });
     }
 
-    res.json({ message: 'Simulation saved', activityOrder, config: normalized });
+    res.json({ message: 'Simulation saved', activityOrder, config: compacted });
   } catch (error) {
     console.error('Save simulation config error:', error);
     if (isMissingSimulationTableError(error)) {

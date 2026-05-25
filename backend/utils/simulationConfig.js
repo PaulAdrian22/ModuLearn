@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 
 const SIM_ASSETS_ROOT = path.join(__dirname, '..', 'sim-assets');
-const SIMULATION_OVERRIDE_DIR = path.join(__dirname, '..', '.simulation-overrides');
+const SIMULATION_OVERRIDE_DIR = path.join(__dirname, '..', 'uploads', 'simulation-overrides');
 
 const getSimulationOverridePath = (simulationId) => {
   const safeId = Number(simulationId);
@@ -35,6 +35,104 @@ const writeSimulationOverride = (simulationId, config) => {
   fs.mkdirSync(SIMULATION_OVERRIDE_DIR, { recursive: true });
   fs.writeFileSync(overridePath, JSON.stringify(config, null, 2));
   return true;
+};
+
+const compactZoomArea = (area) => {
+  if (!area || typeof area !== 'object') return null;
+
+  const x = Number(area.x);
+  const y = Number(area.y);
+  const width = Number(area.width);
+  const height = Number(area.height);
+
+  if (![x, y, width, height].every(Number.isFinite)) return null;
+
+  return { x, y, width, height };
+};
+
+const compactLayerForStorage = (layer) => {
+  if (!layer || typeof layer !== 'object') return null;
+
+  const assetPath = safeString(layer.assetPath) || safeString(layer.targetPath);
+  if (!assetPath) return null;
+
+  const targetPath = safeString(layer.targetPath);
+  const compacted = {
+    id: safeString(layer.id) || undefined,
+    assetPath,
+    kind: safeString(layer.kind).toLowerCase() === 'scene' ? 'scene' : 'focus'
+  };
+
+  if (targetPath && targetPath !== assetPath) {
+    compacted.targetPath = targetPath;
+  }
+
+  const group = safeString(layer.group);
+  if (group) compacted.group = group;
+
+  const label = safeString(layer.label);
+  if (label && label !== componentLabelFromFilename(assetPath)) {
+    compacted.label = label;
+  }
+
+  const animation = safeString(layer.animation).toLowerCase();
+  if (animation && animation !== 'none') {
+    compacted.animation = animation;
+  }
+
+  const clickArea = compactZoomArea(layer.clickArea);
+  if (clickArea) compacted.clickArea = clickArea;
+
+  const zoomArea = compactZoomArea(layer.zoomArea);
+  if (zoomArea) compacted.zoomArea = zoomArea;
+
+  const wrongClickArea = compactZoomArea(layer.wrongClickArea);
+  if (wrongClickArea) compacted.wrongClickArea = wrongClickArea;
+
+  return compacted;
+};
+
+const compactMomentForStorage = (moment, momentIdx = 0) => {
+  if (!moment || typeof moment !== 'object') return null;
+
+  const layers = Array.isArray(moment.layers)
+    ? moment.layers.map(compactLayerForStorage).filter(Boolean)
+    : [];
+
+  if (layers.length === 0) return null;
+
+  const order = Number(moment.order);
+  return {
+    id: safeString(moment.id) || `moment-${Number.isFinite(order) && order > 0 ? order : momentIdx + 1}-${momentIdx}`,
+    order: Number.isFinite(order) && order > 0 ? order : momentIdx + 1,
+    perspective: safeString(moment.perspective),
+    layers
+  };
+};
+
+const compactStoredConfig = (config) => {
+  const rawMeta = config?.meta || {};
+  const meta = {};
+
+  const title = safeString(rawMeta.title);
+  if (title) meta.title = title;
+
+  const description = safeString(rawMeta.description);
+  if (description) meta.description = description;
+
+  const skill = safeString(rawMeta.skill);
+  if (skill) meta.skill = skill;
+
+  const steps = Array.isArray(rawMeta.steps)
+    ? rawMeta.steps.map(safeString).filter(Boolean)
+    : [];
+  if (steps.length > 0) meta.steps = steps;
+
+  const timeline = Array.isArray(config?.timeline)
+    ? config.timeline.map(compactMomentForStorage).filter(Boolean).sort((a, b) => a.order - b.order)
+    : [];
+
+  return { meta, timeline };
 };
 
 const clearSimulationOverride = (simulationId) => {
@@ -482,5 +580,6 @@ module.exports = {
   readSimulationOverride,
   writeSimulationOverride,
   clearSimulationOverride,
-  hasSimulationOverride
+  hasSimulationOverride,
+  compactStoredConfig
 };

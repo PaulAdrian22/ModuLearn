@@ -16,10 +16,6 @@ import {
 import { normalizeSimulationSkill } from '../utils/simulationFlow';
 import { themedConfirm } from '../utils/themedConfirm';
 
-const LAYER_KINDS = [
-  { value: 'scene', label: 'Background' },
-  { value: 'focus', label: 'Clickable Part' },
-];
 
 const LAYER_ANIMATIONS = [
   { value: 'none', label: 'No Animation' },
@@ -139,6 +135,101 @@ const getDocxSkillForSimulation = (simulation = {}) => {
 const ADMIN_ACCENT = '#3A70A1';
 
 const uid = () => `id-${Math.random().toString(36).slice(2, 10)}`;
+
+const compactZoomAreaForSave = (area) => {
+  if (!area || typeof area !== 'object') return null;
+
+  const x = Number(area.x);
+  const y = Number(area.y);
+  const width = Number(area.width);
+  const height = Number(area.height);
+
+  if (![x, y, width, height].every(Number.isFinite)) return null;
+
+  return { x, y, width, height };
+};
+
+const compactLayerForSave = (layer) => {
+  if (!layer || typeof layer !== 'object') return null;
+
+  const assetPath = String(layer.assetPath || layer.targetPath || '').trim();
+  if (!assetPath) return null;
+
+  const targetPath = String(layer.targetPath || '').trim();
+  // All layers are now treated as 'focus' (clickable). The difference is whether
+  // they have correct/wrong click areas defined or not.
+  const compacted = {
+    id: String(layer.id || '').trim() || undefined,
+    assetPath,
+    kind: 'focus'
+  };
+
+  if (targetPath && targetPath !== assetPath) {
+    compacted.targetPath = targetPath;
+  }
+
+  const group = String(layer.group || '').trim();
+  if (group) compacted.group = group;
+
+  const label = String(layer.label || '').trim();
+  if (label) compacted.label = label;
+
+  const animation = String(layer.animation || '').trim().toLowerCase();
+  if (animation && animation !== 'none') {
+    compacted.animation = animation;
+  }
+
+  const clickArea = compactZoomAreaForSave(layer.clickArea);
+  if (clickArea) compacted.clickArea = clickArea;
+
+  const zoomArea = compactZoomAreaForSave(layer.zoomArea);
+  if (zoomArea) compacted.zoomArea = zoomArea;
+
+  const wrongClickArea = compactZoomAreaForSave(layer.wrongClickArea);
+  if (wrongClickArea) compacted.wrongClickArea = wrongClickArea;
+
+  return compacted;
+};
+
+const compactConfigForSave = (config) => {
+  const meta = config?.meta || {};
+  const steps = Array.isArray(meta.steps)
+    ? meta.steps.map((step) => String(step || '').trim()).filter(Boolean)
+    : [];
+
+  const timeline = Array.isArray(config?.timeline)
+    ? config.timeline
+        .map((moment, momentIdx) => {
+          if (!moment || typeof moment !== 'object') return null;
+
+          const layers = Array.isArray(moment.layers)
+            ? moment.layers.map(compactLayerForSave).filter(Boolean)
+            : [];
+
+          if (layers.length === 0) return null;
+
+          const order = Number(moment.order);
+          return {
+            id: String(moment.id || '').trim() || `moment-${Number.isFinite(order) && order > 0 ? order : momentIdx + 1}-${momentIdx}`,
+            order: Number.isFinite(order) && order > 0 ? order : momentIdx + 1,
+            perspective: String(moment.perspective || '').trim(),
+            layers
+          };
+        })
+        .filter(Boolean)
+        .sort((a, b) => a.order - b.order)
+    : [];
+
+  return {
+    meta: {
+      title: String(meta.title || '').trim(),
+      description: String(meta.description || '').trim(),
+      skill: String(meta.skill || '').trim(),
+      ...(steps.length > 0 ? { steps } : {})
+    },
+    timeline
+  };
+};
 
 const AdminSimulationEditor = () => {
   const { id } = useParams();
@@ -463,7 +554,8 @@ const AdminSimulationEditor = () => {
       setSaving(true);
       setError('');
 
-      const saveResponse = await axios.put(`/admin/simulations/${id}`, { config });
+      const savePayload = compactConfigForSave(config);
+      const saveResponse = await axios.put(`/admin/simulations/${id}`, { config: savePayload });
       const normalized = normalizeConfig(saveResponse?.data?.config || {}, { activityOrder });
 
       setConfig(normalized);
@@ -1086,7 +1178,7 @@ const MomentDetailEditor = ({
 
       {moment.layers.length === 0 ? (
         <div className="border-2 border-dashed border-gray-200 rounded-lg p-8 text-center text-sm text-gray-500">
-          No components yet. Add a background or a clickable part.
+          No components yet. Add images and define correct/wrong click areas.
         </div>
       ) : (
         <div className="space-y-3 max-h-[58vh] overflow-y-auto pr-1">
@@ -1109,7 +1201,7 @@ const MomentDetailEditor = ({
 };
 
 const LayerEditorCard = ({ layer, index, accentColor, selected, onSelect, onUpdate, onRemove }) => {
-  const kindLabel = layer.kind === 'scene' ? 'Background' : 'Clickable Part';
+  const hasCorrectArea = !!normalizeZoomArea(layer.clickArea);
   const clickArea = useMemo(() => normalizeZoomArea(layer.clickArea), [layer.clickArea]);
   const wrongClickArea = useMemo(() => normalizeZoomArea(layer.wrongClickArea), [layer.wrongClickArea]);
   const zoomArea = useMemo(() => normalizeZoomArea(layer.zoomArea), [layer.zoomArea]);
@@ -1145,7 +1237,9 @@ const LayerEditorCard = ({ layer, index, accentColor, selected, onSelect, onUpda
       <div className="flex items-center justify-between gap-3 mb-3">
         <div>
           <p className="text-xs text-gray-500">Component {index + 1}</p>
-          <p className="text-sm font-semibold text-[#0B2B4C]">{kindLabel}</p>
+          <p className="text-sm font-semibold text-[#0B2B4C]">
+            {hasCorrectArea ? 'Interactive Component' : 'Component (no interaction)'}
+          </p>
         </div>
 
         <div className="flex items-center gap-2">
@@ -1189,30 +1283,9 @@ const LayerEditorCard = ({ layer, index, accentColor, selected, onSelect, onUpda
           </div>
 
           <div className="flex flex-col gap-1.5">
-            {LAYER_KINDS.map((kind) => {
-              const active = layer.kind === kind.value;
-              return (
-                <button
-                  key={kind.value}
-                  type="button"
-                  onClick={() => onUpdate({ kind: kind.value })}
-                  className="w-full px-2 py-1.5 text-[11px] rounded-md font-semibold transition-all border"
-                  style={active
-                    ? {
-                      backgroundColor: `${accentColor}22`,
-                      color: accentColor,
-                      borderColor: `${accentColor}66`,
-                    }
-                    : {
-                      backgroundColor: '#F3F4F6',
-                      color: '#4B5563',
-                      borderColor: '#E5E7EB',
-                    }}
-                >
-                  {kind.label}
-                </button>
-              );
-            })}
+            <p className="text-[10px] text-gray-400 italic">
+              Only components with a correct area are interactable. Add correct/wrong areas below to define interactions.
+            </p>
           </div>
         </div>
 
@@ -1269,31 +1342,10 @@ const LayerEditorCard = ({ layer, index, accentColor, selected, onSelect, onUpda
                     Remove Correct
                   </button>
                 )}
-                {!wrongClickArea ? (
-                  <button
-                    type="button"
-                    onClick={() => onUpdate({ wrongClickArea: { ...DEFAULT_ZOOM_AREA } })}
-                    className="px-2.5 py-1 text-[11px] rounded-md text-white font-semibold flex items-center gap-1"
-                    style={{ backgroundColor: '#DC2626' }}
-                  >
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
-                    Wrong Area
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => onUpdate({ wrongClickArea: null })}
-                    className="px-2.5 py-1 text-[11px] rounded-md font-semibold border flex items-center gap-1"
-                    style={{ backgroundColor: '#FEE2E2', color: '#991B1B', borderColor: '#FCA5A5' }}
-                  >
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
-                    Remove Wrong
-                  </button>
-                )}
               </div>
-              {(clickArea || wrongClickArea) && (
+              {clickArea && (
                 <p className="text-[11px] text-gray-500">
-                  Drag and resize areas directly on the Main Area preview.
+                  Drag and resize the correct area directly on the Main Area preview. Any interaction outside this area will deduct points.
                 </p>
               )}
             </div>
@@ -1330,6 +1382,60 @@ const PreviewCard = ({
   const selectedClickArea = useMemo(() => normalizeZoomArea(selectedLayer?.clickArea), [selectedLayer?.clickArea]);
   const selectedWrongClickArea = useMemo(() => normalizeZoomArea(selectedLayer?.wrongClickArea), [selectedLayer?.wrongClickArea]);
   const selectedZoomArea = useMemo(() => normalizeZoomArea(selectedLayer?.zoomArea), [selectedLayer?.zoomArea]);
+
+  // Build canvas overlay for area editors when in embedded mode
+  const canvasOverlay = useMemo(() => {
+    if (!embedded || !editorImageBox) return null;
+
+    const overlays = [];
+
+    if (selectedLayer && selectedZoomArea) {
+      overlays.push(
+        <div
+          key="zoom-overlay"
+          className="absolute z-10"
+          style={{
+            left: `${editorImageBox.x}%`, top: `${editorImageBox.y}%`,
+            width: `${editorImageBox.width}%`, height: `${editorImageBox.height}%`,
+          }}
+        >
+          <InteractiveZoomAreaEditor
+            zoomArea={selectedZoomArea}
+            onChange={onUpdateZoomArea}
+            showInputs={false}
+            showCanvasChrome={false}
+            containerClassName="h-full"
+            centerLabel="Drag or resize"
+          />
+        </div>
+      );
+    }
+
+    if (selectedLayer && selectedClickArea) {
+      overlays.push(
+        <div
+          key="click-overlay"
+          className="absolute z-20"
+          style={{
+            left: `${editorImageBox.x}%`, top: `${editorImageBox.y}%`,
+            width: `${editorImageBox.width}%`, height: `${editorImageBox.height}%`,
+          }}
+        >
+          <InteractiveZoomAreaEditor
+            zoomArea={selectedClickArea}
+            onChange={onUpdateClickArea}
+            showInputs={false}
+            showCanvasChrome={false}
+            containerClassName="h-full"
+            centerLabel="✓ Correct area"
+            colorTheme="click"
+          />
+        </div>
+      );
+    }
+
+    return overlays.length > 0 ? overlays : null;
+  }, [embedded, editorImageBox, selectedLayer, selectedZoomArea, selectedClickArea, onUpdateZoomArea, onUpdateClickArea]);
 
   const content = (
     <>
@@ -1381,6 +1487,7 @@ const PreviewCard = ({
               assembling={activityType === 'Assembling'}
               assemblingAnchor="background"
               onImageBoxChange={setEditorImageBox}
+              canvasOverlay={canvasOverlay}
             />
 
             {embedded && (
@@ -1394,65 +1501,6 @@ const PreviewCard = ({
                 >
                   Crop / Edit
                 </button>
-              </div>
-            )}
-
-            {embedded && selectedLayer && selectedZoomArea && editorImageBox && (
-              <div
-                className="absolute z-10"
-                style={{
-                  left: `${editorImageBox.x}%`, top: `${editorImageBox.y}%`,
-                  width: `${editorImageBox.width}%`, height: `${editorImageBox.height}%`,
-                }}
-              >
-                <InteractiveZoomAreaEditor
-                  zoomArea={selectedZoomArea}
-                  onChange={onUpdateZoomArea}
-                  showInputs={false}
-                  showCanvasChrome={false}
-                  containerClassName="h-full"
-                  centerLabel="Drag or resize"
-                />
-              </div>
-            )}
-
-            {embedded && selectedLayer && selectedClickArea && editorImageBox && (
-              <div
-                className="absolute z-20"
-                style={{
-                  left: `${editorImageBox.x}%`, top: `${editorImageBox.y}%`,
-                  width: `${editorImageBox.width}%`, height: `${editorImageBox.height}%`,
-                }}
-              >
-                <InteractiveZoomAreaEditor
-                  zoomArea={selectedClickArea}
-                  onChange={onUpdateClickArea}
-                  showInputs={false}
-                  showCanvasChrome={false}
-                  containerClassName="h-full"
-                  centerLabel="✓ Correct area"
-                  colorTheme="click"
-                />
-              </div>
-            )}
-
-            {embedded && selectedLayer && selectedWrongClickArea && editorImageBox && (
-              <div
-                className="absolute z-20"
-                style={{
-                  left: `${editorImageBox.x}%`, top: `${editorImageBox.y}%`,
-                  width: `${editorImageBox.width}%`, height: `${editorImageBox.height}%`,
-                }}
-              >
-                <InteractiveZoomAreaEditor
-                  zoomArea={selectedWrongClickArea}
-                  onChange={onUpdateWrongClickArea}
-                  showInputs={false}
-                  showCanvasChrome={false}
-                  containerClassName="h-full"
-                  centerLabel="✗ Wrong area"
-                  colorTheme="wrong-click"
-                />
               </div>
             )}
           </div>

@@ -1179,6 +1179,13 @@ const AddLesson = () => {
             range.collapse(true);
             sel.removeAllRanges();
             sel.addRange(range);
+          } else if (lineText.startsWith('\u00A0\u00A0\u00A0\u00A0')) {
+            node.textContent = text.substring(0, lineStart) + lineText.substring(4);
+            const newOffset = Math.max(lineStart, offset - 4);
+            range.setStart(node, newOffset);
+            range.collapse(true);
+            sel.removeAllRanges();
+            sel.addRange(range);
           } else if (lineText.startsWith('    ')) {
             node.textContent = text.substring(0, lineStart) + lineText.substring(4);
             const newOffset = Math.max(lineStart, offset - 4);
@@ -1189,7 +1196,7 @@ const AddLesson = () => {
           }
         }
       } else {
-        document.execCommand('insertText', false, '\t');
+        document.execCommand('insertHTML', false, '&nbsp;&nbsp;&nbsp;&nbsp;');
       }
 
       el.dispatchEvent(new Event('input', { bubbles: true }));

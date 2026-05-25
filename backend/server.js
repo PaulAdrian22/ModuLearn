@@ -94,9 +94,9 @@ if (requestLogMode !== 'off') {
 
   app.use(morgan(morganFormat, morganOptions));
 }
-// Large lesson payloads (rich sections + assessments) can exceed default 100kb.
-app.use(express.json({ limit: '10mb' })); // Parse JSON bodies
-app.use(express.urlencoded({ extended: true, limit: '10mb' })); // Parse URL-encoded bodies
+// Large lesson/simulation payloads can include embedded rich text and image data.
+app.use(express.json({ limit: '50mb' })); // Parse JSON bodies
+app.use(express.urlencoded({ extended: true, limit: '50mb' })); // Parse URL-encoded bodies
 
 // Serve static files for uploads
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), {

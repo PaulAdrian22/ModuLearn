@@ -156,9 +156,13 @@ const SimulationActivity = () => {
     if (layerId) nextRevealed.add(layerId);
     setRevealedIds(nextRevealed);
 
-    const focusLayers = currentMoment.layers.filter((layer) => layer.kind === 'focus');
-    const everyFocusRevealed = focusLayers.length === 0
-      || focusLayers.every((layer) => nextRevealed.has(layer.id));
+    // Only check focus layers that have a clickArea (interactable layers).
+    // Layers without a clickArea are not interactable and should not block advancement.
+    const interactableFocusLayers = currentMoment.layers.filter(
+      (layer) => layer.kind === 'focus' && layer.clickArea
+    );
+    const everyFocusRevealed = interactableFocusLayers.length === 0
+      || interactableFocusLayers.every((layer) => nextRevealed.has(layer.id));
 
     if (everyFocusRevealed) {
       const nextIndex = currentIndex + 1;

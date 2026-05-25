@@ -254,7 +254,9 @@ export const timelineFromManifest = (manifest = {}) => {
           targetPath: targetPath || assetPath,
           group,
           label: componentLabelFromFilename(assetPath),
-          kind: group.toLowerCase() === 'case and panels' ? 'scene' : 'focus',
+          // All layers are now treated as 'focus' (clickable). The difference is whether
+          // they have correct/wrong click areas defined or not.
+          kind: 'focus',
           animation: 'none',
           clickArea: null,
           zoomArea: null,

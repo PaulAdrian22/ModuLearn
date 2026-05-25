@@ -273,7 +273,7 @@ const ModuleView = () => {
   const normalizeRichTextHtml = (value) => {
     if (!value) return '';
 
-    let html = String(value).replace(/^\s+/, '');
+    let html = String(value).replace(/^[\r\n]+/, '');
 
     // Remove leading visual blank lines produced by editor paste/newline behavior.
     let prev = '';
@@ -284,10 +284,10 @@ const ModuleView = () => {
         .replace(/^<(p|div)>\s*(?:<br\s*\/?>\s*)*<\/\1>\s*/i, '');
     }
 
-    // Remove accidental leading newlines/tabs inside common block tags from imported content.
-    // Only strip tab/newline whitespace — preserve spaces and &nbsp; (admin indentation).
+    // Remove accidental leading newlines inside common block tags from imported content.
+    // Preserve spaces, tabs, and &nbsp; so admin indentation survives round-tripping.
     return html.replace(
-      /<(p|li|h[1-6]|td|th|blockquote)([^>]*)>[\t\n\r\f\v]+/gi,
+      /<(p|li|h[1-6]|td|th|blockquote)([^>]*)>[\n\r\f\v]+/gi,
       '<$1$2>'
     );
   };
@@ -1238,7 +1238,9 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
       }
       if (sType === 'review - drag and drop' || sType === 'review-drag-drop' || sType === 'simulation') {
         const dndId = `review-dnd-${section.originalIndex}`;
-        if (!completedReviews[dndId]) return false;
+        const simulationId = section.simulationId || section.simulation?.SimulationID || section.simulation?.id;
+        const simAttempts = simulationId ? Number(simProgressMap?.[simulationId]?.Attempts || 0) : 0;
+        if (!completedReviews[dndId] && simAttempts <= 0) return false;
       }
     }
     return true;

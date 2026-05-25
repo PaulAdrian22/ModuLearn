@@ -67,6 +67,9 @@ const SimulationRenderer = ({
   const [naturalPixelSizes, setNaturalPixelSizes] = useState({}); // { layerId: { widthPx, heightPx } }
   const [imageBoxLocal, setImageBoxLocal] = useState(null);
   const [backgroundScale, setBackgroundScale] = useState({ scaleX: 1, scaleY: 1 });
+  const [showCorrectAreas, setShowCorrectAreas] = useState(false);
+  const correctAreaTimerRef = useRef(null);
+  const [mistakeCount, setMistakeCount] = useState(0);
 
   const timeline = useMemo(() => config?.timeline || [], [config]);
   const meta = useMemo(() => config?.meta || {}, [config]);
@@ -136,6 +139,7 @@ const SimulationRenderer = ({
     setHoveredLayerId('');
     setDraggingLayerId(null);
     setDragOverZoneId(null);
+    setMistakeCount(0); // Reset mistake counter on step change
   }, [currentIndex]);
 
   const updateBackgroundScale = useCallback(() => {
@@ -187,6 +191,17 @@ const SimulationRenderer = ({
 
   const handleWrongClick = () => {
     if (readOnly || isAdvancing) return;
+    const newCount = mistakeCount + 1;
+    setMistakeCount(newCount);
+    // Show correct areas briefly with pulse effect after 3 mistakes
+    if (newCount >= 3) {
+      setShowCorrectAreas(true);
+      if (correctAreaTimerRef.current) clearTimeout(correctAreaTimerRef.current);
+      correctAreaTimerRef.current = setTimeout(() => {
+        setShowCorrectAreas(false);
+        setMistakeCount(0);
+      }, 2000);
+    }
     if (onWrongClick) onWrongClick();
   };
 
@@ -239,7 +254,13 @@ const SimulationRenderer = ({
   const showFocusLayer = (layer) => {
     if (readOnly) return true;
     if (assembling) {
-      // Show during the snap-in animation even before revealedIds is updated.
+      // Layers without a target zone (no clickArea/zoomArea) are always visible
+      // in the main area - they're pre-placed and not draggable.
+      const clickArea = normalizeZoomArea(layer.clickArea);
+      const zoomArea = normalizeZoomArea(layer.zoomArea);
+      const hasTargetZone = !!(clickArea || zoomArea);
+      if (!hasTargetZone) return true;
+      // For layers with a target zone: show when revealed or during snap-in animation.
       return revealedIds.has(layer.id) || activeAnimationLayerId === layer.id;
     }
     if (disassembly) return !revealedIds.has(layer.id);
@@ -252,14 +273,21 @@ const SimulationRenderer = ({
   const sceneHotspotsEnabled = !readOnly && !isAdvancing && unrevealedFocusCount === 0;
   const currentSceneLayers = currentMoment?.layers.filter((layer) => layer.kind === 'scene') || [];
 
-  // Parts tray: include all focus layers (so the draggable icon remains visible
-  // even after placement). Disable dragging for already-placed parts.
+  // Parts tray: only include focus layers that have a target zone (clickArea/zoomArea).
+  // Layers without a target zone are pre-placed in the main area and not draggable.
+  // Also exclude layers that are currently animating (being placed).
   const partsTrayLayers = assembling && !readOnly
-    ? focusLayers.filter((l) => activeAnimationLayerId !== l.id)
+    ? focusLayers.filter((l) => {
+        // Exclude layers currently animating (being placed)
+        if (activeAnimationLayerId === l.id) return false;
+        // Only include layers that have a target zone (draggable parts)
+        const clickArea = normalizeZoomArea(l.clickArea);
+        const zoomArea = normalizeZoomArea(l.zoomArea);
+        return !!(clickArea || zoomArea);
+      })
     : [];
 
-  const hotspotBaseClass = 'absolute border-0 p-0 cursor-pointer focus:outline-none transition-all duration-150';
-  const hotspotHoverClass = 'bg-emerald-400/10 ring-2 ring-emerald-400/80 shadow-[0_0_0_1px_rgba(16,185,129,0.22)]';
+  const hotspotBaseClass = 'absolute border-0 p-0 cursor-pointer focus:outline-none';
 
   return (
     <div className="w-full">
@@ -267,16 +295,29 @@ const SimulationRenderer = ({
       <div
         ref={canvasRef}
         className="relative w-full max-w-full mx-auto aspect-[16/10] max-h-[55vh] sm:max-h-[65vh] lg:max-h-none rounded-xl bg-[#f3f5f8] border-2 border-transparent overflow-hidden select-none transition-transform duration-500 ease-out scale-100"
+        onClick={!assembling && !readOnly ? (e) => {
+          // Check if click was on a hotspot button (handled by its own onClick)
+          // If click is on the canvas itself (not a button), it's a wrong click
+          if (e.target === canvasRef.current) {
+            handleWrongClick();
+          }
+        } : undefined}
         onDragOver={assembling && !readOnly ? (e) => e.preventDefault() : undefined}
         onDrop={assembling && !readOnly ? (e) => {
           e.preventDefault();
           if (!draggingLayerId) return;
-          // Canvas-level drop: only place parts that have no specific target zone
+          // Canvas-level drop outside any target zone: trigger wrong click
           // (zoned layers are handled by their zone div's onDrop + stopPropagation).
           const layer = focusLayers.find((l) => l.id === draggingLayerId);
           if (layer) {
             const hasZone = !!(normalizeZoomArea(layer.clickArea) || normalizeZoomArea(layer.zoomArea));
-            if (!hasZone) handleFocusClick(layer);
+            if (!hasZone) {
+              // Layer has no target zone - dropping anywhere is valid
+              handleFocusClick(layer);
+            } else {
+              // Layer has a target zone but was dropped outside it - wrong drop
+              handleWrongClick();
+            }
           }
           setDraggingLayerId(null);
           setDragOverZoneId(null);
@@ -300,7 +341,9 @@ const SimulationRenderer = ({
         {currentSceneLayers.map((layer) => {
           const clickArea = normalizeZoomArea(layer.clickArea);
           const zoomArea = normalizeZoomArea(layer.zoomArea);
-          const hotspotArea = clickArea || zoomArea;
+          // Only layers with a clickArea are interactable. Layers without clickArea
+          // are just visual elements (background/decoration).
+          const hotspotArea = clickArea;
           if (!hotspotArea) return null;
           const sceneHotspot = mapAreaToCanvas(hotspotArea) || hotspotArea;
           return (
@@ -312,7 +355,7 @@ const SimulationRenderer = ({
                   onMouseEnter={() => setHoveredLayerId(layer.id)}
                   onMouseLeave={() => setHoveredLayerId((p) => (p === layer.id ? '' : p))}
                   aria-label={`Interact with ${layer.label}`}
-                  className={`${hotspotBaseClass} ${hoveredLayerId === layer.id ? hotspotHoverClass : 'bg-transparent'}`}
+                  className={`${hotspotBaseClass} bg-transparent`}
                   style={{
                     left: `${sceneHotspot.x}%`, top: `${sceneHotspot.y}%`,
                     width: `${sceneHotspot.width}%`, height: `${sceneHotspot.height}%`,
@@ -404,47 +447,14 @@ const SimulationRenderer = ({
           if (!visible && !isActive) return null;
           const clickArea = normalizeZoomArea(layer.clickArea);
           const zoomArea = normalizeZoomArea(layer.zoomArea);
-          const hotspotArea = clickArea || zoomArea;
+          // Only layers with a clickArea are interactable. Layers without clickArea
+          // are just visual elements (background/decoration).
+          const hotspotArea = clickArea;
 
           return (
             <React.Fragment key={`focus-${layer.id}`}>
-              {/* Placed/revealed image */}
-              {/* Assembling: part snaps into the zone area. Other modes: full-canvas overlay. */}
-              {visible && assembling && (() => {
-                const anchor = imageBoxLocal || { x: 0, y: 0, width: 0, height: 0 };
-                const canvasArea = hotspotArea ? (mapAreaToCanvas(hotspotArea) || hotspotArea) : null;
-                const useBackground = anchorToBackground || !canvasArea;
-                const useCenter = anchorMode === 'zone-center';
-                const left = useBackground
-                  ? anchor.x
-                  : (useCenter ? (canvasArea.x + canvasArea.width / 2) : canvasArea.x);
-                const top = useBackground
-                  ? anchor.y
-                  : (useCenter ? (canvasArea.y + canvasArea.height / 2) : canvasArea.y);
-                const transform = !useBackground && useCenter ? 'translate(-50%, -50%)' : undefined;
-                return (
-                  <img
-                    ref={(el) => { if (el) registerNaturalSize(layer.id, el); }}
-                    src={simAssetUrl(layer.assetPath || layer.targetPath)}
-                    alt={layer.label}
-                    draggable={false}
-                    className="absolute object-contain pointer-events-none"
-                    style={{
-                      left: `${left}%`,
-                      top: `${top}%`,
-                      transform,
-                      width: naturalPixelSizes[layer.id]?.naturalWidth
-                        ? `${naturalPixelSizes[layer.id].naturalWidth * backgroundScale.scaleX}px`
-                        : 'auto',
-                      height: naturalPixelSizes[layer.id]?.naturalHeight
-                        ? `${naturalPixelSizes[layer.id].naturalHeight * backgroundScale.scaleY}px`
-                        : 'auto',
-                      ...(activeAnimationLayerId === layer.id ? layerAnimationStyle(layer) : undefined),
-                    }}
-                  />
-                );
-              })()}
-              {visible && (!assembling || !hotspotArea) && (
+              {/* Full-canvas overlay image for all visible components (same size/position in editor and learner view) */}
+              {visible && (
                 <img
                   src={simAssetUrl(layer.targetPath || layer.assetPath)}
                   alt={layer.label}
@@ -456,38 +466,20 @@ const SimulationRenderer = ({
                 />
               )}
 
-              {/* ── Assembling mode: drop zone on canvas ── */}
-              {/* The invisible hit-target is always present so drops register even when
-                  the visual indicator is hidden. The visible border only shows during
-                  an active drag so the "empty slot" doesn't look like a placed part. */}
+              {/* ── Assembling mode: invisible drop zone (hit-target only, no visual) ── */}
               {isActive && assembling && hotspotArea && (() => {
-                const ZONE_FIXED_PCT = 12; // fixed hit-area size in percent of canvas
                 const canvasArea = mapAreaToCanvas(hotspotArea) || hotspotArea;
-                const centerX = canvasArea.x + canvasArea.width / 2;
-                const centerY = canvasArea.y + canvasArea.height / 2;
                 return (
                   <div
-                    className={`absolute rounded-lg border-2 border-dashed transition-all duration-200 flex items-center justify-center ${
-                      dragOverZoneId === layer.id
-                        ? 'border-emerald-400 bg-emerald-400/20 scale-[1.03]'
-                        : draggingLayerId
-                          ? 'border-emerald-300 bg-emerald-100/20 animate-pulse'
-                          : 'border-transparent bg-transparent'
-                    }`}
+                    className="absolute cursor-pointer"
                     style={{
-                      left: `${centerX}%`, top: `${centerY}%`, transform: 'translate(-50%, -50%)',
-                      width: `${ZONE_FIXED_PCT}%`, height: `${ZONE_FIXED_PCT}%`,
+                      left: `${canvasArea.x}%`, top: `${canvasArea.y}%`,
+                      width: `${canvasArea.width}%`, height: `${canvasArea.height}%`,
                     }}
                     onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); setDragOverZoneId(layer.id); }}
                     onDragLeave={() => setDragOverZoneId((p) => (p === layer.id ? null : p))}
                     onDrop={(e) => { e.stopPropagation(); e.preventDefault(); handleDrop(layer); }}
-                  >
-                    {draggingLayerId && (
-                      <span className="text-emerald-600 text-[10px] font-bold pointer-events-none select-none drop-shadow">
-                        Drop here
-                      </span>
-                    )}
-                  </div>
+                  />
                 );
               })()}
 
@@ -495,17 +487,8 @@ const SimulationRenderer = ({
               {/* (handled by canvas onDrop above; nothing to render here) */}
 
               {/* ── Disassembly / Exploration: click buttons ── */}
-              {isActive && !assembling && !hotspotArea && (
-                <button
-                  type="button"
-                  onClick={() => handleFocusClick(layer)}
-                  onMouseEnter={() => setHoveredLayerId(layer.id)}
-                  onMouseLeave={() => setHoveredLayerId((p) => (p === layer.id ? '' : p))}
-                  aria-label={disassembly ? `Remove ${layer.label}` : `Reveal ${layer.label}`}
-                  className={`${hotspotBaseClass} inset-0 w-full h-full ${hoveredLayerId === layer.id ? hotspotHoverClass : 'bg-transparent'}`}
-                />
-              )}
-
+              {/* Only render click buttons for layers with a clickArea (hotspotArea).
+                  Layers without clickArea are not interactable. */}
               {isActive && !assembling && hotspotArea && (() => {
                 const activeArea = mapAreaToCanvas(hotspotArea) || hotspotArea;
                 return (
@@ -515,7 +498,7 @@ const SimulationRenderer = ({
                     onMouseEnter={() => setHoveredLayerId(layer.id)}
                     onMouseLeave={() => setHoveredLayerId((p) => (p === layer.id ? '' : p))}
                     aria-label={`Interact with ${layer.label}`}
-                    className={`${hotspotBaseClass} ${hoveredLayerId === layer.id ? hotspotHoverClass : 'bg-transparent'}`}
+                    className={`${hotspotBaseClass} bg-transparent`}
                     style={{
                       left: `${activeArea.x}%`, top: `${activeArea.y}%`,
                       width: `${activeArea.width}%`, height: `${activeArea.height}%`,
@@ -524,30 +507,9 @@ const SimulationRenderer = ({
                 );
               })()}
 
-              {/* Wrong-click zone (disassembly/exploration only) */}
-              {isActive && !assembling && normalizeZoomArea(layer.wrongClickArea) && (() => {
-                const wrongAreaRaw = normalizeZoomArea(layer.wrongClickArea);
-                const wrongArea = mapAreaToCanvas(wrongAreaRaw) || wrongAreaRaw;
-                const wrongHoverId = `wrong-${layer.id}`;
-                return (
-                  <button
-                    key={`wrong-${layer.id}`}
-                    type="button"
-                    onClick={handleWrongClick}
-                    onMouseEnter={() => setHoveredLayerId(wrongHoverId)}
-                    onMouseLeave={() => setHoveredLayerId((p) => (p === wrongHoverId ? '' : p))}
-                    aria-label="Wrong area"
-                    className={`${hotspotBaseClass} ${hoveredLayerId === wrongHoverId ? 'bg-red-400/10 ring-2 ring-red-400/80 shadow-[0_0_0_1px_rgba(239,68,68,0.22)]' : 'bg-transparent'}`}
-                    style={{
-                      left: `${wrongArea.x}%`, top: `${wrongArea.y}%`,
-                      width: `${wrongArea.width}%`, height: `${wrongArea.height}%`,
-                    }}
-                  />
-                );
-              })()}
-
-              {/* Editor zone overlays */}
-              {readOnly && hotspotArea && (() => {
+              {/* Editor zone overlays — only show for zoomArea, not clickArea
+              which have their own dedicated editors with proper color themes */}
+              {readOnly && hotspotArea && !clickArea && !normalizeZoomArea(layer.wrongClickArea) && (() => {
                 const editorArea = mapAreaToCanvas(hotspotArea) || hotspotArea;
                 return (
                   <div
@@ -559,19 +521,24 @@ const SimulationRenderer = ({
                   />
                 );
               })()}
-              {readOnly && normalizeZoomArea(layer.wrongClickArea) && (() => {
-                const wrongArea = normalizeZoomArea(layer.wrongClickArea);
-                return (
-                  <div
-                    className="absolute rounded-md border-2 border-red-400/80 bg-red-100/15 pointer-events-none"
-                    style={{
-                      left: `${wrongArea.x}%`, top: `${wrongArea.y}%`,
-                      width: `${wrongArea.width}%`, height: `${wrongArea.height}%`,
-                    }}
-                  />
-                );
-              })()}
             </React.Fragment>
+          );
+        })}
+
+        {/* Correct areas hint overlay - shown briefly after wrong click */}
+        {showCorrectAreas && !readOnly && focusLayers.map((layer) => {
+          const clickArea = normalizeZoomArea(layer.clickArea);
+          if (!clickArea) return null;
+          const canvasArea = mapAreaToCanvas(clickArea) || clickArea;
+          return (
+            <div
+              key={`hint-${layer.id}`}
+              className="absolute rounded-md border-2 border-emerald-400/40 bg-emerald-400/10 animate-pulse pointer-events-none"
+              style={{
+                left: `${canvasArea.x}%`, top: `${canvasArea.y}%`,
+                width: `${canvasArea.width}%`, height: `${canvasArea.height}%`,
+              }}
+            />
           );
         })}
 
