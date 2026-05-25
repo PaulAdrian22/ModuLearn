@@ -381,13 +381,13 @@ const ensureSimulationTable = async () => {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS simulation (
         SimulationID INT AUTO_INCREMENT PRIMARY KEY,
-        ModuleID INT DEFAULT 0,
+        ModuleID INT NULL,
         SimulationTitle VARCHAR(200) NOT NULL,
-        Description TEXT DEFAULT '',
+        Description TEXT,
         ActivityType VARCHAR(100),
         MaxScore INT DEFAULT 10,
         TimeLimit INT DEFAULT 0,
-        Instructions TEXT DEFAULT '',
+        Instructions TEXT,
         SimulationOrder INT NOT NULL DEFAULT 1,
         Is_Locked BOOLEAN DEFAULT FALSE,
         ZoneData LONGTEXT NULL,
@@ -1744,6 +1744,9 @@ router.post('/simulations', [
     const { SimulationTitle, ModuleID, ActivityType, Description } = req.body;
     const mode = String(req.body.mode || 'supplementary').toLowerCase();
 
+    const rawModuleId = Number(ModuleID);
+    const resolvedModuleId = Number.isFinite(rawModuleId) && rawModuleId > 0 ? rawModuleId : null;
+
     let nextOrder;
     if (mode === 'core') {
       // Find the lowest SimulationOrder in 1..CORE_SIMULATION_LIMIT that
@@ -1791,7 +1794,7 @@ router.post('/simulations', [
     push('Instructions', '');
     push('SimulationOrder', nextOrder);
     push('Is_Locked', false);
-    if (ModuleID) push('ModuleID', Number(ModuleID));
+    if (columns.has('ModuleID')) push('ModuleID', resolvedModuleId);
 
     // SimulationTitle is the one column we can't fall back on — and the
     // schema enforces it NOT NULL — so guard explicitly.
@@ -1811,7 +1814,7 @@ router.post('/simulations', [
     res.status(201).json({
       SimulationID: result.insertId,
       SimulationTitle,
-      ModuleID: ModuleID ? Number(ModuleID) : null,
+      ModuleID: resolvedModuleId,
       ActivityType: ActivityType || null,
       Description: Description || null,
       SimulationOrder: nextOrder

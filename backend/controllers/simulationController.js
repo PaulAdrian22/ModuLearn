@@ -256,9 +256,12 @@ const createSimulation = async (req, res) => {
       insertPayload.TimeLimit = timeLimit || 0;
     }
 
-    // Add ModuleID with default of 0
+    // Add ModuleID only when valid to avoid FK errors
     if (columns.has('ModuleID')) {
-      insertPayload.ModuleID = moduleId !== undefined && moduleId !== null ? moduleId : 0;
+      const normalizedModuleId = Number(moduleId);
+      insertPayload.ModuleID = Number.isFinite(normalizedModuleId) && normalizedModuleId > 0
+        ? normalizedModuleId
+        : null;
     }
 
     // Add ZoneData if available

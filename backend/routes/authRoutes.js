@@ -7,6 +7,7 @@ const authController = require('../controllers/authController');
 const { authenticate } = require('../middleware/auth');
 const { validateRegistration, validateLogin } = require('../middleware/validators');
 const { query } = require('../config/database');
+const { getUserIdentityColumn } = require('../utils/userIdentity');
 
 // POST /api/auth/register - Register new user
 router.post('/register', validateRegistration, authController.register);
@@ -43,8 +44,9 @@ router.post('/forgot-password', async (req, res) => {
       // Continue anyway - table might already exist
     }
 
-    // Verify the username exists
-    const users = await query('SELECT UserID, Name FROM user WHERE Username = ? LIMIT 1', [username]);
+    // Verify the username exists (supports Username or Email columns).
+    const identityColumn = await getUserIdentityColumn();
+    const users = await query(`SELECT UserID, Name FROM user WHERE ${identityColumn} = ? LIMIT 1`, [username]);
     if (!users.length) {
       // Return success anyway to avoid username enumeration
       return res.json({ message: 'If that username exists, the admin has been notified.' });
