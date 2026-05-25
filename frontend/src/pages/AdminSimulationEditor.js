@@ -1039,6 +1039,7 @@ const StageButton = ({ active, number, title, subtitle, accentColor, onClick }) 
 const SimulationInfoEditor = ({ meta, onUpdateMeta, accentColor, activityType, onUpdateActivityType, onUpdateSkill, lessonNumber, onUpdateLessonNumber, lessons }) => {
   const titleRef = React.useRef(null);
   const stepsRef = React.useRef(null);
+  const descriptionRef = React.useRef(null);
   const [activeTextarea, setActiveTextarea] = useState(null);
 
   // Extract text content from contentEditable, handling div wrappers created by Enter key
@@ -1053,6 +1054,62 @@ const SimulationInfoEditor = ({ meta, onUpdateMeta, accentColor, activityType, o
       .trim();
   };
 
+  // Apply text formatting
+  const applyTextFormat = (format) => {
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return;
+
+    const range = selection.getRangeAt(0);
+    const activeEl = document.activeElement;
+    if (!activeEl || activeEl.contentEditable !== 'true') return;
+
+    switch (format) {
+      case 'bold':
+        document.execCommand('bold', false, null);
+        break;
+      case 'italic':
+        document.execCommand('italic', false, null);
+        break;
+      case 'underline':
+        document.execCommand('underline', false, null);
+        break;
+      case 'bullet':
+        document.execCommand('insertUnorderedList', false, null);
+        break;
+      case 'numbering':
+        document.execCommand('insertOrderedList', false, null);
+        break;
+      case 'align-left':
+        document.execCommand('justifyLeft', false, null);
+        break;
+      case 'align-center':
+        document.execCommand('justifyCenter', false, null);
+        break;
+      case 'align-right':
+        document.execCommand('justifyRight', false, null);
+        break;
+      case 'align-justify':
+        document.execCommand('justifyFull', false, null);
+        break;
+      case 'indent':
+        document.execCommand('indent', false, null);
+        break;
+      case 'outdent':
+        document.execCommand('outdent', false, null);
+        break;
+      case 'undo':
+        document.execCommand('undo', false, null);
+        break;
+      case 'redo':
+        document.execCommand('redo', false, null);
+        break;
+      default:
+        break;
+    }
+
+    activeEl.dispatchEvent(new Event('input', { bubbles: true }));
+  };
+
   // Keep contentEditable elements in sync with state
   useEffect(() => {
     const titleEl = titleRef.current;
@@ -1060,6 +1117,14 @@ const SimulationInfoEditor = ({ meta, onUpdateMeta, accentColor, activityType, o
       const targetText = meta.title || '';
       if (titleEl.innerHTML !== targetText) {
         titleEl.innerHTML = targetText;
+      }
+    }
+
+    const descriptionEl = descriptionRef.current;
+    if (descriptionEl && document.activeElement !== descriptionEl) {
+      const targetText = meta.description || '';
+      if (descriptionEl.innerHTML !== targetText) {
+        descriptionEl.innerHTML = targetText;
       }
     }
 
@@ -1071,7 +1136,7 @@ const SimulationInfoEditor = ({ meta, onUpdateMeta, accentColor, activityType, o
         stepsEl.innerHTML = targetText;
       }
     }
-  }, [meta.title, meta.steps]);
+  }, [meta.title, meta.description, meta.steps]);
 
   // Handle Tab key for indentation
   useEffect(() => {
@@ -1079,6 +1144,20 @@ const SimulationInfoEditor = ({ meta, onUpdateMeta, accentColor, activityType, o
       if (e.key !== 'Tab') return;
       const el = e.target;
       if (!el || el.contentEditable !== 'true') return;
+
+      const selection = window.getSelection();
+      const anchorNode = selection?.anchorNode || null;
+      const anchorElement = anchorNode
+        ? (anchorNode.nodeType === Node.TEXT_NODE ? anchorNode.parentElement : anchorNode)
+        : null;
+      const activeListItem = anchorElement?.closest?.('li');
+
+      if (activeListItem) {
+        e.preventDefault();
+        document.execCommand(e.shiftKey ? 'outdent' : 'indent', false, null);
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        return;
+      }
 
       e.preventDefault();
       document.execCommand('insertText', false, '\t');
@@ -1115,146 +1194,370 @@ const SimulationInfoEditor = ({ meta, onUpdateMeta, accentColor, activityType, o
     return () => document.removeEventListener('keydown', handleUndoRedoKey);
   }, []);
 
+  // Close toolbar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!activeTextarea) return;
+
+      const isTextField = e.target.id && (
+        e.target.id.startsWith('input-') ||
+        e.target.id.startsWith('textarea-')
+      );
+
+      const isInsideContentEditable = e.target.closest('[contenteditable="true"]');
+      const isToolbar = e.target.closest('.formatting-toolbar');
+
+      if (!isTextField && !isInsideContentEditable && !isToolbar) {
+        setActiveTextarea(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [activeTextarea]);
+
   return (
-    <div className="space-y-5">
-      <div>
-        <label className="block text-sm font-semibold text-[#0B2B4C] mb-2">Activity Title</label>
-        <div
-          ref={titleRef}
-          id="input-simulation-title"
-          contentEditable
-          suppressContentEditableWarning
-          onInput={(e) => {
-            if (e.currentTarget) {
-              const newValue = e.currentTarget.innerHTML || '';
-              onUpdateMeta({ title: newValue });
-            }
-          }}
-          onBlur={(e) => {
-            e.currentTarget.style.borderColor = '#D1D5DB';
-            if (e.currentTarget) {
-              const newValue = e.currentTarget.innerHTML || '';
-              onUpdateMeta({ title: newValue });
-            }
-          }}
-          onFocus={(e) => {
-            e.currentTarget.style.borderColor = accentColor;
-            setActiveTextarea('input-simulation-title');
-          }}
-          data-placeholder="Example: Activity 1 - Identify Computer Parts"
-          className="w-full min-h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-900 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
-          style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
-        />
-      </div>
+    <>
+      {/* Floating Text Formatting Toolbar */}
+      {activeTextarea && (
+        <div className="formatting-toolbar fixed top-20 left-1/2 transform -translate-x-1/2 bg-white rounded-2xl shadow-2xl border border-gray-200 px-4 py-3 flex items-center gap-1.5 z-50" style={{boxShadow: '0 8px 30px rgba(0,0,0,0.12)'}}>
+          {/* Text Formatting */}
+          <div className="flex items-center gap-1.5 border-r border-gray-200 pr-3 mr-1.5">
+            <button
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => applyTextFormat('bold')}
+              className="w-11 h-11 flex items-center justify-center hover:bg-blue-50 rounded-lg transition-all active:scale-95"
+              title="Bold (Ctrl+B)"
+            >
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <path d="M13.5 4C14.9 4 16.2 4.5 17.1 5.4C18 6.3 18.5 7.5 18.5 8.8C18.5 10.1 18 11.1 17.1 11.9C18.3 12.7 19 14.1 19 15.5C19 17 18.4 18.2 17.3 19.1C16.2 20 14.8 20.5 13.2 20.5H5V4H13.5ZM8.5 7V10.5H13C13.5 10.5 14 10.3 14.3 10C14.7 9.7 14.8 9.3 14.8 8.8C14.8 8.3 14.6 7.9 14.3 7.5C14 7.2 13.5 7 13 7H8.5ZM8.5 13.5V17.5H13.2C13.8 17.5 14.3 17.3 14.7 16.9C15.1 16.5 15.3 16.1 15.3 15.5C15.3 14.9 15.1 14.5 14.7 14.1C14.3 13.7 13.8 13.5 13.2 13.5H8.5Z"/>
+              </svg>
+            </button>
+            <button
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => applyTextFormat('italic')}
+              className="w-11 h-11 flex items-center justify-center hover:bg-blue-50 rounded-lg transition-all active:scale-95"
+              title="Italic (Ctrl+I)"
+            >
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <path d="M10 5V8H12.2L8.5 16H6V19H14V16H11.8L15.5 8H18V5H10Z"/>
+              </svg>
+            </button>
+            <button
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => applyTextFormat('underline')}
+              className="w-11 h-11 flex items-center justify-center hover:bg-blue-50 rounded-lg transition-all active:scale-95"
+              title="Underline (Ctrl+U)"
+            >
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <path d="M12 17C14.8 17 17 14.8 17 12V3H14.5V12C14.5 13.4 13.4 14.5 12 14.5C10.6 14.5 9.5 13.4 9.5 12V3H7V12C7 14.8 9.2 17 12 17ZM5 20V21.5H19V20H5Z"/>
+              </svg>
+            </button>
+          </div>
 
-      <div>
-        <label className="block text-sm font-semibold text-[#0B2B4C] mb-2">Activity Type</label>
-        <select
-          value={activityType || ''}
-          onChange={(event) => onUpdateActivityType?.(event.target.value)}
-          className="w-full h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-900 bg-white"
-          onFocus={(event) => { event.currentTarget.style.borderColor = accentColor; }}
-          onBlur={(event) => { event.currentTarget.style.borderColor = '#D1D5DB'; }}
-        >
-          <option value="" disabled>Select an activity type</option>
-          <option value="Assembling">Assembling</option>
-          <option value="Disassembling">Disassembling</option>
-          <option value="Troubleshooting">Troubleshooting</option>
-        </select>
-      </div>
+          {/* Lists */}
+          <div className="flex items-center gap-1.5 border-r border-gray-200 pr-3 mr-1.5">
+            <button
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => applyTextFormat('bullet')}
+              className="w-11 h-11 flex items-center justify-center hover:bg-green-50 rounded-lg transition-all active:scale-95"
+              title="Bullet List"
+            >
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <circle cx="4" cy="6" r="2"/>
+                <rect x="9" y="4.5" width="12" height="3" rx="1.5"/>
+                <circle cx="4" cy="12" r="2"/>
+                <rect x="9" y="10.5" width="12" height="3" rx="1.5"/>
+                <circle cx="4" cy="18" r="2"/>
+                <rect x="9" y="16.5" width="12" height="3" rx="1.5"/>
+              </svg>
+            </button>
+            <button
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => applyTextFormat('numbering')}
+              className="w-11 h-11 flex items-center justify-center hover:bg-green-50 rounded-lg transition-all active:scale-95"
+              title="Numbered List"
+            >
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 6h2" />
+                <path d="M4 12h2" />
+                <path d="M4 18h2" />
+                <path d="M9 6h11" />
+                <path d="M9 12h11" />
+                <path d="M9 18h11" />
+              </svg>
+            </button>
+          </div>
 
-      <div>
-        <label className="block text-sm font-semibold text-[#0B2B4C] mb-2">Found in Lesson</label>
-        <select
-          value={lessonNumber ?? ''}
-          onChange={(event) => onUpdateLessonNumber?.(event.target.value === '' ? null : Number(event.target.value))}
-          className="w-full h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-900 bg-white"
-          onFocus={(event) => { event.currentTarget.style.borderColor = accentColor; }}
-          onBlur={(event) => { event.currentTarget.style.borderColor = '#D1D5DB'; }}
-        >
-          <option value="">— Not assigned to a lesson —</option>
-          {(lessons || []).map((lesson) => (
-            <option key={lesson.ModuleID} value={lesson.LessonOrder}>
-              Lesson {lesson.LessonOrder}: {lesson.ModuleTitle}
-            </option>
-          ))}
-        </select>
-      </div>
+          {/* Alignment */}
+          <div className="flex items-center gap-1.5 border-r border-gray-200 pr-3 mr-1.5">
+            <button
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => applyTextFormat('align-left')}
+              className="w-11 h-11 flex items-center justify-center hover:bg-indigo-50 rounded-lg transition-all active:scale-95"
+              title="Align Left"
+            >
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <rect x="3" y="5" width="14" height="2.5" rx="1.25"/>
+                <rect x="3" y="10.25" width="18" height="2.5" rx="1.25"/>
+                <rect x="3" y="15.5" width="14" height="2.5" rx="1.25"/>
+              </svg>
+            </button>
+            <button
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => applyTextFormat('align-center')}
+              className="w-11 h-11 flex items-center justify-center hover:bg-indigo-50 rounded-lg transition-all active:scale-95"
+              title="Align Center"
+            >
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <rect x="5" y="5" width="14" height="2.5" rx="1.25"/>
+                <rect x="3" y="10.25" width="18" height="2.5" rx="1.25"/>
+                <rect x="5" y="15.5" width="14" height="2.5" rx="1.25"/>
+              </svg>
+            </button>
+            <button
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => applyTextFormat('align-right')}
+              className="w-11 h-11 flex items-center justify-center hover:bg-indigo-50 rounded-lg transition-all active:scale-95"
+              title="Align Right"
+            >
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <rect x="7" y="5" width="14" height="2.5" rx="1.25"/>
+                <rect x="3" y="10.25" width="18" height="2.5" rx="1.25"/>
+                <rect x="7" y="15.5" width="14" height="2.5" rx="1.25"/>
+              </svg>
+            </button>
+          </div>
 
-      <div>
-        <label className="block text-sm font-semibold text-[#0B2B4C] mb-2">Description</label>
-        <textarea
-          rows={4}
-          value={meta.description}
-          onChange={(event) => onUpdateMeta({ description: event.target.value })}
-          className="w-full min-h-[100px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-900"
-          onFocus={(event) => { event.currentTarget.style.borderColor = accentColor; }}
-          onBlur={(event) => { event.currentTarget.style.borderColor = '#D1D5DB'; }}
-          placeholder="Describe what learners should accomplish in this simulation."
-        />
-      </div>
+          {/* Indent */}
+          <div className="flex items-center gap-1.5 border-r border-gray-200 pr-3 mr-1.5">
+            <button
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => applyTextFormat('indent')}
+              className="w-11 h-11 flex items-center justify-center hover:bg-amber-50 rounded-lg transition-all active:scale-95"
+              title="Indent (Tab)"
+            >
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <rect x="2" y="3" width="20" height="2.5" rx="1.25"/>
+                <rect x="2" y="18.5" width="20" height="2.5" rx="1.25"/>
+                <rect x="10" y="8" width="12" height="2.5" rx="1.25"/>
+                <rect x="10" y="13" width="12" height="2.5" rx="1.25"/>
+                <path d="M2 8.5L6.5 12L2 15.5V8.5Z"/>
+              </svg>
+            </button>
+            <button
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => applyTextFormat('outdent')}
+              className="w-11 h-11 flex items-center justify-center hover:bg-amber-50 rounded-lg transition-all active:scale-95"
+              title="Outdent (Shift+Tab)"
+            >
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <rect x="2" y="3" width="20" height="2.5" rx="1.25"/>
+                <rect x="2" y="18.5" width="20" height="2.5" rx="1.25"/>
+                <rect x="10" y="8" width="12" height="2.5" rx="1.25"/>
+                <rect x="10" y="13" width="12" height="2.5" rx="1.25"/>
+                <path d="M7 8.5L2.5 12L7 15.5V8.5Z"/>
+              </svg>
+            </button>
+          </div>
 
-      <div>
-        <label className="block text-sm font-semibold text-[#0B2B4C] mb-2">Skill / Objective</label>
-        <select
-          value={meta.skill || ''}
-          onChange={(event) => (onUpdateSkill ? onUpdateSkill(event.target.value) : onUpdateMeta({ skill: event.target.value }))}
-          className="w-full h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-900 bg-white"
-          onFocus={(event) => { event.currentTarget.style.borderColor = accentColor; }}
-          onBlur={(event) => { event.currentTarget.style.borderColor = '#D1D5DB'; }}
-        >
-          <option value="" disabled>Select a skill</option>
-          <option value="Memorization">Memorization</option>
-          <option value="Analytical Thinking">Analytical Thinking</option>
-          <option value="Critical Thinking">Critical Thinking</option>
-          <option value="Problem Solving">Problem Solving</option>
-          <option value="Technical Comprehension">Technical Comprehension</option>
-        </select>
-      </div>
+          {/* Undo / Redo */}
+          <div className="flex items-center gap-1.5 border-r border-gray-200 pr-3 mr-1.5">
+            <button
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => applyTextFormat('undo')}
+              className="w-11 h-11 flex items-center justify-center hover:bg-cyan-50 rounded-lg transition-all active:scale-95"
+              title="Undo (Ctrl+Z)"
+            >
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <path d="M12.5 8C15.9 8 18.8 10.1 20 13.1L18.1 13.8C17.2 11.3 15 9.6 12.5 9.6H6.8L9.3 12.1L8.1 13.3L3.5 8.7L8.1 4.1L9.3 5.3L6.8 7.8H12.5Z"/>
+              </svg>
+            </button>
+            <button
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => applyTextFormat('redo')}
+              className="w-11 h-11 flex items-center justify-center hover:bg-cyan-50 rounded-lg transition-all active:scale-95"
+              title="Redo (Ctrl+Y)"
+            >
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <path d="M11.5 8C8.1 8 5.2 10.1 4 13.1L5.9 13.8C6.8 11.3 9 9.6 11.5 9.6H17.2L14.7 12.1L15.9 13.3L20.5 8.7L15.9 4.1L14.7 5.3L17.2 7.8H11.5Z"/>
+              </svg>
+            </button>
+          </div>
 
-      <div>
-        <label className="block text-sm font-semibold text-[#0B2B4C] mb-2">
-          Instruction Steps
-          <span className="ml-2 text-xs text-gray-500 font-normal">One step per line</span>
-        </label>
-        <div
-          ref={stepsRef}
-          id="textarea-simulation-steps"
-          contentEditable
-          suppressContentEditableWarning
-          onInput={(e) => {
-            if (e.currentTarget) {
-              const rawHtml = e.currentTarget.innerHTML || '';
-              const textContent = extractTextFromContentEditable(rawHtml);
-              const steps = textContent
-                .split('\n')
-                .map((step) => step.trim())
-                .filter(Boolean);
-              onUpdateMeta({ steps });
-            }
-          }}
-          onBlur={(e) => {
-            e.currentTarget.style.borderColor = '#D1D5DB';
-            if (e.currentTarget) {
-              const rawHtml = e.currentTarget.innerHTML || '';
-              const textContent = extractTextFromContentEditable(rawHtml);
-              const steps = textContent
-                .split('\n')
-                .map((step) => step.trim())
-                .filter(Boolean);
-              onUpdateMeta({ steps });
-            }
-          }}
-          onFocus={(e) => {
-            e.currentTarget.style.borderColor = accentColor;
-            setActiveTextarea('textarea-simulation-steps');
-          }}
-          data-placeholder="Step 1: ...\nStep 2: ...\nStep 3: ..."
-          className="w-full min-h-[200px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-700 font-mono text-sm leading-5 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
-          style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
-        />
+          {/* Close Button */}
+          <div>
+            <button
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => setActiveTextarea(null)}
+              className="w-11 h-11 flex items-center justify-center hover:bg-red-50 rounded-lg transition-all active:scale-95 text-gray-400 hover:text-red-500"
+              title="Close Toolbar"
+            >
+              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12 5.7 16.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="space-y-5">
+        <div>
+          <label className="block text-sm font-semibold text-[#0B2B4C] mb-2">Activity Title</label>
+          <div
+            ref={titleRef}
+            id="input-simulation-title"
+            contentEditable
+            suppressContentEditableWarning
+            onInput={(e) => {
+              if (e.currentTarget) {
+                const newValue = e.currentTarget.innerHTML || '';
+                onUpdateMeta({ title: newValue });
+              }
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = '#D1D5DB';
+              if (e.currentTarget) {
+                const newValue = e.currentTarget.innerHTML || '';
+                onUpdateMeta({ title: newValue });
+              }
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = accentColor;
+              setActiveTextarea('input-simulation-title');
+            }}
+            data-placeholder="Example: Activity 1 - Identify Computer Parts"
+            className="w-full min-h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-900 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+            style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-semibold text-[#0B2B4C] mb-2">Activity Type</label>
+          <select
+            value={activityType || ''}
+            onChange={(event) => onUpdateActivityType?.(event.target.value)}
+            className="w-full h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-900 bg-white"
+            onFocus={(event) => { event.currentTarget.style.borderColor = accentColor; }}
+            onBlur={(event) => { event.currentTarget.style.borderColor = '#D1D5DB'; }}
+          >
+            <option value="" disabled>Select an activity type</option>
+            <option value="Assembling">Assembling</option>
+            <option value="Disassembling">Disassembling</option>
+            <option value="Troubleshooting">Troubleshooting</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-semibold text-[#0B2B4C] mb-2">Found in Lesson</label>
+          <select
+            value={lessonNumber ?? ''}
+            onChange={(event) => onUpdateLessonNumber?.(event.target.value === '' ? null : Number(event.target.value))}
+            className="w-full h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-900 bg-white"
+            onFocus={(event) => { event.currentTarget.style.borderColor = accentColor; }}
+            onBlur={(event) => { event.currentTarget.style.borderColor = '#D1D5DB'; }}
+          >
+            <option value="">— Not assigned to a lesson —</option>
+            {(lessons || []).map((lesson) => (
+              <option key={lesson.ModuleID} value={lesson.LessonOrder}>
+                Lesson {lesson.LessonOrder}: {lesson.ModuleTitle}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-semibold text-[#0B2B4C] mb-2">Description</label>
+          <div
+            ref={descriptionRef}
+            id="input-simulation-description"
+            contentEditable
+            suppressContentEditableWarning
+            onInput={(e) => {
+              if (e.currentTarget) {
+                const newValue = e.currentTarget.innerHTML || '';
+                onUpdateMeta({ description: newValue });
+              }
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = '#D1D5DB';
+              if (e.currentTarget) {
+                const newValue = e.currentTarget.innerHTML || '';
+                onUpdateMeta({ description: newValue });
+              }
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = accentColor;
+              setActiveTextarea('input-simulation-description');
+            }}
+            data-placeholder="Describe what learners should accomplish in this simulation."
+            className="w-full min-h-[100px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-900 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+            style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-semibold text-[#0B2B4C] mb-2">Skill / Objective</label>
+          <select
+            value={meta.skill || ''}
+            onChange={(event) => (onUpdateSkill ? onUpdateSkill(event.target.value) : onUpdateMeta({ skill: event.target.value }))}
+            className="w-full h-[48px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-900 bg-white"
+            onFocus={(event) => { event.currentTarget.style.borderColor = accentColor; }}
+            onBlur={(event) => { event.currentTarget.style.borderColor = '#D1D5DB'; }}
+          >
+            <option value="" disabled>Select a skill</option>
+            <option value="Memorization">Memorization</option>
+            <option value="Analytical Thinking">Analytical Thinking</option>
+            <option value="Critical Thinking">Critical Thinking</option>
+            <option value="Problem Solving">Problem Solving</option>
+            <option value="Technical Comprehension">Technical Comprehension</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-semibold text-[#0B2B4C] mb-2">
+            Instruction Steps
+            <span className="ml-2 text-xs text-gray-500 font-normal">One step per line</span>
+          </label>
+          <div
+            ref={stepsRef}
+            id="textarea-simulation-steps"
+            contentEditable
+            suppressContentEditableWarning
+            onInput={(e) => {
+              if (e.currentTarget) {
+                const rawHtml = e.currentTarget.innerHTML || '';
+                const textContent = extractTextFromContentEditable(rawHtml);
+                const steps = textContent
+                  .split('\n')
+                  .map((step) => step.trim())
+                  .filter(Boolean);
+                onUpdateMeta({ steps });
+              }
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.borderColor = '#D1D5DB';
+              if (e.currentTarget) {
+                const rawHtml = e.currentTarget.innerHTML || '';
+                const textContent = extractTextFromContentEditable(rawHtml);
+                const steps = textContent
+                  .split('\n')
+                  .map((step) => step.trim())
+                  .filter(Boolean);
+                onUpdateMeta({ steps });
+              }
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = accentColor;
+              setActiveTextarea('textarea-simulation-steps');
+            }}
+            data-placeholder="Step 1: ...\nStep 2: ...\nStep 3: ..."
+            className="w-full min-h-[200px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none text-gray-700 font-mono text-sm leading-5 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+            style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

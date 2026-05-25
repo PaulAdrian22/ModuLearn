@@ -304,7 +304,6 @@ const AdminSimulations = () => {
         <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="simulation-title text-4xl font-bold text-[#0B2B4C]">Simulation</h1>
-            <p className="text-sm text-gray-600 mt-1">Edit learner-facing simulation cards, timeline, and assets.</p>
           </div>
 
           <div className="flex flex-wrap gap-3">
@@ -390,9 +389,6 @@ const AdminSimulations = () => {
                       >
                         {activityOrder}
                       </div>
-                      <span className="px-3 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-800">
-                        Available
-                      </span>
                       {isSupplementary && (
                         <span
                           className="px-3 py-1 text-xs font-semibold rounded-full bg-amber-100 text-amber-800 border border-amber-300"
@@ -513,17 +509,34 @@ const AdminSimulations = () => {
                   <option value="">Select type</option>
                   <option value="Assembling">Assembling</option>
                   <option value="Disassembling">Disassembling</option>
+                  <option value="Troubleshooting">Troubleshooting</option>
                 </select>
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-[#17364f] mb-1">Description</label>
-                <textarea
-                  rows={3}
-                  value={createForm.Description}
-                  onChange={(e) => setCreateForm({ ...createForm, Description: e.target.value })}
-                  className="w-full rounded-lg border border-[#bed4e6] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#8bb3d8] resize-none"
-                  placeholder="Optional"
+                <div
+                  contentEditable
+                  suppressContentEditableWarning
+                  onInput={(e) => {
+                    if (e.currentTarget) {
+                      const newValue = e.currentTarget.innerText || '';
+                      setCreateForm({ ...createForm, Description: newValue });
+                    }
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = '#bed4e6';
+                    if (e.currentTarget) {
+                      const newValue = e.currentTarget.innerText || '';
+                      setCreateForm({ ...createForm, Description: newValue });
+                    }
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = '#8bb3d8';
+                  }}
+                  data-placeholder="Optional"
+                  className="w-full min-h-[100px] rounded-lg border border-[#bed4e6] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#8bb3d8] text-gray-700 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+                  style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
                 />
               </div>
             </div>

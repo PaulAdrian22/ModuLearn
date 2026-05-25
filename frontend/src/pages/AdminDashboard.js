@@ -336,9 +336,8 @@ const AdminDashboard = () => {
 
   // Adaptive Y-axis: scale ticks to the current toggle's max so small values stay visible.
   // Pick a "nice" step (1, 2, 2.5, 5 × 10^n) targeting ~5 ticks regardless of magnitude.
-  const currentMaxMetric = chartData.length
-    ? Math.max(...chartData.map((item) => Math.abs(Number(item.metricValue || 0))))
-    : 0;
+  const chartDataForAxis = chartData.map((item) => Math.max(0, Number(item.metricValue || 0)));
+  const currentMaxMetric = chartDataForAxis.length ? Math.max(...chartDataForAxis) : 0;
 
   const niceAxis = (rawMax, targetTicks = 5) => {
     if (!Number.isFinite(rawMax) || rawMax <= 0) return { max: 5, step: 1 };
@@ -502,22 +501,25 @@ const AdminDashboard = () => {
                     {/* Bars */}
                     <div className="flex justify-around h-full relative z-10 px-2 gap-1">
                       {chartData.map((item, index) => {
-                        const metric = Math.max(0, Number(item.metricValue || 0));
+                        const rawMetric = Number(item.metricValue || 0);
+                        const metric = Math.max(0, rawMetric);
                         const heightPercent = yAxisMax > 0 ? (metric / yAxisMax) * 100 : 0;
+                        const isNegative = rawMetric < 0;
+                        
                         return (
                           <div
                             key={index}
                             className="flex-1 flex flex-col items-center justify-end"
                             style={{ maxWidth: '80px', alignSelf: 'stretch' }}
-                            title={`${item.title || item.lesson}: ${metric}`}
+                            title={`${item.title || item.lesson}: ${rawMetric}`}
                           >
                             <div
                               className="rounded-t-md transition-all duration-500 hover:opacity-80 cursor-pointer"
                               style={{
-                                backgroundColor: item.color,
-                                height: `${heightPercent}%`,
+                                backgroundColor: isNegative ? '#D1D5DB' : item.color,
+                                height: isNegative ? '3px' : `${heightPercent}%`,
                                 width: '70%',
-                                minHeight: metric > 0 ? '4px' : '0px'
+                                minHeight: '3px'
                               }}
                             />
                           </div>

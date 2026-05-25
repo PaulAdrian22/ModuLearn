@@ -302,6 +302,7 @@ const GlobalTokenUnlockTracker = () => {
   const [unlockQueue, setUnlockQueue] = useState([]);
   const [activeUnlockToken, setActiveUnlockToken] = useState(null);
 
+  // Track achievement earned in this session to show animation on navigation to dashboard
   useEffect(() => {
     if (!user?.userId || user.role === 'admin') {
       return;
@@ -346,15 +347,17 @@ const GlobalTokenUnlockTracker = () => {
         const seen = new Set(saved ? JSON.parse(saved) : []);
         const newlyUnlocked = unlockedTokens.filter((token) => !seen.has(token.key));
 
-        if (!newlyUnlocked.length) return;
-
-        newlyUnlocked.forEach((token) => seen.add(token.key));
-        localStorage.setItem(storageKey, JSON.stringify(Array.from(seen)));
-
-        setUnlockQueue((prev) => {
-          const existing = new Set(prev.map((token) => token.key));
-          return [...prev, ...newlyUnlocked.filter((token) => !existing.has(token.key))];
-        });
+        // Mark newly unlocked as earned and store in sessionStorage
+        if (newlyUnlocked.length > 0) {
+          const earnedKey = `earnedTokens:${user.userId}`;
+          const earnedTokens = new Set(JSON.parse(sessionStorage.getItem(earnedKey) || '[]'));
+          newlyUnlocked.forEach((token) => {
+            earnedTokens.add(token.key);
+            seen.add(token.key);
+          });
+          sessionStorage.setItem(earnedKey, JSON.stringify(Array.from(earnedTokens)));
+          localStorage.setItem(storageKey, JSON.stringify(Array.from(seen)));
+        }
       } catch (error) {
         console.error('Global token unlock tracking failed:', error);
       }
@@ -362,15 +365,48 @@ const GlobalTokenUnlockTracker = () => {
 
     runUnlockCheck();
     const intervalId = setInterval(runUnlockCheck, 30000);
-    const handleAchievementRefresh = () => runUnlockCheck();
-    window.addEventListener('achievementMetricsUpdated', handleAchievementRefresh);
 
     return () => {
       mounted = false;
       clearInterval(intervalId);
-      window.removeEventListener('achievementMetricsUpdated', handleAchievementRefresh);
     };
-  }, [user?.userId, user?.role, location.pathname]);
+  }, [user?.userId, user?.role]);
+
+  // Only trigger animation when navigating to dashboard/progress with earned tokens
+  useEffect(() => {
+    if (!user?.userId || user.role === 'admin') {
+      return;
+    }
+
+    const animationAllowedPaths = ['/dashboard', '/progress'];
+    const isOnAnimationAllowedPage = animationAllowedPaths.some(
+      (p) => location.pathname === p || location.pathname.startsWith(p + '/')
+    );
+
+    if (!isOnAnimationAllowedPage) {
+      return;
+    }
+
+    // Check for earned tokens that haven't been shown yet
+    const earnedKey = `earnedTokens:${user.userId}`;
+    const shownKey = `shownTokens:${user.userId}`;
+    const earnedTokens = new Set(JSON.parse(sessionStorage.getItem(earnedKey) || '[]'));
+    const shownTokens = new Set(JSON.parse(sessionStorage.getItem(shownKey) || '[]'));
+
+    const tokensToShow = Array.from(earnedTokens).filter((tokenKey) => !shownTokens.has(tokenKey));
+
+    if (tokensToShow.length > 0) {
+      const tokensToDisplay = tokensToShow.map((tokenKey) =>
+        TOKEN_UNLOCK_RULES.find((t) => t.key === tokenKey)
+      ).filter(Boolean);
+
+      setUnlockQueue(tokensToDisplay);
+
+      // Mark these tokens as shown
+      tokensToShow.forEach((tokenKey) => shownTokens.add(tokenKey));
+      sessionStorage.setItem(shownKey, JSON.stringify(Array.from(shownTokens)));
+    }
+  }, [location.pathname, user?.userId, user?.role]);
 
   useEffect(() => {
     if (!activeUnlockToken && unlockQueue.length > 0) {
@@ -385,12 +421,7 @@ const GlobalTokenUnlockTracker = () => {
     return () => clearTimeout(timerId);
   }, [activeUnlockToken]);
 
-  const animationAllowedPaths = ['/dashboard', '/progress'];
-  const isOnAnimationAllowedPage = animationAllowedPaths.some(
-    (p) => location.pathname === p || location.pathname.startsWith(p + '/')
-  );
-
-  if (!activeUnlockToken || !isOnAnimationAllowedPage) {
+  if (!activeUnlockToken) {
     return null;
   }
 

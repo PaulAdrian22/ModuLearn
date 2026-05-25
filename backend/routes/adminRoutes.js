@@ -1442,6 +1442,11 @@ router.get('/dashboard/notifications', async (req, res) => {
       }
     }
 
+    // Helper to strip HTML tags
+    const stripHtmlTags = (html = '') => {
+      return String(html || '').replace(/<[^>]*>/g, '').trim();
+    };
+
     // Issue reports (rare, admin-actionable).
     const issues = await query(`
       SELECT r.ReportID, u.Name, r.created_at, r.IssueType, r.LessonTitle
@@ -1451,10 +1456,11 @@ router.get('/dashboard/notifications', async (req, res) => {
       LIMIT 50
     `);
     issues.forEach((i) => {
+      const cleanLessonTitle = i.LessonTitle ? stripHtmlTags(i.LessonTitle) : '';
       notifications.push({
         id: buildId('issue', i.ReportID),
         date: i.created_at,
-        message: `${i.Name} reported an issue: ${i.IssueType}${i.LessonTitle ? ` in ${i.LessonTitle}` : ''}.`,
+        message: `${i.Name} reported an issue: ${i.IssueType}${cleanLessonTitle ? ` in ${cleanLessonTitle}` : ''}.`,
         type: 'issue'
       });
     });

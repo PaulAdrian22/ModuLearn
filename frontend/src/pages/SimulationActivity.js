@@ -413,9 +413,9 @@ const SimulationActivity = () => {
           <div className="flex items-center justify-between flex-wrap gap-3 mb-4">
             <h2 className="text-xl font-semibold text-[#0B2B4C]">
               {simulation?.ActivityType === 'Troubleshooting'
-                ? 'Click the faulty part to identify and fix it'
+                ? 'Identify and fix the issue'
                 : disassembly
-                  ? 'Click a highlighted part to remove it'
+                  ? ''
                   : isAssembling
                     ? 'Drag each part from the tray to its target'
                     : 'Click the highlighted area to reveal'}

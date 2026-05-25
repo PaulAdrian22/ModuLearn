@@ -248,14 +248,7 @@ const Simulations = () => {
                           </svg>
                           Completed
                         </span>
-                      ) : (
-                        <span
-                          className="px-3 py-1 text-xs font-semibold rounded-full"
-                          style={{ backgroundColor: soft, color: text }}
-                        >
-                          Available
-                        </span>
-                      )}
+                      ) : null}
                     </div>
                     {simulation.LessonNumber != null && (
                       <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 border border-blue-200 flex items-center gap-1 shrink-0">
