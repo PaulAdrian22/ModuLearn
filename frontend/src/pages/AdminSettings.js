@@ -4,6 +4,7 @@ import { useAuth } from '../App';
 import AdminNavbar from '../components/AdminNavbar';
 import Notification from '../components/Notification';
 import { applyAppearanceSettings, getStoredAppearanceSettings, saveAppearanceSettings } from '../utils/appearanceSettings';
+import { API_SERVER_URL } from '../config/api';
 
 const AdminSettings = () => {
   const { user } = useAuth();
@@ -907,14 +908,13 @@ const CertZoneEditor = ({ template, savedConfig, onSaved, onNotify }) => {
   };
 
   const isImage = template?.mimetype?.startsWith('image/');
-  // Static files aren't proxied by Vite; use the backend origin directly
-  const backendOrigin = `${window.location.protocol}//${window.location.hostname}:5000`;
-  const templateSrc = `${backendOrigin}/uploads/cert-template/${template.filename}`;
+  // Use API_SERVER_URL to construct the full path to backend uploads directory
+  const templateSrc = `${API_SERVER_URL}/uploads/cert-template/${template.filename}`;
 
   return (
     <div className="mt-5 border border-border rounded-lg overflow-hidden">
       <div className="px-4 py-3 bg-gray-50 border-b border-border flex items-center justify-between">
-        <span className="text-sm font-semibold text-gray-700">Text Zone Editor</span>
+        <span className="text-sm font-semibold text-gray-700">Certificate Editor</span>
         <span className="text-xs text-gray-400">Drag to move · drag handles to resize</span>
       </div>
 
@@ -964,7 +964,7 @@ const CertZoneEditor = ({ template, savedConfig, onSaved, onNotify }) => {
           disabled={saving}
           className="px-5 py-2 bg-[#346C9A] text-white rounded-lg hover:bg-[#2A5D84] font-semibold disabled:opacity-50 transition-colors"
         >
-          {saving ? 'Saving…' : 'Save Zone Positions'}
+          {saving ? 'Saving…' : 'Save'}
         </button>
         <button
           onClick={() => setZones({ name: { ...DEFAULT_CERT_ZONES.name }, date: { ...DEFAULT_CERT_ZONES.date } })}

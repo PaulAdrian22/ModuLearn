@@ -117,11 +117,6 @@ const AdminSimulations = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [warning, setWarning] = useState('');
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [createMode, setCreateMode] = useState('supplementary'); // 'core' | 'supplementary'
-  const [createForm, setCreateForm] = useState({ SimulationTitle: '', ActivityType: '', Description: '' });
-  const [createError, setCreateError] = useState('');
-  const [creating, setCreating] = useState(false);
 
   useEffect(() => {
     if (user && user.role !== 'admin') {
@@ -259,41 +254,25 @@ const AdminSimulations = () => {
   const coreSlotsTaken = simulations.filter((s) => Number(s.SimulationOrder || 0) >= 1 && Number(s.SimulationOrder || 0) <= CORE_SIMULATION_LIMIT).length;
   const allCoreSlotsFilled = coreSlotsTaken >= CORE_SIMULATION_LIMIT;
 
-  const openCreateModal = (mode) => {
-    setCreateMode(mode);
-    setCreateForm({ SimulationTitle: '', ActivityType: '', Description: '' });
-    setCreateError('');
-    setShowCreateModal(true);
-  };
-
-  const handleCreateSimulation = async () => {
-    setCreateError('');
-    const title = createForm.SimulationTitle.trim();
-    if (!title) {
-      setCreateError('Title is required');
-      return;
-    }
-
-    const payload = {
-      SimulationTitle: title,
-      ActivityType: createForm.ActivityType.trim() || null,
-      Description: createForm.Description.trim() || null,
-      mode: createMode,
-    };
-
+  const handleQuickCreateSimulation = async (mode) => {
     try {
-      setCreating(true);
+      setError('');
+      // Generate a default title with timestamp for uniqueness
+      const timestamp = new Date().toLocaleTimeString('en-US', { hour12: false });
+      const defaultTitle = `New Simulation - ${timestamp}`;
+
+      const payload = {
+        SimulationTitle: defaultTitle,
+        mode: mode === 'core' ? 'core' : 'supplementary',
+      };
+
       const response = await axios.post('/admin/simulations', payload);
       const newId = response?.data?.SimulationID;
-      setShowCreateModal(false);
-      setCreateForm({ SimulationTitle: '', ActivityType: '', Description: '' });
       if (newId) {
         navigate(`/admin/simulations/${newId}`);
       }
     } catch (err) {
-      setCreateError(err.response?.data?.message || 'Failed to create simulation');
-    } finally {
-      setCreating(false);
+      setError(err.response?.data?.message || 'Failed to create simulation');
     }
   };
 
@@ -310,7 +289,7 @@ const AdminSimulations = () => {
             {!allCoreSlotsFilled && (
             <button
               type="button"
-              onClick={() => openCreateModal('core')}
+              onClick={() => handleQuickCreateSimulation('core')}
               title={`Fill the lowest empty core slot (1-${CORE_SIMULATION_LIMIT})`}
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#0B2B4C] hover:bg-[#0e3a66] text-white font-semibold px-5 py-3 shadow-sm transition-colors"
             >
@@ -323,7 +302,7 @@ const AdminSimulations = () => {
             )}
             <button
               type="button"
-              onClick={() => openCreateModal('supplementary')}
+              onClick={() => handleQuickCreateSimulation('supplementary')}
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-highlight hover:bg-highlight-dark text-white font-semibold px-5 py-3 shadow-sm transition-colors"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -468,103 +447,7 @@ const AdminSimulations = () => {
         )}
       </div>
 
-      {showCreateModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 sm:p-8">
-            <h3 className="text-2xl font-bold text-[#0B2B4C] mb-1">
-              {createMode === 'core' ? 'Add Simulation' : 'Add Supplementary Simulation'}
-            </h3>
-            <p className="text-sm text-gray-500 mb-5">
-              {createMode === 'core'
-                ? `This will fill the lowest empty core slot (1-${CORE_SIMULATION_LIMIT}). Core simulations are included in the algorithm and mastery calculations. You will be redirected to the editor after saving.`
-                : 'Supplementary simulations are practice-only and are excluded from algorithm and mastery calculations. You will be redirected to the editor after saving.'}
-            </p>
 
-            {createError && (
-              <div className="rounded-lg bg-red-50 border border-red-200 text-red-700 px-3 py-2 mb-4 text-sm">
-                {createError}
-              </div>
-            )}
-
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-semibold text-[#17364f] mb-1">Title <span className="text-red-500">*</span></label>
-                <input
-                  type="text"
-                  value={createForm.SimulationTitle}
-                  onChange={(e) => setCreateForm({ ...createForm, SimulationTitle: e.target.value })}
-                  className="w-full rounded-lg border border-[#bed4e6] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#8bb3d8]"
-                  placeholder="e.g. Assemble the motherboard"
-                  maxLength={200}
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-[#17364f] mb-1">Activity Type</label>
-                <select
-                  value={createForm.ActivityType}
-                  onChange={(e) => setCreateForm({ ...createForm, ActivityType: e.target.value })}
-                  className="w-full rounded-lg border border-[#bed4e6] px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#8bb3d8]"
-                >
-                  <option value="">Select type</option>
-                  <option value="Assembling">Assembling</option>
-                  <option value="Disassembling">Disassembling</option>
-                  <option value="Troubleshooting">Troubleshooting</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-[#17364f] mb-1">Description</label>
-                <div
-                  contentEditable
-                  suppressContentEditableWarning
-                  onInput={(e) => {
-                    if (e.currentTarget) {
-                      const newValue = e.currentTarget.innerText || '';
-                      setCreateForm({ ...createForm, Description: newValue });
-                    }
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = '#bed4e6';
-                    if (e.currentTarget) {
-                      const newValue = e.currentTarget.innerText || '';
-                      setCreateForm({ ...createForm, Description: newValue });
-                    }
-                  }}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = '#8bb3d8';
-                  }}
-                  data-placeholder="Optional"
-                  className="w-full min-h-[100px] rounded-lg border border-[#bed4e6] px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#8bb3d8] text-gray-700 empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
-                  style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-3 mt-6">
-              <button
-                type="button"
-                onClick={() => {
-                  setShowCreateModal(false);
-                  setCreateError('');
-                }}
-                disabled={creating}
-                className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 disabled:opacity-50"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleCreateSimulation}
-                disabled={creating}
-                className="px-4 py-2 rounded-lg bg-highlight hover:bg-highlight-dark text-white font-semibold disabled:opacity-50"
-              >
-                {creating ? 'Creating...' : 'Create'}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
