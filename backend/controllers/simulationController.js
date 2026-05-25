@@ -210,6 +210,14 @@ const createSimulation = async (req, res) => {
       zoneData
     } = req.body;
 
+    // Validate required fields
+    if (!simulationTitle || simulationTitle.trim() === '') {
+      return res.status(400).json({
+        error: 'Bad Request',
+        message: 'simulationTitle is required'
+      });
+    }
+
     const columns = await getSimulationColumnSet();
 
     const normalizedZoneData = zoneData
@@ -220,8 +228,8 @@ const createSimulation = async (req, res) => {
       : (skillType ? { skillType } : null);
 
     const insertPayload = {
-      SimulationTitle: simulationTitle,
-      Description: description,
+      SimulationTitle: simulationTitle.trim(),
+      Description: description || '',
       ActivityType: activityType || 'Drag and Drop',
       MaxScore: maxScore || 100,
       TimeLimit: timeLimit || 0,
@@ -229,7 +237,7 @@ const createSimulation = async (req, res) => {
       ZoneData: normalizedZoneData ? JSON.stringify(normalizedZoneData) : null
     };
 
-    if (columns.has('ModuleID')) insertPayload.ModuleID = moduleId || null;
+    if (columns.has('ModuleID')) insertPayload.ModuleID = moduleId || 0; // Default to 0 if not provided
     if (columns.has('Instructions')) insertPayload.Instructions = instructions || '';
     if (columns.has('Is_Locked')) insertPayload.Is_Locked = isLocked !== undefined ? !!isLocked : false;
     if (columns.has('SkillType')) insertPayload.SkillType = skillType || normalizedZoneData?.skillType || 'Memorization';

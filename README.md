@@ -14,8 +14,8 @@ MODULEARN is an adaptive learning platform designed to provide personalized lear
 
 ## Technology Stack
 - **Frontend**: HTML5, CSS3, JavaScript (React/Vue.js)
-- **Backend**: Node.js with Express / Python with Django
-- **Database**: MySQL / PostgreSQL / MongoDB
+- **Backend**: Node.js with Express
+- **Database**: MySQL
 - **BKT Algorithm**: Custom implementation with probability calculations
 
 ## Project Structure

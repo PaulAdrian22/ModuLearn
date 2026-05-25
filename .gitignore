@@ -1,11 +1,5 @@
 # Dependencies
 node_modules/
-venv/
-env/
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
 
 # Environment variables
 .env

@@ -36,7 +36,7 @@ router.post('/forgot-password', async (req, res) => {
         RequestedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         Resolved BOOLEAN NOT NULL DEFAULT FALSE
       )
-    `);
+    `, []);
 
     // Verify the username exists
     const users = await query('SELECT UserID, Name FROM user WHERE Username = ? LIMIT 1', [username]);

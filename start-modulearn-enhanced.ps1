@@ -58,7 +58,7 @@ function Stop-Port($port) {
     foreach ($ownerPid in $ownerPids) {
         Stop-Process -Id ([int]$ownerPid) -Force -ErrorAction SilentlyContinue
     }
-    Stop-Process -Name "node","python","python3","uvicorn" -Force -ErrorAction SilentlyContinue
+    Stop-Process -Name "node" -Force -ErrorAction SilentlyContinue
 }
 
 Stop-Port 5000

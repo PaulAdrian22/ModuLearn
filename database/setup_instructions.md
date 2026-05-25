@@ -181,9 +181,12 @@ module.exports = {
 };
 ```
 
-### For Python/Django (settings.py):
+### For Python/Django (DEPRECATED - system now uses Node.js only):
+
+~~For legacy reference only - all Python code has been removed in favor of Node.js backend~~
 
 ```python
+# Legacy Django settings (not used)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',

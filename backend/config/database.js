@@ -44,9 +44,9 @@ const testConnection = async () => {
 };
 
 // Execute query helper function
-const query = async (sql, params) => {
+const query = async (sql, params = []) => {
   try {
-    const [results] = await pool.execute(sql, params);
+    const [results] = await pool.execute(sql, params || []);
     return results;
   } catch (error) {
     console.error('Database query error:', error.message);
