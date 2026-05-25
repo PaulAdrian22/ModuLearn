@@ -983,7 +983,7 @@ const AdminLearners = () => {
                   </div>
                   <div className="flex-1 min-h-0" style={{ minHeight: '260px' }}>
                   <ResponsiveContainer width="100%" height={260}>
-                    <BarChart data={getLearnerChartData()} margin={{ top: 8, right: 16, left: 0, bottom: 8 }}>
+                    <BarChart data={getLearnerChartData()} margin={{ top: 8, right: 16, left: 45, bottom: 8 }}>
                       <CartesianGrid strokeDasharray="0" stroke="#D1D5DB" vertical={false} />
                       <XAxis dataKey="lessonLabel" tick={{ fontSize: 13, fill: '#374151' }} />
                       <YAxis

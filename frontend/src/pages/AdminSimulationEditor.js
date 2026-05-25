@@ -1041,21 +1041,34 @@ const SimulationInfoEditor = ({ meta, onUpdateMeta, accentColor, activityType, o
   const stepsRef = React.useRef(null);
   const [activeTextarea, setActiveTextarea] = useState(null);
 
+  // Extract text content from contentEditable, handling div wrappers created by Enter key
+  const extractTextFromContentEditable = (html = '') => {
+    if (!html) return '';
+    // Remove <div> and </div> tags, replacing with newlines to preserve line structure
+    return String(html)
+      .replace(/<div>/gi, '')
+      .replace(/<\/div>/gi, '\n')
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/&nbsp;/g, ' ')
+      .trim();
+  };
+
   // Keep contentEditable elements in sync with state
   useEffect(() => {
     const titleEl = titleRef.current;
     if (titleEl && document.activeElement !== titleEl) {
       const targetText = meta.title || '';
-      if (titleEl.textContent !== targetText) {
-        titleEl.textContent = targetText;
+      if (titleEl.innerHTML !== targetText) {
+        titleEl.innerHTML = targetText;
       }
     }
 
     const stepsEl = stepsRef.current;
     if (stepsEl && document.activeElement !== stepsEl) {
       const targetText = (meta.steps || []).join('\n');
-      if (stepsEl.textContent !== targetText) {
-        stepsEl.textContent = targetText;
+      const currentText = extractTextFromContentEditable(stepsEl.innerHTML || '');
+      if (currentText !== targetText) {
+        stepsEl.innerHTML = targetText;
       }
     }
   }, [meta.title, meta.steps]);
@@ -1113,14 +1126,14 @@ const SimulationInfoEditor = ({ meta, onUpdateMeta, accentColor, activityType, o
           suppressContentEditableWarning
           onInput={(e) => {
             if (e.currentTarget) {
-              const newValue = e.currentTarget.textContent || '';
+              const newValue = e.currentTarget.innerHTML || '';
               onUpdateMeta({ title: newValue });
             }
           }}
           onBlur={(e) => {
             e.currentTarget.style.borderColor = '#D1D5DB';
             if (e.currentTarget) {
-              const newValue = e.currentTarget.textContent || '';
+              const newValue = e.currentTarget.innerHTML || '';
               onUpdateMeta({ title: newValue });
             }
           }}
@@ -1211,7 +1224,9 @@ const SimulationInfoEditor = ({ meta, onUpdateMeta, accentColor, activityType, o
           suppressContentEditableWarning
           onInput={(e) => {
             if (e.currentTarget) {
-              const steps = (e.currentTarget.textContent || '')
+              const rawHtml = e.currentTarget.innerHTML || '';
+              const textContent = extractTextFromContentEditable(rawHtml);
+              const steps = textContent
                 .split('\n')
                 .map((step) => step.trim())
                 .filter(Boolean);
@@ -1221,7 +1236,9 @@ const SimulationInfoEditor = ({ meta, onUpdateMeta, accentColor, activityType, o
           onBlur={(e) => {
             e.currentTarget.style.borderColor = '#D1D5DB';
             if (e.currentTarget) {
-              const steps = (e.currentTarget.textContent || '')
+              const rawHtml = e.currentTarget.innerHTML || '';
+              const textContent = extractTextFromContentEditable(rawHtml);
+              const steps = textContent
                 .split('\n')
                 .map((step) => step.trim())
                 .filter(Boolean);
