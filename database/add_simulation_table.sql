@@ -3,13 +3,13 @@
 -- ============================================
 CREATE TABLE simulation (
     SimulationID INT AUTO_INCREMENT PRIMARY KEY,
-    ModuleID INT NOT NULL,
+    ModuleID INT DEFAULT 0,
     SimulationTitle VARCHAR(200) NOT NULL,
-    Description TEXT,
+    Description TEXT DEFAULT '',
     ActivityType VARCHAR(100),
     MaxScore INT DEFAULT 10,
     TimeLimit INT DEFAULT 0, -- in minutes, 0 means no limit
-    Instructions TEXT,
+    Instructions TEXT DEFAULT '',
     SimulationOrder INT NOT NULL,
     Is_Locked BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

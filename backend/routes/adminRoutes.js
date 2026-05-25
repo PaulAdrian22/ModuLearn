@@ -381,13 +381,13 @@ const ensureSimulationTable = async () => {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS simulation (
         SimulationID INT AUTO_INCREMENT PRIMARY KEY,
-        ModuleID INT NULL,
+        ModuleID INT DEFAULT 0,
         SimulationTitle VARCHAR(200) NOT NULL,
-        Description TEXT,
+        Description TEXT DEFAULT '',
         ActivityType VARCHAR(100),
         MaxScore INT DEFAULT 10,
         TimeLimit INT DEFAULT 0,
-        Instructions TEXT,
+        Instructions TEXT DEFAULT '',
         SimulationOrder INT NOT NULL DEFAULT 1,
         Is_Locked BOOLEAN DEFAULT FALSE,
         ZoneData LONGTEXT NULL,

@@ -713,22 +713,6 @@ const FinalAssessment = () => {
               </div>
             </div>
 
-            <div className="mb-6 rounded-lg border border-[#BFE7E2] bg-[#F3FCFA] p-4">
-              <p className="text-sm font-bold text-primary mb-1">
-                Mode: {assessmentMode === 'retake' ? 'Retake Final Assessment' : 'First Take Final Assessment'}
-              </p>
-              {assessmentMode === 'retake' ? (
-                <p className="text-sm text-gray-700">
-                  Question mix: {questionMix.easyFinal} easy final + {questionMix.easyReview} easy review
-                  {questionMix.mandatoryRetake > 0 ? ` (${questionMix.mandatoryRetake} mandatory from previous attempt rules)` : ''}.
-                </p>
-              ) : (
-                <p className="text-sm text-gray-700">
-                  Question mix: {questionMix.total} situational items selected for first take.
-                </p>
-              )}
-            </div>
-
             {/* Previous Records (if retake) */}
             {attemptHistory && attemptHistory.totalAttempts > 0 && (
               <div className="mb-6">

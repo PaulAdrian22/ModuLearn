@@ -28,15 +28,20 @@ router.post('/forgot-password', async (req, res) => {
       return res.status(400).json({ message: 'Username is required.' });
     }
 
-    // Ensure the table exists
-    await query(`
-      CREATE TABLE IF NOT EXISTS password_reset_requests (
-        RequestID INT AUTO_INCREMENT PRIMARY KEY,
-        Username VARCHAR(100) NOT NULL,
-        RequestedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        Resolved BOOLEAN NOT NULL DEFAULT FALSE
-      )
-    `, []);
+    // Ensure the table exists - use pool.query directly for DDL
+    try {
+      await pool.query(`
+        CREATE TABLE IF NOT EXISTS password_reset_requests (
+          RequestID INT AUTO_INCREMENT PRIMARY KEY,
+          Username VARCHAR(100) NOT NULL,
+          RequestedAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          Resolved BOOLEAN NOT NULL DEFAULT FALSE
+        )
+      `);
+    } catch (ddlError) {
+      console.error('Failed to create password_reset_requests table:', ddlError);
+      // Continue anyway - table might already exist
+    }
 
     // Verify the username exists
     const users = await query('SELECT UserID, Name FROM user WHERE Username = ? LIMIT 1', [username]);
@@ -45,6 +50,7 @@ router.post('/forgot-password', async (req, res) => {
       return res.json({ message: 'If that username exists, the admin has been notified.' });
     }
 
+    // Insert the reset request
     await query(
       'INSERT INTO password_reset_requests (Username, RequestedAt) VALUES (?, NOW())',
       [username]
@@ -52,7 +58,7 @@ router.post('/forgot-password', async (req, res) => {
 
     res.json({ message: 'Your request has been sent. The admin will reset your password shortly.' });
   } catch (error) {
-    console.error('Forgot password error:', error);
+    console.error('Forgot password error:', error.message || error);
     res.status(500).json({ message: 'Failed to submit request. Please try again.' });
   }
 });

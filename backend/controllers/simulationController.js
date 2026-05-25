@@ -227,20 +227,54 @@ const createSimulation = async (req, res) => {
         }
       : (skillType ? { skillType } : null);
 
+    // Always include these critical columns for all new simulations
     const insertPayload = {
       SimulationTitle: simulationTitle.trim(),
-      Description: description || '',
-      ActivityType: activityType || 'Drag and Drop',
-      MaxScore: maxScore || 100,
-      TimeLimit: timeLimit || 0,
       SimulationOrder: simulationOrder || 1,
-      ZoneData: normalizedZoneData ? JSON.stringify(normalizedZoneData) : null
     };
 
-    if (columns.has('ModuleID')) insertPayload.ModuleID = moduleId || 0; // Default to 0 if not provided
-    if (columns.has('Instructions')) insertPayload.Instructions = instructions || '';
-    if (columns.has('Is_Locked')) insertPayload.Is_Locked = isLocked !== undefined ? !!isLocked : false;
-    if (columns.has('SkillType')) insertPayload.SkillType = skillType || normalizedZoneData?.skillType || 'Memorization';
+    // Add Description (important for preventing ER_NO_DEFAULT_FOR_FIELD)
+    if (columns.has('Description')) {
+      insertPayload.Description = description || '';
+    }
+
+    // Add Instructions (important for preventing ER_NO_DEFAULT_FOR_FIELD)
+    if (columns.has('Instructions')) {
+      insertPayload.Instructions = instructions || '';
+    }
+
+    // Add Activity Type and other fields
+    if (columns.has('ActivityType')) {
+      insertPayload.ActivityType = activityType || 'Drag and Drop';
+    }
+
+    if (columns.has('MaxScore')) {
+      insertPayload.MaxScore = maxScore || 100;
+    }
+
+    if (columns.has('TimeLimit')) {
+      insertPayload.TimeLimit = timeLimit || 0;
+    }
+
+    // Add ModuleID with default of 0
+    if (columns.has('ModuleID')) {
+      insertPayload.ModuleID = moduleId !== undefined && moduleId !== null ? moduleId : 0;
+    }
+
+    // Add ZoneData if available
+    if (columns.has('ZoneData')) {
+      insertPayload.ZoneData = normalizedZoneData ? JSON.stringify(normalizedZoneData) : null;
+    }
+
+    // Add Is_Locked
+    if (columns.has('Is_Locked')) {
+      insertPayload.Is_Locked = isLocked !== undefined ? !!isLocked : false;
+    }
+
+    // Add SkillType
+    if (columns.has('SkillType')) {
+      insertPayload.SkillType = skillType || normalizedZoneData?.skillType || 'Memorization';
+    }
 
     const insertColumns = Object.keys(insertPayload);
     const insertValues = insertColumns.map((column) => insertPayload[column]);
