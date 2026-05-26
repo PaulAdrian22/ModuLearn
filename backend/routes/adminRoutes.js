@@ -1789,7 +1789,7 @@ router.post('/simulations', [
     push('SimulationTitle', SimulationTitle);
     push('Description', Description || '');
     push('ActivityType', ActivityType || 'Disassembling');
-    push('MaxScore', 10);
+    push('MaxScore', 100);
     push('TimeLimit', 0);
     push('Instructions', '');
     push('SimulationOrder', nextOrder);

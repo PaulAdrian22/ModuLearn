@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useAuth } from '../App';
 import Navbar from '../components/Navbar';
 import { normalizeSimulationSkill } from '../utils/simulationFlow';
+import { stripHtmlTags } from '../utils/stripHtml';
 
 const getCompletionPercent = (simulation) => {
   const score = Number(simulation?.Score || 0);
@@ -265,7 +266,7 @@ const Simulations = () => {
                   </h3>
 
                   <p className="simulation-text text-[18px] leading-[1.45] text-gray-600 mb-5 min-h-[3.8rem]">
-                    {simulation.Description || 'Drag and drop component layers into masked targets, then submit your run.'}
+                    {stripHtmlTags(simulation.Description) || 'Drag and drop component layers into masked targets, then submit your run.'}
                   </p>
 
                   {isLockedOnPage ? (

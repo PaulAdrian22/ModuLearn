@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useAuth } from '../App';
 import SimulationRenderer from '../components/SimulationRenderer';
 import { isDisassemblyActivity, normalizeConfig } from '../data/simulationActivities';
+import { stripHtmlTags } from '../utils/stripHtml';
 
 const PENALTY_PER_MISTAKE = 5;
 
@@ -317,7 +318,7 @@ const SimulationActivity = () => {
                 <h2 className="text-base font-semibold text-[#0B2B4C] mb-2">What you will do</h2>
                 <ol className="list-decimal pl-5 space-y-1.5 text-sm text-[#334155] max-h-56 overflow-y-auto custom-scrollbar pr-1">
                   {meta.steps.map((step, index) => (
-                    <li key={index}>{step}</li>
+                    <li key={index}>{stripHtmlTags(step)}</li>
                   ))}
                 </ol>
               </div>
@@ -463,7 +464,7 @@ const SimulationActivity = () => {
             <h3 className="text-lg font-bold text-[#0B2B4C] mb-3">Instructions</h3>
             <ol className="list-decimal pl-8 space-y-1.5 text-sm text-[#334155] max-h-[260px] overflow-y-auto custom-scrollbar pr-1">
               {(meta?.steps || []).map((step, index) => (
-                <li key={index} className="leading-snug">{step}</li>
+                <li key={index} className="leading-snug">{stripHtmlTags(step)}</li>
               ))}
             </ol>
           </div>

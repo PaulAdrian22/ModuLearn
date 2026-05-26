@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useAuth } from '../App';
 import AdminNavbar from '../components/AdminNavbar';
 import { normalizeSimulationSkill } from '../utils/simulationFlow';
+import { stripHtmlTags } from '../utils/stripHtml';
 
 // Aligned with the Mastery Performance palette in Progress.js so the same
 // skill always reads as the same color across the system.
@@ -394,7 +395,7 @@ const AdminSimulations = () => {
                   </h3>
 
                   <p className="simulation-text text-[18px] leading-[1.45] text-gray-600 mb-5 min-h-[3.8rem]">
-                    {simulation.Description || ''}
+                    {stripHtmlTags(simulation.Description) || ''}
                   </p>
 
                   <div className="mb-4 flex flex-wrap gap-2">
