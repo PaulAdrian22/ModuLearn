@@ -472,8 +472,7 @@ const AdminLearners = () => {
           `font-size:${(z.height * 0.55).toFixed(2)}vh;color:#000;` +
           `pointer-events:none;white-space:nowrap;letter-spacing:0.04em;overflow:hidden;`;
 
-        const backendOrigin = `${window.location.protocol}//${window.location.hostname}:5000`;
-        const imgUrl = `${backendOrigin}${data.templateUrl}`;
+        const imgUrl = `${window.location.origin}${data.templateUrl}`;
 
         const printWindow = window.open('', '_blank', 'width=1100,height=800');
         if (!printWindow) return;
