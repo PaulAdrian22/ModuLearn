@@ -37,7 +37,7 @@ const validateRegistration = [
   body('age')
     .notEmpty().withMessage('Age is required')
     .bail()
-    .isInt({ min: 15, max: 65 }).withMessage('Age must be between 15 and 65'),
+    .isInt({ min: 15, max: 60 }).withMessage('Age must be between 15 and 60'),
 
   body('gender')
     .notEmpty().withMessage('Gender is required')

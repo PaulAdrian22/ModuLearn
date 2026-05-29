@@ -385,7 +385,7 @@ const ensureSimulationTable = async () => {
         SimulationTitle VARCHAR(200) NOT NULL,
         Description TEXT,
         ActivityType VARCHAR(100),
-        MaxScore INT DEFAULT 10,
+        MaxScore INT DEFAULT 100,
         TimeLimit INT DEFAULT 0,
         Instructions TEXT,
         SimulationOrder INT NOT NULL DEFAULT 1,
@@ -423,7 +423,7 @@ const ensureSimulationTable = async () => {
             meta.title || `Activity ${order}`,
             meta.description || '',
             order === 1 ? 'Assembling' : 'Disassembling',
-            10,
+            100,
             0,
             Array.isArray(meta.steps) ? meta.steps.join('\n') : '',
             order,
@@ -1280,30 +1280,66 @@ router.get('/reports', async (req, res) => {
   }
 });
 
-// GET /api/admin/dashboard/certified - Count learners who completed all lessons
+// GET /api/admin/dashboard/certified - Count learners eligible for certification
 router.get('/dashboard/certified', async (req, res) => {
   try {
     await ensureModuleAdminColumns();
 
-    const totalModules = await query('SELECT COUNT(*) as total FROM module WHERE Is_Deleted = FALSE');
-    const totalCount = totalModules[0].total;
+    const CORE_SIM_LIMIT = 20;
 
-    if (totalCount === 0) {
+    // Count total non-supplementary modules
+    const [{ totalModules }] = await query(`
+      SELECT COUNT(DISTINCT LessonOrder) AS totalModules
+      FROM module
+      WHERE Is_Deleted = FALSE AND (Difficulty IS NULL OR LOWER(Difficulty) != 'supplementary')
+    `);
+
+    if (Number(totalModules) === 0) {
       return res.json({ count: 0 });
     }
 
-    const certified = await query(`
-      SELECT COUNT(*) as count FROM (
-        SELECT p.UserID
-        FROM progress p
-        JOIN user u ON p.UserID = u.UserID
-        WHERE u.Role = 'student' AND p.CompletionRate >= 100
-        GROUP BY p.UserID
-        HAVING COUNT(DISTINCT p.ModuleID) = ?
-      ) as certified_users
-    `, [totalCount]);
+    // Count total core simulations
+    const [{ totalSims }] = await query(
+      'SELECT COUNT(*) AS totalSims FROM simulation WHERE SimulationOrder > 0 AND SimulationOrder <= ?',
+      [CORE_SIM_LIMIT]
+    ).catch(() => [{ totalSims: 0 }]);
 
-    res.json({ count: certified[0]?.count || 0 });
+    // Get all students who completed all required modules
+    const completedModules = await query(`
+      SELECT DISTINCT p.UserID
+      FROM progress p
+      JOIN module m ON m.ModuleID = p.ModuleID
+      WHERE p.CompletionRate >= 100
+        AND m.Is_Deleted = FALSE
+        AND (m.Difficulty IS NULL OR LOWER(m.Difficulty) != 'supplementary')
+      GROUP BY p.UserID
+      HAVING COUNT(DISTINCT m.LessonOrder) = ?
+    `, [totalModules]);
+
+    let eligibleUserIds = completedModules.map(row => row.UserID);
+
+    // If there are core simulations, filter for users who completed all of them
+    if (Number(totalSims) > 0 && eligibleUserIds.length > 0) {
+      const simTable = await query('SHOW TABLES LIKE \'simulation_progress\'').catch(() => []);
+
+      if (simTable.length > 0) {
+        const userPlaceholders = eligibleUserIds.map(() => '?').join(',');
+        const completedAllSims = await query(`
+          SELECT DISTINCT sp.UserID
+          FROM simulation_progress sp
+          JOIN simulation s ON s.SimulationID = sp.SimulationID
+          WHERE sp.UserID IN (${userPlaceholders})
+            AND s.SimulationOrder > 0 AND s.SimulationOrder <= ?
+            AND sp.CompletionStatus = 'completed'
+          GROUP BY sp.UserID
+          HAVING COUNT(DISTINCT s.SimulationID) = ?
+        `, [...eligibleUserIds, CORE_SIM_LIMIT, totalSims]).catch(() => []);
+
+        eligibleUserIds = completedAllSims.map(row => row.UserID);
+      }
+    }
+
+    res.json({ count: eligibleUserIds.length });
   } catch (error) {
     console.error('Get certified learners error:', error);
     res.status(500).json({ error: 'Failed to fetch certified learners count' });

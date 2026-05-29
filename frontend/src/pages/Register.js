@@ -8,7 +8,7 @@ const Register = () => {
   const { login } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
-    age: '',
+    birthdate: '',
     gender: '',
     username: '',
     password: '',
@@ -18,6 +18,17 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const calculateAge = (birthdate) => {
+    const birth = new Date(birthdate);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+    return age;
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -50,8 +61,9 @@ const Register = () => {
       return;
     }
 
-    if (!formData.age || Number(formData.age) < 15 || Number(formData.age) > 65) {
-      setError('Age must be between 15 and 65');
+    const age = calculateAge(formData.birthdate);
+    if (!formData.birthdate || age < 15 || age > 60) {
+      setError('Age must be between 15 and 60 years');
       setLoading(false);
       return;
     }
@@ -63,8 +75,8 @@ const Register = () => {
     }
 
     try {
-      const { confirmPassword, ...registerData } = formData;
-      registerData.age = Number(registerData.age);
+      const { confirmPassword, birthdate, ...registerData } = formData;
+      registerData.age = age;
       const response = await axios.post('/auth/register', registerData);
       navigate('/login');
     } catch (err) {
@@ -120,23 +132,23 @@ const Register = () => {
               />
             </div>
 
-            {/* Age */}
+            {/* Birthdate */}
             <div>
               <label className="block text-sm font-semibold mb-2" style={{ color: '#173F65' }}>
-                Age <span className="text-red-500">*</span>
+                Date of Birth <span className="text-red-500">*</span>
               </label>
               <input
-                type="number"
-                name="age"
-                value={formData.age}
+                type="date"
+                name="birthdate"
+                value={formData.birthdate}
                 onChange={handleChange}
-                placeholder="Enter your age (15-65)"
                 className="w-full px-4 py-3 border-2 border-[#E5E7EB] rounded-xl focus:border-highlight focus:outline-none transition-all placeholder-gray-400"
                 style={{ color: '#173F65' }}
-                min="15"
-                max="65"
                 required
               />
+              {formData.birthdate && (
+                <p className="text-xs text-gray-600 mt-1">Age: {calculateAge(formData.birthdate)} years</p>
+              )}
             </div>
 
             {/* Gender */}

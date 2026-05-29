@@ -1626,7 +1626,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
 
               {/* Scrollable Content - Clean white background with teal scrollbar */}
               <div ref={contentScrollRef} className="flex-1 overflow-y-auto bg-white">
-                <div className="w-[92%] lg:w-[80%] mx-auto px-4 md:px-6 lg:px-8 py-10 lg:py-12">
+                <div className="w-full max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-10 lg:py-12">
                   {/* Topic page indicator */}
                   {topicPages.length > 1 && (
                     <div className="mb-6 text-sm text-gray-500 font-medium">

@@ -37,6 +37,10 @@ const AdminLearners = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [activeTab, setActiveTab] = useState('active');
   const [selectedMetric, setSelectedMetric] = useState('timeSpentPerLesson');
+  const [selectedPrintMetrics, setSelectedPrintMetrics] = useState(['timeSpentPerLesson']);
+  const [showPrintModal, setShowPrintModal] = useState(false);
+  const [showListPrintModal, setShowListPrintModal] = useState(false);
+  const [selectedListPrintColumns, setSelectedListPrintColumns] = useState(['Name', 'Username', 'Gender', 'Age', 'Joined']);
   const [currentPage, setCurrentPage] = useState(1);
   const [genderFilter, setGenderFilter] = useState('all');
   const ITEMS_PER_PAGE = 20;
@@ -469,10 +473,10 @@ const AdminLearners = () => {
           `position:absolute;left:${z.x}%;top:${z.y}%;width:${z.width}%;height:${z.height}%;` +
           `display:flex;align-items:center;justify-content:center;text-align:center;` +
           `font-family:'Times New Roman',Times,serif;font-weight:700;` +
-          `font-size:${(z.height * 0.55).toFixed(2)}vh;color:#000;` +
+          `font-size:${Math.max(8, Math.min(48, z.height * 0.8))}pt;color:#000;` +
           `pointer-events:none;white-space:nowrap;letter-spacing:0.04em;overflow:hidden;`;
 
-        const backendOrigin = `${window.location.protocol}//${window.location.hostname}:5000`;
+        const backendOrigin = window.location.origin;
         const imgUrl = `${backendOrigin}${data.templateUrl}`;
 
         const printWindow = window.open('', '_blank', 'width=1100,height=800');
@@ -482,8 +486,14 @@ const AdminLearners = () => {
 <style>
   @page { margin: 0; size: A4 landscape; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { width: 100vw; height: 100vh; overflow: hidden; position: relative; background: #fff; }
+  html { width: 100%; height: 100%; }
+  body { width: 100%; height: 100%; overflow: hidden; position: relative; background: #fff; }
   .cert-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
+  @media print {
+    html { width: 100%; height: 100%; }
+    body { width: 100%; height: 100%; margin: 0; padding: 0; background: #fff; }
+    .cert-img { width: 100%; height: 100%; }
+  }
 </style></head>
 <body>
   <img class="cert-img" src="${escHtml(imgUrl)}" alt="Certificate" crossorigin="anonymous" />
@@ -533,14 +543,16 @@ const AdminLearners = () => {
   };
 
   const handlePrintReport = () => {
-    if (!selectedLearner) return;
-    const metricLabel = METRIC_OPTIONS.find((m) => m.key === selectedMetric)?.label || selectedMetric;
+    if (!selectedPrintMetrics.length || !selectedLearner?.lessonMetrics) return;
+    const metricLabel = selectedPrintMetrics.map(key => METRIC_OPTIONS.find((m) => m.key === key)?.label || key).join(', ');
     const rows = selectedLearner.lessonMetrics || [];
     const escapeHtml = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
       { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
     ));
+
+    const headers = ['Lesson', 'Lesson Title', ...selectedPrintMetrics.map(k => METRIC_OPTIONS.find((m) => m.key === k)?.label || k)];
     const tableRows = rows
-      .map((r) => `<tr><td>${escapeHtml(r.lessonLabel)}</td><td>${escapeHtml(r.lessonTitle)}</td><td>${Number(r[selectedMetric] || 0)}</td></tr>`)
+      .map((r) => `<tr><td>${escapeHtml(r.lessonLabel)}</td><td>${escapeHtml(r.lessonTitle)}</td>${selectedPrintMetrics.map(metricKey => `<td>${Number(r[metricKey] || 0)}</td>`).join('')}</tr>`)
       .join('');
 
     const printWindow = window.open('', '_blank', 'width=900,height=700');
@@ -563,16 +575,120 @@ const AdminLearners = () => {
   <div class="meta">
     <div><strong>Learner:</strong> ${escapeHtml(selectedLearner.Name)}</div>
     <div><strong>Username:</strong> ${escapeHtml(selectedLearner.Username || '')}</div>
-    <div><strong>Metric:</strong> ${escapeHtml(metricLabel)}</div>
+    <div><strong>Metrics:</strong> ${escapeHtml(metricLabel)}</div>
     <div><strong>Generated:</strong> ${new Date().toLocaleString()}</div>
   </div>
   <table>
-    <thead><tr><th>Lesson</th><th>Lesson Title</th><th>${escapeHtml(metricLabel)}</th></tr></thead>
+    <thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead>
     <tbody>${tableRows}</tbody>
   </table>
   <script>window.onload = function () { window.focus(); window.print(); };<\/script>
 </body></html>`);
     printWindow.document.close();
+    setShowPrintModal(false);
+  };
+
+  const handleTogglePrintMetric = (metricKey) => {
+    setSelectedPrintMetrics(prev =>
+      prev.includes(metricKey)
+        ? prev.filter(k => k !== metricKey)
+        : [...prev, metricKey]
+    );
+  };
+
+  const handleToggleSelectAllMetrics = () => {
+    if (selectedPrintMetrics.length === METRIC_OPTIONS.length) {
+      setSelectedPrintMetrics([]);
+    } else {
+      setSelectedPrintMetrics(METRIC_OPTIONS.map(m => m.key));
+    }
+  };
+
+  const allMetricsSelected = selectedPrintMetrics.length === METRIC_OPTIONS.length;
+
+  const handleToggleListPrintColumn = (column) => {
+    setSelectedListPrintColumns(prev =>
+      prev.includes(column)
+        ? prev.filter(c => c !== column)
+        : [...prev, column]
+    );
+  };
+
+  const handleToggleSelectAllListColumns = () => {
+    const allColumns = ['Name', 'Username', 'Gender', 'Age', 'Joined', 'Last Login'];
+    if (selectedListPrintColumns.length === allColumns.length) {
+      setSelectedListPrintColumns([]);
+    } else {
+      setSelectedListPrintColumns(allColumns);
+    }
+  };
+
+  const allListColumnsSelected = selectedListPrintColumns.length === 5;
+
+  const handlePrintLearnersList = () => {
+    if (!selectedListPrintColumns.length) return;
+    const rows = visibleLearners;
+    const escapeHtml = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+    ));
+
+    const columnMap = {
+      'Name': 'Name',
+      'Username': 'Username',
+      'Gender': 'Gender',
+      'Age': 'Age',
+      'Joined': 'Date Joined',
+      'Last Login': 'Last Login'
+    };
+
+    const tableHeaders = selectedListPrintColumns.map(col => `<th>${columnMap[col]}</th>`).join('');
+    const tableRows = rows
+      .map((l) => {
+        const cells = selectedListPrintColumns.map(col => {
+          switch(col) {
+            case 'Name': return `<td>${escapeHtml(l.Name)}</td>`;
+            case 'Username': return `<td>${escapeHtml(l.Username)}</td>`;
+            case 'Gender': return `<td>${escapeHtml(['Male', 'Female'].includes(l.Gender) ? l.Gender : 'N/A')}</td>`;
+            case 'Age': return `<td>${escapeHtml(l.Age || 'N/A')}</td>`;
+            case 'Joined': return `<td>${escapeHtml(formatDate(l.created_at))}</td>`;
+            case 'Last Login': return `<td>${escapeHtml(formatDate(l.last_login))}</td>`;
+            default: return '<td></td>';
+          }
+        }).join('');
+        return `<tr>${cells}</tr>`;
+      })
+      .join('');
+
+    const printWindow = window.open('', '_blank', 'width=900,height=700');
+    if (!printWindow) return;
+
+    printWindow.document.write(`<!doctype html>
+<html><head><title>Learners List</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 24px; color: #0B2B4C; }
+  h1 { margin: 0 0 8px; }
+  .meta { color: #555; font-size: 12px; margin-bottom: 16px; line-height: 1.6; }
+  table { border-collapse: collapse; width: 100%; font-size: 12px; margin-top: 8px; }
+  th, td { border: 1px solid #d1d5db; padding: 6px 8px; text-align: left; }
+  th { background: #0B2B4C; color: #fff; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  @media print { body { padding: 0; } }
+</style></head>
+<body>
+  <h1>Learners List Report</h1>
+  <div class="meta">
+    <div><strong>Report Type:</strong> ${activeTab === 'archived' ? 'Archived Learners' : 'Active Learners'}</div>
+    <div><strong>Total Learners:</strong> ${rows.length}</div>
+    <div><strong>Generated:</strong> ${new Date().toLocaleString()}</div>
+  </div>
+  <table>
+    <thead><tr>${tableHeaders}</tr></thead>
+    <tbody>${tableRows}</tbody>
+  </table>
+  <script>window.onload = function () { window.focus(); window.print(); };<\/script>
+</body></html>`);
+    printWindow.document.close();
+    setShowListPrintModal(false);
   };
 
   const handleExportCSV = () => {
@@ -770,6 +886,16 @@ const AdminLearners = () => {
                     <option value="desc">Descending</option>
                   </select>
                 </div>
+
+                <button
+                  onClick={() => setShowListPrintModal(true)}
+                  className="px-4 py-2 rounded-lg bg-highlight hover:bg-highlight-dark text-white font-semibold text-sm flex items-center gap-2 whitespace-nowrap"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                  </svg>
+                  Print List
+                </button>
 
               </div>
             </div>
@@ -1005,6 +1131,7 @@ const AdminLearners = () => {
 
                 <div className="pt-4 pl-2">
                   <div className="space-y-2 text-text-primary">
+                    <p className="font-semibold text-base md:text-lg mb-3">Chart Metric</p>
                     {METRIC_OPTIONS.map((metric) => (
                       <label key={metric.key} className="flex items-center gap-2 cursor-pointer">
                         <input
@@ -1023,7 +1150,7 @@ const AdminLearners = () => {
 
               <div className="mt-5 flex flex-wrap justify-end gap-4">
                 <button
-                  onClick={handlePrintReport}
+                  onClick={() => setShowPrintModal(true)}
                   className="px-6 py-2 bg-[#3A70A1] hover:bg-[#2A5D84] text-white rounded-lg text-sm md:text-2xl leading-tight"
                 >
                   Print Report
@@ -1033,6 +1160,114 @@ const AdminLearners = () => {
           </div>
         )}
       </div>
+
+      {/* Print Report Modal */}
+      {showPrintModal && showDetails && selectedLearner && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-6xl bg-white rounded-sm shadow-2xl overflow-hidden">
+            <div className="bg-highlight px-8 py-4 flex items-center justify-between">
+              <h2 className="text-5xl font-bold text-white">Print Report</h2>
+              <button onClick={() => setShowPrintModal(false)} className="text-white hover:text-gray-100">
+                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="p-8">
+              <div className="flex items-center justify-between mb-5 gap-3 flex-wrap">
+                <p className="text-2xl md:text-3xl font-bold text-[#3A70A1]">Select the metrics you want to include</p>
+                <label className="flex items-center gap-2 text-[#3A70A1] cursor-pointer text-base font-semibold whitespace-nowrap">
+                  <input
+                    type="checkbox"
+                    checked={allMetricsSelected}
+                    onChange={handleToggleSelectAllMetrics}
+                    className="w-5 h-5"
+                  />
+                  Select All
+                </label>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-2">
+                {METRIC_OPTIONS.map((metric) => (
+                  <label key={metric.key} className="flex items-center gap-3 md:gap-4 text-[#4A4A4A] cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedPrintMetrics.includes(metric.key)}
+                      onChange={() => handleTogglePrintMetric(metric.key)}
+                      className="w-4 h-4 md:w-5 md:h-5"
+                    />
+                    <span className="text-sm md:text-base leading-tight font-medium">{metric.label}</span>
+                  </label>
+                ))}
+              </div>
+
+              <div className="mt-8 flex justify-end gap-6">
+                <button
+                  onClick={handlePrintReport}
+                  disabled={!selectedPrintMetrics.length || !selectedLearner?.lessonMetrics}
+                  className="px-8 py-2 rounded-xl bg-highlight hover:bg-highlight-dark text-white font-semibold text-[30px] disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Print Report
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Print Learners List Modal */}
+      {showListPrintModal && !showDetails && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-6xl bg-white rounded-sm shadow-2xl overflow-hidden">
+            <div className="bg-highlight px-8 py-4 flex items-center justify-between">
+              <h2 className="text-5xl font-bold text-white">Print Learners List</h2>
+              <button onClick={() => setShowListPrintModal(false)} className="text-white hover:text-gray-100">
+                <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="p-8">
+              <div className="flex items-center justify-between mb-5 gap-3 flex-wrap">
+                <p className="text-2xl md:text-3xl font-bold text-[#3A70A1]">Select the columns you want to include</p>
+                <label className="flex items-center gap-2 text-[#3A70A1] cursor-pointer text-base font-semibold whitespace-nowrap">
+                  <input
+                    type="checkbox"
+                    checked={allListColumnsSelected}
+                    onChange={handleToggleSelectAllListColumns}
+                    className="w-5 h-5"
+                  />
+                  Select All
+                </label>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-2">
+                {['Name', 'Username', 'Gender', 'Age', 'Joined', 'Last Login'].map((column) => (
+                  <label key={column} className="flex items-center gap-3 md:gap-4 text-[#4A4A4A] cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedListPrintColumns.includes(column)}
+                      onChange={() => handleToggleListPrintColumn(column)}
+                      className="w-4 h-4 md:w-5 md:h-5"
+                    />
+                    <span className="text-sm md:text-base leading-tight font-medium">{column}</span>
+                  </label>
+                ))}
+              </div>
+
+              <div className="mt-8 flex justify-end gap-6">
+                <button
+                  onClick={handlePrintLearnersList}
+                  disabled={!selectedListPrintColumns.length || !visibleLearners.length}
+                  className="px-8 py-2 rounded-xl bg-highlight hover:bg-highlight-dark text-white font-semibold text-[30px] disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Print List
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
