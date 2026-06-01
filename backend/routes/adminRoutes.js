@@ -2503,4 +2503,233 @@ router.get('/certificate/generate/:userId', authenticate, requireAdmin, async (r
   }
 });
 
+// GET /api/admin/certificate/render/:userId — render certificate image with overlaid text
+// Returns PNG for image templates, PDF for PDF templates
+router.get('/certificate/render/:userId', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    if (!/^\d+$/.test(userId)) return res.status(400).json({ error: 'Invalid user ID.' });
+
+    const meta = getCertMeta();
+    if (!meta) return res.status(404).json({ error: 'No certificate template uploaded yet.' });
+
+    const users = await query('SELECT Name FROM user WHERE UserID = ?', [userId]);
+    if (!users.length) return res.status(404).json({ error: 'User not found.' });
+    const userName = users[0].Name;
+    const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    const templatePath = path.join(CERT_TEMPLATE_DIR, meta.filename);
+    if (!fs.existsSync(templatePath)) return res.status(404).json({ error: 'Template file missing on server.' });
+
+    const saved = meta.textConfig || {};
+    const textConfig = {
+      name: { ...DEFAULT_CERT_TEXT_CONFIG.name, ...(saved.name || {}) },
+      date: { ...DEFAULT_CERT_TEXT_CONFIG.date, ...(saved.date || {}) }
+    };
+
+    // For PDF: use existing pdf-lib approach
+    if (meta.mimetype === 'application/pdf') {
+      let PDFDocument, rgb, StandardFonts;
+      try {
+        ({ PDFDocument, rgb, StandardFonts } = require('pdf-lib'));
+      } catch {
+        return res.status(500).json({ error: 'pdf-lib is not installed.' });
+      }
+
+      const existingBytes = fs.readFileSync(templatePath);
+      const pdfDoc = await PDFDocument.load(existingBytes);
+      const boldFont = await pdfDoc.embedFont(StandardFonts.TimesRomanBold);
+      const pages = pdfDoc.getPages();
+      const page = pages[0];
+      const { width, height } = page.getSize();
+
+      const drawField = (text, zone) => {
+        const zoneLeft   = (zone.x / 100) * width;
+        const zoneW      = (zone.width  / 100) * width;
+        const zoneH      = (zone.height / 100) * height;
+        const pdfYBottom = (1 - (zone.y + zone.height) / 100) * height;
+        const autoSize = Math.max(8, Math.min(120, Math.floor(zoneH * 0.55)));
+        const textWidth = boldFont.widthOfTextAtSize(text, autoSize);
+        const drawX = zoneLeft + Math.max(0, (zoneW - textWidth) / 2);
+        const drawY = pdfYBottom + (zoneH - autoSize) / 2;
+        page.drawText(text, { x: Math.max(0, drawX), y: Math.max(0, drawY), size: autoSize, font: boldFont, color: rgb(0, 0, 0) });
+      };
+
+      drawField(userName, textConfig.name);
+      drawField(date, textConfig.date);
+
+      const pdfBytes = await pdfDoc.save();
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="certificate_${userName.replace(/\s+/g, '_')}_${Date.now()}.pdf"`);
+      res.send(Buffer.from(pdfBytes));
+      return;
+    }
+
+    // For image templates: use sharp to composite text
+    let sharp;
+    try {
+      sharp = require('sharp');
+    } catch {
+      return res.status(500).json({ error: 'sharp is not installed.' });
+    }
+
+    const image = await sharp(templatePath);
+    const metadata = await image.metadata();
+
+    // Calculate text positions in pixels
+    const nameX = Math.round((textConfig.name.x / 100) * metadata.width);
+    const nameY = Math.round((textConfig.name.y / 100) * metadata.height);
+    const nameW = Math.round((textConfig.name.width / 100) * metadata.width);
+    const nameH = Math.round((textConfig.name.height / 100) * metadata.height);
+
+    const dateX = Math.round((textConfig.date.x / 100) * metadata.width);
+    const dateY = Math.round((textConfig.date.y / 100) * metadata.height);
+    const dateW = Math.round((textConfig.date.width / 100) * metadata.width);
+    const dateH = Math.round((textConfig.date.height / 100) * metadata.height);
+
+    // Auto-size font based on zone height
+    const nameFontSize = Math.max(8, Math.min(120, Math.floor(nameH * 0.55)));
+    const dateFontSize = Math.max(8, Math.min(120, Math.floor(dateH * 0.55)));
+
+    // Create SVG overlays for text
+    const createTextSvg = (text, x, y, w, h, fontSize) => {
+      return `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+        <text x="${w/2}" y="${h/2}" font-size="${fontSize}" font-family="Arial" font-weight="bold"
+              text-anchor="middle" dominant-baseline="central" fill="black">${text}</text>
+      </svg>`;
+    };
+
+    const nameSvg = createTextSvg(userName, 0, 0, nameW, nameH, nameFontSize);
+    const dateSvg = createTextSvg(date, 0, 0, dateW, dateH, dateFontSize);
+
+    // Composite text onto image
+    const pngBuffer = await image
+      .composite([
+        { input: Buffer.from(nameSvg), left: nameX, top: nameY },
+        { input: Buffer.from(dateSvg), left: dateX, top: dateY }
+      ])
+      .png()
+      .toBuffer();
+
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Content-Disposition', `attachment; filename="certificate_${userName.replace(/\s+/g, '_')}_${Date.now()}.png"`);
+    res.send(pngBuffer);
+  } catch (err) {
+    console.error('Certificate render error:', err);
+    res.status(500).json({ error: 'Failed to render certificate.' });
+  }
+});
+
+// GET /api/user/certificate/download — public endpoint for users to download their certificate
+router.get('/certificate/download', authenticate, async (req, res) => {
+  try {
+    const userId = req.user?.userId || req.user?.id;
+    if (!userId) return res.status(401).json({ error: 'User not authenticated.' });
+
+    const meta = getCertMeta();
+    if (!meta) return res.status(404).json({ error: 'No certificate template uploaded yet.' });
+
+    const users = await query('SELECT Name FROM user WHERE UserID = ?', [userId]);
+    if (!users.length) return res.status(404).json({ error: 'User not found.' });
+    const userName = users[0].Name;
+    const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    const templatePath = path.join(CERT_TEMPLATE_DIR, meta.filename);
+    if (!fs.existsSync(templatePath)) return res.status(404).json({ error: 'Template file missing on server.' });
+
+    const saved = meta.textConfig || {};
+    const textConfig = {
+      name: { ...DEFAULT_CERT_TEXT_CONFIG.name, ...(saved.name || {}) },
+      date: { ...DEFAULT_CERT_TEXT_CONFIG.date, ...(saved.date || {}) }
+    };
+
+    // For PDF: use pdf-lib approach
+    if (meta.mimetype === 'application/pdf') {
+      let PDFDocument, rgb, StandardFonts;
+      try {
+        ({ PDFDocument, rgb, StandardFonts } = require('pdf-lib'));
+      } catch {
+        return res.status(500).json({ error: 'pdf-lib is not installed.' });
+      }
+
+      const existingBytes = fs.readFileSync(templatePath);
+      const pdfDoc = await PDFDocument.load(existingBytes);
+      const boldFont = await pdfDoc.embedFont(StandardFonts.TimesRomanBold);
+      const pages = pdfDoc.getPages();
+      const page = pages[0];
+      const { width, height } = page.getSize();
+
+      const drawField = (text, zone) => {
+        const zoneLeft   = (zone.x / 100) * width;
+        const zoneW      = (zone.width  / 100) * width;
+        const zoneH      = (zone.height / 100) * height;
+        const pdfYBottom = (1 - (zone.y + zone.height) / 100) * height;
+        const autoSize = Math.max(8, Math.min(120, Math.floor(zoneH * 0.55)));
+        const textWidth = boldFont.widthOfTextAtSize(text, autoSize);
+        const drawX = zoneLeft + Math.max(0, (zoneW - textWidth) / 2);
+        const drawY = pdfYBottom + (zoneH - autoSize) / 2;
+        page.drawText(text, { x: Math.max(0, drawX), y: Math.max(0, drawY), size: autoSize, font: boldFont, color: rgb(0, 0, 0) });
+      };
+
+      drawField(userName, textConfig.name);
+      drawField(date, textConfig.date);
+
+      const pdfBytes = await pdfDoc.save();
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="certificate_${userName.replace(/\s+/g, '_')}_${Date.now()}.pdf"`);
+      res.send(Buffer.from(pdfBytes));
+      return;
+    }
+
+    // For image templates: use sharp to composite text
+    let sharp;
+    try {
+      sharp = require('sharp');
+    } catch {
+      return res.status(500).json({ error: 'sharp is not installed.' });
+    }
+
+    const image = await sharp(templatePath);
+    const metadata = await image.metadata();
+
+    const nameX = Math.round((textConfig.name.x / 100) * metadata.width);
+    const nameY = Math.round((textConfig.name.y / 100) * metadata.height);
+    const nameW = Math.round((textConfig.name.width / 100) * metadata.width);
+    const nameH = Math.round((textConfig.name.height / 100) * metadata.height);
+
+    const dateX = Math.round((textConfig.date.x / 100) * metadata.width);
+    const dateY = Math.round((textConfig.date.y / 100) * metadata.height);
+    const dateW = Math.round((textConfig.date.width / 100) * metadata.width);
+    const dateH = Math.round((textConfig.date.height / 100) * metadata.height);
+
+    const nameFontSize = Math.max(8, Math.min(120, Math.floor(nameH * 0.55)));
+    const dateFontSize = Math.max(8, Math.min(120, Math.floor(dateH * 0.55)));
+
+    const createTextSvg = (text, x, y, w, h, fontSize) => {
+      return `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+        <text x="${w/2}" y="${h/2}" font-size="${fontSize}" font-family="Arial" font-weight="bold"
+              text-anchor="middle" dominant-baseline="central" fill="black">${text}</text>
+      </svg>`;
+    };
+
+    const nameSvg = createTextSvg(userName, 0, 0, nameW, nameH, nameFontSize);
+    const dateSvg = createTextSvg(date, 0, 0, dateW, dateH, dateFontSize);
+
+    const pngBuffer = await image
+      .composite([
+        { input: Buffer.from(nameSvg), left: nameX, top: nameY },
+        { input: Buffer.from(dateSvg), left: dateX, top: dateY }
+      ])
+      .png()
+      .toBuffer();
+
+    res.setHeader('Content-Type', 'image/png');
+    res.setHeader('Content-Disposition', `attachment; filename="certificate_${userName.replace(/\s+/g, '_')}_${Date.now()}.png"`);
+    res.send(pngBuffer);
+  } catch (err) {
+    console.error('Certificate download error:', err);
+    res.status(500).json({ error: 'Failed to download certificate.' });
+  }
+});
+
 module.exports = router;

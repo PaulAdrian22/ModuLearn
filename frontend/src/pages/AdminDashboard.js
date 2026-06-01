@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../App';
 import AdminNavbar from '../components/AdminNavbar';
+import { downloadCertificate } from '../utils/certificateService';
 
 const TOGGLE_OPTIONS = [
   { key: 'lessonProgress', label: 'Lesson Progress' },
@@ -47,6 +48,8 @@ const AdminDashboard = () => {
   const NOTIFICATIONS_PER_PAGE = 20;
   const [activityData, setActivityData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [downloadingCertificateId, setDownloadingCertificateId] = useState(null);
+  const [certificateMessage, setCertificateMessage] = useState('');
   
   // Issues Report Modal State
   const [showIssuesModal, setShowIssuesModal] = useState(false);
@@ -210,6 +213,27 @@ const AdminDashboard = () => {
       setSelectedReport(null);
     } catch (err) {
       console.error('Error resolving report:', err);
+    }
+  };
+
+  const handleDownloadCertificate = async (userId) => {
+    setDownloadingCertificateId(userId);
+    setCertificateMessage('');
+    try {
+      const result = await downloadCertificate(userId, true);
+      if (result.success) {
+        setCertificateMessage('Certificate downloaded successfully!');
+        setTimeout(() => setCertificateMessage(''), 3000);
+      } else {
+        setCertificateMessage(`Error: ${result.message}`);
+        setTimeout(() => setCertificateMessage(''), 5000);
+      }
+    } catch (err) {
+      console.error('Download error:', err);
+      setCertificateMessage('Failed to download certificate');
+      setTimeout(() => setCertificateMessage(''), 5000);
+    } finally {
+      setDownloadingCertificateId(null);
     }
   };
 
@@ -614,10 +638,14 @@ const AdminDashboard = () => {
                     };
                     const barColor = typeColors[notification.type] || '#42C5B6';
                     const checked = selectedNotificationIds.has(notification.id);
+                    const userIdMatch = notification.id?.match(/cert_eligible:(\d+)/);
+                    const certEligibleUserId = userIdMatch ? userIdMatch[1] : null;
+                    const isDownloading = downloadingCertificateId === certEligibleUserId;
+
                     return (
-                      <label
+                      <div
                         key={notification.id}
-                        className="flex items-start gap-3 border border-gray-100 rounded-lg p-3 hover:bg-gray-50 cursor-pointer"
+                        className="flex items-start gap-3 border border-gray-100 rounded-lg p-3 hover:bg-gray-50 transition-colors"
                       >
                         <input
                           type="checkbox"
@@ -628,9 +656,18 @@ const AdminDashboard = () => {
                         <div className="flex-shrink-0 w-1 rounded-full self-stretch" style={{ backgroundColor: barColor }}></div>
                         <div className="flex-1">
                           <p className="text-sm font-semibold text-gray-800 mb-1">{notification.date}</p>
-                          <p className="text-sm text-gray-600">{notification.message}</p>
+                          <p className="text-sm text-gray-600 mb-2">{notification.message}</p>
+                          {notification.type === 'cert_eligible' && certEligibleUserId && (
+                            <button
+                              onClick={() => handleDownloadCertificate(certEligibleUserId)}
+                              disabled={isDownloading}
+                              className="text-xs px-3 py-1.5 bg-[#2E7D32] hover:bg-[#1B5E20] text-white rounded font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {isDownloading ? 'Downloading...' : 'Download Certificate'}
+                            </button>
+                          )}
                         </div>
-                      </label>
+                      </div>
                     );
                   })}
                 </div>
@@ -642,6 +679,15 @@ const AdminDashboard = () => {
                 <span className="text-xs text-gray-500">
                   Page {currentPage} of {totalNotificationPages} &middot; {visibleNotifications.length} total
                 </span>
+                {certificateMessage && (
+                  <div className={`text-xs px-3 py-1 rounded font-semibold ${
+                    certificateMessage.includes('Error') || certificateMessage.includes('Failed')
+                      ? 'bg-red-100 text-red-700'
+                      : 'bg-green-100 text-green-700'
+                  }`}>
+                    {certificateMessage}
+                  </div>
+                )}
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setNotificationsPage((p) => Math.max(1, p - 1))}

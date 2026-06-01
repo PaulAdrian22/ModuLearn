@@ -427,57 +427,56 @@ const AdminLearners = () => {
     if (!selectedLearner) return;
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get(`/admin/certificate/generate/${selectedLearner.UserID}`, {
+
+      // Use new render endpoint that returns image/PDF with text already composited
+      const res = await axios.get(`/admin/certificate/render/${selectedLearner.UserID}`, {
         headers: { Authorization: `Bearer ${token}` },
-        responseType: 'arraybuffer',
+        responseType: 'blob',
         validateStatus: null
       });
 
-      const contentType = res.headers['content-type'] || '';
-
-      // Image template path: backend returns JSON with templateUrl + name + date + textConfig
-      if (contentType.includes('application/json')) {
+      if (res.status !== 200) {
         const text = new TextDecoder().decode(res.data);
-        const data = JSON.parse(text);
-
-        if (res.status !== 200) {
+        try {
+          const data = JSON.parse(text);
           await import('../utils/themedConfirm').then(({ themedConfirm }) =>
             themedConfirm({
-              title: 'Cannot Print Certificate',
-              message: data.error || 'An error occurred.',
+              title: 'Certificate Error',
+              message: data.error || 'Unexpected response from server.',
               confirmText: 'OK',
               showCancel: false,
               variant: 'danger'
             })
           );
-          return;
+        } catch {
+          await import('../utils/themedConfirm').then(({ themedConfirm }) =>
+            themedConfirm({
+              title: 'Certificate Error',
+              message: 'Failed to generate certificate.',
+              confirmText: 'OK',
+              showCancel: false,
+              variant: 'danger'
+            })
+          );
         }
+        return;
+      }
+
+      const contentType = res.headers['content-type'] || '';
+
+      // Image (PNG) - text already composited on image by backend
+      if (contentType.includes('image/')) {
+        const blob = new Blob([res.data], { type: 'image/png' });
+        const url = URL.createObjectURL(blob);
+        const printWindow = window.open('', '_blank', 'width=1100,height=800');
+        if (!printWindow) return;
 
         const escHtml = (s) => String(s ?? '').replace(/[&<>"']/g, (c) =>
           ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])
         );
 
-        const DEFAULT_CERT_ZONES = {
-          name: { x: 15, y: 42, width: 70, height: 12 },
-          date: { x: 25, y: 57, width: 50, height: 8 }
-        };
-        const nameCfg = { ...DEFAULT_CERT_ZONES.name, ...(data.textConfig?.name || {}) };
-        const dateCfg = { ...DEFAULT_CERT_ZONES.date, ...(data.textConfig?.date || {}) };
-
-        // Zone-based: text fills zone area, centered both axes, font scales with zone height
-        const zoneStyle = (z) =>
-          `position:absolute;left:${z.x}%;top:${z.y}%;width:${z.width}%;height:${z.height}%;` +
-          `display:flex;align-items:center;justify-content:center;text-align:center;` +
-          `font-family:'Times New Roman',Times,serif;font-weight:700;` +
-          `font-size:${(z.height * 0.55).toFixed(2)}vh;color:#000;` +
-          `pointer-events:none;white-space:nowrap;letter-spacing:0.04em;overflow:hidden;`;
-
-        const imgUrl = `${window.location.origin}${data.templateUrl}`;
-
-        const printWindow = window.open('', '_blank', 'width=1100,height=800');
-        if (!printWindow) return;
         printWindow.document.write(`<!doctype html>
-<html><head><title>Certificate — ${escHtml(data.userName)}</title>
+<html><head><title>Certificate — ${escHtml(selectedLearner.Name)}</title>
 <style>
   @page { margin: 0; size: A4 landscape; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -485,22 +484,21 @@ const AdminLearners = () => {
   .cert-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
 </style></head>
 <body>
-  <img class="cert-img" src="${escHtml(imgUrl)}" alt="Certificate" crossorigin="anonymous" />
-  <div style="${zoneStyle(nameCfg)}">${escHtml(data.userName)}</div>
-  <div style="${zoneStyle(dateCfg)}">${escHtml(data.date)}</div>
+  <img class="cert-img" src="${url}" alt="Certificate" crossorigin="anonymous" />
   <script>
     var img = document.querySelector('.cert-img');
     function doPrint() { window.focus(); window.print(); }
     img.onload = doPrint;
     img.onerror = doPrint;
-    setTimeout(doPrint, 3500);
+    setTimeout(doPrint, 2000);
   <\/script>
 </body></html>`);
         printWindow.document.close();
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
         return;
       }
 
-      // PDF path: backend returns PDF bytes
+      // PDF - text already stamped on PDF by backend
       if (contentType.includes('application/pdf')) {
         const blob = new Blob([res.data], { type: 'application/pdf' });
         const url = URL.createObjectURL(blob);
