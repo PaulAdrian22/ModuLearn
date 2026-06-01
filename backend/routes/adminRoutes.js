@@ -2591,16 +2591,28 @@ router.get('/certificate/render/:userId', authenticate, requireAdmin, async (req
     const nameFontSize = Math.max(8, Math.min(120, Math.floor(nameH * 0.55)));
     const dateFontSize = Math.max(8, Math.min(120, Math.floor(dateH * 0.55)));
 
-    // Create SVG overlays for text
-    const createTextSvg = (text, x, y, w, h, fontSize) => {
-      return `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-        <text x="${w/2}" y="${h/2}" font-size="${fontSize}" font-family="Arial" font-weight="bold"
-              text-anchor="middle" dominant-baseline="central" fill="black">${text}</text>
+    // Create SVG overlays for text with proper encoding
+    const createTextSvg = (text, w, h, fontSize) => {
+      // Escape text for XML
+      const escaped = String(text || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
+      return `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}">
+        <defs>
+          <style>
+            text { font-family: 'Arial', 'Helvetica', sans-serif; font-weight: bold; fill: black; }
+          </style>
+        </defs>
+        <text x="${w/2}" y="${h/2 + fontSize/3}" font-size="${fontSize}px" text-anchor="middle" dominant-baseline="middle">${escaped}</text>
       </svg>`;
     };
 
-    const nameSvg = createTextSvg(userName, 0, 0, nameW, nameH, nameFontSize);
-    const dateSvg = createTextSvg(date, 0, 0, dateW, dateH, dateFontSize);
+    const nameSvg = createTextSvg(userName, nameW, nameH, nameFontSize);
+    const dateSvg = createTextSvg(date, dateW, dateH, dateFontSize);
 
     // Composite text onto image
     const pngBuffer = await image
@@ -2705,15 +2717,27 @@ router.get('/certificate/download', authenticate, async (req, res) => {
     const nameFontSize = Math.max(8, Math.min(120, Math.floor(nameH * 0.55)));
     const dateFontSize = Math.max(8, Math.min(120, Math.floor(dateH * 0.55)));
 
-    const createTextSvg = (text, x, y, w, h, fontSize) => {
-      return `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-        <text x="${w/2}" y="${h/2}" font-size="${fontSize}" font-family="Arial" font-weight="bold"
-              text-anchor="middle" dominant-baseline="central" fill="black">${text}</text>
+    const createTextSvg = (text, w, h, fontSize) => {
+      // Escape text for XML
+      const escaped = String(text || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
+      return `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}">
+        <defs>
+          <style>
+            text { font-family: 'Arial', 'Helvetica', sans-serif; font-weight: bold; fill: black; }
+          </style>
+        </defs>
+        <text x="${w/2}" y="${h/2 + fontSize/3}" font-size="${fontSize}px" text-anchor="middle" dominant-baseline="middle">${escaped}</text>
       </svg>`;
     };
 
-    const nameSvg = createTextSvg(userName, 0, 0, nameW, nameH, nameFontSize);
-    const dateSvg = createTextSvg(date, 0, 0, dateW, dateH, dateFontSize);
+    const nameSvg = createTextSvg(userName, nameW, nameH, nameFontSize);
+    const dateSvg = createTextSvg(date, dateW, dateH, dateFontSize);
 
     const pngBuffer = await image
       .composite([
