@@ -23,6 +23,11 @@ const AdminSettings = () => {
   const [showUsernameModal, setShowUsernameModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
 
+  // Certificate settings
+  const [certTemplate, setCertTemplate] = useState(null);
+  const [certZones, setCertZones] = useState(null);
+  const [certUploading, setCertUploading] = useState(false);
+
   useEffect(() => {
     const settings = getStoredAppearanceSettings(true);
     setTheme(settings.theme);
