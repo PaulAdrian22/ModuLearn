@@ -2781,7 +2781,7 @@ router.get('/certificate/render/:userId', authenticate, requireAdmin, async (req
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
 
-      return `<?xml version="1.0" encoding="UTF-8"?><svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><text x="${w/2}" y="${h/2}" font-size="${fontSize}" font-family="sans-serif" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="black">${escaped}</text></svg>`;
+      return `<?xml version="1.0" encoding="UTF-8"?><svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><text x="${w/2}" y="${h/2}" font-size="${fontSize}" font-family="Arial, Helvetica, DejaVu Sans, Liberation Sans, sans-serif" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="black">${escaped}</text></svg>`;
     };
 
     const nameSvg = createTextSvg(userName, nameW, nameH, nameFontSize);
@@ -2899,7 +2899,7 @@ router.get('/certificate/download', authenticate, async (req, res) => {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
 
-      return `<?xml version="1.0" encoding="UTF-8"?><svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><text x="${w/2}" y="${h/2}" font-size="${fontSize}" font-family="sans-serif" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="black">${escaped}</text></svg>`;
+      return `<?xml version="1.0" encoding="UTF-8"?><svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><text x="${w/2}" y="${h/2}" font-size="${fontSize}" font-family="Arial, Helvetica, DejaVu Sans, Liberation Sans, sans-serif" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="black">${escaped}</text></svg>`;
     };
 
     const nameSvg = createTextSvg(userName, nameW, nameH, nameFontSize);

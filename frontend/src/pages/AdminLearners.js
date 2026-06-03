@@ -6,6 +6,7 @@ import AdminNavbar from '../components/AdminNavbar';
 import Avatar from '../components/Avatar';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { themedConfirm } from '../utils/themedConfirm';
+import { API_SERVER_URL } from '../config/api';
 
 const METRIC_OPTIONS = [
   { key: 'lessonProgress', label: 'Lesson Progress', yLabel: 'Percent' },
@@ -427,8 +428,73 @@ const AdminLearners = () => {
     if (!selectedLearner) return;
     try {
       const token = localStorage.getItem('token');
+      const escHtml = (s) => String(s ?? '').replace(/[&<>"']/g, (c) =>
+        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])
+      );
+      const showCertError = async (message) => {
+        await themedConfirm({
+          title: 'Certificate Error',
+          message,
+          confirmText: 'OK',
+          showCancel: false,
+          variant: 'danger'
+        });
+      };
 
-      // Use new render endpoint that returns image/PDF with text already composited
+      const previewRes = await axios.get(`/admin/certificate/generate/${selectedLearner.UserID}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        validateStatus: null
+      });
+
+      if (previewRes.status !== 200) {
+        await showCertError(previewRes.data?.error || 'Failed to generate certificate.');
+        return;
+      }
+
+      if (previewRes.data?.type === 'image') {
+        const { templateUrl, userName, date, textConfig } = previewRes.data;
+        const zones = {
+          name: { x: 15, y: 42, width: 70, height: 12, ...(textConfig?.name || {}) },
+          date: { x: 25, y: 57, width: 50, height: 8, ...(textConfig?.date || {}) }
+        };
+        const templateSrc = `${API_SERVER_URL}${templateUrl}`;
+        const nameFontSize = Math.max(2, Math.min(9, zones.name.height * 0.55));
+        const dateFontSize = Math.max(1.4, Math.min(5, zones.date.height * 0.55));
+        const printWindow = window.open('', '_blank', 'width=1100,height=800');
+        if (!printWindow) return;
+
+        printWindow.document.write(`<!doctype html>
+<html><head><title>Certificate - ${escHtml(userName || selectedLearner.Name)}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @page { margin: -15mm 0 -15mm 0; padding: 0; size: A4 landscape; }
+  * { margin: 0 !important; padding: 0 !important; box-sizing: border-box; }
+  html { margin: 0 !important; padding: 0 !important; width: 100%; height: 100%; }
+  body { width: 100vw; height: 100vh; margin: 0 !important; padding: 0 !important; overflow: hidden; position: relative; background: #fff; }
+  .certificate { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+  .cert-img { width: 100%; height: 100%; object-fit: cover; display: block; margin: 0 !important; padding: 0 !important; }
+  .cert-text { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; font-family: Arial, Helvetica, "DejaVu Sans", "Liberation Sans", sans-serif; }
+</style></head>
+<body>
+  <div class="certificate">
+    <img class="cert-img" src="${templateSrc}" alt="Certificate" crossorigin="anonymous" />
+    <svg class="cert-text" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <text x="${zones.name.x + zones.name.width / 2}" y="${zones.name.y + zones.name.height / 2}" font-size="${nameFontSize}" font-weight="700" text-anchor="middle" dominant-baseline="central" fill="#000">${escHtml(userName)}</text>
+      <text x="${zones.date.x + zones.date.width / 2}" y="${zones.date.y + zones.date.height / 2}" font-size="${dateFontSize}" font-weight="700" text-anchor="middle" dominant-baseline="central" fill="#000">${escHtml(date)}</text>
+    </svg>
+  </div>
+  <script>
+    var img = document.querySelector('.cert-img');
+    function doPrint() { window.focus(); window.print(); }
+    img.onload = doPrint;
+    img.onerror = doPrint;
+    setTimeout(doPrint, 2000);
+  <\/script>
+</body></html>`);
+        printWindow.document.close();
+        return;
+      }
+
       const res = await axios.get(`/admin/certificate/render/${selectedLearner.UserID}`, {
         headers: { Authorization: `Bearer ${token}` },
         responseType: 'blob',
@@ -439,68 +505,14 @@ const AdminLearners = () => {
         const text = new TextDecoder().decode(res.data);
         try {
           const data = JSON.parse(text);
-          await import('../utils/themedConfirm').then(({ themedConfirm }) =>
-            themedConfirm({
-              title: 'Certificate Error',
-              message: data.error || 'Unexpected response from server.',
-              confirmText: 'OK',
-              showCancel: false,
-              variant: 'danger'
-            })
-          );
+          await showCertError(data.error || 'Unexpected response from server.');
         } catch {
-          await import('../utils/themedConfirm').then(({ themedConfirm }) =>
-            themedConfirm({
-              title: 'Certificate Error',
-              message: 'Failed to generate certificate.',
-              confirmText: 'OK',
-              showCancel: false,
-              variant: 'danger'
-            })
-          );
+          await showCertError('Failed to generate certificate.');
         }
         return;
       }
 
       const contentType = res.headers['content-type'] || '';
-
-      // Image (PNG) - text already composited on image by backend
-      if (contentType.includes('image/')) {
-        const blob = new Blob([res.data], { type: 'image/png' });
-        const url = URL.createObjectURL(blob);
-        const printWindow = window.open('', '_blank', 'width=1100,height=800');
-        if (!printWindow) return;
-
-        const escHtml = (s) => String(s ?? '').replace(/[&<>"']/g, (c) =>
-          ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])
-        );
-
-        printWindow.document.write(`<!doctype html>
-<html><head><title>Certificate — ${escHtml(selectedLearner.Name)}</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-  @page { margin: -15mm 0 -15mm 0; padding: 0; size: A4 landscape; }
-  * { margin: 0 !important; padding: 0 !important; box-sizing: border-box; }
-  html { margin: 0 !important; padding: 0 !important; width: 100%; height: 100%; }
-  body { width: 100vw; height: 100vh; margin: 0 !important; padding: 0 !important; overflow: hidden; position: relative; background: #fff; }
-  .cert-img { width: 100%; height: 100%; object-fit: cover; display: block; margin: 0 !important; padding: 0 !important; }
-</style></head>
-<body>
-  <img class="cert-img" src="${url}" alt="Certificate" crossorigin="anonymous" />
-  <script>
-    var img = document.querySelector('.cert-img');
-    function doPrint() { window.focus(); window.print(); }
-    img.onload = doPrint;
-    img.onerror = doPrint;
-    setTimeout(doPrint, 2000);
-  <\/script>
-</body></html>`);
-        printWindow.document.close();
-        setTimeout(() => URL.revokeObjectURL(url), 60000);
-        return;
-      }
-
-      // PDF - text already stamped on PDF by backend
       if (contentType.includes('application/pdf')) {
         const blob = new Blob([res.data], { type: 'application/pdf' });
         const url = URL.createObjectURL(blob);
@@ -512,20 +524,13 @@ const AdminLearners = () => {
         return;
       }
 
-      // Fallback: try to parse as JSON error
       const text = new TextDecoder().decode(res.data);
       try {
         const data = JSON.parse(text);
-        await import('../utils/themedConfirm').then(({ themedConfirm }) =>
-          themedConfirm({
-            title: 'Certificate Error',
-            message: data.error || 'Unexpected response from server.',
-            confirmText: 'OK',
-            showCancel: false,
-            variant: 'danger'
-          })
-        );
-      } catch {}
+        await showCertError(data.error || 'Unexpected response from server.');
+      } catch {
+        await showCertError('Unexpected response from server.');
+      }
     } catch (err) {
       console.error('Print certificate error:', err);
     }
