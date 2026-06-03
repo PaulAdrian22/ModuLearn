@@ -26,7 +26,6 @@ import AddLesson from './pages/AddLesson';
 import AdminLearners from './pages/AdminLearners';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminSettings from './pages/AdminSettings';
-import AdminCertificateEditor from './pages/AdminCertificateEditor';
 import AdminSimulations from './pages/AdminSimulations';
 import AdminSimulationEditor from './pages/AdminSimulationEditor';
 import ForgotPassword from './pages/ForgotPassword';
@@ -635,14 +634,6 @@ function App() {
               element={
                 <AdminRoute>
                   <AdminSettings />
-                </AdminRoute>
-              }
-            />
-            <Route
-              path="/admin/certificate-editor"
-              element={
-                <AdminRoute>
-                  <AdminCertificateEditor />
                 </AdminRoute>
               }
             />
