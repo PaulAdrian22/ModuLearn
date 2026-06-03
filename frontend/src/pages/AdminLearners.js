@@ -477,11 +477,13 @@ const AdminLearners = () => {
 
         printWindow.document.write(`<!doctype html>
 <html><head><title>Certificate — ${escHtml(selectedLearner.Name)}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-  @page { margin: 0; size: A4 landscape; }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { width: 100vw; height: 100vh; overflow: hidden; position: relative; background: #fff; }
-  .cert-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
+  @page { margin: -15mm 0 -15mm 0; padding: 0; size: A4 landscape; }
+  * { margin: 0 !important; padding: 0 !important; box-sizing: border-box; }
+  html { margin: 0 !important; padding: 0 !important; width: 100%; height: 100%; }
+  body { width: 100vw; height: 100vh; margin: 0 !important; padding: 0 !important; overflow: hidden; position: relative; background: #fff; }
+  .cert-img { width: 100%; height: 100%; object-fit: cover; display: block; margin: 0 !important; padding: 0 !important; }
 </style></head>
 <body>
   <img class="cert-img" src="${url}" alt="Certificate" crossorigin="anonymous" />

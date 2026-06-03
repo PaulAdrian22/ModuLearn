@@ -2601,14 +2601,7 @@ router.get('/certificate/render/:userId', authenticate, requireAdmin, async (req
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
 
-      return `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}">
-        <defs>
-          <style>
-            text { font-family: 'Arial', 'Helvetica', sans-serif; font-weight: bold; fill: black; }
-          </style>
-        </defs>
-        <text x="${w/2}" y="${h/2 + fontSize/3}" font-size="${fontSize}px" text-anchor="middle" dominant-baseline="middle">${escaped}</text>
-      </svg>`;
+      return `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><text x="${w/2}" y="${h/2}" font-size="${fontSize}" font-family="Arial" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="black">${escaped}</text></svg>`;
     };
 
     const nameSvg = createTextSvg(userName, nameW, nameH, nameFontSize);
@@ -2726,14 +2719,7 @@ router.get('/certificate/download', authenticate, async (req, res) => {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
 
-      return `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}">
-        <defs>
-          <style>
-            text { font-family: 'Arial', 'Helvetica', sans-serif; font-weight: bold; fill: black; }
-          </style>
-        </defs>
-        <text x="${w/2}" y="${h/2 + fontSize/3}" font-size="${fontSize}px" text-anchor="middle" dominant-baseline="middle">${escaped}</text>
-      </svg>`;
+      return `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg"><text x="${w/2}" y="${h/2}" font-size="${fontSize}" font-family="Arial" font-weight="bold" text-anchor="middle" dominant-baseline="central" fill="black">${escaped}</text></svg>`;
     };
 
     const nameSvg = createTextSvg(userName, nameW, nameH, nameFontSize);
