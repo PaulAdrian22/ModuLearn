@@ -459,7 +459,16 @@ const updateProgress = async (req, res) => {
       'SELECT * FROM progress WHERE ProgressID = ?',
       [canonicalProgress.ProgressID]
     );
-    
+
+    // Check for certificate eligibility after progress update
+    if (isCompleted) {
+      try {
+        await checkAndNotifyCertificateEligibility(userId);
+      } catch (err) {
+        console.warn('Certificate eligibility check failed (non-blocking):', err);
+      }
+    }
+
     res.json({
       message: 'Progress updated successfully',
       progress: updatedProgress[0],
@@ -548,6 +557,101 @@ const trackLessonTime = async (req, res) => {
       error: 'Internal Server Error',
       message: 'Failed to track lesson time'
     });
+  }
+};
+
+const checkAndNotifyCertificateEligibility = async (userId) => {
+  const CORE_SIM_LIMIT = 20;
+
+  // Count total non-supplementary modules
+  const [{ totalModules }] = await query(`
+    SELECT COUNT(DISTINCT LessonOrder) AS totalModules
+    FROM module
+    WHERE Is_Deleted = FALSE AND (Difficulty IS NULL OR LOWER(Difficulty) != 'supplementary')
+  `);
+
+  // Count total modules this user has completed
+  const [{ completedModules }] = await query(`
+    SELECT COUNT(DISTINCT m.LessonOrder) AS completedModules
+    FROM progress p
+    JOIN module m ON m.ModuleID = p.ModuleID
+    WHERE p.UserID = ?
+      AND p.CompletionRate >= 100
+      AND m.Is_Deleted = FALSE
+      AND (m.Difficulty IS NULL OR LOWER(m.Difficulty) != 'supplementary')
+  `, [userId]);
+
+  if (Number(completedModules) < Number(totalModules)) {
+    return; // Not all lessons completed
+  }
+
+  // Check if simulations table exists and count core simulations
+  const simCheck = await query('SHOW TABLES LIKE \'simulation_progress\'').catch(() => []);
+  if (simCheck.length === 0) {
+    // No simulation table yet - user is eligible with just lessons
+    await createCertificateNotification(userId);
+    return;
+  }
+
+  const [{ totalSims }] = await query(
+    `SELECT COUNT(*) AS totalSims FROM simulation WHERE SimulationOrder > 0 AND SimulationOrder <= ?`,
+    [CORE_SIM_LIMIT]
+  ).catch(() => [{ totalSims: 0 }]);
+
+  if (Number(totalSims) === 0) {
+    // No core simulations - user is eligible with just lessons
+    await createCertificateNotification(userId);
+    return;
+  }
+
+  // Check if user completed all core simulations
+  const [{ completedSims }] = await query(`
+    SELECT COUNT(*) AS completedSims
+    FROM simulation_progress sp
+    JOIN simulation s ON s.SimulationID = sp.SimulationID
+    WHERE sp.UserID = ? AND s.SimulationOrder > 0 AND s.SimulationOrder <= ?
+      AND sp.CompletionStatus = 'completed'
+  `, [userId, CORE_SIM_LIMIT]);
+
+  if (Number(completedSims) >= Number(totalSims)) {
+    // User completed all required modules and simulations
+    await createCertificateNotification(userId);
+  }
+};
+
+const createCertificateNotification = async (userId) => {
+  // Ensure notification table exists
+  await query(`
+    CREATE TABLE IF NOT EXISTS user_notifications (
+      NotificationID INT AUTO_INCREMENT PRIMARY KEY,
+      UserID INT NOT NULL,
+      Type VARCHAR(50) NOT NULL,
+      Title VARCHAR(255) NOT NULL,
+      Message TEXT NOT NULL,
+      IsRead BOOLEAN DEFAULT FALSE,
+      ReferenceID INT,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (UserID) REFERENCES user(UserID) ON DELETE CASCADE
+    )
+  `);
+
+  // Check if already notified
+  const existing = await query(
+    'SELECT NotificationID FROM user_notifications WHERE UserID = ? AND Type = ? LIMIT 1',
+    [userId, 'certificate_ready']
+  );
+
+  if (existing.length === 0) {
+    // Create notification only if not already sent
+    await query(
+      'INSERT INTO user_notifications (UserID, Type, Title, Message) VALUES (?, ?, ?, ?)',
+      [
+        userId,
+        'certificate_ready',
+        'Your Certificate is Ready',
+        'Congratulations! You have completed all requirements. Your certificate is ready for download.'
+      ]
+    );
   }
 };
 

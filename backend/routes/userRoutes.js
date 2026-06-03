@@ -88,4 +88,112 @@ router.put('/notifications/read-all', authenticate, userController.markAllNotifi
 // PUT /api/users/notifications/:id/read - Mark a single notification as read
 router.put('/notifications/:id/read', authenticate, userController.markNotificationRead);
 
+// GET /api/users/certificate/:userId — download generated certificate (learner only)
+router.get('/certificate/:userId', authenticate, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const authenticatedUserId = req.user.userId;
+
+    // Only allow users to download their own certificate
+    if (Number(userId) !== Number(authenticatedUserId)) {
+      return res.status(403).json({ error: 'Unauthorized', message: 'You can only download your own certificate.' });
+    }
+
+    if (!/^\d+$/.test(userId)) return res.status(400).json({ error: 'Invalid user ID.' });
+
+    // Reuse admin certificate generation logic
+    const { query } = require('../config/database');
+    const fs = require('fs');
+    const path = require('path');
+
+    const CERT_TEMPLATE_DIR = path.join(__dirname, '..', 'uploads', 'cert-template');
+    const CERT_META_FILE = path.join(CERT_TEMPLATE_DIR, 'meta.json');
+
+    const getCertMeta = () => {
+      try {
+        if (fs.existsSync(CERT_META_FILE)) {
+          return JSON.parse(fs.readFileSync(CERT_META_FILE, 'utf8'));
+        }
+      } catch {}
+      return null;
+    };
+
+    const meta = getCertMeta();
+    if (!meta) return res.status(404).json({ error: 'No certificate template available.' });
+
+    const users = await query('SELECT Name FROM user WHERE UserID = ?', [userId]);
+    if (!users.length) return res.status(404).json({ error: 'User not found.' });
+
+    const userName = users[0].Name;
+    const date = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    const templatePath = path.join(CERT_TEMPLATE_DIR, meta.filename);
+    if (!fs.existsSync(templatePath)) return res.status(404).json({ error: 'Template file missing.' });
+
+    const DEFAULT_CERT_TEXT_CONFIG = {
+      name: { x: 15, y: 42, width: 70, height: 12 },
+      date: { x: 25, y: 57, width: 50, height: 8 }
+    };
+
+    const saved = meta.textConfig || {};
+    const textConfig = {
+      name: { ...DEFAULT_CERT_TEXT_CONFIG.name, ...(saved.name || {}) },
+      date: { ...DEFAULT_CERT_TEXT_CONFIG.date, ...(saved.date || {}) }
+    };
+
+    if (meta.mimetype.startsWith('image/')) {
+      return res.json({
+        type: 'image',
+        templateUrl: `/uploads/cert-template/${meta.filename}`,
+        userName,
+        date,
+        textConfig
+      });
+    }
+
+    // PDF: stamp name + date using pdf-lib at saved positions
+    let PDFDocument, rgb, StandardFonts;
+    try {
+      ({ PDFDocument, rgb, StandardFonts } = require('pdf-lib'));
+    } catch {
+      return res.status(500).json({ error: 'PDF library not available.' });
+    }
+
+    const existingBytes = fs.readFileSync(templatePath);
+    const pdfDoc = await PDFDocument.load(existingBytes);
+
+    const boldFont = await pdfDoc.embedFont(StandardFonts.TimesRomanBold);
+
+    const pages = pdfDoc.getPages();
+    const page = pages[0];
+    const { width, height } = page.getSize();
+
+    const drawField = (text, zone) => {
+      const zoneLeft   = (zone.x / 100) * width;
+      const zoneW      = (zone.width  / 100) * width;
+      const zoneH      = (zone.height / 100) * height;
+      const pdfYBottom = (1 - (zone.y + zone.height) / 100) * height;
+
+      const autoSize = Math.max(8, Math.min(120, Math.floor(zoneH * 0.55)));
+      const textWidth = boldFont.widthOfTextAtSize(text, autoSize);
+
+      const drawX = zoneLeft + Math.max(0, (zoneW - textWidth) / 2);
+      const drawY = pdfYBottom + (zoneH - autoSize) / 2;
+
+      page.drawText(text, { x: Math.max(0, drawX), y: Math.max(0, drawY), size: autoSize, font: boldFont, color: rgb(0, 0, 0) });
+    };
+
+    drawField(userName, textConfig.name);
+    drawField(date, textConfig.date);
+
+    const pdfBytes = await pdfDoc.save();
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="certificate_${userId}.pdf"`);
+    res.send(Buffer.from(pdfBytes));
+  } catch (err) {
+    console.error('Certificate download error:', err);
+    res.status(500).json({ error: 'Failed to download certificate.' });
+  }
+});
+
 module.exports = router;

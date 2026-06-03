@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../App';
 import AdminNavbar from '../components/AdminNavbar';
 import Notification from '../components/Notification';
 import { applyAppearanceSettings, getStoredAppearanceSettings, saveAppearanceSettings } from '../utils/appearanceSettings';
-import { API_SERVER_URL } from '../config/api';
 
 const AdminSettings = () => {
   const { user } = useAuth();
@@ -16,11 +15,6 @@ const AdminSettings = () => {
   const [fontSize, setFontSize] = useState(() => getStoredAppearanceSettings(true).fontSize);
   const [uiSize, setUiSize] = useState(() => getStoredAppearanceSettings(true).uiSize);
 
-  // Certificate template
-  const [certTemplate, setCertTemplate] = useState(null);
-  const [certUploading, setCertUploading] = useState(false);
-  const [certZones, setCertZones] = useState(null);
-  const certFileRef = useRef(null);
 
   // Modals
   const [showThemeModal, setShowThemeModal] = useState(false);
@@ -48,7 +42,6 @@ const AdminSettings = () => {
     };
 
     fetchAdminContact();
-    fetchCertTemplate();
   }, []);
 
   const showNotification = (message, type = 'success') => {
@@ -279,85 +272,15 @@ const AdminSettings = () => {
             </svg>
             Certificate Template
           </h2>
-
-          <p className="text-sm text-gray-500 mb-4">
-            Upload the certificate template that will be used when printing a learner's certificate.
-            Accepted formats: <strong>PDF</strong> or any image (<strong>WebP, PNG, JPG, GIF, BMP, TIFF</strong>). Maximum file size: <strong>10 MB</strong>.
-            {' '}For image templates, name and date are overlaid at the configured positions.
-            For PDF templates, text is stamped onto the first page.
+          <p className="text-sm text-gray-600 mb-4">
+            Manage your certificate template and configure text positions for learner names and dates.
           </p>
-
-          {certTemplate ? (
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4 p-4 bg-gray-50 rounded-lg border border-border">
-              <div className="flex items-center gap-3 flex-1 min-w-0">
-                <div className="w-10 h-10 bg-[#346C9A]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                  {certTemplate.mimetype?.startsWith('image/') ? (
-                    <svg className="w-5 h-5 text-[#346C9A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  ) : (
-                    <svg className="w-5 h-5 text-[#346C9A]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                    </svg>
-                  )}
-                </div>
-                <div className="min-w-0">
-                  <p className="font-semibold text-gray-900 truncate">{certTemplate.originalName}</p>
-                  <p className="text-xs text-gray-500">
-                    {certTemplate.mimetype?.startsWith('image/') ? `Image (${certTemplate.originalName?.split('.').pop()?.toUpperCase() || 'IMG'})` : 'PDF Document'}
-                    {certTemplate.size ? ` · ${formatFileSize(certTemplate.size)}` : ''}
-                    {certTemplate.uploadedAt ? ` · Uploaded ${new Date(certTemplate.uploadedAt).toLocaleDateString()}` : ''}
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-2 flex-shrink-0">
-                <button
-                  onClick={() => certFileRef.current?.click()}
-                  disabled={certUploading}
-                  className="px-4 py-2 bg-[#346C9A] text-white rounded-lg hover:bg-[#2A5D84] transition-all text-sm font-semibold disabled:opacity-50"
-                >
-                  Replace
-                </button>
-                <button
-                  onClick={handleCertDelete}
-                  className="px-4 py-2 bg-[#D93B3B] hover:bg-[#B82E2E] text-white rounded-lg transition-all text-sm font-semibold"
-                >
-                  Remove
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 gap-3">
-              <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-              </svg>
-              <p className="text-gray-500 text-sm">No certificate template uploaded yet.</p>
-              <button
-                onClick={() => certFileRef.current?.click()}
-                disabled={certUploading}
-                className="px-5 py-2 bg-[#346C9A] text-white rounded-lg hover:bg-[#2A5D84] transition-all font-semibold disabled:opacity-50"
-              >
-                {certUploading ? 'Uploading...' : 'Upload Template'}
-              </button>
-            </div>
-          )}
-
-          {certTemplate && (
-            <CertZoneEditor
-              template={certTemplate}
-              savedConfig={certZones}
-              onSaved={(cfg) => setCertZones(cfg)}
-              onNotify={showNotification}
-            />
-          )}
-
-          <input
-            ref={certFileRef}
-            type="file"
-            accept=".pdf,.webp,.png,.jpg,.jpeg,.gif,.bmp,.tiff,.tif,application/pdf,image/*"
-            className="hidden"
-            onChange={handleCertUpload}
-          />
+          <button
+            onClick={() => window.location.href = '/admin/certificate-editor'}
+            className="px-6 py-2 bg-[#346C9A] text-white rounded-lg hover:bg-[#2A5D84] font-semibold transition-colors"
+          >
+            Open Certificate Editor
+          </button>
         </div>
 
         {/* Account Section */}
@@ -771,210 +694,6 @@ const UiSizeModal = ({ currentSize, onSave, onClose }) => {
             Cancel
           </button>
         </div>
-      </div>
-    </div>
-  );
-};
-
-// ─── Certificate zone editor ──────────────────────────────────────────────────
-
-const DEFAULT_CERT_ZONES = {
-  name: { x: 15, y: 42, width: 70, height: 12 },
-  date: { x: 25, y: 57, width: 50, height: 8 }
-};
-
-const ZONE_CFG = {
-  name: { label: 'Full Name', color: '#059669', bg: 'rgba(16,185,129,0.15)', border: '#059669' },
-  date: { label: 'Date',      color: '#d97706', bg: 'rgba(245,158,11,0.15)', border: '#d97706' }
-};
-
-const HANDLE_POSITIONS = {
-  nw: { top: -4,  left: -4 },
-  n:  { top: -4,  left: 'calc(50% - 4px)' },
-  ne: { top: -4,  right: -4 },
-  e:  { top: 'calc(50% - 4px)', right: -4 },
-  se: { bottom: -4, right: -4 },
-  s:  { bottom: -4, left: 'calc(50% - 4px)' },
-  sw: { bottom: -4, left: -4 },
-  w:  { top: 'calc(50% - 4px)', left: -4 }
-};
-
-const HANDLE_CURSORS = {
-  nw: 'nw-resize', n: 'n-resize', ne: 'ne-resize', e: 'e-resize',
-  se: 'se-resize', s: 's-resize', sw: 'sw-resize', w: 'w-resize'
-};
-
-const ZoneBox = ({ field, zone, onStartDrag }) => {
-  const cfg = ZONE_CFG[field];
-  return (
-    <div
-      onMouseDown={(e) => onStartDrag(field, 'move', e)}
-      style={{
-        position: 'absolute',
-        left: `${zone.x}%`, top: `${zone.y}%`,
-        width: `${zone.width}%`, height: `${zone.height}%`,
-        background: cfg.bg, border: `2px solid ${cfg.border}`,
-        borderRadius: 3, cursor: 'move', zIndex: 10, boxSizing: 'border-box'
-      }}
-    >
-      <div style={{
-        position: 'absolute', top: 2, left: 4,
-        fontSize: 10, fontWeight: 700, color: cfg.color,
-        lineHeight: 1, pointerEvents: 'none', userSelect: 'none', whiteSpace: 'nowrap'
-      }}>
-        {cfg.label}
-      </div>
-      {Object.keys(HANDLE_POSITIONS).map(pos => (
-        <div
-          key={pos}
-          onMouseDown={(e) => onStartDrag(field, pos, e)}
-          style={{
-            position: 'absolute', width: 8, height: 8,
-            background: cfg.border, border: '1.5px solid white',
-            borderRadius: 1, cursor: HANDLE_CURSORS[pos], zIndex: 11,
-            ...HANDLE_POSITIONS[pos]
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-
-const CertZoneEditor = ({ template, savedConfig, onSaved, onNotify }) => {
-  const [zones, setZones] = useState(() => ({
-    name: { ...DEFAULT_CERT_ZONES.name, ...(savedConfig?.name || {}) },
-    date: { ...DEFAULT_CERT_ZONES.date, ...(savedConfig?.date || {}) }
-  }));
-  const [saving, setSaving] = useState(false);
-  const containerRef = useRef(null);
-  const dragRef = useRef(null);
-
-  useEffect(() => {
-    setZones({
-      name: { ...DEFAULT_CERT_ZONES.name, ...(savedConfig?.name || {}) },
-      date: { ...DEFAULT_CERT_ZONES.date, ...(savedConfig?.date || {}) }
-    });
-  }, [savedConfig]);
-
-  useEffect(() => {
-    const onMove = (e) => {
-      if (!dragRef.current || !containerRef.current) return;
-      const { field, mode, startX, startY, startZone } = dragRef.current;
-      const rect = containerRef.current.getBoundingClientRect();
-      const dx = ((e.clientX - startX) / rect.width) * 100;
-      const dy = ((e.clientY - startY) / rect.height) * 100;
-      setZones(prev => {
-        const z = { ...startZone };
-        if (mode === 'move') {
-          z.x = Math.max(0, Math.min(100 - z.width,  startZone.x + dx));
-          z.y = Math.max(0, Math.min(100 - z.height, startZone.y + dy));
-        } else {
-          if (mode.includes('e')) z.width  = Math.max(5, Math.min(100 - startZone.x, startZone.width  + dx));
-          if (mode.includes('w')) { const w = Math.max(5, startZone.width - dx); z.x = startZone.x + startZone.width - w; z.width = w; }
-          if (mode.includes('s')) z.height = Math.max(3, Math.min(100 - startZone.y, startZone.height + dy));
-          if (mode.includes('n')) { const h = Math.max(3, startZone.height - dy); z.y = startZone.y + startZone.height - h; z.height = h; }
-        }
-        return { ...prev, [field]: z };
-      });
-    };
-    const onUp = () => { dragRef.current = null; };
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onUp);
-    return () => {
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mouseup', onUp);
-    };
-  }, []);
-
-  const startDrag = (field, mode, e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    dragRef.current = { field, mode, startX: e.clientX, startY: e.clientY, startZone: { ...zones[field] } };
-  };
-
-  const handleSave = async () => {
-    setSaving(true);
-    try {
-      const res = await axios.put('/admin/certificate/template/config', { textConfig: zones }, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      });
-      onSaved(res.data.template?.textConfig || zones);
-      onNotify('Zone positions saved.');
-    } catch (err) {
-      onNotify(err.response?.data?.error || 'Failed to save zone positions.', 'error');
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const isImage = template?.mimetype?.startsWith('image/');
-  // Use API_SERVER_URL to construct the full path to backend uploads directory
-  const templateSrc = `${API_SERVER_URL}/uploads/cert-template/${template.filename}`;
-
-  return (
-    <div className="mt-5 border border-border rounded-lg overflow-hidden">
-      <div className="px-4 py-3 bg-gray-50 border-b border-border flex items-center justify-between">
-        <span className="text-sm font-semibold text-gray-700">Certificate Editor</span>
-        <span className="text-xs text-gray-400">Drag to move · drag handles to resize</span>
-      </div>
-
-      {/* Legend */}
-      <div className="px-4 py-2 bg-white border-b border-gray-100 flex flex-wrap items-center gap-4 text-xs text-gray-500">
-        {Object.entries(ZONE_CFG).map(([key, cfg]) => (
-          <span key={key} className="flex items-center gap-1.5">
-            <span className="inline-block w-3 h-3 rounded-sm border-2" style={{ background: cfg.bg, borderColor: cfg.border }} />
-            <span style={{ color: cfg.color, fontWeight: 600 }}>{cfg.label}</span>
-          </span>
-        ))}
-        <span className="text-gray-400">— drag the colored box to move, drag its edge handles to resize</span>
-      </div>
-
-      {/* Canvas — fixed A4-landscape aspect ratio so zones scale correctly */}
-      <div ref={containerRef} className="relative select-none" style={{ background: '#6b7280' }}>
-        {/* Aspect-ratio spacer (A4 landscape ≈ 1.414:1) */}
-        <div style={{ paddingBottom: '70.7%' }} />
-        {/* Template preview fills the canvas absolutely */}
-        <div className="absolute inset-0">
-          {isImage ? (
-            <img
-              src={templateSrc}
-              alt="Certificate template"
-              className="w-full h-full object-contain block pointer-events-none"
-              draggable={false}
-              style={{ background: '#fff' }}
-            />
-          ) : (
-            <embed
-              src={templateSrc}
-              type="application/pdf"
-              className="w-full h-full block"
-              style={{ pointerEvents: 'none' }}
-            />
-          )}
-        </div>
-        {/* Zone overlays — positioned over the full canvas */}
-        {Object.keys(zones).map(field => (
-          <ZoneBox key={field} field={field} zone={zones[field]} onStartDrag={startDrag} />
-        ))}
-      </div>
-
-      <div className="px-4 py-3 bg-gray-50 border-t border-border flex flex-wrap items-center gap-3">
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          className="px-5 py-2 bg-[#346C9A] text-white rounded-lg hover:bg-[#2A5D84] font-semibold disabled:opacity-50 transition-colors"
-        >
-          {saving ? 'Saving…' : 'Save'}
-        </button>
-        <button
-          onClick={() => setZones({ name: { ...DEFAULT_CERT_ZONES.name }, date: { ...DEFAULT_CERT_ZONES.date } })}
-          className="px-4 py-2 border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-100 text-sm font-medium"
-        >
-          Reset to Default
-        </button>
-        <span className="text-xs text-gray-400">
-          Positions are stored and applied when printing any certificate.
-        </span>
       </div>
     </div>
   );
