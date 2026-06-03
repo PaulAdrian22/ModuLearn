@@ -100,6 +100,44 @@ const Navbar = ({ suppressAutoTour = false }) => {
     }
   };
 
+  const downloadCertificate = async (userId) => {
+    if (!userId) return;
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const res = await fetch(`${API_SERVER_URL}/api/users/certificate/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error('Failed to download certificate');
+
+      const contentType = res.headers.get('content-type');
+      if (contentType?.includes('application/json')) {
+        const data = await res.json();
+        if (data.type === 'image') {
+          const link = document.createElement('a');
+          link.href = `${API_SERVER_URL}${data.templateUrl}`;
+          link.download = `certificate_${userId}.${data.templateUrl.split('.').pop()}`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      } else if (contentType?.includes('application/pdf')) {
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `certificate_${userId}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      }
+    } catch (err) {
+      console.error('Certificate download error:', err);
+      alert('Failed to download certificate');
+    }
+  };
+
   const formatNotifTime = (ts) => {
     const diff = Date.now() - new Date(ts).getTime();
     const mins = Math.floor(diff / 60000);
@@ -577,9 +615,8 @@ const Navbar = ({ suppressAutoTour = false }) => {
                     </div>
                   ) : (
                     notifications.map((notif) => (
-                      <button
+                      <div
                         key={notif.NotificationID}
-                        onClick={() => !notif.IsRead && handleMarkRead(notif.NotificationID)}
                         className={`w-full text-left px-4 py-3 flex gap-3 items-start transition-colors hover:bg-gray-50 ${
                           notif.IsRead ? 'opacity-60' : ''
                         }`}
@@ -588,12 +625,18 @@ const Navbar = ({ suppressAutoTour = false }) => {
                           className={`mt-0.5 flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
                             notif.Type === 'password_reset'
                               ? 'bg-amber-100 text-amber-600'
+                              : notif.Type === 'certificate_ready'
+                              ? 'bg-blue-100 text-blue-600'
                               : 'bg-emerald-100 text-emerald-600'
                           }`}
                         >
                           {notif.Type === 'password_reset' ? (
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                            </svg>
+                          ) : notif.Type === 'certificate_ready' ? (
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                           ) : (
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -606,12 +649,20 @@ const Navbar = ({ suppressAutoTour = false }) => {
                             {notif.Title}
                           </p>
                           <p className="text-xs text-gray-500 mt-0.5 leading-relaxed">{notif.Message}</p>
+                          {notif.Type === 'certificate_ready' && (
+                            <button
+                              onClick={() => downloadCertificate(user?.userId)}
+                              className="mt-2 text-xs px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                            >
+                              Download Certificate
+                            </button>
+                          )}
                           <p className="text-[11px] text-gray-400 mt-1">{formatNotifTime(notif.created_at)}</p>
                         </div>
                         {!notif.IsRead && (
                           <span className="flex-shrink-0 mt-1.5 w-2 h-2 rounded-full bg-[#2BC4B3]" />
                         )}
-                      </button>
+                      </div>
                     ))
                   )}
                 </div>

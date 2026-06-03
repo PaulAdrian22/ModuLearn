@@ -2419,6 +2419,186 @@ router.put('/certificate/template/config', authenticate, requireAdmin, async (re
   res.json({ message: 'Text positions saved.', template: updated });
 });
 
+// POST /api/admin/certificate/generate-and-notify/:userId — generate certificate and notify learner
+router.post('/certificate/generate-and-notify/:userId', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    if (!/^\d+$/.test(userId)) return res.status(400).json({ error: 'Invalid user ID.' });
+
+    const meta = getCertMeta();
+    if (!meta) return res.status(404).json({ error: 'No certificate template uploaded yet.' });
+
+    // Check eligibility
+    const users = await query('SELECT Name, UserID FROM user WHERE UserID = ? AND Role = ? AND is_archived = FALSE', [userId, 'student']);
+    if (!users.length) return res.status(404).json({ error: 'User not found or not eligible.' });
+
+    const userName = users[0].Name;
+
+    // Check if already notified
+    const existingNotif = await query(
+      'SELECT NotificationID FROM user_notifications WHERE UserID = ? AND Type = ? LIMIT 1',
+      [userId, 'certificate_ready']
+    );
+
+    if (existingNotif.length > 0) {
+      return res.json({ message: 'User already notified about certificate.', alreadyNotified: true });
+    }
+
+    // Create the notification
+    await query(`
+      CREATE TABLE IF NOT EXISTS user_notifications (
+        NotificationID INT AUTO_INCREMENT PRIMARY KEY,
+        UserID INT NOT NULL,
+        Type VARCHAR(50) NOT NULL,
+        Title VARCHAR(255) NOT NULL,
+        Message TEXT NOT NULL,
+        IsRead BOOLEAN DEFAULT FALSE,
+        ReferenceID INT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (UserID) REFERENCES user(UserID) ON DELETE CASCADE
+      )
+    `);
+
+    await query(
+      'INSERT INTO user_notifications (UserID, Type, Title, Message) VALUES (?, ?, ?, ?)',
+      [
+        userId,
+        'certificate_ready',
+        'Your Certificate is Ready',
+        `Congratulations! Your certificate is ready for download.`
+      ]
+    );
+
+    res.json({
+      message: 'Certificate notification sent to learner.',
+      userId: Number(userId),
+      userName,
+      notified: true
+    });
+  } catch (err) {
+    console.error('Certificate generate-and-notify error:', err);
+    res.status(500).json({ error: 'Failed to notify learner.' });
+  }
+});
+
+// POST /api/admin/certificate/notify-all-eligible — generate and notify all newly-eligible learners
+router.post('/certificate/notify-all-eligible', authenticate, requireAdmin, async (req, res) => {
+  try {
+    await ensureModuleAdminColumns();
+
+    const meta = getCertMeta();
+    if (!meta) return res.status(404).json({ error: 'No certificate template uploaded yet.' });
+
+    // Count total non-supplementary modules
+    const [{ totalModules }] = await query(`
+      SELECT COUNT(DISTINCT LessonOrder) AS totalModules
+      FROM module
+      WHERE Is_Deleted = FALSE AND (Difficulty IS NULL OR LOWER(Difficulty) != 'supplementary')
+    `);
+
+    // Count core simulations
+    const simCheck = await query('SHOW TABLES LIKE \'simulation_progress\'');
+    const hasSimTable = simCheck.length > 0;
+
+    let totalSims = 0;
+    if (hasSimTable) {
+      const [{ cnt }] = await query(
+        `SELECT COUNT(*) AS cnt FROM simulation WHERE SimulationOrder > 0 AND SimulationOrder <= ?`,
+        [CORE_SIM_LIMIT]
+      );
+      totalSims = Number(cnt);
+    }
+
+    // Find eligible learners
+    const lessonEligible = await query(`
+      SELECT DISTINCT u.UserID, u.Name
+      FROM user u
+      WHERE u.Role = 'student' AND u.is_archived = FALSE
+        AND (
+          SELECT COUNT(DISTINCT m.LessonOrder)
+          FROM progress p
+          JOIN module m ON m.ModuleID = p.ModuleID
+          WHERE p.UserID = u.UserID
+            AND p.CompletionRate >= 100
+            AND m.Is_Deleted = FALSE
+            AND (m.Difficulty IS NULL OR LOWER(m.Difficulty) != 'supplementary')
+        ) >= ?
+    `, [totalModules]);
+
+    let eligibleUserIds = lessonEligible.map(row => row.UserID);
+
+    // If there are core simulations, filter for users who completed all of them
+    if (hasSimTable && totalSims > 0 && eligibleUserIds.length > 0) {
+      const userPlaceholders = eligibleUserIds.map(() => '?').join(',');
+      const completedAllSims = await query(`
+        SELECT DISTINCT sp.UserID
+        FROM simulation_progress sp
+        JOIN simulation s ON s.SimulationID = sp.SimulationID
+        WHERE sp.UserID IN (${userPlaceholders})
+          AND s.SimulationOrder > 0 AND s.SimulationOrder <= ?
+          AND sp.CompletionStatus = 'completed'
+        GROUP BY sp.UserID
+        HAVING COUNT(DISTINCT s.SimulationID) = ?
+      `, [...eligibleUserIds, CORE_SIM_LIMIT, totalSims]);
+
+      eligibleUserIds = completedAllSims.map(row => row.UserID);
+    }
+
+    // Filter out already-notified users
+    const placeholders = eligibleUserIds.map(() => '?').join(',');
+    if (placeholders) {
+      const alreadyNotified = await query(`
+        SELECT DISTINCT UserID FROM user_notifications
+        WHERE UserID IN (${placeholders}) AND Type = 'certificate_ready'
+      `, eligibleUserIds);
+      const notifiedSet = new Set(alreadyNotified.map(row => row.UserID));
+      eligibleUserIds = eligibleUserIds.filter(id => !notifiedSet.has(id));
+    }
+
+    // Ensure table exists
+    await query(`
+      CREATE TABLE IF NOT EXISTS user_notifications (
+        NotificationID INT AUTO_INCREMENT PRIMARY KEY,
+        UserID INT NOT NULL,
+        Type VARCHAR(50) NOT NULL,
+        Title VARCHAR(255) NOT NULL,
+        Message TEXT NOT NULL,
+        IsRead BOOLEAN DEFAULT FALSE,
+        ReferenceID INT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (UserID) REFERENCES user(UserID) ON DELETE CASCADE
+      )
+    `);
+
+    // Create notifications for eligible users
+    const notifiedUsers = [];
+    for (const userId of eligibleUserIds) {
+      const user = lessonEligible.find(u => u.UserID === userId);
+      if (user) {
+        await query(
+          'INSERT INTO user_notifications (UserID, Type, Title, Message) VALUES (?, ?, ?, ?)',
+          [
+            userId,
+            'certificate_ready',
+            'Your Certificate is Ready',
+            `Congratulations! Your certificate is ready for download.`
+          ]
+        );
+        notifiedUsers.push({ userId, name: user.Name });
+      }
+    }
+
+    res.json({
+      message: `Notified ${notifiedUsers.length} eligible learner(s).`,
+      count: notifiedUsers.length,
+      notifiedUsers
+    });
+  } catch (err) {
+    console.error('Certificate notify-all-eligible error:', err);
+    res.status(500).json({ error: 'Failed to notify eligible learners.' });
+  }
+});
+
 // GET /api/admin/certificate/generate/:userId — return filled certificate
 // For image templates: returns { type:'image', templateUrl, userName, date, textConfig }
 // For PDF: streams the pdf-lib-stamped PDF using saved textConfig positions
