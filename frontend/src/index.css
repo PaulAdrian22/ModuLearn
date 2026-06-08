@@ -28,6 +28,20 @@
   * {
     @apply box-border;
   }
+
+  input,
+  textarea,
+  [contenteditable] {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  textarea {
+    overflow-x: hidden;
+    overflow-y: auto;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
   
   #root {
     min-height: 100dvh;
@@ -1173,6 +1187,10 @@ h3, .text-2xl {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 [contenteditable] * {
@@ -1245,6 +1263,37 @@ h3, .text-2xl {
 
 [contenteditable] p {
   margin: 0.25rem 0;
+}
+
+[contenteditable][id^='input-'],
+[contenteditable][id^='textarea-'],
+.table-rich-content {
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+
+[contenteditable][id^='input-'] {
+  max-height: 10rem;
+}
+
+[contenteditable][id^='textarea-'] {
+  max-height: 18rem;
+}
+
+#textarea-description,
+#textarea-objectives,
+[contenteditable][id^='textarea-video-caption-'] {
+  max-height: 14rem;
+}
+
+.table-rich-content {
+  max-height: 10rem;
+}
+
+textarea[id^='textarea-'] {
+  max-height: 14rem;
+  scrollbar-gutter: stable;
 }
 
 [contenteditable] ul ul,
