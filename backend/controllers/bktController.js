@@ -990,6 +990,104 @@ const submitDiagnosticAnswer = async (req, res) => {
   }
 };
 
+const getDiagnosticStatus = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const moduleId = parseInt(req.params.moduleId, 10);
+
+    const rows = await query(
+      `SELECT AssessmentID, TotalScore, ResultStatus, DateTaken
+         FROM assessment
+        WHERE UserID = ?
+          AND ModuleID = ?
+          AND AssessmentType = 'Diagnostic'
+          AND ResultStatus IN ('Pass', 'Fail')
+        ORDER BY DateTaken DESC, AssessmentID DESC
+        LIMIT 1`,
+      [userId, moduleId]
+    );
+
+    const latest = rows[0] || null;
+
+    res.json({
+      moduleId,
+      completed: Boolean(latest),
+      score: latest?.TotalScore !== undefined && latest?.TotalScore !== null
+        ? Number(latest.TotalScore)
+        : null,
+      resultStatus: latest?.ResultStatus || null,
+      dateTaken: latest?.DateTaken || null
+    });
+  } catch (error) {
+    console.error('Get diagnostic status error:', error);
+    res.status(500).json({ error: 'Internal Server Error', message: 'Failed to get diagnostic status' });
+  }
+};
+
+const completeDiagnostic = async (req, res) => {
+  try {
+    await ensureAssessmentTimeSpentColumn();
+
+    const userId = req.user.userId;
+    const moduleId = parseInt(req.params.moduleId, 10);
+    const rawScore = Number(req.body?.score);
+    const score = Number.isFinite(rawScore)
+      ? Math.max(0, Math.min(100, rawScore))
+      : null;
+    const skipped = Boolean(req.body?.skipped);
+    const resultStatus = !skipped && score !== null && score >= ASSESSMENT_PASSING_SCORE ? 'Pass' : 'Fail';
+
+    const existing = await query(
+      `SELECT AssessmentID
+         FROM assessment
+        WHERE UserID = ?
+          AND ModuleID = ?
+          AND AssessmentType = 'Diagnostic'
+        ORDER BY AssessmentID DESC
+        LIMIT 1`,
+      [userId, moduleId]
+    );
+
+    if (existing.length > 0) {
+      await query(
+        `UPDATE assessment
+            SET TotalScore = ?,
+                ResultStatus = ?,
+                DateTaken = CURRENT_TIMESTAMP
+          WHERE AssessmentID = ?`,
+        [score, resultStatus, existing[0].AssessmentID]
+      );
+
+      return res.json({
+        message: 'Diagnostic completion updated',
+        assessmentId: existing[0].AssessmentID,
+        moduleId,
+        completed: true,
+        score,
+        resultStatus
+      });
+    }
+
+    const result = await query(
+      `INSERT INTO assessment (UserID, ModuleID, AssessmentType, TotalScore, TimeSpentSeconds, ResultStatus)
+       VALUES (?, ?, 'Diagnostic', ?, 0, ?)`,
+      [userId, moduleId, score, resultStatus]
+    );
+
+    res.status(201).json({
+      message: 'Diagnostic completion saved',
+      assessmentId: result.insertId,
+      moduleId,
+      completed: true,
+      score,
+      resultStatus
+    });
+  } catch (error) {
+    console.error('Complete diagnostic error:', error);
+    res.status(500).json({ error: 'Internal Server Error', message: 'Failed to save diagnostic completion' });
+  }
+};
+
 /**
  * Start a Review Assessment for a lesson.
  * 
@@ -2444,6 +2542,8 @@ module.exports = {
   // Lesson Assessments
   startDiagnostic,
   submitDiagnosticAnswer,
+  getDiagnosticStatus,
+  completeDiagnostic,
   startReviewAssessment,
   startSimulationAssessment,
   startFinalAssessment,

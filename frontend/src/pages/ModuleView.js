@@ -811,6 +811,14 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
       }
 
       const savedLessonProgress = readSavedLessonProgress(response.data.LessonOrder);
+      let serverDiagnosticStatus = null;
+
+      try {
+        const diagnosticStatusResponse = await axios.get(`/bkt/lesson/${moduleId}/diagnostic/status`);
+        serverDiagnosticStatus = diagnosticStatusResponse.data || null;
+      } catch (diagnosticStatusError) {
+        console.warn('Unable to load diagnostic completion status:', diagnosticStatusError);
+      }
 
       setModule(response.data);
 
@@ -890,12 +898,34 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
       console.log('Has diagnostic questions:', hasDiagnosticQuestions);
       
       if (hasDiagnosticQuestions) {
-        const hasSavedDiagnostic = savedLessonProgress?.diagnosticCompleted === true;
+        const legacyDiagnosticKey = `diagnostic_completed_${moduleId}`;
+        const hasLegacyDiagnostic = localStorage.getItem(legacyDiagnosticKey) === 'true';
+        const hasServerDiagnostic = serverDiagnosticStatus?.completed === true;
+        const hasSavedDiagnostic = savedLessonProgress?.diagnosticCompleted === true || hasLegacyDiagnostic || hasServerDiagnostic;
         if (hasSavedDiagnostic) {
           setDiagnosticCompleted(true);
           setShowDiagnostic(false);
-          if (typeof savedLessonProgress.diagnosticScore === 'number') {
+          if (typeof serverDiagnosticStatus?.score === 'number') {
+            setDiagnosticScore(serverDiagnosticStatus.score);
+          } else if (typeof savedLessonProgress?.diagnosticScore === 'number') {
             setDiagnosticScore(savedLessonProgress.diagnosticScore);
+          } else {
+            const legacyScore = Number(localStorage.getItem(`diagnostic_score_${moduleId}`));
+            if (Number.isFinite(legacyScore)) {
+              setDiagnosticScore(legacyScore);
+            }
+          }
+
+          if (!hasServerDiagnostic) {
+            axios.post(`/bkt/lesson/${moduleId}/diagnostic/complete`, {
+              score: typeof savedLessonProgress?.diagnosticScore === 'number'
+                ? savedLessonProgress.diagnosticScore
+                : (Number.isFinite(Number(localStorage.getItem(`diagnostic_score_${moduleId}`)))
+                    ? Number(localStorage.getItem(`diagnostic_score_${moduleId}`))
+                    : null)
+            }).catch((error) => {
+              console.warn('Unable to sync diagnostic completion:', error);
+            });
           }
         } else {
           console.log('Setting showDiagnostic to true');
@@ -936,10 +966,22 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
     }
   };
 
+  const persistDiagnosticCompletion = async (score, options = {}) => {
+    try {
+      await axios.post(`/bkt/lesson/${moduleId}/diagnostic/complete`, {
+        score: Number.isFinite(Number(score)) ? Number(score) : null,
+        skipped: Boolean(options.skipped)
+      });
+    } catch (error) {
+      console.error('Error saving diagnostic completion:', error);
+    }
+  };
+
   const handleDiagnosticComplete = (score) => {
     const diagnosticKey = `diagnostic_completed_${moduleId}`;
     localStorage.setItem(diagnosticKey, 'true');
     localStorage.setItem(`diagnostic_score_${moduleId}`, score.toString());
+    persistDiagnosticCompletion(score);
     setDiagnosticScore(score);
     setDiagnosticCompleted(true);
     setShowDiagnostic(false);
@@ -948,6 +990,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
   const handleDiagnosticSkip = () => {
     const diagnosticKey = `diagnostic_completed_${moduleId}`;
     localStorage.setItem(diagnosticKey, 'true');
+    persistDiagnosticCompletion(null, { skipped: true });
     setDiagnosticCompleted(true);
     setShowDiagnostic(false);
   };

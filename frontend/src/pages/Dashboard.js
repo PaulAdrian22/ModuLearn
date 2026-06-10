@@ -32,6 +32,8 @@ const stripObjectivesFromSummary = (value = '') => {
 
 const PENDING_INITIAL_ASSESSMENT_KEY = 'modulearnPendingInitialAssessment';
 
+const getIntroductionSeenKey = (userId) => `modulearnIntroductionSeen:${userId || 'guest'}`;
+
 const formatLastOpened = (dateString) => {
   if (!dateString) return 'Not opened yet';
   const date = new Date(dateString);
@@ -64,7 +66,9 @@ const Dashboard = () => {
     try {
       if (!location.state?.fromLogin) return;
 
-      const isNewUser = Boolean(location.state?.isNewUser);
+      const introductionSeenKey = getIntroductionSeenKey(user?.userId);
+      const hasSeenIntroduction = localStorage.getItem(introductionSeenKey) === 'true';
+      const isNewUser = Boolean(location.state?.isNewUser) && !hasSeenIntroduction;
       setIsNewUserLogin(isNewUser);
 
       if (isNewUser) {
@@ -80,7 +84,7 @@ const Dashboard = () => {
     } catch (err) {
       console.error('Error checking user profile:', err);
     }
-  }, [location.state]);
+  }, [location.state, user?.userId]);
 
   const fetchDashboardData = useCallback(async () => {
     try {
@@ -179,6 +183,7 @@ const Dashboard = () => {
   const roadmapEdgeInset = 26;
   const userHeadLeft = `calc(${roadmapEdgeInset}px + (100% - ${roadmapEdgeInset * 2}px) * ${userHeadScale})`;
   const suppressNavbarTour = showIntroduction;
+  const allowNavbarAutoTour = isNewUserLogin && !showIntroduction;
   const getCheckpointLeft = (columnIndex) => {
     const checkpointScale = totalRoadColumns > 1
       ? ((columnIndex - 1) / (totalRoadColumns - 1))
@@ -194,6 +199,7 @@ const Dashboard = () => {
           onComplete={async (language) => {
             const normalizedLanguage = normalizePreferredLanguage(language || 'English');
             localStorage.setItem('hasSeenIntroduction', 'true');
+            localStorage.setItem(getIntroductionSeenKey(user?.userId), 'true');
             localStorage.setItem('preferredLanguage', normalizedLanguage);
             window.dispatchEvent(new CustomEvent('preferredLanguageChanged', { detail: normalizedLanguage }));
 
@@ -216,7 +222,7 @@ const Dashboard = () => {
         />
       )}
       
-      <Navbar suppressAutoTour={suppressNavbarTour} />
+      <Navbar suppressAutoTour={suppressNavbarTour} allowAutoTour={allowNavbarAutoTour} />
 
       <div className="w-full px-8 py-8 min-h-[calc(100vh-80px)] custom-scrollbar">
         {/* Dashboard Section */}

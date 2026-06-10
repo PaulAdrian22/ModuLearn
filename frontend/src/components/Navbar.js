@@ -12,7 +12,7 @@ const resolvePreferredLanguage = () => {
   return normalizePreferredLanguage(window.localStorage.getItem('preferredLanguage') || 'English');
 };
 
-const Navbar = ({ suppressAutoTour = false }) => {
+const Navbar = ({ suppressAutoTour = false, allowAutoTour = false }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuth();
@@ -295,6 +295,7 @@ const Navbar = ({ suppressAutoTour = false }) => {
   useEffect(() => {
     if (user?.role === 'admin') return undefined;
     if (typeof window === 'undefined') return undefined;
+    if (!allowAutoTour) return undefined;
     if (suppressAutoTour) return undefined;
     if (isTourActive) return undefined;
 
@@ -308,7 +309,7 @@ const Navbar = ({ suppressAutoTour = false }) => {
     }, 900);
 
     return () => window.clearTimeout(timer);
-  }, [tourStorageKey, user?.role, suppressAutoTour, isTourActive]);
+  }, [tourStorageKey, user?.role, suppressAutoTour, allowAutoTour, isTourActive]);
 
   useEffect(() => {
     if (!isTourActive) return undefined;

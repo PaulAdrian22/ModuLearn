@@ -68,6 +68,20 @@ router.post('/lesson/:moduleId/diagnostic/start', authenticate, [
   handleValidationErrors
 ], bktController.startDiagnostic);
 
+// GET /api/bkt/lesson/:moduleId/diagnostic/status - Check whether user already completed diagnostic
+router.get('/lesson/:moduleId/diagnostic/status', authenticate, [
+  param('moduleId').isInt({ min: 1 }).withMessage('Valid module ID is required'),
+  handleValidationErrors
+], bktController.getDiagnosticStatus);
+
+// POST /api/bkt/lesson/:moduleId/diagnostic/complete - Persist diagnostic completion for local diagnostic UI
+router.post('/lesson/:moduleId/diagnostic/complete', authenticate, [
+  param('moduleId').isInt({ min: 1 }).withMessage('Valid module ID is required'),
+  body('score').optional({ nullable: true }).isFloat({ min: 0, max: 100 }).withMessage('Score must be between 0 and 100'),
+  body('skipped').optional().isBoolean().withMessage('Skipped must be a boolean'),
+  handleValidationErrors
+], bktController.completeDiagnostic);
+
 // POST /api/bkt/lesson/:moduleId/diagnostic/submit - Submit diagnostic answer (no BKT update)
 router.post('/lesson/:moduleId/diagnostic/submit', authenticate, [
   param('moduleId').isInt({ min: 1 }).withMessage('Valid module ID is required'),

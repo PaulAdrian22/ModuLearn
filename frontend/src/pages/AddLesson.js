@@ -2054,6 +2054,34 @@ const AddLesson = () => {
       return match[1].toLowerCase().includes('underline');
     };
 
+    const getScriptStyle = (style) => {
+      if (!style) return null;
+
+      const verticalAlign = getStyleValue(style, 'vertical-align').toLowerCase();
+      if (verticalAlign === 'super' || verticalAlign === 'text-top') return 'sup';
+      if (verticalAlign === 'sub' || verticalAlign === 'text-bottom') return 'sub';
+
+      const fontVariantPosition = getStyleValue(style, 'font-variant-position').toLowerCase();
+      if (fontVariantPosition === 'super') return 'sup';
+      if (fontVariantPosition === 'sub') return 'sub';
+
+      const baselineShift = getStyleValue(style, 'baseline-shift').toLowerCase();
+      if (baselineShift === 'super') return 'sup';
+      if (baselineShift === 'sub') return 'sub';
+
+      const msoTextRaise = getStyleValue(style, 'mso-text-raise').toLowerCase();
+      if (msoTextRaise && !msoTextRaise.startsWith('0')) return 'sup';
+
+      return null;
+    };
+
+    const applyScriptStyle = (style, value) => {
+      const scriptStyle = getScriptStyle(style);
+      if (scriptStyle === 'sup') return `<sup>${value}</sup>`;
+      if (scriptStyle === 'sub') return `<sub>${value}</sub>`;
+      return value;
+    };
+
     const cleanNode = (node) => {
       if (node.nodeType === Node.TEXT_NODE) {
         // Preserve manual indentation and spacing from the editor by converting ALL spaces to &nbsp;
@@ -2136,19 +2164,19 @@ const AddLesson = () => {
                 return children; // Style overrides to non-bold, skip <b> tag
               }
             }
-            return `<b>${children}</b>`;
+            return applyScriptStyle(style, `<b>${children}</b>`);
           }
           if (tagName === 'I' || tagName === 'EM') {
             if (style.includes('font-style') && style.match(/font-style\s*:\s*normal/)) {
               return children; // Style overrides to non-italic
             }
-            return `<i>${children}</i>`;
+            return applyScriptStyle(style, `<i>${children}</i>`);
           }
           if (tagName === 'U') {
             if (style.includes('text-decoration') && style.match(/text-decoration[^:]*:\s*none/)) {
               return children; // Style overrides to no underline
             }
-            return `<u>${children}</u>`;
+            return applyScriptStyle(style, `<u>${children}</u>`);
           }
           if (tagName === 'SUB') return `<sub>${children}</sub>`;
           if (tagName === 'SUP') return `<sup>${children}</sup>`;
@@ -2164,7 +2192,10 @@ const AddLesson = () => {
           }
           if (tagName === 'P') return hasVisibleChildren ? `<p${styleAttr}>${children}</p>` : `<p${styleAttr}><br></p>`;
           if (tagName === 'DIV') return hasVisibleChildren ? `<div${styleAttr}>${children}</div>` : `<div${styleAttr}><br></div>`;
-          if (tagName === 'SPAN') return styleAttr ? `<span${styleAttr}>${children}</span>` : children;
+          if (tagName === 'SPAN') {
+            const spanContent = styleAttr ? `<span${styleAttr}>${children}</span>` : children;
+            return applyScriptStyle(style, spanContent);
+          }
           return children;
         }
         // Convert common external tags to allowed equivalents
@@ -2176,6 +2207,7 @@ const AddLesson = () => {
         if (isBoldStyle(style)) result = `<b>${result}</b>`;
         if (isItalicStyle(style)) result = `<i>${result}</i>`;
         if (isUnderlineStyle(style)) result = `<u>${result}</u>`;
+        result = applyScriptStyle(style, result);
         const containerStyle = sanitizeInlineStyle('DIV', style);
         if (containerStyle && hasVisibleChildren) {
           result = `<div${containerStyle}>${result}</div>`;
@@ -4203,6 +4235,8 @@ const AddLesson = () => {
         'align-center',
         'align-right',
         'align-justify',
+        'superscript',
+        'subscript',
         'undo',
         'redo'
       ];
@@ -4381,6 +4415,49 @@ const AddLesson = () => {
         }
       };
 
+      const applyAlignmentToSelection = (alignment) => {
+        const blockSelector = 'p, div, blockquote, li, h1, h2, h3, h4, h5, h6';
+        const currentSelection = window.getSelection();
+        const selectedBlocks = new Set();
+
+        const applyAlignment = (node) => {
+          if (!node || node.nodeType !== Node.ELEMENT_NODE) return;
+          node.style.textAlign = alignment;
+          node.removeAttribute('align');
+
+          node.querySelectorAll?.(blockSelector).forEach((child) => {
+            child.style.textAlign = alignment;
+            child.removeAttribute('align');
+          });
+        };
+
+        if (!currentSelection || currentSelection.rangeCount === 0) {
+          applyAlignment(element);
+          return;
+        }
+
+        const range = currentSelection.getRangeAt(0);
+        const anchorElement = getSelectionAnchorElement();
+        const anchorBlock = anchorElement?.closest?.(blockSelector);
+
+        if (anchorBlock && element.contains(anchorBlock)) {
+          selectedBlocks.add(anchorBlock);
+        }
+
+        element.querySelectorAll(blockSelector).forEach((block) => {
+          if (range.intersectsNode(block)) {
+            selectedBlocks.add(block);
+          }
+        });
+
+        if (selectedBlocks.size === 0) {
+          applyAlignment(element);
+          return;
+        }
+
+        selectedBlocks.forEach(applyAlignment);
+      };
+
       switch(format) {
         case 'bold':
           document.execCommand('bold', false, null);
@@ -4390,6 +4467,12 @@ const AddLesson = () => {
           break;
         case 'underline':
           document.execCommand('underline', false, null);
+          break;
+        case 'superscript':
+          document.execCommand('superscript', false, null);
+          break;
+        case 'subscript':
+          document.execCommand('subscript', false, null);
           break;
         case 'uppercase':
           if (selectedText) {
@@ -4431,15 +4514,19 @@ const AddLesson = () => {
           break;
         case 'align-left':
           document.execCommand('justifyLeft', false, null);
+          applyAlignmentToSelection('left');
           break;
         case 'align-center':
           document.execCommand('justifyCenter', false, null);
+          applyAlignmentToSelection('center');
           break;
         case 'align-right':
           document.execCommand('justifyRight', false, null);
+          applyAlignmentToSelection('right');
           break;
         case 'align-justify':
           document.execCommand('justifyFull', false, null);
+          applyAlignmentToSelection('justify');
           break;
         case 'undo':
           document.execCommand('undo', false, null);
@@ -4573,6 +4660,12 @@ const AddLesson = () => {
           break;
         case 'underline':
           formattedText = `__${selectedText}__`;
+          break;
+        case 'superscript':
+          formattedText = `<sup>${selectedText}</sup>`;
+          break;
+        case 'subscript':
+          formattedText = `<sub>${selectedText}</sub>`;
           break;
         case 'uppercase':
           formattedText = selectedText.toUpperCase();
@@ -5257,47 +5350,61 @@ const AddLesson = () => {
 
         {/* Floating Text Formatting Toolbar */}
         {activeTextarea && (
-          <div className="formatting-toolbar fixed top-20 left-1/2 transform -translate-x-1/2 bg-white rounded-2xl shadow-2xl border border-gray-200 px-4 py-3 flex items-center gap-1.5 z-50" style={{boxShadow: '0 8px 30px rgba(0,0,0,0.12)'}}>
+          <div className="formatting-toolbar fixed top-20 left-1/2 transform -translate-x-1/2 bg-white rounded-xl shadow-2xl border border-gray-200 px-3 py-2 flex flex-nowrap items-center gap-1 z-50 max-w-[calc(100vw-2rem)] overflow-x-auto custom-scrollbar" style={{boxShadow: '0 8px 30px rgba(0,0,0,0.12)'}}>
             {/* Text Formatting */}
-            <div className="flex items-center gap-1.5 border-r border-gray-200 pr-3 mr-1.5">
+            <div className="flex items-center gap-1 border-r border-gray-200 pr-2 mr-1 flex-shrink-0">
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => applyTextFormat('bold')}
-                className="w-11 h-11 flex items-center justify-center hover:bg-blue-50 rounded-lg transition-all active:scale-95"
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-blue-50 rounded-lg transition-all active:scale-95"
                 title="Bold (Ctrl+B)"
               >
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
-                  <path d="M13.5 4C14.9 4 16.2 4.5 17.1 5.4C18 6.3 18.5 7.5 18.5 8.8C18.5 10.1 18 11.1 17.1 11.9C18.3 12.7 19 14.1 19 15.5C19 17 18.4 18.2 17.3 19.1C16.2 20 14.8 20.5 13.2 20.5H5V4H13.5ZM8.5 7V10.5H13C13.5 10.5 14 10.3 14.3 10C14.7 9.7 14.8 9.3 14.8 8.8C14.8 8.3 14.6 7.9 14.3 7.5C14 7.2 13.5 7 13 7H8.5ZM8.5 13.5V17.5H13.2C13.8 17.5 14.3 17.3 14.7 16.9C15.1 16.5 15.3 16.1 15.3 15.5C15.3 14.9 15.1 14.5 14.7 14.1C14.3 13.7 13.8 13.5 13.2 13.5H8.5Z"/>
-                </svg>
+                <span className="text-xl font-black text-gray-700 leading-none font-serif">B</span>
               </button>
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => applyTextFormat('italic')}
-                className="w-11 h-11 flex items-center justify-center hover:bg-blue-50 rounded-lg transition-all active:scale-95"
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-blue-50 rounded-lg transition-all active:scale-95"
                 title="Italic (Ctrl+I)"
               >
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
-                  <path d="M10 5V8H12.2L8.5 16H6V19H14V16H11.8L15.5 8H18V5H10Z"/>
-                </svg>
+                <span className="text-xl italic font-bold text-gray-700 leading-none font-serif">I</span>
               </button>
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => applyTextFormat('underline')}
-                className="w-11 h-11 flex items-center justify-center hover:bg-blue-50 rounded-lg transition-all active:scale-95"
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-blue-50 rounded-lg transition-all active:scale-95"
                 title="Underline (Ctrl+U)"
               >
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
-                  <path d="M12 17C14.8 17 17 14.8 17 12V3H14.5V12C14.5 13.4 13.4 14.5 12 14.5C10.6 14.5 9.5 13.4 9.5 12V3H7V12C7 14.8 9.2 17 12 17ZM5 20V21.5H19V20H5Z"/>
-                </svg>
+                <span className="text-xl underline underline-offset-4 font-bold text-gray-700 leading-none font-serif">U</span>
+              </button>
+              <button
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => applyTextFormat('superscript')}
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-blue-50 rounded-lg transition-all active:scale-95"
+                title="Superscript"
+              >
+                <span className="text-lg font-bold text-gray-700 leading-none">
+                  x<sup className="text-xs">2</sup>
+                </span>
+              </button>
+              <button
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => applyTextFormat('subscript')}
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-blue-50 rounded-lg transition-all active:scale-95"
+                title="Subscript"
+              >
+                <span className="text-lg font-bold text-gray-700 leading-none">
+                  x<sub className="text-xs">2</sub>
+                </span>
               </button>
             </div>
 
             {/* Capitalization */}
-            <div className="flex items-center gap-1.5 border-r border-gray-200 pr-3 mr-1.5">
+            <div className="flex items-center gap-1 border-r border-gray-200 pr-2 mr-1 flex-shrink-0">
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => applyTextFormat('uppercase')}
-                className="w-11 h-11 flex items-center justify-center hover:bg-purple-50 rounded-lg transition-all active:scale-95"
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-purple-50 rounded-lg transition-all active:scale-95"
                 title="UPPERCASE"
               >
                 <span className="text-sm font-bold text-gray-700 leading-none">AB</span>
@@ -5305,7 +5412,7 @@ const AddLesson = () => {
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => applyTextFormat('lowercase')}
-                className="w-11 h-11 flex items-center justify-center hover:bg-purple-50 rounded-lg transition-all active:scale-95"
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-purple-50 rounded-lg transition-all active:scale-95"
                 title="lowercase"
               >
                 <span className="text-sm font-bold text-gray-700 leading-none">ab</span>
@@ -5313,7 +5420,7 @@ const AddLesson = () => {
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => applyTextFormat('capitalize')}
-                className="w-11 h-11 flex items-center justify-center hover:bg-purple-50 rounded-lg transition-all active:scale-95"
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-purple-50 rounded-lg transition-all active:scale-95"
                 title="Capitalize Each Word"
               >
                 <span className="text-sm font-bold text-gray-700 leading-none">Ab</span>
@@ -5321,14 +5428,14 @@ const AddLesson = () => {
             </div>
 
             {/* Lists */}
-            <div className="flex items-center gap-1.5 border-r border-gray-200 pr-3 mr-1.5">
+            <div className="flex items-center gap-1 border-r border-gray-200 pr-2 mr-1 flex-shrink-0">
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => applyTextFormat('bullet')}
-                className="w-11 h-11 flex items-center justify-center hover:bg-green-50 rounded-lg transition-all active:scale-95"
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-green-50 rounded-lg transition-all active:scale-95"
                 title="Bullet List"
               >
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#374151">
                   <circle cx="4" cy="6" r="2"/>
                   <rect x="9" y="4.5" width="12" height="3" rx="1.5"/>
                   <circle cx="4" cy="12" r="2"/>
@@ -5340,45 +5447,40 @@ const AddLesson = () => {
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => applyTextFormat('alphabet')}
-                className="w-11 h-11 flex items-center justify-center hover:bg-green-50 rounded-lg transition-all active:scale-95"
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-green-50 rounded-lg transition-all active:scale-95"
                 title="Alphabet List (a, b, c)"
               >
-                <div className="flex items-center gap-1 text-gray-700" aria-hidden="true">
-                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M4 6h2" />
-                    <path d="M4 12h2" />
-                    <path d="M4 18h2" />
-                    <path d="M9 6h11" />
-                    <path d="M9 12h11" />
-                    <path d="M9 18h11" />
-                  </svg>
+                <div className="grid grid-cols-[16px_1fr] gap-x-1 gap-y-0.5 items-center text-gray-700" aria-hidden="true">
+                  <span className="text-[10px] font-bold leading-none">a.</span>
+                  <span className="w-4 h-1 bg-gray-700 rounded-full" />
+                  <span className="text-[10px] font-bold leading-none">b.</span>
+                  <span className="w-4 h-1 bg-gray-700 rounded-full" />
+                  <span className="text-[10px] font-bold leading-none">c.</span>
+                  <span className="w-4 h-1 bg-gray-700 rounded-full" />
                 </div>
               </button>
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => applyTextFormat('numbering')}
-                className="w-11 h-11 flex items-center justify-center hover:bg-green-50 rounded-lg transition-all active:scale-95"
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-green-50 rounded-lg transition-all active:scale-95"
                 title="Numbered List"
               >
-                <div className="flex items-center gap-1 text-gray-700" aria-hidden="true">
-                  <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M4 6h2" />
-                    <path d="M4 12h2" />
-                    <path d="M4 18h2" />
-                    <path d="M9 6h11" />
-                    <path d="M9 12h11" />
-                    <path d="M9 18h11" />
-                    <path d="M3.2 6L4.6 4.8" />
-                  </svg>
+                <div className="grid grid-cols-[16px_1fr] gap-x-1 gap-y-0.5 items-center text-gray-700" aria-hidden="true">
+                  <span className="text-[10px] font-bold leading-none">1.</span>
+                  <span className="w-4 h-1 bg-gray-700 rounded-full" />
+                  <span className="text-[10px] font-bold leading-none">2.</span>
+                  <span className="w-4 h-1 bg-gray-700 rounded-full" />
+                  <span className="text-[10px] font-bold leading-none">3.</span>
+                  <span className="w-4 h-1 bg-gray-700 rounded-full" />
                 </div>
               </button>
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => applyTextFormat('dash-list')}
-                className="w-11 h-11 flex items-center justify-center hover:bg-green-50 rounded-lg transition-all active:scale-95"
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-green-50 rounded-lg transition-all active:scale-95"
                 title="Dashed List"
               >
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#374151" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M3 6h3" />
                   <path d="M3 12h3" />
                   <path d="M3 18h3" />
@@ -5390,14 +5492,14 @@ const AddLesson = () => {
             </div>
 
             {/* Alignment */}
-            <div className="flex items-center gap-1.5 border-r border-gray-200 pr-3 mr-1.5">
+            <div className="flex items-center gap-1 border-r border-gray-200 pr-2 mr-1 flex-shrink-0">
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => applyTextFormat('align-left')}
-                className="w-11 h-11 flex items-center justify-center hover:bg-indigo-50 rounded-lg transition-all active:scale-95"
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-indigo-50 rounded-lg transition-all active:scale-95"
                 title="Align Left"
               >
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#374151">
                   <rect x="3" y="5" width="14" height="2.5" rx="1.25"/>
                   <rect x="3" y="10.25" width="18" height="2.5" rx="1.25"/>
                   <rect x="3" y="15.5" width="14" height="2.5" rx="1.25"/>
@@ -5406,10 +5508,10 @@ const AddLesson = () => {
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => applyTextFormat('align-center')}
-                className="w-11 h-11 flex items-center justify-center hover:bg-indigo-50 rounded-lg transition-all active:scale-95"
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-indigo-50 rounded-lg transition-all active:scale-95"
                 title="Align Center"
               >
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#374151">
                   <rect x="5" y="5" width="14" height="2.5" rx="1.25"/>
                   <rect x="3" y="10.25" width="18" height="2.5" rx="1.25"/>
                   <rect x="5" y="15.5" width="14" height="2.5" rx="1.25"/>
@@ -5418,10 +5520,10 @@ const AddLesson = () => {
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => applyTextFormat('align-right')}
-                className="w-11 h-11 flex items-center justify-center hover:bg-indigo-50 rounded-lg transition-all active:scale-95"
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-indigo-50 rounded-lg transition-all active:scale-95"
                 title="Align Right"
               >
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#374151">
                   <rect x="7" y="5" width="14" height="2.5" rx="1.25"/>
                   <rect x="3" y="10.25" width="18" height="2.5" rx="1.25"/>
                   <rect x="7" y="15.5" width="14" height="2.5" rx="1.25"/>
@@ -5430,10 +5532,10 @@ const AddLesson = () => {
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => applyTextFormat('align-justify')}
-                className="w-11 h-11 flex items-center justify-center hover:bg-indigo-50 rounded-lg transition-all active:scale-95"
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-indigo-50 rounded-lg transition-all active:scale-95"
                 title="Justify"
               >
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#374151">
                   <rect x="3" y="5" width="18" height="2.5" rx="1.25"/>
                   <rect x="3" y="10.25" width="18" height="2.5" rx="1.25"/>
                   <rect x="3" y="15.5" width="18" height="2.5" rx="1.25"/>
@@ -5442,14 +5544,14 @@ const AddLesson = () => {
             </div>
 
             {/* Indent */}
-            <div className="flex items-center gap-1.5 border-r border-gray-200 pr-3 mr-1.5">
+            <div className="flex items-center gap-1 border-r border-gray-200 pr-2 mr-1 flex-shrink-0">
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => applyTextFormat('indent')}
-                className="w-11 h-11 flex items-center justify-center hover:bg-amber-50 rounded-lg transition-all active:scale-95"
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-amber-50 rounded-lg transition-all active:scale-95"
                 title="Indent (Tab)"
               >
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#374151">
                   <rect x="2" y="3" width="20" height="2.5" rx="1.25"/>
                   <rect x="2" y="18.5" width="20" height="2.5" rx="1.25"/>
                   <rect x="10" y="8" width="12" height="2.5" rx="1.25"/>
@@ -5460,10 +5562,10 @@ const AddLesson = () => {
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => applyTextFormat('outdent')}
-                className="w-11 h-11 flex items-center justify-center hover:bg-amber-50 rounded-lg transition-all active:scale-95"
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-amber-50 rounded-lg transition-all active:scale-95"
                 title="Outdent (Shift+Tab)"
               >
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#374151">
                   <rect x="2" y="3" width="20" height="2.5" rx="1.25"/>
                   <rect x="2" y="18.5" width="20" height="2.5" rx="1.25"/>
                   <rect x="10" y="8" width="12" height="2.5" rx="1.25"/>
@@ -5474,24 +5576,24 @@ const AddLesson = () => {
             </div>
 
             {/* Undo / Redo */}
-            <div className="flex items-center gap-1.5 border-r border-gray-200 pr-3 mr-1.5">
+            <div className="flex items-center gap-1 border-r border-gray-200 pr-2 mr-1 flex-shrink-0">
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => applyTextFormat('undo')}
-                className="w-11 h-11 flex items-center justify-center hover:bg-cyan-50 rounded-lg transition-all active:scale-95"
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-cyan-50 rounded-lg transition-all active:scale-95"
                 title="Undo (Ctrl+Z)"
               >
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#374151">
                   <path d="M12.5 8C15.9 8 18.8 10.1 20 13.1L18.1 13.8C17.2 11.3 15 9.6 12.5 9.6H6.8L9.3 12.1L8.1 13.3L3.5 8.7L8.1 4.1L9.3 5.3L6.8 7.8H12.5Z"/>
                 </svg>
               </button>
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => applyTextFormat('redo')}
-                className="w-11 h-11 flex items-center justify-center hover:bg-cyan-50 rounded-lg transition-all active:scale-95"
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-cyan-50 rounded-lg transition-all active:scale-95"
                 title="Redo (Ctrl+Y)"
               >
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="#374151">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#374151">
                   <path d="M11.5 8C8.1 8 5.2 10.1 4 13.1L5.9 13.8C6.8 11.3 9 9.6 11.5 9.6H17.2L14.7 12.1L15.9 13.3L20.5 8.7L15.9 4.1L14.7 5.3L17.2 7.8H11.5Z"/>
                 </svg>
               </button>
@@ -5502,10 +5604,10 @@ const AddLesson = () => {
               <button
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => setActiveTextarea(null)}
-                className="w-11 h-11 flex items-center justify-center hover:bg-red-50 rounded-lg transition-all active:scale-95 text-gray-400 hover:text-red-500"
+                className="w-9 h-9 flex items-center justify-center flex-shrink-0 hover:bg-red-50 rounded-lg transition-all active:scale-95 text-gray-400 hover:text-red-500"
                 title="Close Toolbar"
               >
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12 5.7 16.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z"/>
                 </svg>
               </button>
@@ -5794,7 +5896,7 @@ const AddLesson = () => {
                   </div>
 
                   {/* Content */}
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0 max-w-full">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-xl font-bold text-secondary">
                         {getSectionDisplayTitle(section)}
@@ -5920,7 +6022,7 @@ const AddLesson = () => {
 
                     {/* Paragraph - ContentEditable with Layout Options */}
                     {section.type === 'paragraph' && !collapsedSections[section.id] && (
-                      <div className="space-y-3">
+                      <div className="space-y-3 min-w-0 max-w-full">
                         {/* Controls bar: Layout indicator | Change Layout | Add Table */}
                         <div className="flex items-center gap-3 flex-wrap">
                           <span className="text-sm font-bold text-secondary bg-[#346C9A]/10 px-4 py-1.5 rounded-full">
@@ -5967,7 +6069,7 @@ const AddLesson = () => {
 
                         {/* Normal Text Content */}
                         {(section.contentLayout || 'text') === 'text' && (
-                          <div className="relative">
+                          <div className="relative min-w-0 max-w-full">
                             <div
                               id={`textarea-${section.id}`}
                               contentEditable
@@ -5990,8 +6092,8 @@ const AddLesson = () => {
                               onPaste={(e) => handleRichPaste(e, section.id, 'content')}
                               onFocus={() => setActiveTextarea(`textarea-${section.id}`)}
                               data-placeholder="Enter paragraph content..."
-                              className="w-full min-h-[100px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-700 leading-relaxed empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
-                              style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}
+                              className="w-full max-w-full min-h-[100px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-700 leading-relaxed overflow-hidden break-words empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
+                              style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'anywhere', wordBreak: 'break-word' }}
                             />
                           </div>
                         )}
