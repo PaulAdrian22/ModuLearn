@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { query } = require('../config/database');
 const { getUserIdentityColumn } = require('../utils/userIdentity');
+const { formatFullName } = require('../utils/nameFormatting');
 
 // Self-heal: make sure the Gender column exists before inserting. Cached after
 // the first call so subsequent registrations don't re-query schema.
@@ -64,7 +65,8 @@ const generateToken = (userId, username, name, role = 'student', sessionVersion 
 // Register new user
 const register = async (req, res) => {
   try {
-    const { name, password, age, gender, educationalBackground } = req.body;
+    const { password, age, gender, educationalBackground } = req.body;
+    const name = formatFullName(req.body.name).trim();
     const username = (req.body.username || '').trim();
 
     await ensureGenderColumn();

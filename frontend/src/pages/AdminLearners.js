@@ -7,6 +7,7 @@ import Avatar from '../components/Avatar';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { themedConfirm } from '../utils/themedConfirm';
 import { API_SERVER_URL } from '../config/api';
+import { formatFullName } from '../utils/nameFormatting';
 
 const METRIC_OPTIONS = [
   { key: 'lessonProgress', label: 'Lesson Progress', yLabel: 'Percent' },
@@ -21,6 +22,11 @@ const METRIC_OPTIONS = [
 ];
 
 const LESSON_COLORS = ['#7CA7F9', '#6B98F0', '#E7B346', '#E99942', '#EE9C47', '#EAAF3E', '#7BA5F7', '#88508F', '#8F5693'];
+
+const formatLearnerNameFields = (learner = {}) => ({
+  ...learner,
+  Name: formatFullName(learner.Name || '')
+});
 
 const AdminLearners = () => {
   const { user } = useAuth();
@@ -158,7 +164,9 @@ const AdminLearners = () => {
       console.log('Fetched users:', response.data); // Debug log
       
       // Filter for students only
-      const studentLearners = response.data.filter(u => u.Role === 'student');
+      const studentLearners = response.data
+        .filter(u => u.Role === 'student')
+        .map(formatLearnerNameFields);
       console.log('Student learners:', studentLearners); // Debug log
       
       setLearners(studentLearners);
@@ -196,7 +204,7 @@ const AdminLearners = () => {
       // the detail endpoint doesn't return them and we need is_archived to switch between
       // Archive vs Unarchive/Delete buttons.
       const response = await axios.get(`/users/${learner.UserID}/details`);
-      setSelectedLearner({ ...learner, ...response.data, is_archived: learner.is_archived });
+      setSelectedLearner(formatLearnerNameFields({ ...learner, ...response.data, is_archived: learner.is_archived }));
       setShowDetails(true);
     } catch (err) {
       console.error('Error fetching learner details:', err);

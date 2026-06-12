@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { useAuth } from '../App';
+import { formatFullName } from '../utils/nameFormatting';
 
 const Register = () => {
   const navigate = useNavigate();
-  const { login } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     birthdate: '',
@@ -31,9 +30,11 @@ const Register = () => {
   };
 
   const handleChange = (e) => {
+    const value = e.target.name === 'name' ? formatFullName(e.target.value) : e.target.value;
+
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: value,
     });
     setError('');
   };
@@ -76,8 +77,9 @@ const Register = () => {
 
     try {
       const { confirmPassword, birthdate, ...registerData } = formData;
+      registerData.name = formatFullName(registerData.name).trim();
       registerData.age = age;
-      const response = await axios.post('/auth/register', registerData);
+      await axios.post('/auth/register', registerData);
       navigate('/login');
     } catch (err) {
       if (err.response?.data?.errors) {

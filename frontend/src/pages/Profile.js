@@ -405,7 +405,7 @@ const Profile = () => {
       setMessage({ type: '', text: '', show: false });
 
       const formData = new FormData();
-      formData.append('profilePicture', croppedImageBlob, 'avatar.jpg');
+      formData.append('profilePicture', croppedImageBlob, 'avatar.png');
 
       const response = await axios.post('/users/upload-picture', formData, {
         headers: {
@@ -699,6 +699,7 @@ const Profile = () => {
         <ImageCropper
           image={imageToCrop}
           onSave={handleSaveCroppedImage}
+          outputFileName="avatar.png"
           onClose={() => {
             setShowCropper(false);
             setShowAvatarModal(true);

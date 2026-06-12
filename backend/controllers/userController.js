@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const path = require('path');
 const { getUserIdentityColumn } = require('../utils/userIdentity');
+const { formatFullName } = require('../utils/nameFormatting');
 const {
   getMulterProfileDestination,
   uploadProfileImageFromPath,
@@ -175,7 +176,7 @@ const updateUserProfile = async (req, res) => {
 
     if (name !== undefined) {
       fields.push('Name = ?');
-      values.push(String(name).trim());
+      values.push(formatFullName(name).trim());
     }
 
     if (identityValue !== undefined) {
@@ -651,8 +652,9 @@ const uploadProfilePicture = async (req, res) => {
     const sharp = getSharp();
 
     if (sharp) {
-      // Resize image to 600x600px when sharp is available.
-      const resizedFilename = `${userId}_${Date.now()}.jpg`;
+      // Resize image to 600x600px when sharp is available. Keep PNG output so
+      // transparent avatar backgrounds do not turn black during conversion.
+      const resizedFilename = `${userId}_${Date.now()}.png`;
       const resizedPath = path.join(getMulterProfileDestination(), resizedFilename);
 
       await sharp(req.file.path)
@@ -660,7 +662,7 @@ const uploadProfilePicture = async (req, res) => {
           fit: 'cover',
           position: 'center'
         })
-        .jpeg({ quality: 90 })
+        .png({ compressionLevel: 9 })
         .toFile(resizedPath);
 
       // Delete the original uploaded file after resize.

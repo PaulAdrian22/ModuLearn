@@ -6093,7 +6093,7 @@ const AddLesson = () => {
                               onFocus={() => setActiveTextarea(`textarea-${section.id}`)}
                               data-placeholder="Enter paragraph content..."
                               className="w-full max-w-full min-h-[100px] px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-700 leading-relaxed overflow-hidden break-words empty:before:content-[attr(data-placeholder)] empty:before:text-gray-400"
-                              style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word', overflowWrap: 'anywhere', wordBreak: 'break-word' }}
+                              style={{ whiteSpace: 'pre-wrap', wordWrap: 'normal', overflowWrap: 'normal', wordBreak: 'normal', hyphens: 'none' }}
                             />
                           </div>
                         )}
