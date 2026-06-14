@@ -2178,28 +2178,16 @@ router.delete('/simulations/:id/override', [
   }
 });
 
-// DELETE /api/admin/simulations/:id - Permanently delete a supplementary simulation.
-// Refuses if the simulation is part of the core curriculum (SimulationOrder <= 20).
+// DELETE /api/admin/simulations/:id - Permanently delete a simulation.
 router.delete('/simulations/:id', [
   param('id').isInt({ min: 1 }).withMessage('Invalid simulation ID'),
   handleValidationErrors
 ], async (req, res) => {
   try {
     const { id } = req.params;
-    const [rows] = await pool.query(
-      'SELECT SimulationID, SimulationOrder FROM simulation WHERE SimulationID = ?',
-      [id]
-    );
+    const [rows] = await pool.query('SELECT SimulationID FROM simulation WHERE SimulationID = ?', [id]);
     if (rows.length === 0) {
       return res.status(404).json({ error: 'Not Found', message: 'Simulation not found' });
-    }
-
-    const order = Number(rows[0].SimulationOrder || 0);
-    if (order > 0 && order <= CORE_SIMULATION_LIMIT) {
-      return res.status(403).json({
-        error: 'Forbidden',
-        message: `Core simulations (1-${CORE_SIMULATION_LIMIT}) cannot be deleted; only supplementary simulations may be removed.`
-      });
     }
 
     await pool.query('DELETE FROM simulation WHERE SimulationID = ?', [id]);

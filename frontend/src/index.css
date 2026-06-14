@@ -1273,10 +1273,27 @@ h3, .text-2xl {
 
 [contenteditable][id^='input-'],
 [contenteditable][id^='textarea-'],
+[contenteditable][id^='sidetext-'],
 .table-rich-content {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   overflow-x: hidden;
   overflow-y: auto;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+  word-wrap: normal !important;
   scrollbar-gutter: stable;
+}
+
+[contenteditable][id^='input-'] *,
+[contenteditable][id^='textarea-'] *,
+[contenteditable][id^='sidetext-'] *,
+.table-rich-content * {
+  max-width: 100%;
+  white-space: inherit !important;
+  overflow-wrap: normal !important;
+  word-break: normal !important;
 }
 
 [contenteditable][id^='input-'] {
@@ -1284,6 +1301,10 @@ h3, .text-2xl {
 }
 
 [contenteditable][id^='textarea-'] {
+  max-height: 18rem;
+}
+
+[contenteditable][id^='sidetext-'] {
   max-height: 18rem;
 }
 
@@ -1393,6 +1414,8 @@ textarea[id^='textarea-'] {
 .lesson-content {
   white-space: pre-wrap;
   tab-size: 4;
+  min-width: 0;
+  overflow-x: hidden;
   word-wrap: normal;
   overflow-wrap: normal;
   word-break: normal;
@@ -1400,8 +1423,20 @@ textarea[id^='textarea-'] {
   max-width: 100%;
 }
 
+.lesson-content * {
+  max-width: 100%;
+  white-space: inherit;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
 .lesson-content a {
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+}
+
+.lesson-content pre,
+.lesson-content code {
+  white-space: pre-wrap;
 }
 
 /* Keep the first visible text line aligned at the top across layered layouts */
@@ -1438,6 +1473,9 @@ textarea[id^='textarea-'] {
 
 .lesson-content table {
   width: 100%;
+  max-width: 100%;
+  display: block;
+  overflow-x: auto;
   border-collapse: collapse;
   margin: 0.9rem 0;
 }

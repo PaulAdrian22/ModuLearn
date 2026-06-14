@@ -5,6 +5,7 @@ import { useAuth } from '../App';
 import AdminNavbar from '../components/AdminNavbar';
 import { normalizeSimulationSkill } from '../utils/simulationFlow';
 import { stripHtmlTags } from '../utils/stripHtml';
+import { themedConfirm } from '../utils/themedConfirm';
 
 // Aligned with the Mastery Performance palette in Progress.js so the same
 // skill always reads as the same color across the system.
@@ -118,6 +119,7 @@ const AdminSimulations = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [warning, setWarning] = useState('');
+  const [deletingSimulationId, setDeletingSimulationId] = useState(null);
 
   useEffect(() => {
     if (user && user.role !== 'admin') {
@@ -222,22 +224,24 @@ const AdminSimulations = () => {
   };
 
   const handleDeleteSimulation = async (simulation) => {
-    const order = Number(simulation?.SimulationOrder || 0);
-    if (order > 0 && order <= CORE_SIMULATION_LIMIT) {
-      // Defensive: button shouldn't render for core sims, but block here too.
-      return;
-    }
-    const confirmed = window.confirm(
-      `Delete supplementary simulation "${simulation.SimulationTitle}"? This cannot be undone.`
-    );
+    const confirmed = await themedConfirm({
+      title: 'Delete Simulation?',
+      message: `Delete simulation "${simulation.SimulationTitle}"? This cannot be undone.`,
+      confirmText: 'Delete',
+      cancelText: 'Cancel',
+      variant: 'danger'
+    });
     if (!confirmed) return;
 
     try {
+      setDeletingSimulationId(simulation.SimulationID);
       await axios.delete(`/admin/simulations/${simulation.SimulationID}`);
       setSimulations((prev) => prev.filter((s) => s.SimulationID !== simulation.SimulationID));
     } catch (err) {
       console.error('Failed to delete simulation:', err);
       setError(err?.response?.data?.message || 'Failed to delete simulation');
+    } finally {
+      setDeletingSimulationId(null);
     }
   };
 
@@ -353,6 +357,7 @@ const AdminSimulations = () => {
               const { solid, soft, text } = getSkillTheme(resolvedSkillType);
               const simOrder = Number(simulation.SimulationOrder || 0);
               const isSupplementary = simOrder > CORE_SIMULATION_LIMIT;
+              const isDeleting = deletingSimulationId === simulation.SimulationID;
 
               return (
                 <div
@@ -412,11 +417,11 @@ const AdminSimulations = () => {
 
                   <div className="mb-6" />
 
-                  <div className={`flex gap-2 ${isSupplementary ? '' : ''}`}>
+                  <div className="flex gap-2">
                     <button
                       type="button"
                       onClick={() => handleEdit(simulation.SimulationID)}
-                      className={`${isSupplementary ? 'flex-1' : 'w-full'} py-3 text-white rounded-lg font-medium text-sm flex items-center justify-center gap-2 shadow-sm`}
+                      className="flex-1 py-3 text-white rounded-lg font-medium text-sm flex items-center justify-center gap-2 shadow-sm"
                       style={{ backgroundColor: solid }}
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -425,20 +430,23 @@ const AdminSimulations = () => {
                       </svg>
                       Edit Simulation
                     </button>
-                    {isSupplementary && (
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteSimulation(simulation)}
-                        className="flex-shrink-0 px-4 py-3 text-white rounded-lg font-medium text-sm flex items-center justify-center gap-1 shadow-sm bg-[#D93B3B] hover:bg-[#B82E2E]"
-                        title="Delete this supplementary simulation"
-                        aria-label="Delete supplementary simulation"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3" />
-                        </svg>
-                        Delete
-                      </button>
-                    )}
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteSimulation(simulation)}
+                      disabled={isDeleting}
+                      className={`flex-shrink-0 px-4 py-3 rounded-lg font-medium text-sm flex items-center justify-center gap-1 shadow-sm transition-colors ${
+                        isDeleting
+                          ? 'text-white bg-[#D93B3B]/70 cursor-not-allowed'
+                          : 'text-white bg-[#D93B3B] hover:bg-[#B82E2E]'
+                      }`}
+                      title="Delete this simulation"
+                      aria-label="Delete simulation"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3" />
+                      </svg>
+                      {isDeleting ? 'Deleting...' : 'Delete'}
+                    </button>
                   </div>
                 </div>
               );
