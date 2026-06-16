@@ -1315,7 +1315,13 @@ h3, .text-2xl {
 }
 
 .table-rich-content {
+  max-height: none;
+  overflow-y: visible;
+}
+
+[contenteditable].table-rich-content {
   max-height: 10rem;
+  overflow-y: auto;
 }
 
 textarea[id^='textarea-'] {
@@ -1416,8 +1422,8 @@ textarea[id^='textarea-'] {
   tab-size: 4;
   min-width: 0;
   overflow-x: hidden;
-  word-wrap: normal;
-  overflow-wrap: normal;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
   word-break: normal;
   hyphens: none;
   max-width: 100%;
@@ -1426,12 +1432,12 @@ textarea[id^='textarea-'] {
 .lesson-content * {
   max-width: 100%;
   white-space: inherit;
-  overflow-wrap: normal;
+  overflow-wrap: anywhere;
   word-break: normal;
 }
 
 .lesson-content a {
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
 }
 
 .lesson-content pre,
