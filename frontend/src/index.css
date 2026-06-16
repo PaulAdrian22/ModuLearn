@@ -1423,7 +1423,7 @@ textarea[id^='textarea-'] {
   min-width: 0;
   overflow-x: hidden;
   word-wrap: break-word;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
   word-break: normal;
   hyphens: none;
   max-width: 100%;
@@ -1432,7 +1432,7 @@ textarea[id^='textarea-'] {
 .lesson-content * {
   max-width: 100%;
   white-space: inherit;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
   word-break: normal;
 }
 

@@ -845,9 +845,13 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
       // Progress caches are kept separate from content caches to ensure data integrity.
       if (savedLessonProgress) {
         const toObject = (value) => (value && typeof value === 'object' && !Array.isArray(value) ? value : {});
+        const dbTopicCount = Array.isArray(response.data.sections)
+          ? response.data.sections.filter((section) => normalizeLessonSectionType(section?.type) === 'topic').length
+          : 0;
         const hardcodedTopicCount = moduleContent[moduleId]?.topics?.length || 0;
         const savedCurrentTopic = Number.isInteger(savedLessonProgress.currentTopic) ? savedLessonProgress.currentTopic : 0;
         const maxTopicIndex = hardcodedTopicCount > 0 ? hardcodedTopicCount - 1 : savedCurrentTopic;
+        const serverCompletedTopics = buildCompletedTopicsFromProgress(response.data.CompletionRate, dbTopicCount);
 
         setCurrentTopic(Math.max(0, Math.min(savedCurrentTopic, maxTopicIndex)));
         setCurrentTopicPage(Math.max(0, Number.isInteger(savedLessonProgress.currentTopicPage) ? savedLessonProgress.currentTopicPage : 0));
@@ -856,7 +860,10 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
             ? savedLessonProgress.showLessonIntro
             : !diagnosticBeforeIntro
         );
-        setTopicCompleted(toObject(savedLessonProgress.topicCompleted));
+        setTopicCompleted({
+          ...serverCompletedTopics,
+          ...toObject(savedLessonProgress.topicCompleted)
+        });
         setCompletedReviews(toObject(savedLessonProgress.completedReviews));
         setReviewResults(toObject(savedLessonProgress.reviewResults));
         setReviewAttempts(toObject(savedLessonProgress.reviewAttempts));
@@ -870,12 +877,19 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
         }, {});
         setReviewCooldowns(restoredCooldowns);
       } else {
+        const dbTopicCount = Array.isArray(response.data.sections)
+          ? response.data.sections.filter((section) => normalizeLessonSectionType(section?.type) === 'topic').length
+          : 0;
+        const serverCompletedTopics = buildCompletedTopicsFromProgress(response.data.CompletionRate, dbTopicCount);
         // Only show lesson intro for new users (no prior topic completion)
-        const isNewUser = Object.keys(prevTopicCompleted).length === 0;
+        const isNewUser = Object.keys(prevTopicCompleted).length === 0 && Object.keys(serverCompletedTopics).length === 0;
         setShowLessonIntro(isNewUser ? !diagnosticBeforeIntro : false);
         // Preserve topicCompleted from before the refetch (e.g., after admin cache invalidation)
-        if (Object.keys(prevTopicCompleted).length > 0) {
-          setTopicCompleted(prevTopicCompleted);
+        if (!isNewUser) {
+          setTopicCompleted({
+            ...serverCompletedTopics,
+            ...prevTopicCompleted
+          });
           setCompletedReviews(prevCompletedReviews);
         }
       }
@@ -975,6 +989,21 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
     } catch (error) {
       console.error('Error saving diagnostic completion:', error);
     }
+  };
+
+  const buildCompletedTopicsFromProgress = (completionRate, pageCount) => {
+    const safePageCount = Math.max(0, Number(pageCount) || 0);
+    if (safePageCount === 0) return {};
+
+    const safeRate = Math.max(0, Math.min(100, Number(completionRate) || 0));
+    const completedPageCount = safeRate >= 100
+      ? safePageCount
+      : Math.floor((safeRate / 100) * safePageCount);
+
+    return Array.from({ length: completedPageCount }).reduce((acc, _, index) => {
+      acc[index] = true;
+      return acc;
+    }, {});
   };
 
   const handleDiagnosticComplete = (score) => {
@@ -1275,6 +1304,12 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
 
   // Navigate to a topic page and scroll content to top
   const goToTopicPage = (pageIndex) => {
+    if (pageIndex > currentTopicPage) {
+      setTopicCompleted((prev) => ({
+        ...prev,
+        [currentTopicPage]: true
+      }));
+    }
     setCurrentTopicPage(pageIndex);
     if (contentScrollRef.current) {
       contentScrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1305,6 +1340,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
   const isTopicPageAccessible = (pageIndex) => {
     if (pageIndex === 0) return true;
     for (let i = 0; i < pageIndex; i++) {
+      if (topicCompleted[i]) continue;
       if (!arePageReviewsCompleted(i)) return false;
     }
     return true;

@@ -996,15 +996,17 @@ const getDiagnosticStatus = async (req, res) => {
     const moduleId = parseInt(req.params.moduleId, 10);
 
     const rows = await query(
-      `SELECT AssessmentID, TotalScore, ResultStatus, DateTaken
-         FROM assessment
-        WHERE UserID = ?
-          AND ModuleID = ?
-          AND AssessmentType = 'Diagnostic'
-          AND ResultStatus IN ('Pass', 'Fail')
-        ORDER BY DateTaken DESC, AssessmentID DESC
+      `SELECT a.AssessmentID, a.TotalScore, a.ResultStatus, a.DateTaken
+         FROM assessment a
+         JOIN module currentModule ON currentModule.ModuleID = ?
+         JOIN module assessedModule ON assessedModule.ModuleID = a.ModuleID
+        WHERE a.UserID = ?
+          AND assessedModule.LessonOrder = currentModule.LessonOrder
+          AND a.AssessmentType = 'Diagnostic'
+          AND a.ResultStatus IN ('Pass', 'Fail')
+        ORDER BY a.DateTaken DESC, a.AssessmentID DESC
         LIMIT 1`,
-      [userId, moduleId]
+      [moduleId, userId]
     );
 
     const latest = rows[0] || null;
@@ -1038,14 +1040,16 @@ const completeDiagnostic = async (req, res) => {
     const resultStatus = !skipped && score !== null && score >= ASSESSMENT_PASSING_SCORE ? 'Pass' : 'Fail';
 
     const existing = await query(
-      `SELECT AssessmentID
-         FROM assessment
-        WHERE UserID = ?
-          AND ModuleID = ?
-          AND AssessmentType = 'Diagnostic'
-        ORDER BY AssessmentID DESC
+      `SELECT a.AssessmentID
+         FROM assessment a
+         JOIN module currentModule ON currentModule.ModuleID = ?
+         JOIN module assessedModule ON assessedModule.ModuleID = a.ModuleID
+        WHERE a.UserID = ?
+          AND assessedModule.LessonOrder = currentModule.LessonOrder
+          AND a.AssessmentType = 'Diagnostic'
+        ORDER BY a.AssessmentID DESC
         LIMIT 1`,
-      [userId, moduleId]
+      [moduleId, userId]
     );
 
     if (existing.length > 0) {
