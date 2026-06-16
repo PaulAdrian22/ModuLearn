@@ -1418,12 +1418,12 @@ textarea[id^='textarea-'] {
 
 /* Indentation support for lesson content */
 .lesson-content {
-  white-space: pre-wrap;
+  white-space: normal;
   tab-size: 4;
   min-width: 0;
-  overflow-x: hidden;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  overflow-x: visible;
+  word-wrap: normal;
+  overflow-wrap: normal;
   word-break: normal;
   hyphens: none;
   max-width: 100%;
@@ -1431,9 +1431,17 @@ textarea[id^='textarea-'] {
 
 .lesson-content * {
   max-width: 100%;
-  white-space: inherit;
-  overflow-wrap: break-word;
+  white-space: normal;
+  overflow-wrap: normal;
   word-break: normal;
+}
+
+.lesson-content span {
+  display: inline !important;
+}
+
+.lesson-content span[style*='white-space:pre'] {
+  white-space: normal !important;
 }
 
 .lesson-content a {

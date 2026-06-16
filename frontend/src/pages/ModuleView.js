@@ -273,7 +273,10 @@ const ModuleView = () => {
   const normalizeRichTextHtml = (value) => {
     if (!value) return '';
 
-    let html = String(value).replace(/^[\r\n]+/, '');
+    let html = String(value)
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/\u00a0/g, ' ')
+      .replace(/^[\r\n]+/, '');
 
     // Remove leading visual blank lines produced by editor paste/newline behavior.
     let prev = '';
@@ -285,11 +288,13 @@ const ModuleView = () => {
     }
 
     // Remove accidental leading newlines inside common block tags from imported content.
-    // Preserve spaces, tabs, and &nbsp; so admin indentation survives round-tripping.
-    return html.replace(
+    html = html.replace(
       /<(p|li|h[1-6]|td|th|blockquote)([^>]*)>[\n\r\f\v]+/gi,
       '<$1$2>'
     );
+
+    // Repair obvious soft-wrapped pasted words, e.g. "sympto<br>ms".
+    return html.replace(/([a-z])[\t ]*<br\s*\/?>[\t ]*([a-z])/g, '$1$2');
   };
 
   const VIDEO_TEXT_URL_REGEX = /(https?:\/\/[^\s<>"']+|www\.[^\s<>"']+)/gi;
