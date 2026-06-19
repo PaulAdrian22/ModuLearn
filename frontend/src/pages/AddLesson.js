@@ -1982,6 +1982,36 @@ const AddLesson = () => {
       : null;
   };
 
+  const sanitizeIndentLength = (value = '') => {
+    const normalized = String(value || '').trim().toLowerCase();
+    if (/^0(?:\.0+)?(?:px|rem|em|pt|in|%)?$/.test(normalized)) return '0';
+
+    const match = normalized.match(/^(\d*\.?\d+)(px|rem|em|pt|in|%)$/);
+    if (!match) return null;
+
+    const amount = Number.parseFloat(match[1]);
+    const unit = match[2];
+    const maxByUnit = {
+      px: 240,
+      rem: 15,
+      em: 15,
+      pt: 180,
+      in: 2.5,
+      '%': 100,
+    };
+
+    if (!Number.isFinite(amount) || amount < 0 || amount > maxByUnit[unit]) {
+      return null;
+    }
+
+    return `${amount}${unit}`;
+  };
+
+  const sanitizeWhiteSpace = (value = '') => {
+    const normalized = String(value || '').trim().toLowerCase();
+    return ['pre', 'pre-wrap', 'break-spaces'].includes(normalized) ? normalized : null;
+  };
+
   const mapOrderedListTypeToStyle = (typeValue = '') => {
     const normalized = String(typeValue || '').trim();
     if (!normalized) return null;
@@ -2012,6 +2042,26 @@ const AddLesson = () => {
 
     if (textAlign && ['P', 'DIV', 'BLOCKQUOTE', 'LI', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(normalizedTagName)) {
       styleRules.push(`text-align: ${textAlign}`);
+    }
+
+    if (['UL', 'OL', 'LI'].includes(normalizedTagName)) {
+      const listStyleType = sanitizeListStyleType(getStyleValue(styleText, 'list-style-type'));
+      if (listStyleType) styleRules.push(`list-style-type: ${listStyleType}`);
+    }
+
+    if (['P', 'DIV', 'BLOCKQUOTE', 'LI', 'UL', 'OL', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(normalizedTagName)) {
+      const marginLeft = sanitizeIndentLength(getStyleValue(styleText, 'margin-left'));
+      const paddingLeft = sanitizeIndentLength(getStyleValue(styleText, 'padding-left'));
+      const textIndent = sanitizeIndentLength(getStyleValue(styleText, 'text-indent'));
+
+      if (marginLeft) styleRules.push(`margin-left: ${marginLeft}`);
+      if (paddingLeft) styleRules.push(`padding-left: ${paddingLeft}`);
+      if (textIndent) styleRules.push(`text-indent: ${textIndent}`);
+    }
+
+    if (['SPAN', 'P', 'DIV', 'LI'].includes(normalizedTagName)) {
+      const whiteSpace = sanitizeWhiteSpace(getStyleValue(styleText, 'white-space'));
+      if (whiteSpace) styleRules.push(`white-space: ${whiteSpace}`);
     }
 
     return styleRules.length > 0 ? ` style="${styleRules.join('; ')}"` : '';
@@ -2147,9 +2197,10 @@ const AddLesson = () => {
               ? sanitizeListStyleType(getStyleValue(firstLi.getAttribute('style') || '', 'list-style-type'))
               : null;
             const resolvedUnorderedListType = inlineListType || firstLiListType || 'disc';
+            const ulStyleAttr = sanitizeInlineStyle(tagName, `list-style-type: ${resolvedUnorderedListType}; ${style}`);
             return hasVisibleChildren
-              ? `<ul style="list-style-type: ${resolvedUnorderedListType}">${children}</ul>`
-              : `<ul style="list-style-type: ${resolvedUnorderedListType}"><li><br></li></ul>`;
+              ? `<ul${ulStyleAttr || ` style="list-style-type: ${resolvedUnorderedListType}"`}>${children}</ul>`
+              : `<ul${ulStyleAttr || ` style="list-style-type: ${resolvedUnorderedListType}"`}><li><br></li></ul>`;
           }
           if (tagName === 'OL') {
             const inlineListType = sanitizeListStyleType(getStyleValue(style, 'list-style-type'));
@@ -2159,7 +2210,7 @@ const AddLesson = () => {
               ? sanitizeListStyleType(getStyleValue(firstLi.getAttribute('style') || '', 'list-style-type'))
               : null;
             const resolvedOrderedListType = inlineListType || listTypeFromAttribute || firstLiListType || 'decimal';
-            const olStyleAttr = ` style="list-style-type: ${resolvedOrderedListType}"`;
+            const olStyleAttr = sanitizeInlineStyle(tagName, `list-style-type: ${resolvedOrderedListType}; ${style}`) || ` style="list-style-type: ${resolvedOrderedListType}"`;
             return hasVisibleChildren
               ? `<ol${olStyleAttr}>${children}</ol>`
               : `<ol${olStyleAttr}><li><br></li></ol>`;

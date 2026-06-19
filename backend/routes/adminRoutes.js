@@ -515,7 +515,7 @@ router.get('/modules', async (req, res) => {
 // POST /api/admin/modules - Create new module/lesson
 router.post('/modules', [
   body('ModuleTitle').trim().notEmpty().withMessage('Module title is required'),
-  body('Description').optional().trim(),
+  body('Description').optional(),
   body('LessonOrder').isInt({ min: 1 }).withMessage('Lesson order must be a positive integer'),
   body('Tesda_Reference').optional().trim(),
   body('LessonTime').optional(),
@@ -662,7 +662,7 @@ router.post('/modules', [
 router.put('/modules/:id', [
   param('id').isInt({ min: 1 }).withMessage('Invalid module ID'),
   body('ModuleTitle').optional().trim().notEmpty(),
-  body('Description').optional().trim(),
+  body('Description').optional(),
   body('LessonOrder').optional().isInt({ min: 1 }),
   body('Tesda_Reference').optional().trim(),
   body('LessonTime').optional(),

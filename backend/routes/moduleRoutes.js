@@ -20,7 +20,7 @@ router.get('/:id', [
 // POST /api/modules - Create new module
 router.post('/', authenticate, [
   body('ModuleTitle').trim().notEmpty().withMessage('Module title is required'),
-  body('Description').optional().trim(),
+  body('Description').optional(),
   body('LessonOrder').isInt({ min: 1 }).withMessage('Lesson order must be a positive integer'),
   handleValidationErrors
 ], moduleController.createModule);
@@ -29,7 +29,7 @@ router.post('/', authenticate, [
 router.put('/:id', authenticate, [
   param('id').isInt({ min: 1 }).withMessage('Invalid module ID'),
   body('ModuleTitle').optional().trim().notEmpty().withMessage('Module title cannot be empty'),
-  body('Description').optional().trim(),
+  body('Description').optional(),
   body('LessonOrder').optional().isInt({ min: 1 }).withMessage('Lesson order must be a positive integer'),
   handleValidationErrors
 ], moduleController.updateModule);
