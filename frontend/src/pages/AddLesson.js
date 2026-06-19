@@ -2017,6 +2017,23 @@ const AddLesson = () => {
     return styleRules.length > 0 ? ` style="${styleRules.join('; ')}"` : '';
   };
 
+  const escapeTextForRichHtml = (text = '') => {
+    const escapedText = escapeHtmlEntities(text || '').replace(/\t/g, '    ');
+
+    return escapedText
+      .split('\n')
+      .map((line) => {
+        const leadingSpaces = line.match(/^ +/)?.[0] || '';
+        const withoutLeadingSpaces = line.slice(leadingSpaces.length);
+        const preservedIndent = leadingSpaces.replace(/ /g, '&nbsp;');
+
+        return `${preservedIndent}${withoutLeadingSpaces.replace(/ {2,}/g, (spaces) => {
+          return ` ${'&nbsp;'.repeat(spaces.length - 1)}`;
+        })}`;
+      })
+      .join('\n');
+  };
+
   // Helper to sanitize HTML - keeps only safe formatting tags for content areas
   // Handles paste from external sources (Word, Google Docs) preserving formatting
   const sanitizeHtml = (html) => {
@@ -2084,9 +2101,8 @@ const AddLesson = () => {
 
     const cleanNode = (node) => {
       if (node.nodeType === Node.TEXT_NODE) {
-        // Preserve manual indentation and spacing from the editor by converting ALL spaces to &nbsp;
-        const escapedText = escapeHtmlEntities(node.textContent || '').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
-        return escapedText.replace(/ /g, '&nbsp;');
+        // Preserve indentation without turning every word gap into a non-wrapping space.
+        return escapeTextForRichHtml(node.textContent || '');
       }
       if (node.nodeType === Node.ELEMENT_NODE) {
         const tagName = node.tagName.toUpperCase();
