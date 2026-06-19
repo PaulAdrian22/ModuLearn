@@ -4401,6 +4401,63 @@ const AddLesson = () => {
         return replacementList;
       };
 
+      const escapeHtmlForInsert = (value = '') => {
+        return String(value)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      };
+
+      const applyLineIndentToSelection = (shouldOutdent = false) => {
+        const currentSelection = window.getSelection();
+        if (!currentSelection || currentSelection.rangeCount === 0) return;
+
+        const anchorElement = getSelectionAnchorElement();
+        if (anchorElement?.closest?.('li')) {
+          document.execCommand(shouldOutdent ? 'outdent' : 'indent', false, null);
+          return;
+        }
+
+        const selectedValue = currentSelection.toString();
+        if (selectedValue) {
+          const updatedValue = selectedValue
+            .split('\n')
+            .map((line) => {
+              if (!shouldOutdent) return `    ${line}`;
+              return line.replace(/^(\t| {1,4}|\u00a0{1,4})/, '');
+            })
+            .join('\n');
+          document.execCommand('insertHTML', false, escapeHtmlForInsert(updatedValue).replace(/^ {1,4}/gm, (spaces) => '&nbsp;'.repeat(spaces.length)));
+          return;
+        }
+
+        if (!shouldOutdent) {
+          document.execCommand('insertHTML', false, '&nbsp;&nbsp;&nbsp;&nbsp;');
+          return;
+        }
+
+        const range = currentSelection.getRangeAt(0);
+        const node = range.startContainer;
+        if (node.nodeType !== Node.TEXT_NODE) return;
+
+        const text = node.textContent || '';
+        const offset = range.startOffset;
+        const lineStart = text.lastIndexOf('\n', offset - 1) + 1;
+        const lineText = text.substring(lineStart);
+        const removeMatch = lineText.match(/^(\t| {1,4}|\u00a0{1,4})/);
+        if (!removeMatch) return;
+
+        const removeLength = removeMatch[0].length;
+        node.textContent = text.substring(0, lineStart) + lineText.substring(removeLength);
+        const newOffset = Math.max(lineStart, offset - removeLength);
+        range.setStart(node, newOffset);
+        range.collapse(true);
+        currentSelection.removeAllRanges();
+        currentSelection.addRange(range);
+      };
+
       const ensureListFormatting = (targetListType) => {
         const currentList = getCurrentListElement();
         const currentListType = getCurrentListType(currentList);
@@ -4574,10 +4631,10 @@ const AddLesson = () => {
           break;
         }
         case 'indent':
-          document.execCommand('indent', false, null);
+          applyLineIndentToSelection(false);
           break;
         case 'outdent':
-          document.execCommand('outdent', false, null);
+          applyLineIndentToSelection(true);
           break;
         case 'align-left':
           document.execCommand('justifyLeft', false, null);

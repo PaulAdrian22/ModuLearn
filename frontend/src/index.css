@@ -1431,7 +1431,7 @@ textarea[id^='textarea-'] {
 
 .lesson-content * {
   max-width: 100%;
-  white-space: normal;
+  white-space: inherit;
   overflow-wrap: normal;
   word-break: normal;
 }
@@ -1441,7 +1441,7 @@ textarea[id^='textarea-'] {
 }
 
 .lesson-content span[style*='white-space:pre'] {
-  white-space: normal !important;
+  white-space: pre !important;
 }
 
 .lesson-content a {

@@ -274,8 +274,6 @@ const ModuleView = () => {
     if (!value) return '';
 
     let html = String(value)
-      .replace(/&nbsp;/gi, ' ')
-      .replace(/\u00a0/g, ' ')
       .replace(/^[\r\n]+/, '');
 
     // Remove leading visual blank lines produced by editor paste/newline behavior.

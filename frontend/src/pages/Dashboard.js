@@ -135,9 +135,17 @@ const Dashboard = () => {
     Advanced: '#E67E22',
     Supplementary: '#9B59B6'
   };
+  const isCoreRoadmapLesson = (module) => {
+    const lessonOrder = Number(module?.LessonOrder || 0);
+    const difficulty = String(module?.Difficulty || '').trim().toLowerCase();
+
+    return lessonOrder >= 1 && lessonOrder <= 7 && difficulty !== 'supplementary';
+  };
+
   const roadmapModules = [...modules]
+    .filter(isCoreRoadmapLesson)
     .sort((a, b) => (a.LessonOrder || 0) - (b.LessonOrder || 0))
-    .slice(0, 8);
+    .slice(0, 7);
   const roadmapPoints = roadmapModules.length > 0
     ? roadmapModules
     : [
