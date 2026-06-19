@@ -95,7 +95,7 @@ const Register = () => {
 
   return (
     <div
-      className="min-h-screen w-full relative"
+      className="min-h-dvh w-full relative overflow-y-auto"
       style={{
         backgroundImage: 'url(/images/register-bg.webp)',
         backgroundSize: 'cover',
@@ -103,7 +103,7 @@ const Register = () => {
         backgroundRepeat: 'no-repeat'
       }}
     >
-      <div className="min-h-screen flex items-center justify-center lg:justify-end px-4 py-8 lg:pr-[8vw] overflow-y-auto">
+      <div className="min-h-dvh flex items-center justify-center lg:justify-end px-4 py-8 lg:pr-[8vw]">
       <div className="w-full max-w-[470px]">
         <div className="bg-white rounded-3xl shadow-2xl p-7" style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}>
           {/* Register Title */}

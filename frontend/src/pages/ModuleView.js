@@ -869,8 +869,8 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
           ...serverCompletedTopics,
           ...toObject(savedLessonProgress.topicCompleted)
         });
-        setCompletedReviews(toObject(savedLessonProgress.completedReviews));
-        setReviewResults(toObject(savedLessonProgress.reviewResults));
+        setCompletedReviews(normalizeReviewStateKeysForSections(toObject(savedLessonProgress.completedReviews), response.data.sections));
+        setReviewResults(normalizeReviewStateKeysForSections(toObject(savedLessonProgress.reviewResults), response.data.sections));
         setReviewAttempts(toObject(savedLessonProgress.reviewAttempts));
 
         const restoredCooldowns = Object.entries(toObject(savedLessonProgress.reviewCooldowns)).reduce((acc, [key, value]) => {
@@ -895,7 +895,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
             ...serverCompletedTopics,
             ...prevTopicCompleted
           });
-          setCompletedReviews(prevCompletedReviews);
+          setCompletedReviews(normalizeReviewStateKeysForSections(prevCompletedReviews, response.data.sections));
         }
       }
       
@@ -1321,6 +1321,68 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
     }
   };
 
+  const getSectionReviewKey = (prefix, section) => {
+    const stableId = section?.id ?? section?.sectionId ?? section?.SectionID;
+    return stableId ? `${prefix}-${stableId}` : `${prefix}-${section?.originalIndex}`;
+  };
+
+  const getLegacyReviewKey = (prefix, section) => `${prefix}-${section?.originalIndex}`;
+
+  const hasReviewState = (state, prefix, section) => {
+    const stableKey = getSectionReviewKey(prefix, section);
+    const legacyKey = getLegacyReviewKey(prefix, section);
+    return Boolean(state?.[stableKey] || state?.[legacyKey]);
+  };
+
+  const getReviewStateValue = (state, prefix, section) => {
+    const stableKey = getSectionReviewKey(prefix, section);
+    const legacyKey = getLegacyReviewKey(prefix, section);
+    return state?.[stableKey] ?? state?.[legacyKey];
+  };
+
+  const setReviewStateValue = (setter, prefix, section, value) => {
+    const stableKey = getSectionReviewKey(prefix, section);
+    const legacyKey = getLegacyReviewKey(prefix, section);
+    setter((prev) => ({
+      ...prev,
+      [legacyKey]: value,
+      [stableKey]: value,
+    }));
+  };
+
+  const normalizeReviewStateKeysForSections = (state, sections = []) => {
+    if (!state || typeof state !== 'object' || Array.isArray(state) || !Array.isArray(sections)) {
+      return state && typeof state === 'object' && !Array.isArray(state) ? state : {};
+    }
+
+    return sections.reduce((next, section, index) => {
+      const sectionWithIndex = { ...section, originalIndex: index };
+      const sectionType = normalizeLessonSectionType(section?.type);
+      const prefix = (
+        sectionType === 'review' ||
+        sectionType === 'review - multiple choice' ||
+        sectionType === 'review-multiple-choice'
+      )
+        ? 'review-mc'
+        : (
+          sectionType === 'review - drag and drop' ||
+          sectionType === 'review-drag-drop' ||
+          sectionType === 'simulation'
+        )
+          ? 'review-dnd'
+          : null;
+
+      if (!prefix) return next;
+
+      const stableKey = getSectionReviewKey(prefix, sectionWithIndex);
+      const legacyKey = getLegacyReviewKey(prefix, sectionWithIndex);
+      if (next[legacyKey] !== undefined && next[stableKey] === undefined) {
+        next[stableKey] = next[legacyKey];
+      }
+      return next;
+    }, { ...state });
+  };
+
   // Check if all review sections on a given topic page are completed
   const arePageReviewsCompleted = (pageIndex) => {
     const page = topicPages[pageIndex];
@@ -1328,14 +1390,12 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
     for (const section of page) {
       const sType = normalizeLessonSectionType(section?.type);
       if (sType === 'review' || sType === 'review - multiple choice' || sType === 'review-multiple-choice') {
-        const reviewId = `review-mc-${section.originalIndex}`;
-        if (!completedReviews[reviewId]) return false;
+        if (!hasReviewState(completedReviews, 'review-mc', section)) return false;
       }
       if (sType === 'review - drag and drop' || sType === 'review-drag-drop' || sType === 'simulation') {
-        const dndId = `review-dnd-${section.originalIndex}`;
         const simulationId = section.simulationId || section.simulation?.SimulationID || section.simulation?.id;
         const simAttempts = simulationId ? Number(simProgressMap?.[simulationId]?.Attempts || 0) : 0;
-        if (!completedReviews[dndId] && simAttempts <= 0) return false;
+        if (!hasReviewState(completedReviews, 'review-dnd', section) && simAttempts <= 0) return false;
       }
     }
     return true;
@@ -2076,9 +2136,9 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                       case 'review':
                       case 'review - multiple choice':
                       case 'review-multiple-choice': {
-                        const reviewId = `review-mc-${section.originalIndex}`;
-                        const isCompleted = completedReviews[reviewId];
-                        const reviewResult = reviewResults[reviewId];
+                        const reviewId = getSectionReviewKey('review-mc', section);
+                        const isCompleted = hasReviewState(completedReviews, 'review-mc', section);
+                        const reviewResult = getReviewStateValue(reviewResults, 'review-mc', section);
                         const isPerfectScore = typeof reviewResult?.score === 'number' && reviewResult.score === 100;
                         const isWrongSubmission = !!reviewResult && !isPerfectScore;
                         const showReviewStatusCard = isCompleted || isWrongSubmission;
@@ -2236,7 +2296,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                       <h3 className="text-2xl font-bold mb-2">{reviewScore >= 75 ? 'Great Job!' : 'Keep Learning!'}</h3>
                                       <p className="text-4xl font-bold text-highlight-dark mb-4">{reviewScore.toFixed(0)}%</p>
                                       <button onClick={() => {
-                                        setCompletedReviews(prev => ({ ...prev, [reviewId]: true }));
+                                        setReviewStateValue(setCompletedReviews, 'review-mc', section, true);
                                         setActiveReview(null);
                                         setReviewScore(null);
                                         setActiveReviewQuestionIndex(0);
@@ -2330,15 +2390,20 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                               const score = (correct / reviewQuestions.length) * 100;
                                               const timeSpentSeconds = getTotalTimeFromQuestionTimes(updatedQuestionTimes);
 
-                                              setReviewResults(prev => ({
-                                                ...prev,
-                                                [reviewId]: {
+                                              setReviewResults(prev => {
+                                                const legacyReviewId = getLegacyReviewKey('review-mc', section);
+                                                const result = {
                                                   score,
                                                   hasCorrectAnswer: breakdown.some(item => item.isCorrect),
                                                   breakdown,
                                                   timeSpentSeconds,
-                                                }
-                                              }));
+                                                };
+                                                return {
+                                                  ...prev,
+                                                  [legacyReviewId]: result,
+                                                  [reviewId]: result,
+                                                };
+                                              });
 
                                               try {
                                                 const numericModuleId = Number.parseInt(moduleId, 10);
@@ -2360,20 +2425,14 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                                   ...prev,
                                                   [reviewId]: Date.now() + 30000,
                                                 }));
-                                                setCompletedReviews(prev => ({
-                                                  ...prev,
-                                                  [reviewId]: false,
-                                                }));
+                                                setReviewStateValue(setCompletedReviews, 'review-mc', section, false);
                                               } else {
                                                 setReviewCooldowns(prev => {
                                                   const next = { ...prev };
                                                   delete next[reviewId];
                                                   return next;
                                                 });
-                                                setCompletedReviews(prev => ({
-                                                  ...prev,
-                                                  [reviewId]: true,
-                                                }));
+                                                setReviewStateValue(setCompletedReviews, 'review-mc', section, true);
                                               }
 
                                               setActiveReview(null);
@@ -2400,13 +2459,13 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                       case 'review - drag and drop':
                       case 'review-drag-drop':
                       case 'simulation': {
-                        const dndReviewId = `review-dnd-${section.originalIndex}`;
+                        const dndReviewId = getSectionReviewKey('review-dnd', section);
                         const simulationId = section.simulationId || section.simulation?.SimulationID || section.simulation?.id;
                         const simulationTitle = section.simulation?.SimulationTitle || 'Interactive Exercise';
                         const simulationDescription = section.simulation?.Description || 'Complete this interactive exercise to continue.';
                         const simProgress = simProgressMap[simulationId];
                         const simAttempts = Number(simProgress?.Attempts || 0);
-                        const isDndCompleted = completedReviews[dndReviewId] || simAttempts > 0;
+                        const isDndCompleted = hasReviewState(completedReviews, 'review-dnd', section) || simAttempts > 0;
                         const cooldownSecondsLeft = getCooldownSecondsLeft(dndReviewId);
                         const isCooldownActive = cooldownSecondsLeft > 0;
                         const simScore = simAttempts > 0 ? Number(simProgress?.Score || 0) : null;

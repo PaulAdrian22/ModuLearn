@@ -252,7 +252,7 @@ const CertificatePreview = ({ template, zones }) => {
   const sampleDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
   return (
-    <div ref={containerRef} className="relative w-full" style={{ aspectRatio: '1.414' }}>
+    <div ref={containerRef} className="relative w-full max-w-4xl mx-auto" style={{ aspectRatio: '1.414' }}>
       <div className="w-full h-full relative bg-gray-100 rounded-lg overflow-hidden border border-gray-300">
         {isImage ? (
           <img

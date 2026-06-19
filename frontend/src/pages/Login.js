@@ -63,7 +63,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-14 relative overflow-y-auto" style={{
+    <div className="min-h-dvh flex items-center justify-center px-4 py-14 relative overflow-y-auto" style={{
       backgroundImage: 'url(/images/login-bg.webp)',
       backgroundSize: 'cover',
       backgroundPosition: 'center',

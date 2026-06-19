@@ -448,7 +448,7 @@ const UsernameModal = ({ currentUsername, onSave, onClose }) => {
   const [username, setUsername] = useState(currentUsername);
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
       <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
         <h3 className="text-2xl font-bold mb-4">Change Username</h3>
         <input
@@ -503,7 +503,7 @@ const PasswordModal = ({ onSave, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
       <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
         <h3 className="text-2xl font-bold mb-4">Change Password</h3>
 
@@ -618,7 +618,7 @@ const ThemeModal = ({ currentTheme, onSave, onClose }) => {
   const themes = ['Light Mode', 'Dark Mode', 'Auto'];
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
       <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
         <h3 className="text-2xl font-bold mb-6">Select Theme</h3>
         <div className="space-y-3 mb-6">
@@ -672,7 +672,7 @@ const FontSizeModal = ({ currentSize, onSave, onClose }) => {
   ];
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
       <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
         <h3 className="text-2xl font-bold mb-6">Select Font Size</h3>
         <div className="space-y-3 mb-6">
@@ -729,7 +729,7 @@ const UiSizeModal = ({ currentSize, onSave, onClose }) => {
   ];
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
       <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
         <h3 className="text-2xl font-bold mb-6">Select UI Size</h3>
         <div className="space-y-3 mb-6">
@@ -912,7 +912,7 @@ const CertZoneEditor = ({ template, savedConfig, onSaved, onNotify }) => {
   const templateSrc = `${API_SERVER_URL}/uploads/cert-template/${template.filename}`;
 
   return (
-    <div className="mt-5 border border-border rounded-lg overflow-hidden">
+    <div className="mt-5 border border-border rounded-lg overflow-hidden max-w-5xl mx-auto">
       <div className="px-4 py-3 bg-gray-50 border-b border-border flex items-center justify-between">
         <span className="text-sm font-semibold text-gray-700">Certificate Editor</span>
         <span className="text-xs text-gray-400">Drag to move · drag handles to resize</span>

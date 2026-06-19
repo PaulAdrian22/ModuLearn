@@ -234,7 +234,7 @@ const InitialAssessmentModal = ({
     const correctCount = Math.round((score / 100) * assessmentQuestions.length);
 
     return (
-      <div className={standalone ? 'min-h-screen bg-gradient-to-br from-[#d9f5f1] via-[#eef8ff] to-[#d3ecfb]' : 'fixed inset-0 bg-black/45 backdrop-blur-sm z-[10000] overflow-hidden'}>
+      <div className={standalone ? 'min-h-dvh bg-gradient-to-br from-[#d9f5f1] via-[#eef8ff] to-[#d3ecfb] overflow-y-auto' : 'fixed inset-0 bg-black/45 backdrop-blur-sm z-[10000] overflow-hidden'}>
         <div className={standalone ? 'w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-10' : 'h-full w-full p-3 sm:p-6 flex items-center justify-center'}>
           <div className={`w-full rounded-2xl bg-white shadow-2xl border border-gray-200 flex flex-col overflow-hidden ${standalone ? '' : 'max-w-3xl max-h-full'}`}>
             <div className="bg-[#284C71] px-6 py-4 text-white rounded-t-2xl">
@@ -293,7 +293,7 @@ const InitialAssessmentModal = ({
     : 0;
 
   return (
-    <div className={standalone ? 'min-h-screen bg-gradient-to-br from-[#d9f5f1] via-[#eef8ff] to-[#d3ecfb]' : 'fixed inset-0 bg-black/45 backdrop-blur-sm z-[10000] overflow-hidden'}>
+    <div className={standalone ? 'min-h-dvh bg-gradient-to-br from-[#d9f5f1] via-[#eef8ff] to-[#d3ecfb] overflow-y-auto' : 'fixed inset-0 bg-black/45 backdrop-blur-sm z-[10000] overflow-hidden'}>
       <div className={standalone ? 'w-full max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10' : 'h-full w-full p-3 sm:p-6 flex items-center justify-center'}>
         <div className={`w-full rounded-2xl bg-white shadow-2xl border border-gray-200 flex flex-col overflow-hidden ${standalone ? '' : 'max-w-5xl max-h-full'}`}>
           <div className="bg-[#284C71] px-6 py-4 text-white rounded-t-2xl">

@@ -103,7 +103,7 @@ const InitialAssessment = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#d9f5f1] via-[#eef8ff] to-[#d3ecfb] flex items-center justify-center px-6 py-10">
+      <div className="min-h-dvh bg-gradient-to-br from-[#d9f5f1] via-[#eef8ff] to-[#d3ecfb] flex items-center justify-center px-6 py-10 overflow-y-auto">
         <div className="w-full max-w-md rounded-2xl bg-white/95 border border-[#cde3f1] shadow-xl px-7 py-8 text-center">
           <div className="w-14 h-14 mx-auto mb-4 border-4 border-[#2FCAB8]/30 border-t-[#2FCAB8] rounded-full animate-spin" />
           <p className="text-lg font-semibold text-[#1f4c72]">Preparing your initial assessment...</p>
@@ -114,7 +114,7 @@ const InitialAssessment = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#d9f5f1] via-[#eef8ff] to-[#d3ecfb] flex items-center justify-center px-6 py-10">
+      <div className="min-h-dvh bg-gradient-to-br from-[#d9f5f1] via-[#eef8ff] to-[#d3ecfb] flex items-center justify-center px-6 py-10 overflow-y-auto">
         <div className="w-full max-w-lg rounded-2xl bg-white/95 border border-[#f4c7c7] shadow-xl px-7 py-7 text-center">
           <h1 className="text-2xl font-bold text-[#1f4c72] mb-3">Initial Assessment Unavailable</h1>
           <p className="text-sm text-[#a03333] mb-5">{error}</p>
