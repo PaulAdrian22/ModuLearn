@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 import SkeletonLoader from '../components/SkeletonLoader';
 import { themedConfirm } from '../utils/themedConfirm';
 import { withPreferredLanguage } from '../utils/languagePreference';
+import { formatLessonTime } from '../utils/lessonTime';
 
 const decodeHtmlEntities = (value = '') => {
   const normalized = String(value)
@@ -257,6 +258,12 @@ const DashboardOverview = () => {
                           <p className="mt-2 text-xs sm:text-sm text-gray-500 leading-relaxed flex flex-col sm:flex-row sm:items-center sm:gap-1">
                             <span className="font-semibold">Last Opened:</span>
                             <span>{formatLastOpened(module.LastOpenedAt)}</span>
+                          </p>
+                          <p className="mt-1 text-xs sm:text-sm text-gray-500 leading-relaxed flex items-center gap-1">
+                            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>{formatLessonTime(module.LessonTime)}</span>
                           </p>
                         </div>
                         {!module.Is_Unlocked && (

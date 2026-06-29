@@ -236,6 +236,11 @@ let simulationAdminColumnCache = null;
 let simulationZoneDataUpgradeAttempted = false;
 let simulationTableMissingConfirmed = false;
 
+const clearModuleResponseCache = () => {
+  clearNamespace('modules:list');
+  clearNamespace('modules:item');
+};
+
 const ensureModuleAdminColumns = async () => {
   if (moduleAdminColumnsReady) return;
 
@@ -643,6 +648,8 @@ router.post('/modules', [
       console.log('JSON fields saved successfully');
     }
     
+    clearModuleResponseCache();
+
     res.status(201).json({
       message: 'Module created successfully',
       moduleId: moduleId,
@@ -879,6 +886,8 @@ router.put('/modules/:id', [
         }
       }
     }
+
+    clearModuleResponseCache();
 
     console.log('Module updated successfully');
     

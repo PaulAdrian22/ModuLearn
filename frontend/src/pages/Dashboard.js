@@ -5,6 +5,7 @@ import { useAuth } from '../App';
 import IntroductionFlow from '../components/IntroductionFlow';
 import Navbar from '../components/Navbar';
 import { normalizePreferredLanguage, withPreferredLanguage } from '../utils/languagePreference';
+import { formatLessonTime } from '../utils/lessonTime';
 
 const decodeHtmlEntities = (value = '') => {
   const normalized = String(value)
@@ -182,8 +183,13 @@ const Dashboard = () => {
   const completedCheckpointCount = hasRealRoadmapData
     ? Math.max(0, Math.min(roadmapPoints.length, Math.floor(checkpointProgressUnits)))
     : Math.max(0, Math.min(roadmapPoints.length, Math.floor((roadmapProgress / 100) * roadmapPoints.length)));
-  const userCheckpointColumn = Math.max(1, Math.min(roadmapPoints.length + 1, completedCheckpointCount + 1));
   const totalRoadColumns = roadmapPoints.length + 2;
+  const isCertificationEligibleOnRoadmap = hasRealRoadmapData
+    && roadmapPoints.length > 0
+    && completedCheckpointCount >= roadmapPoints.length;
+  const userCheckpointColumn = isCertificationEligibleOnRoadmap
+    ? totalRoadColumns
+    : Math.max(1, Math.min(roadmapPoints.length + 1, completedCheckpointCount + 1));
   const userHeadPercent = totalRoadColumns > 1
     ? ((userCheckpointColumn - 1) / (totalRoadColumns - 1)) * 100
     : 0;
@@ -453,6 +459,12 @@ const Dashboard = () => {
                           <p className="mt-2 text-xs sm:text-sm text-gray-500 leading-relaxed flex flex-col sm:flex-row sm:items-center sm:gap-1">
                             <span className="font-semibold">Last Opened:</span>
                             <span>{formatLastOpened(module.LastOpenedAt)}</span>
+                          </p>
+                          <p className="mt-1 text-xs sm:text-sm text-gray-500 leading-relaxed flex items-center gap-1">
+                            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>{formatLessonTime(module.LessonTime)}</span>
                           </p>
                         </div>
                         {!module.Is_Unlocked && (
