@@ -20,8 +20,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      AZURE_WEBAPP_NAME: ${{ vars.AZURE_WEBAPP_NAME || 'modulearn-api-260412162638' }}
-      AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+      AZURE_WEBAPP_NAME: ${{ vars.AZURE_WEBAPP_NAME || 'modulearn-api-hally-260720' }}
+      AZURE_RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP || 'modulearn-prod-rg' }}
       AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
       AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
 
@@ -45,6 +45,11 @@ jobs:
           echo "Missing repository variable AZURE_WEBAPP_NAME."
           echo "Set it in GitHub: Settings > Secrets and variables > Actions > Variables."
           exit 1
+
+      - name: Show deployment target
+        run: |
+          echo "Deploying backend to Azure Web App: $AZURE_WEBAPP_NAME"
+          echo "Azure resource group: $AZURE_RESOURCE_GROUP"
 
       - name: Deploy to Azure Web App (publish profile)
         if: ${{ env.AZURE_WEBAPP_PUBLISH_PROFILE != '' }}

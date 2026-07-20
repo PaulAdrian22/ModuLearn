@@ -14,7 +14,7 @@ const hostedEnvApiBaseUrl = hasEnvApiBaseUrl && !isEnvApiLocal ? envApiBaseUrl :
 
 // Keep fallback host-agnostic so production target is controlled by REACT_APP_API_URL.
 const FALLBACK_API_BASE_URL = '/api';
-const NETLIFY_API_BASE_URL = 'https://modulearn-api-260412162638.azurewebsites.net/api';
+const NETLIFY_API_BASE_URL = 'https://modulearn-api-hally-260720.azurewebsites.net/api';
 
 export const DEFAULT_API_BASE_URL = isLocalhost
   ? `${protocol}//${localApiHost}:5000/api`
