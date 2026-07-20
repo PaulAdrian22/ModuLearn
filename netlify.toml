@@ -10,7 +10,7 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "https://modulearn-api-260412162638.azurewebsites.net/api/:splat"
+  to = "https://modulearn-api-hally-260720.azurewebsites.net/api/:splat"
   status = 200
   force = true
 
