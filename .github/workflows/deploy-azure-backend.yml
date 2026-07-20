@@ -2,11 +2,18 @@ name: Deploy Backend to Azure App Service
 
 on:
   workflow_dispatch:
+    inputs:
+      restoreDatabase:
+        description: Restore database/modulearn_latest.sql into the deployed MySQL database
+        required: false
+        default: false
+        type: boolean
   push:
     branches:
       - main
     paths:
       - backend/**
+      - database/modulearn_latest.sql
       - .github/workflows/deploy-azure-backend.yml
 
 permissions:
@@ -51,6 +58,26 @@ jobs:
           echo "Deploying backend to Azure Web App: $AZURE_WEBAPP_NAME"
           echo "Azure resource group: $AZURE_RESOURCE_GROUP"
 
+      - name: Determine database restore
+        id: database_restore
+        shell: bash
+        run: |
+          restore=false
+
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.restoreDatabase }}" = "true" ]; then
+            restore=true
+          fi
+
+          if [ "${{ github.event_name }}" = "push" ]; then
+            changed_files="$(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" || true)"
+            if echo "$changed_files" | grep -Eq '^(database/modulearn_latest\.sql|backend/scripts/migrations/restore_database_dump\.js|\.github/workflows/deploy-azure-backend\.yml)$'; then
+              restore=true
+            fi
+          fi
+
+          echo "restore=$restore" >> "$GITHUB_OUTPUT"
+          echo "Database restore enabled: $restore"
+
       - name: Deploy to Azure Web App (publish profile)
         if: ${{ env.AZURE_WEBAPP_PUBLISH_PROFILE != '' }}
         uses: azure/webapps-deploy@v3
@@ -64,6 +91,48 @@ jobs:
         uses: azure/login@v2
         with:
           creds: ${{ env.AZURE_CREDENTIALS }}
+
+      - name: Load database settings from Azure Web App
+        if: ${{ steps.database_restore.outputs.restore == 'true' && env.AZURE_CREDENTIALS != '' && env.AZURE_RESOURCE_GROUP != '' }}
+        shell: bash
+        run: |
+          settings_json="$(az webapp config appsettings list --resource-group "$AZURE_RESOURCE_GROUP" --name "$AZURE_WEBAPP_NAME" -o json)"
+
+          for key in DB_HOST DB_PORT DB_USER DB_PASSWORD DB_NAME DB_SSL DB_SSL_REJECT_UNAUTHORIZED; do
+            value="$(echo "$settings_json" | jq -r --arg key "$key" '.[] | select(.name == $key) | .value // empty' | head -n 1)"
+            if [ -n "$value" ]; then
+              echo "::add-mask::$value"
+              echo "$key=$value" >> "$GITHUB_ENV"
+            fi
+          done
+
+      - name: Load database settings from repository secrets
+        if: ${{ steps.database_restore.outputs.restore == 'true' && env.AZURE_CREDENTIALS == '' }}
+        shell: bash
+        env:
+          SECRET_DB_HOST: ${{ secrets.DB_HOST }}
+          SECRET_DB_PORT: ${{ secrets.DB_PORT }}
+          SECRET_DB_USER: ${{ secrets.DB_USER }}
+          SECRET_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          SECRET_DB_NAME: ${{ secrets.DB_NAME }}
+          SECRET_DB_SSL: ${{ secrets.DB_SSL }}
+          SECRET_DB_SSL_REJECT_UNAUTHORIZED: ${{ secrets.DB_SSL_REJECT_UNAUTHORIZED }}
+        run: |
+          for key in DB_HOST DB_PORT DB_USER DB_PASSWORD DB_NAME DB_SSL DB_SSL_REJECT_UNAUTHORIZED; do
+            secret_key="SECRET_${key}"
+            value="${!secret_key}"
+            if [ -n "$value" ]; then
+              echo "::add-mask::$value"
+              echo "$key=$value" >> "$GITHUB_ENV"
+            fi
+          done
+
+      - name: Restore deployed database from latest dump
+        if: ${{ steps.database_restore.outputs.restore == 'true' }}
+        working-directory: backend
+        env:
+          DB_RESTORE_FILE: ../database/modulearn_latest.sql
+        run: npm run db:restore:latest
 
       - name: Apply production app settings defaults
         if: ${{ env.AZURE_CREDENTIALS != '' && env.AZURE_RESOURCE_GROUP != '' }}

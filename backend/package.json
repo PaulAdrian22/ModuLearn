@@ -25,7 +25,8 @@
     "verify:simulations": "node scripts/checks/verify_simulation_assets.js",
     "sync:remote:api": "node scripts/imports/sync_local_to_remote_api.js",
     "migrate:media:azure": "node scripts/migrations/migrate_media_to_azure_blob.js",
-    "migrate:media:azure:dry": "node scripts/migrations/migrate_media_to_azure_blob.js --dry-run"
+    "migrate:media:azure:dry": "node scripts/migrations/migrate_media_to_azure_blob.js --dry-run",
+    "db:restore:latest": "node scripts/migrations/restore_database_dump.js"
   },
   "keywords": [
     "education",
