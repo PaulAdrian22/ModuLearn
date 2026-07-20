@@ -12,10 +12,22 @@ const parseNonNegativeInt = (value, fallback) => {
 
 const isProduction = process.env.NODE_ENV === 'production';
 const defaultConnectionLimit = isProduction ? 5 : 10;
+const dbHost = process.env.DB_HOST || 'localhost';
+const isAzureMysqlHost = /\.mysql\.database\.azure\.com$/i.test(dbHost);
+const parseBooleanEnv = (value, fallback = false) => {
+  if (value === undefined || value === null || value === '') return fallback;
+  const normalized = String(value).trim().toLowerCase();
+  return ['1', 'true', 'yes', 'on'].includes(normalized);
+};
+const shouldUseSsl = parseBooleanEnv(process.env.DB_SSL, isAzureMysqlHost);
+const shouldRejectUnauthorizedSsl = parseBooleanEnv(
+  process.env.DB_SSL_REJECT_UNAUTHORIZED,
+  false
+);
 
 // Database configuration
 const dbConfig = {
-  host: process.env.DB_HOST || 'localhost',
+  host: dbHost,
   user: process.env.DB_USER || 'modulearn_user',
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME || 'modulearn_db',
@@ -26,6 +38,13 @@ const dbConfig = {
   enableKeepAlive: true,
   keepAliveInitialDelay: 0
 };
+
+if (shouldUseSsl) {
+  dbConfig.ssl = {
+    minVersion: 'TLSv1.2',
+    rejectUnauthorized: shouldRejectUnauthorizedSsl
+  };
+}
 
 // Create connection pool
 const pool = mysql.createPool(dbConfig);
