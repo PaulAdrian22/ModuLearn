@@ -1,5 +1,6 @@
 param(
     [string]$OutputDir = ".\portable_exports",
+    [string]$LatestDatabaseSql = "",
     [switch]$NoZip,
     [switch]$KeepStaging
 )
@@ -82,6 +83,42 @@ foreach ($file in $includeFiles) {
         Copy-Item -Path $src -Destination (Join-Path $staging $file) -Force
         Write-Host "  Copied file: $file" -ForegroundColor Green
     }
+}
+
+$stagedLatestDb = Join-Path $staging "database\modulearn_latest.sql"
+New-Item -Path (Split-Path -Parent $stagedLatestDb) -ItemType Directory -Force | Out-Null
+$explicitLatestDb = if ([string]::IsNullOrWhiteSpace($LatestDatabaseSql)) {
+    $null
+} elseif ([System.IO.Path]::IsPathRooted($LatestDatabaseSql)) {
+    $LatestDatabaseSql
+} else {
+    Join-Path $root $LatestDatabaseSql
+}
+
+if ($explicitLatestDb -and -not (Test-Path $explicitLatestDb)) {
+    throw "LatestDatabaseSql not found: $explicitLatestDb"
+}
+
+if ($explicitLatestDb) {
+    Copy-Item -Path $explicitLatestDb -Destination $stagedLatestDb -Force
+    Write-Host "  Included latest DB export: database\modulearn_latest.sql" -ForegroundColor Green
+} elseif (-not (Test-Path $stagedLatestDb)) {
+    $backupDir = Join-Path $root "database_backups"
+    $newestBackup = $null
+    if (Test-Path $backupDir) {
+        $newestBackup = Get-ChildItem -Path $backupDir -Filter "*.sql" -File -ErrorAction SilentlyContinue |
+            Sort-Object LastWriteTime -Descending |
+            Select-Object -First 1
+    }
+
+    if ($newestBackup) {
+        Copy-Item -Path $newestBackup.FullName -Destination $stagedLatestDb -Force
+        Write-Host "  Included newest DB backup as database\modulearn_latest.sql" -ForegroundColor Green
+    } else {
+        Write-Host "  No latest DB export found; setup will fall back to database\schema.sql" -ForegroundColor Yellow
+    }
+} else {
+    Write-Host "  Included existing database\modulearn_latest.sql" -ForegroundColor Green
 }
 
 Write-Host "" 

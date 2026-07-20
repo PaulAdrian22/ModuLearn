@@ -5,13 +5,27 @@ This guide prepares a transferable package so another device can run MODULEARN o
 ## 1) On Source Device (this workspace)
 
 1. Open PowerShell at project root.
-2. Run:
+2. If you want the portable copy to include the latest deployed lessons, simulations, and accounts, first export the deployed database and place/copy it as:
+
+```text
+database\modulearn_latest.sql
+```
+
+You can also keep the export in `database_backups`; the export script will automatically copy the newest `.sql` backup into the package as `database\modulearn_latest.sql`.
+
+3. Run:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\EXPORT_LOCALHOST_PACKAGE.ps1
 ```
 
-3. Find the generated zip in:
+To choose a specific deployed export:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\EXPORT_LOCALHOST_PACKAGE.ps1 -LatestDatabaseSql .\database_backups\modulearn_db_deployed_YYYY-MM-DD.sql
+```
+
+4. Find the generated zip in:
 - .\portable_exports\modulearn-localhost-portable-YYYYMMDD-HHMMSS.zip
 
 ## 2) On Target Device
@@ -31,7 +45,8 @@ This will:
 - verify Node/npm
 - prepare backend/frontend .env for localhost
 - install missing backend/frontend dependencies
-- run database bootstrap (with your MySQL credentials)
+- run database bootstrap with your MySQL credentials
+- import `database\modulearn_latest.sql` when included, otherwise import `database\schema.sql`
 - auto-start the system
 
 4. Manual option (if you prefer step-by-step):
@@ -77,7 +92,9 @@ Note:
 
 - The export script removes local-only/generated folders such as node_modules and build.
 - The export script removes exact .env files for safety.
+- If `database\modulearn_latest.sql` exists, setup uses it so the local package starts with the latest exported deployed content.
 - Keep backend/.env.example and frontend/.env.production.example as templates.
+- Review/anonymize `database\modulearn_latest.sql` before sharing if it includes real users, progress, or account data.
 
 ## 7) Troubleshooting
 

@@ -244,14 +244,19 @@ if (-not $doDatabase) {
             throw "Failed to create modulearn_db."
         }
 
+        $latestDatabasePath = Join-Path $root "database\modulearn_latest.sql"
         $schemaPath = Join-Path $root "database\schema.sql"
-        if (-not (Test-Path $schemaPath)) {
-            throw "database/schema.sql not found."
+        $importPath = if (Test-Path $latestDatabasePath) { $latestDatabasePath } else { $schemaPath }
+        $importLabel = if ($importPath -eq $latestDatabasePath) { "database\modulearn_latest.sql" } else { "database\schema.sql" }
+
+        if (-not (Test-Path $importPath)) {
+            throw "No database import file found. Add database/modulearn_latest.sql or database/schema.sql."
         }
 
-        Get-Content -Path $schemaPath -Raw | & $mysqlExe -u $dbUser modulearn_db
+        Write-Host "  Importing $importLabel..." -ForegroundColor Cyan
+        Get-Content -Path $importPath -Raw | & $mysqlExe -u $dbUser modulearn_db
         if ($LASTEXITCODE -ne 0) {
-            throw "Failed to import schema.sql."
+            throw "Failed to import $importLabel."
         }
 
         $locksPath = Join-Path $root "database\set_initial_locks.sql"
