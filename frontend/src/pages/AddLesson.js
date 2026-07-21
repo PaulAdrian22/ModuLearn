@@ -1382,14 +1382,26 @@ const AddLesson = () => {
             url: toDisplayUrl(img.url || img.content || ''),
             file: null,
             fileName: img.fileName || '',
-            caption: img.caption || ''
+            caption: stripHtml(normalizeEditableRichHtml(img.caption || ''))
           };
         };
         
         // Process sections to ensure proper URLs and fields
         const processedSections = editableSections.map(section => {
           const normalizedSectionType = normalizeEditorSectionType(section?.type);
-          const processed = { ...section, type: normalizedSectionType };
+          const processed = {
+            ...section,
+            type: normalizedSectionType,
+            title: normalizeEditableRichHtml(section?.title || ''),
+            caption: stripHtml(normalizeEditableRichHtml(section?.caption || '')),
+            sideText: normalizeEditableRichHtml(section?.sideText || ''),
+            sideTexts: Array.isArray(section?.sideTexts)
+              ? section.sideTexts.map((text) => normalizeEditableRichHtml(text))
+              : section?.sideTexts,
+            content: ['topic', 'subtopic', 'paragraph'].includes(normalizedSectionType)
+              ? normalizeEditableRichHtml(section?.content || '')
+              : section?.content
+          };
 
           if (processed.type === 'paragraph') {
             const normalizedTableData = normalizeTableData(section.tableData);
@@ -1429,7 +1441,7 @@ const AddLesson = () => {
               processed.images = section.images.map(normalizeImageItem);
             } else if (section.content) {
               // Backward compatibility: older lessons may store a single image only in `content`.
-              processed.images = [{ url: toDisplayUrl(section.content), file: null, fileName: '', caption: section.caption || '' }];
+              processed.images = [{ url: toDisplayUrl(section.content), file: null, fileName: '', caption: stripHtml(normalizeEditableRichHtml(section.caption || '')) }];
             } else {
               processed.images = [];
             }
@@ -1453,9 +1465,9 @@ const AddLesson = () => {
           }
 
           if (processed.type === 'image' && (processed.layout === 'text-left' || processed.layout === 'text-right')) {
-            const fallbackSideTexts = section.sideText ? [String(section.sideText)] : [''];
+            const fallbackSideTexts = processed.sideText ? [String(processed.sideText)] : [''];
             const normalizedSideTexts = Array.isArray(section.sideTexts) && section.sideTexts.length > 0
-              ? section.sideTexts.map((text) => String(text || ''))
+              ? section.sideTexts.map((text) => normalizeEditableRichHtml(text))
               : fallbackSideTexts;
 
             const fallbackLayerImages = (Array.isArray(processed.images) ? processed.images : []).map((image) => [image]);
@@ -1477,7 +1489,7 @@ const AddLesson = () => {
             });
 
             processed.sideTexts = Array.from({ length: layerCount }, (_, layerIdx) =>
-              String(normalizedSideTexts[layerIdx] || '')
+              normalizeEditableRichHtml(normalizedSideTexts[layerIdx] || '')
             );
             processed.layerImages = normalizedLayers;
 
@@ -1974,6 +1986,21 @@ const AddLesson = () => {
   const normalizeEditableRichHtml = (value = '') => (
     linkifyVideoLinksInHtml(sanitizeHtml(decodeEscapedHtmlMarkup(value)))
   );
+
+  const getEditorMediaUrl = (url = '') => {
+    const source = String(url || '').trim();
+    if (!source) return '';
+    if (source.startsWith('blob:') || source.startsWith('data:')) return source;
+    if (/^https?:\/\//i.test(source)) return source;
+
+    const apiBaseUrl = axios.defaults.baseURL || API_BASE_URL;
+    const baseUrl = apiBaseUrl.replace('/api', '');
+    const normalizedUrl = source.replace(/\\/g, '/');
+    const uploadPath = normalizedUrl.startsWith('uploads/') ? `/${normalizedUrl}` : normalizedUrl;
+
+    if (uploadPath.startsWith('/uploads')) return `${baseUrl}${uploadPath}`;
+    return uploadPath;
+  };
 
   const sanitizeTextAlign = (value = '') => {
     const normalized = String(value || '').trim().toLowerCase();
@@ -5189,7 +5216,7 @@ const AddLesson = () => {
         .map((section) => ({
           ...section,
           title: normalizeEditableRichHtml(section?.title || ''),
-          caption: normalizeEditableRichHtml(section?.caption || ''),
+          caption: stripHtml(normalizeEditableRichHtml(section?.caption || '')),
           sideText: normalizeEditableRichHtml(section?.sideText || ''),
           sideTexts: Array.isArray(section?.sideTexts)
             ? section.sideTexts.map((sideText) => normalizeEditableRichHtml(sideText))
@@ -5197,14 +5224,14 @@ const AddLesson = () => {
           images: Array.isArray(section?.images)
             ? section.images.map((image) => ({
                 ...image,
-                caption: normalizeEditableRichHtml(image?.caption || ''),
+                caption: stripHtml(normalizeEditableRichHtml(image?.caption || '')),
               }))
             : section?.images,
           layerImages: Array.isArray(section?.layerImages)
             ? section.layerImages.map((layer) =>
                 (Array.isArray(layer) ? layer : [layer]).map((image) => ({
                   ...image,
-                  caption: normalizeEditableRichHtml(image?.caption || ''),
+                  caption: stripHtml(normalizeEditableRichHtml(image?.caption || '')),
                 }))
               )
             : section?.layerImages,
@@ -6670,7 +6697,7 @@ const AddLesson = () => {
                                 const imageKey = `${img.fileName || img.url || 'image'}-${i}`;
 
                                 return img.url ? (
-                                  <img key={imageKey} src={img.url} alt={`Thumb ${i+1}`} className="w-16 h-16 object-cover rounded-lg border border-gray-200" />
+                                  <img key={imageKey} src={getEditorMediaUrl(img.url)} alt={`Thumb ${i+1}`} className="w-16 h-16 object-cover rounded-lg border border-gray-200" />
                                 ) : (
                                   <div key={imageKey} className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
                                     <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
@@ -6793,7 +6820,7 @@ const AddLesson = () => {
                                             {img.url ? (
                                               <div className="min-h-[140px] flex flex-col items-center justify-center">
                                                 <img
-                                                  src={img.url}
+                                                  src={getEditorMediaUrl(img.url)}
                                                   alt={`Image ${imgIdx + 1}`}
                                                   className="max-w-full h-auto mx-auto rounded-lg shadow-md"
                                                   draggable="false"
@@ -6836,7 +6863,7 @@ const AddLesson = () => {
                                             )}
                                             <input
                                               type="text"
-                                              value={img.caption || ''}
+                                              value={stripHtml(normalizeEditableRichHtml(img.caption || ''))}
                                               onChange={(e) => handleLayerImageCaptionChange(section.id, layerIdx, imgIdx, e.target.value)}
                                               placeholder={`Image ${imgIdx + 1} name or description...`}
                                               className="w-full mt-2 px-2.5 py-1.5 text-xs border border-gray-300 rounded-md focus:border-highlight focus:outline-none text-gray-700 placeholder-gray-400"
@@ -6953,7 +6980,7 @@ const AddLesson = () => {
                                   {img.url ? (
                                     <div>
                                       <img
-                                        src={img.url}
+                                        src={getEditorMediaUrl(img.url)}
                                         alt={`Image ${imgIdx + 1}`}
                                         className="max-w-full h-auto mx-auto rounded-lg shadow-md"
                                         draggable="false"
@@ -6998,7 +7025,7 @@ const AddLesson = () => {
                                   {/* Per-image caption */}
                                   <input
                                     type="text"
-                                    value={img.caption || ''}
+                                    value={stripHtml(normalizeEditableRichHtml(img.caption || ''))}
                                     onChange={(e) => handleImageCaptionChange(section.id, imgIdx, e.target.value)}
                                     placeholder={`Image ${imgIdx + 1} caption...`}
                                     className="w-full mt-3 px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:border-highlight focus:outline-none text-gray-600 placeholder-gray-400"
