@@ -130,6 +130,14 @@ const ModuleView = () => {
     return textarea.value;
   };
 
+  const decodeEscapedHtmlMarkup = (value = '') => {
+    const source = String(value || '');
+    if (!/&lt;\/?[a-z][\s\S]*&gt;/i.test(source)) return source;
+
+    const decoded = decodeHtmlEntities(source);
+    return /<\/?[a-z][\s\S]*>/i.test(decoded) ? decoded : source;
+  };
+
   const toPlainText = (value) => {
     const decoded = decodeHtmlEntities(value);
     return decoded.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
@@ -406,6 +414,10 @@ const ModuleView = () => {
     Array.from(container.childNodes).forEach(traverseNode);
     return container.innerHTML;
   };
+
+  const normalizeDisplayRichHtml = (value = '') => (
+    linkifyVideoUrlsInTextHtml(normalizeRichTextHtml(decodeEscapedHtmlMarkup(value)))
+  );
 
   const REFERENCE_URL_REGEX = /(https?:\/\/[^\s<>"']+|www\.[^\s<>"']+)/gi;
 
@@ -1961,9 +1973,7 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                               <div className="border-b border-border-light"></div>
                               {Array.from({ length: layerCount }, (_, layerIdx) => {
                                 const imgs = layerImages[layerIdx] || [];
-                                const textHtml = linkifyVideoUrlsInTextHtml(
-                                  normalizeRichTextHtml(sideTexts[layerIdx] || '')
-                                );
+                                const textHtml = normalizeDisplayRichHtml(sideTexts[layerIdx] || '');
                                 const validImgs = imgs.filter(img => img && img.url);
 
                                 const textBlock = (
@@ -1996,7 +2006,10 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                           onError={(e) => { e.target.style.display = 'none'; }}
                                         />
                                         {img.caption && (
-                                          <p className="text-sm text-gray-600 text-center italic mt-2">{img.caption}</p>
+                                          <p
+                                            className="text-sm text-gray-600 text-center italic mt-2"
+                                            dangerouslySetInnerHTML={{ __html: normalizeDisplayRichHtml(img.caption) }}
+                                          ></p>
                                         )}
                                       </div>
                                     ))}
@@ -2066,7 +2079,10 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                                         onError={(e) => { e.target.style.display = 'none'; }}
                                       />
                                       {img.caption && (
-                                        <p className="text-sm text-gray-600 text-center italic mt-2">{img.caption}</p>
+                                        <p
+                                          className="text-sm text-gray-600 text-center italic mt-2"
+                                          dangerouslySetInnerHTML={{ __html: normalizeDisplayRichHtml(img.caption) }}
+                                        ></p>
                                       )}
                                     </div>
                                   )
@@ -2091,7 +2107,10 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                               }}
                             />
                             {(section.caption || section.fileName) && (
-                              <p className="text-base text-gray-700 text-center italic">{section.caption || section.fileName}</p>
+                              <p
+                                className="text-base text-gray-700 text-center italic"
+                                dangerouslySetInnerHTML={{ __html: normalizeDisplayRichHtml(section.caption || section.fileName) }}
+                              ></p>
                             )}
                           </div>
                         );
@@ -2127,7 +2146,10 @@ Computer Hardware Servicing (CHS) is the procedural workflow of installing, repa
                               )}
                             </div>
                             {section.caption && (
-                              <p className="text-base text-gray-700 text-center italic">{section.caption}</p>
+                              <p
+                                className="text-base text-gray-700 text-center italic"
+                                dangerouslySetInnerHTML={{ __html: normalizeDisplayRichHtml(section.caption) }}
+                              ></p>
                             )}
                           </div>
                         );

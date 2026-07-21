@@ -1708,6 +1708,17 @@ const AddLesson = () => {
     return withTabs.replace(/(^ +| +$| {2,})/g, (spaces) => '&nbsp;'.repeat(spaces.length));
   };
 
+  const decodeEscapedHtmlMarkup = (value = '') => {
+    const source = String(value || '');
+    if (!/&lt;\/?[a-z][\s\S]*&gt;/i.test(source)) return source;
+
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = source;
+    const decoded = textarea.value;
+
+    return /<\/?[a-z][\s\S]*>/i.test(decoded) ? decoded : source;
+  };
+
   const detectPlainTextListItem = (line = '') => {
     const normalizedLine = String(line || '');
     const leading = (normalizedLine.match(/^\s*/) || [''])[0];
@@ -1959,6 +1970,10 @@ const AddLesson = () => {
     Array.from(container.childNodes).forEach(traverseNode);
     return container.innerHTML;
   };
+
+  const normalizeEditableRichHtml = (value = '') => (
+    linkifyVideoLinksInHtml(sanitizeHtml(decodeEscapedHtmlMarkup(value)))
+  );
 
   const sanitizeTextAlign = (value = '') => {
     const normalized = String(value || '').trim().toLowerCase();
@@ -3586,7 +3601,7 @@ const AddLesson = () => {
   };
 
   const handleSideTextChange = (sectionId, layerIdx, value) => {
-    const normalizedValue = linkifyVideoLinksInHtml(sanitizeHtml(String(value || '')));
+    const normalizedValue = normalizeEditableRichHtml(value);
 
     setSections(prev => prev.map(s => {
       if (s.id !== sectionId) return s;
@@ -3874,9 +3889,13 @@ const AddLesson = () => {
   };
 
   const handleSectionContentChange = (sectionId, field, value) => {
+    const nextValue = ['caption', 'content', 'title'].includes(field)
+      ? normalizeEditableRichHtml(value)
+      : value;
+
     setSections(prevSections => prevSections.map(section => 
       section.id === sectionId 
-        ? { ...section, [field]: value }
+        ? { ...section, [field]: nextValue }
         : section
     ));
   };
@@ -5167,6 +5186,29 @@ const AddLesson = () => {
         : uploadedSections;
 
       const sectionsForSave = sectionsForSaveBase
+        .map((section) => ({
+          ...section,
+          title: normalizeEditableRichHtml(section?.title || ''),
+          caption: normalizeEditableRichHtml(section?.caption || ''),
+          sideText: normalizeEditableRichHtml(section?.sideText || ''),
+          sideTexts: Array.isArray(section?.sideTexts)
+            ? section.sideTexts.map((sideText) => normalizeEditableRichHtml(sideText))
+            : section?.sideTexts,
+          images: Array.isArray(section?.images)
+            ? section.images.map((image) => ({
+                ...image,
+                caption: normalizeEditableRichHtml(image?.caption || ''),
+              }))
+            : section?.images,
+          layerImages: Array.isArray(section?.layerImages)
+            ? section.layerImages.map((layer) =>
+                (Array.isArray(layer) ? layer : [layer]).map((image) => ({
+                  ...image,
+                  caption: normalizeEditableRichHtml(image?.caption || ''),
+                }))
+              )
+            : section?.layerImages,
+        }))
         .map((section) => {
           const normalizedType = normalizeEditorSectionType(section?.type);
 
